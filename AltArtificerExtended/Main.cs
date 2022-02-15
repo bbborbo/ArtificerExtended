@@ -32,7 +32,9 @@ namespace AltArtificerExtended
     [BepInDependency(R2API.R2API.PluginGUID)]
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
+
     [BepInDependency("com.Borbo.DuckSurvivorTweaks", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.Borbo.BalanceOverhaulRBO", BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI), nameof(BuffAPI), nameof(PrefabAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class Main : BaseUnityPlugin
@@ -48,6 +50,7 @@ namespace AltArtificerExtended
         public static bool isScepterLoaded = Tools.isLoaded("com.DestroyedClone.AncientScepter");
         public static bool autosprintLoaded = Tools.isLoaded("com.johnedwa.RTAutoSprintEx");
         public static bool isDstLoaded = Tools.isLoaded("com.Borbo.DuckSurvivorTweaks");
+        public static bool isBorboLoaded = Tools.isLoaded("com.Borbo.BalanceOverhaulRBO");
 
         #region Config
         internal static ConfigFile CustomConfigFile { get; set; }
@@ -337,6 +340,24 @@ namespace AltArtificerExtended
                 "The storm <style=cIsDamage>grows with every kill</style>, " +
                 "increasing its radius by <style=cIsDamage>1m</style>. " +
                 "Stacks up to <style=cIsDamage>6m</style> <style=cStack>(+6m per stack)</style>.");
+
+            if (isBorboLoaded)
+            {
+                LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_CHILL", "<style=cKeywordName>Chilling</style>" +
+                    $"<style=cSub>Has a chance to temporarily <style=cIsUtility>slow enemy speed</style> by <style=cIsDamage>80%.</style></style>");
+            }
+            else
+            {
+                LanguageAPI.Add("ITEM_ICERING_DESC",
+                    $"Hits that deal <style=cIsDamage>more than 400% damage</style> also blasts enemies with a " +
+                    $"<style=cIsDamage>runic ice blast</style>, " +
+                    $"<style=cIsUtility>Chilling</style> them for <style=cIsUtility>3s</style> <style=cStack>(+3s per stack)</style> and " +
+                    $"dealing <style=cIsDamage>250%</style> <style=cStack>(+250% per stack)</style> TOTAL damage. " +
+                    $"Recharges every <style=cIsUtility>10</style> seconds.");
+
+                LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_CHILL", "<style=cKeywordName>Chilling</style>" +
+                    $"<style=cSub>Has a chance to temporarily <style=cIsUtility>slow movement speed</style> by <style=cIsDamage>80%.</style></style>");
+            }
 
             LanguageAPI.Add("KEYWORD_FREEZING",
                 "<style=cKeywordName>Freezing</style>" +

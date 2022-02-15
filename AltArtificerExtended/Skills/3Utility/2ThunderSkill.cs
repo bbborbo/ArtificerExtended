@@ -23,7 +23,7 @@ namespace AltArtificerExtended.Skills
         public override string SkillName => "Rolling Thunder";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Summon a rain of<style=cIsDamage> explosive</style> lightning bolts " +
-            $"for <style=cIsDamage>{CastThunder.meatballCount}x{Tools.ConvertDecimal(CastThunder.minTotalDamageCoefficient / CastThunder.meatballCount)} damage</style>. " +
+            $"for <style=cIsDamage>{CastThunder.meatballCount}x{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>. " +
             $"Can hold up to {maxCharges} charges.";
 
         public override string SkillLangTokenName => "THUNDERMEATBALLS";

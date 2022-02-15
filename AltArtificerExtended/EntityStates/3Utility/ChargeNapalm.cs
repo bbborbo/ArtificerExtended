@@ -38,15 +38,15 @@ namespace AltArtificerExtended.EntityState
 
         public static int minRowCount = 2;
         public static int maxRowCount = 2;
-        public static float minYawSpread = 3f; //yaw is turn
+        public static float minYawSpread = 5f; //yaw is turn
         public static float maxYawSpread = 25f;
         public static int minProjectileCount = 3; // per row
         public static int maxProjectileCount = 3;
-        public static float minPitchSpread = 3.5f; //pitch is vertical angle
-        public static float maxPitchSpread = 5.5f;
+        public static float minPitchSpread = 5f; //pitch is vertical angle
+        public static float maxPitchSpread = 10f;
 
-        public static float minSpread = 2.5f;
-        public static float maxSpread = 10f;
+        public static float minSpread = 3f;
+        public static float maxSpread = 15f;
         public static float arcAngle = 5f;
         public static float projectileHSpeed = 50f;
 
@@ -175,7 +175,7 @@ namespace AltArtificerExtended.EntityState
                 if (this.projectilePrefab != null)
                 {
                     float rows = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minRowCount, ChargeNapalm.maxRowCount);
-                    float projectiles = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minProjectileCount, ChargeNapalm.maxProjectileCount);
+                    float projectilesPerRow = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minProjectileCount, ChargeNapalm.maxProjectileCount);
                     float totalDamage = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minDamageCoefficient, ChargeNapalm.maxDamageCoefficient);
                     float pitchSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxPitchSpread, ChargeNapalm.minPitchSpread);
                     float yawSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxYawSpread, ChargeNapalm.minYawSpread);
@@ -184,14 +184,17 @@ namespace AltArtificerExtended.EntityState
                     Vector3 direction = aimRay2.direction;
                     Vector3 origin = aimRay2.origin;
 
-                    int totalProjectiles = ChargeNapalm.maxRowCount * (int)projectiles;
+                    float yawPerRow = (yawSpread * 2) / (rows + 1);
+                    float pitchPerProjectile = (pitchSpread * 2) / (projectilesPerRow + 1);
+
+                    int totalProjectiles = ChargeNapalm.maxRowCount * (int)projectilesPerRow;
                     float projectileDamageCoeff = totalDamage / (int)totalProjectiles;
                     for (int n = 0; n < ChargeNapalm.maxRowCount; n++)
                     {
-                        for (int i = 0; i < projectiles; i++)
+                        for (int i = 0; i < projectilesPerRow; i++)
                         {
-                            this.FireBlob(this.aimRay, ((float)projectiles / pitchSpread - (float)i) * pitchSpread,
-                                (rows / yawSpread - (float)n) * yawSpread, projectileDamageCoeff, direction, origin);
+                            this.FireBlob(this.aimRay, (pitchPerProjectile * (i + 1)) - pitchSpread,
+                                (yawPerRow * (n + 1)) - yawSpread, projectileDamageCoeff, direction, origin);
                             await Task.Delay(50);
                         }
                     }
@@ -209,6 +212,7 @@ namespace AltArtificerExtended.EntityState
             float spread = Util.Remap(this.GetChargeProgress(), 0f, 1f, ChargeNapalm.maxSpread, ChargeNapalm.minSpread);
 
             Vector3 forward = Util.ApplySpread(direction, 0, spread, 1f, 1f, bonusYaw, bonusPitch - 6f);
+            //Vector3 forward = Util.ApplySpread(direction, 0, 0, 1f, 1f, bonusYaw, bonusPitch - 6f);
             ProjectileManager.instance.FireProjectile(this.projectilePrefab, origin,
                 Util.QuaternionSafeLookRotation(forward), base.gameObject, this.damageStat * projectileDamageCoeff,
                 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1);

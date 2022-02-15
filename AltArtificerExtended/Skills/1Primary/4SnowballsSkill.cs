@@ -32,7 +32,7 @@ namespace AltArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            baseRechargeInterval: 9989999,
+            baseRechargeInterval: 9899999,
             mustKeyPress: false,
             stockToConsume: 0,
             requiredStock: 0

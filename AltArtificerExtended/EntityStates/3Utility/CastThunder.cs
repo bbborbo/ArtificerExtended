@@ -23,7 +23,7 @@ namespace AltArtificerExtended.EntityState
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
 
         public static float minMeteorRadius = _2ThunderSkill.thunderBlastRadius;
-        public static float minTotalDamageCoefficient = 1.8f * meatballCount;
+        public static float damagePerMeatball = 1.8f;
 
         public static int meatballCount = 3;
         public static float meatballAngleMin = 1f;
@@ -138,7 +138,7 @@ namespace AltArtificerExtended.EntityState
                 Vector3 forward2 = Quaternion.AngleAxis(rotationExtra + rotationInverval * (float)i, Vector3.up) * point;
 
                 ProjectileManager.instance.FireProjectile(meatballProjectile, impactPosition, Util.QuaternionSafeLookRotation(forward2),
-                    base.gameObject, this.characterBody.damage * minTotalDamageCoefficient / (float)meatballCount, meatballForce, 
+                    base.gameObject, this.characterBody.damage * damagePerMeatball, meatballForce, 
                     Util.CheckRoll(this.characterBody.crit, this.characterBody.master), DamageColorIndex.Default, null, speedOverride);
                 await Task.Delay(delay);
             }
