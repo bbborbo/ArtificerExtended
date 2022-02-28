@@ -12,17 +12,7 @@ namespace AltArtificerExtended.Unlocks
     class ArtificerLaserUnlock : UnlockBase
     {
         public ulong stunRequirementTotal = 100;
-        public StatDef stunCounter = GetStunCounter("artificerTotalEnemiesStunned");
-
-        static StatDef GetStunCounter(string name)
-        {
-            StatDef stat = StatDef.Find(name);
-            if (stat == null)
-            {
-                stat = StatDef.Register(name, StatRecordType.Sum, StatDataType.ULong, 0.0, null);
-            }
-            return stat;
-        }
+        public StatDef stunCounter = GetCareerStatTotal("artificerTotalEnemiesStunned");
 
         public override string UnlockLangTokenName => "LASERBOLTCAREER";
 

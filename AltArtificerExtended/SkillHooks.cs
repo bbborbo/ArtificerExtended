@@ -54,34 +54,6 @@ namespace AltArtificerExtended
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
-            On.RoR2.Inventory.SetEquipmentIndex += Inventory_SetEquipmentIndex;
-        }
-
-        private void Inventory_SetEquipmentIndex(On.RoR2.Inventory.orig_SetEquipmentIndex orig, Inventory self, EquipmentIndex newEquipmentIndex)
-        {
-            bool b = self.currentEquipmentIndex != newEquipmentIndex;
-            orig(self, newEquipmentIndex);
-            if (NetworkServer.active && b)
-            {
-                CharacterMaster master = self.gameObject.GetComponent<CharacterMaster>();
-                if (master)
-                {
-                    //Debug.Log("Element counter sdfhfdgh");
-                    ElementCounter counter = master.GetBody()?.GetComponent<ElementCounter>();
-                    try
-                    {
-                        if (counter != null)
-                        {
-                            counter.GetPowers(newEquipmentIndex, true);
-                            //Debug.Log("Element Counter found on entity trying to change equipment");
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
         }
 
         private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)

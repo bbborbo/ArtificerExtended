@@ -23,7 +23,7 @@ namespace AltArtificerExtended.Skills
 
         public override string SkillLangTokenName => "COLDFUSION";
 
-        public override UnlockableDef UnlockDef => ScriptableObject.CreateInstance<UnlockableDef>();
+        public override UnlockableDef UnlockDef => ScriptableObject.CreateInstance<UnlockableDef>();//GetUnlockDef(typeof(ArtificerColdFusionUnlock));
 
         public override string IconName => "FusionIcon";
 

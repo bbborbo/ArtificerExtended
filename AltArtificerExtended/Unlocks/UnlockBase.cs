@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.Stats;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,6 +57,16 @@ namespace AltArtificerExtended.Unlocks
             LanguageAPI.Add(AchievementNameToken, "Artificer: " + AchievementName);
             LanguageAPI.Add(AchievementDescToken, "As Artificer, " + AchievementDesc);
             LanguageAPI.Add(UnlockableNameToken, "Artificer: " + UnlockName);
+        }
+
+        public static StatDef GetCareerStatTotal(string name)
+        {
+            StatDef stat = StatDef.Find(name);
+            if (stat == null)
+            {
+                stat = StatDef.Register(name, StatRecordType.Sum, StatDataType.ULong, 0.0, null);
+            }
+            return stat;
         }
     }
 }

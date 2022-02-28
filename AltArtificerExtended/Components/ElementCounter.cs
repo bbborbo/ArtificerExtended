@@ -48,47 +48,8 @@ namespace AltArtificerExtended.Components
             this.GetSkillPower(loc.secondary);
             this.GetSkillPower(loc.utility);
             this.GetSkillPower(loc.special);
-            if(updateEquipment)
-                this.GetEquipPower(equipIndex);
 
             Debug.Log($"Fire: {this.firePower}\nIce: {this.icePower}\nLightning: {this.lightningPower}");
-        }
-
-        private void GetEquipPower(EquipmentIndex equipIndex)
-        {
-            if (equipIndex == RoR2Content.Equipment.AffixRed.equipmentIndex)
-            {
-                this.firePower++;
-                //Debug.Log("Adding Fire power from affix!");
-            }
-            if (equipIndex == RoR2Content.Equipment.AffixWhite.equipmentIndex)
-            {
-                this.icePower++;
-                //Debug.Log("Adding Ice power from affix!");
-            }
-            if (equipIndex == RoR2Content.Equipment.AffixBlue.equipmentIndex)
-            {
-                this.lightningPower++;
-                //Debug.Log("Adding Lightning power from affix!");
-            }
-
-            return;
-            /*
-            if (body.HasBuff(RoR2Content.Buffs.AffixRed))
-            {
-                this.firePower++;
-                Debug.Log("Adding Fire power from affix!");
-            }
-            if (body.HasBuff(RoR2Content.Buffs.AffixWhite))
-            {
-                this.icePower++;
-                Debug.Log("Adding Ice power from affix!");
-            }
-            if (body.HasBuff(RoR2Content.Buffs.AffixBlue))
-            {
-                this.lightningPower++;
-                Debug.Log("Adding Lightning power from affix!");
-            }*/
         }
 
         private void GetSkillPower(GenericSkill skill)
