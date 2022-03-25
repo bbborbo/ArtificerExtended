@@ -16,7 +16,7 @@ namespace AltArtificerExtended.EntityState
         public static float damageCoefficient = 10f;
 
         public float minRadius = 6;
-        public float maxRadius = 25;
+        public float maxRadius = Main.meleeRangeSingle;
         float endHopVelocity = 10;
 
         public float downForce = -12.5f;

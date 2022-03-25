@@ -25,7 +25,7 @@ namespace AltArtificerExtended.EntityState
         public static float procCoefficientSpread = 0.5f;
         public static float procCoefficientBuckshot = 0.7f;
         public static float bulletRadius = 0.15f;
-        public static float maxRange = 20f;
+        public static float maxRange = Main.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount;
         public static int bulletCountPoint = 1;

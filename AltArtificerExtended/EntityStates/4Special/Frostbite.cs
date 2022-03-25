@@ -21,11 +21,11 @@ namespace AltArtificerExtended.EntityState
 
         public static float blizzardDamageCoefficient = 3f;
         public static float blizzardProcCoefficient = 1f;
-        public static float blizzardRadius = 13f;
+        public static float blizzardRadius = Main.meleeRangeSingle - 3f;
 
         public static float novaDamageCoefficient = 5f;
         public static float novaProcCoefficient = 1f;
-        public static float novaRadius = 20f;
+        public static float novaRadius = Main.meleeRangeSingle;
 
         private static float buffduration = _1FrostbiteSkill.blizzardBuffDuration;
         public static float baseDuration = 0.4f;

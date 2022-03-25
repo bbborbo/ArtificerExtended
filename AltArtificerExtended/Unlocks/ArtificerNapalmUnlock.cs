@@ -65,14 +65,11 @@ namespace AltArtificerExtended.Unlocks
             {
                 if (attackerBody.bodyIndex == LookUpRequiredBodyIndex())
                 {
-                    if (damageInfo.damageType.HasFlag(DamageType.IgniteOnHit) || damageInfo.damageType.HasFlag(DamageType.PercentIgniteOnHit))
-                    {
-                        int burnCount = victimBody.GetBuffCount(RoR2Content.Buffs.OnFire) + 1;
+                    int burnCount = victimBody.GetBuffCount(RoR2Content.Buffs.OnFire) + victimBody.GetBuffCount(DLC1Content.Buffs.StrongerBurn) + 1;
 
-                        if (burnCount >= burnRequirementTotal)
-                        {
-                            base.Grant();
-                        }
+                    if (burnCount >= burnRequirementTotal)
+                    {
+                        base.Grant();
                     }
                 }
             }

@@ -54,7 +54,6 @@ namespace AltArtificerExtended
 
         #region Config
         internal static ConfigFile CustomConfigFile { get; set; }
-        public static ConfigEntry<bool> EnableConfig { get; set; }
         public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
         public static ConfigEntry<bool> NanobombChanges { get; set; }
@@ -75,6 +74,8 @@ namespace AltArtificerExtended
         public static float artiBoltDamage = 2.2f;
         public static float artiNanoDamage = 20;
         public static float artiUtilCooldown = 12;
+        public static float meleeRangeChannel = 21;
+        public static float meleeRangeSingle = meleeRangeChannel + 4f;
 
         void Awake()
         {
@@ -246,7 +247,7 @@ namespace AltArtificerExtended
 
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Gain a buff that temporarily " +
-                $"increases the <style=cIsDamage>burn damage</style> from Ignite and Napalm " +
+                $"increases the <style=cIsDamage>burn damage</style> from Ignite" +
                 $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.burnDamageMult)} per stack.</style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "<style=cKeywordName>Arctic Blast</style>" +
                 "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
@@ -312,15 +313,6 @@ namespace AltArtificerExtended
         private void InitializeConfig()
         {
             CustomConfigFile = new ConfigFile(Paths.ConfigPath + "\\ArtificerExtended.cfg", true);
-
-            EnableConfig = CustomConfigFile.Bind<bool>(
-                "Config: Allow Config Options",
-                "Enable Config For Unlocks + Balance Changes",
-                false,
-                "Set this to true to generate additional config options for UNLOCKS and BALANCE changes.\n" +
-                "If you have any issues or feedback on my mod balance, \n" +
-                "please feel free to send in feedback with the contact info in the README or Thunderstore description!"
-                );
 
             AllowBrokenSFX = CustomConfigFile.Bind<bool>(
                 "Cosmetic",
@@ -396,8 +388,7 @@ namespace AltArtificerExtended
 
 
                 LanguageAPI.Add("MAGE_SPECIAL_FIRE_DESCRIPTION",
-                    "Burn all enemies in front of you for <style=cIsDamage>2095% damage</style>; " +
-                    "<style=cIsHealth>does not scale with Attack Speed</style>. " +
+                    "Burn all enemies in front of you for <style=cIsDamage>2000% damage</style>. " +
                     "Each hit has a <style=cIsDamage>50% chance to ignite</style>.");
             }
         }
@@ -422,7 +413,7 @@ namespace AltArtificerExtended
 
                     bool forceUnlock = unlock.ForceDisable;
 
-                    if (!forceUnlock && EnableConfig.Value)
+                    if (!forceUnlock)
                     {
                         forceUnlock = CustomConfigFile.Bind<bool>("Config: UNLOCKS", "Force Unlock Achievement: " + unlock.UnlockName,
                         false, $"Force this achievement to unlock: {unlock.UnlockName}?").Value;

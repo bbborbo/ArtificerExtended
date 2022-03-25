@@ -21,7 +21,7 @@ namespace AltArtificerExtended.EntityState
         public float baseDuration = 0.7f;
 
         public float backupDistance = 2.5f;
-        public float maxDistance = 20;
+        public float maxDistance = Main.meleeRangeSingle;
         public static float smallHopVelocity = 7;
         public static float recoilAmplitude = 3.5f;
 

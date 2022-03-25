@@ -16,7 +16,7 @@ namespace AltArtificerExtended.Skills
         public static GameObject fusionTracer;
         public override string SkillName => "Cold Fusion";
 
-        public override string SkillDescription => $"<style=cIsUtility>Chilling.</style> Charge up a blast of cold spikes " +
+        public override string SkillDescription => $"<style=cIsUtility>Chilling.</style> Channel a blast of cold spikes " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(ColdFusion.totalDamageCoefficient)} total damage.</style> " +
             $"Each hit has a <style=cIsUtility>{ColdFusion.freezeChance}% chance to Freeze.</style> " +
             $"Releasing the attack before fully charging returns a stock and doesn't fire.";

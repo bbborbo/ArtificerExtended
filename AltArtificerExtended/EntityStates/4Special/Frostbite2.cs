@@ -21,7 +21,7 @@ namespace AltArtificerExtended.EntityState
 
         public static float novaDamageCoefficient = 8f;
         public static float novaProcCoefficient = 1f;
-        public static float novaRadius = 21f;
+        public static float novaRadius = Main.meleeRangeSingle;
 
         private static float buffduration = 1.75f;
         public static float baseDuration = 0.4f;

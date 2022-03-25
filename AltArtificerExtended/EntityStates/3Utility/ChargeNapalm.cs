@@ -32,8 +32,8 @@ namespace AltArtificerExtended.EntityState
         public float baseWinddownDuration = 0.5f;
 
         //generic attack stuff
-        public static float minDamageCoefficient = 4.2f;
-        public static float maxDamageCoefficient = 4.2f;
+        public static float minDamageCoefficient = 3f;
+        public static float maxDamageCoefficient = 3f;
         public static float napalmBurnDamageCoefficient = 1f;
 
         public static int minRowCount = 2;

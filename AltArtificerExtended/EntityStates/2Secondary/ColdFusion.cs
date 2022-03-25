@@ -41,7 +41,7 @@ namespace AltArtificerExtended.EntityState
 
         public float force = 600f;
         public static float selfForce = 400f;
-        public static float maxRange = 21f;
+        public static float maxRange = Main.meleeRangeSingle;
 
         //everything past here is generic charge stuff
         public float minRadius = 0;

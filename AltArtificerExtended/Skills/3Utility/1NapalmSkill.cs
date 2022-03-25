@@ -21,9 +21,9 @@ namespace AltArtificerExtended.Skills
         public static GameObject projectileNapalmImpact;
         public static GameObject projectileNapalmFX;
 
-        public static float napalmDotFireFrequency = 1f;
+        public static float napalmDotFireFrequency = 2f;
         public static int napalmMaxProjectiles = ChargeNapalm.maxProjectileCount * ChargeNapalm.maxRowCount;
-        public static float napalmBurnDPS =(ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
+        public static float napalmBurnDPS = (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
         public override string SkillName => "Napalm Cascade";
 
         public override string SkillDescription => $"Charge up a barrage of fiery napalm, creating flaming pools that " +
@@ -100,7 +100,7 @@ namespace AltArtificerExtended.Skills
             pdz.lifetime = 8f;
             pdz.fireFrequency = napalmDotFireFrequency;
             pdz.damageCoefficient = ChargeNapalm.napalmBurnDamageCoefficient;
-            pdz.overlapProcCoefficient = 0.3f;
+            pdz.overlapProcCoefficient = 0.5f;
             pdz.attackerFiltering = AttackerFiltering.Default;
             acidPrefabNapalm.GetComponent<ProjectileDamage>().damageType = DamageType.IgniteOnHit;
             acidPrefabNapalm.GetComponent<ProjectileController>().procCoefficient = 1f;
