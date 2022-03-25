@@ -74,7 +74,7 @@ namespace AltArtificerExtended
         public static float artiBoltDamage = 2.2f;
         public static float artiNanoDamage = 20;
         public static float artiUtilCooldown = 12;
-        public static float meleeRangeChannel = 21;
+        public static float meleeRangeChannel = 21; //flamethrower
         public static float meleeRangeSingle = meleeRangeChannel + 4f;
 
         void Awake()
