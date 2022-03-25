@@ -53,7 +53,7 @@ namespace AltArtificerExtended.Skills
         }
         private void RegisterProjectileMeteor(ConfigFile config)
         {
-            meteorImpactPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/MeteorStrikeImpact").InstantiateClone("NanometeorImpact", false);
+            meteorImpactPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/MeteorStrikeImpact").InstantiateClone("NanometeorImpact", false);
             float newScale = 2f;
             meteorImpactPrefab.transform.localScale = new Vector3(newScale, newScale, newScale);
 

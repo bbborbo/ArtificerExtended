@@ -19,7 +19,7 @@ namespace AltArtificerExtended.EntityState
         float baseSpeed = 15f;
 
         public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
-        public static GameObject aoeEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
+        public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
 
         public static float minMeteorRadius = _2ThunderSkill.thunderBlastRadius;
@@ -44,7 +44,7 @@ namespace AltArtificerExtended.EntityState
             base.OnEnter();
             this.duration = CastThunder.baseDuration / this.attackSpeedStat;
             base.characterBody.SetAimTimer(this.duration + 2f);
-            this.cachedCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.cachedCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
 
             if (Main.AllowBrokenSFX.Value == true)
@@ -118,7 +118,7 @@ namespace AltArtificerExtended.EntityState
                 }
                 global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             }
-            base.characterBody.crosshairPrefab = this.cachedCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
             base.OnExit();
         }
 

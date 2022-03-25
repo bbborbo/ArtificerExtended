@@ -20,7 +20,7 @@ namespace AltArtificerExtended.EntityState
     public class ChargeMeteors : BaseSkillState
     {
         public GameObject muzzleflashEffectPrefab;
-        public GameObject chargeEffectPrefab = Resources.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
+        public GameObject chargeEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
         public string chargeSoundString = "Play_mage_m2_charge";
         public float baseChargeDuration = 2f;
         public float baseWinddownDuration = 0.5f;
@@ -58,7 +58,7 @@ namespace AltArtificerExtended.EntityState
         private AltArtiPassive.BatchHandle handle;
 
         public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
-        public static GameObject aoeEffect = Resources.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
+        public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
         public static GameObject meteorEffect = _1MeteorSkill.meteorImpactPrefab;
 
@@ -113,10 +113,10 @@ namespace AltArtificerExtended.EntityState
             //base.PlayAnimation("Gesture, Additive", "ChargeNovaBomb", "ChargeNovaBomb.playbackRate", this.chargeDuration);
 
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.chargeDuration);
-            this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.defaultCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             if (ChargeMeteors.crosshairOverridePrefab)
             {
-                base.characterBody.crosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
+                base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
         }
 
@@ -259,7 +259,7 @@ namespace AltArtificerExtended.EntityState
                 }
             }
 
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
 
@@ -286,7 +286,7 @@ namespace AltArtificerExtended.EntityState
                 global::EntityStates.EntityState.Destroy(this.chargeEffectInstance);
             }
             AkSoundEngine.StopPlayingID(this.soundID);
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
             base.OnExit();
         }

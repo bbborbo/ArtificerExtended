@@ -20,8 +20,8 @@ namespace AltArtificerExtended.EntityState
     {
         public GameObject projectilePrefabOuter = _2FireSkill2Skill.outerFireball;
         public GameObject projectilePrefabInner = _2FireSkill2Skill.innerFireball;
-        public GameObject muzzleflashEffectPrefab = Resources.Load<GameObject>("prefabs/effects/MuzzleflashMageFireLarge");
-        public GameObject chargeEffectPrefab = Resources.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
+        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageFireLarge");
+        public GameObject chargeEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
         public string chargeSoundString = "Play_mage_m2_charge";
         public float baseChargeDuration = 1f;
         public float baseWinddownDuration = 0.2f;
@@ -68,10 +68,10 @@ namespace AltArtificerExtended.EntityState
             this.muzzleString = "MuzzleBetween";
 
             base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.chargeDuration);
-            this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.defaultCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             if (ChargeMeteors.crosshairOverridePrefab)
             {
-                base.characterBody.crosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
+                base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
         }
 
@@ -143,7 +143,7 @@ namespace AltArtificerExtended.EntityState
                 }
             }
 
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
             this.handle.Fire(0f, 0.5f);
@@ -176,7 +176,7 @@ namespace AltArtificerExtended.EntityState
         {
             base.PlayAnimation("Gesture, Additive", "FireWall");
             AkSoundEngine.StopPlayingID(this.soundID);
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
             base.OnExit();
         }

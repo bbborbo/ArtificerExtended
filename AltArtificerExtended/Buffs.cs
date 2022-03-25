@@ -15,13 +15,18 @@ namespace AltArtificerExtended
 
         public static DotController.DotIndex burnDot;
 
+
         void CreateBuffs()
         {
-            RoR2Content.Buffs.Slow80.canStack = true;
+            RoR2Application.onLoad += FixBuffDef;
 
             burnDot = DotController.DotIndex.Burn;
 
             AddAAPassiveBuffs();
+        }
+        void FixBuffDef()
+        {
+             RoR2Content.Buffs.Slow80.canStack = true;
         }
 
         internal static void AddBuff(BuffDef buff)
@@ -39,7 +44,7 @@ namespace AltArtificerExtended
             {
                 chillDebuff.buffColor = new Color(0.4f, 0.4f, 0.9f);
                 chillDebuff.canStack = true;
-                chillDebuff.iconSprite = Resources.Load<Sprite>("Textures/BuffIcons/texBuffSlow50Icon");
+                chillDebuff.iconSprite = RoR2.LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffSlow50Icon");
                 chillDebuff.isDebuff = false;
                 chillDebuff.name = "AltArtiColdDebuff";
             }
@@ -49,7 +54,7 @@ namespace AltArtificerExtended
             {
                 meltBuff.buffColor = new Color(0.9f, 0.2f, 0.2f);
                 meltBuff.canStack = true;
-                meltBuff.iconSprite = Resources.Load<Sprite>("Textures/BuffIcons/texBuffAffixRed");
+                meltBuff.iconSprite = RoR2.LegacyResourcesAPI.Load<Sprite>("Textures/BuffIcons/texBuffAffixRed");
                 meltBuff.isDebuff = false;
                 meltBuff.name = "AltArtiFireBuff";
             }

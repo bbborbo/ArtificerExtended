@@ -17,7 +17,7 @@ namespace AltArtificerExtended.EntityState
 {
     public class Frostbite : BaseSkillState
     {
-        public static GameObject novaEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
+        public static GameObject novaEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
 
         public static float blizzardDamageCoefficient = 3f;
         public static float blizzardProcCoefficient = 1f;
@@ -99,7 +99,7 @@ namespace AltArtificerExtended.EntityState
             blastAttack.damageType = DamageType.SlowOnHit;
             blastAttack.baseForce = force;
             blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
-            blastAttack.attackerFiltering = AttackerFiltering.NeverHit;
+            blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
             blastAttack.Fire();
         }
     }

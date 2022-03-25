@@ -9,7 +9,7 @@ namespace AltArtificerExtended.Unlocks
 {
     class ArtificerMeteorUnlock : UnlockBase
     {
-        GameObject meteorGameObject = Resources.Load<GameObject>("Prefabs/NetworkedObjects/MeteorStorm");
+        GameObject meteorGameObject = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/MeteorStorm");
 
         public override string UnlockLangTokenName => "METEOR";
 

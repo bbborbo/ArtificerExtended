@@ -19,11 +19,11 @@ namespace AltArtificerExtended.EntityState
         public GameObject projectilePrefab = _1NapalmSkill.projectilePrefabNapalm;
         public GameObject acidPrefab = _1NapalmSkill.acidPrefabNapalm;
 
-        public GameObject muzzleflashEffectPrefab = Resources.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageIceLarge");
+        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageIceLarge");
         public GameObject chargeEffectPrefab = new EntityStates.Mage.Weapon.ChargeIcebomb().chargeEffectPrefab;
         //FrozenImpactEffect, IceCullExplosion, IceRingExplosion, MageIceExplosion
-        public GameObject coldImpactPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/FrozenImpactEffect");
-        public GameObject freezeImpactPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/MageIceExplosion");
+        public GameObject coldImpactPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/FrozenImpactEffect");
+        public GameObject freezeImpactPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/MageIceExplosion");
         public string chargeSoundString = "Play_mage_m2_charge";
         public float baseChargeDuration = 2.5f;
         public float baseWinddownDuration = 0.25f;
@@ -107,10 +107,10 @@ namespace AltArtificerExtended.EntityState
                 }
             }
             base.PlayAnimation("Gesture, Additive", "ChargeNovaBomb", "ChargeNovaBomb.playbackRate", this.chargeDuration);
-            this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.defaultCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             if (ChargeNapalm.crosshairOverridePrefab)
             {
-                base.characterBody.crosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
+                base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
         }
 
@@ -136,7 +136,7 @@ namespace AltArtificerExtended.EntityState
                 Destroy(this.chargeEffectInstance);
             }
             AkSoundEngine.StopPlayingID(this.soundID);
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
             base.OnExit();
         }
@@ -212,7 +212,7 @@ namespace AltArtificerExtended.EntityState
                 }
             }
 
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
             this.handle.Fire(0f, 0.5f);
@@ -248,7 +248,7 @@ namespace AltArtificerExtended.EntityState
                     base.PlayAnimation("Gesture, Additive", "FireWall");
                     activatorSkillSlot.AddOneStock();
                     this.hasFiredBomb = true;
-                    base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+                    base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
                     this.stopwatch = 0f;
                     this.timer = 0f;
                 }

@@ -50,7 +50,7 @@ namespace AltArtificerExtended.Skills
 
         private void CreateTracerEffects()
         {
-            tracerShotgun = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun").InstantiateClone("tracerMageIceShard", false);
+            tracerShotgun = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun").InstantiateClone("tracerMageIceShard", false);
             Tracer shotgunTracer = tracerShotgun.GetComponent<Tracer>();
             shotgunTracer.speed = 100f;
             shotgunTracer.length = 3f;
@@ -59,7 +59,7 @@ namespace AltArtificerExtended.Skills
             shotgunAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             shotgunAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            tracerBuckshot = Resources.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun").InstantiateClone("tracerMageIceShardBuckshot", false);
+            tracerBuckshot = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/tracers/TracerCommandoShotgun").InstantiateClone("tracerMageIceShardBuckshot", false);
             Tracer buckshotTracer = tracerBuckshot.GetComponent<Tracer>();
             buckshotTracer.speed = 60f;
             buckshotTracer.length = 2f;

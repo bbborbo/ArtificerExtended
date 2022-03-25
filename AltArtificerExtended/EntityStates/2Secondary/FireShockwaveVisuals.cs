@@ -19,7 +19,7 @@ namespace AltArtificerExtended.EntityState
 
         public string muzzle;
 
-        public GameObject fireEffectPrefab = Resources.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
+        public GameObject fireEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
 
         public float baseDuration = 0.7f;
 

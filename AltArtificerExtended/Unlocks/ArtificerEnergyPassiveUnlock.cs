@@ -1,4 +1,5 @@
-﻿using AltArtificerExtended.Components;
+﻿
+using AltArtificerExtended.Components;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;

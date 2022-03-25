@@ -97,14 +97,13 @@ namespace AltArtificerExtended.Components
             }
 
             bool useAspect = true;
-            BuffDef aspect = RoR2Content.Buffs.AffixWhite;
             if (powerComponent != null)
             {
                 power = powerComponent.icePower;
                 useAspect = powerComponent.useIceAspect;
             }
 
-            return GetPowerLevelFromBody(body, power, aspect, useAspect);
+            return GetPowerLevelFromBody(body, power, useAspect);
         }
 
         public static Power GetFirePowerLevelFromBody(CharacterBody body, ElementCounter powerComponent = null)
@@ -119,14 +118,13 @@ namespace AltArtificerExtended.Components
             }
 
             bool useAspect = true;
-            BuffDef aspect = RoR2Content.Buffs.AffixRed;
             if (powerComponent != null)
             {
                 power = powerComponent.firePower;
                 useAspect = powerComponent.useFireAspect;
             }
 
-            return GetPowerLevelFromBody(body, power, aspect, useAspect);
+            return GetPowerLevelFromBody(body, power, useAspect);
         }
 
         public static Power GetLightningPowerLevelFromBody(CharacterBody body, ElementCounter powerComponent = null)
@@ -141,17 +139,16 @@ namespace AltArtificerExtended.Components
             }
 
             bool useAspect = true;
-            BuffDef aspect = RoR2Content.Buffs.AffixBlue;
             if (powerComponent != null)
             {
                 power = powerComponent.lightningPower;
                 useAspect = powerComponent.useLightningAspect;
             }
 
-            return GetPowerLevelFromBody(body, power, aspect, useAspect);
+            return GetPowerLevelFromBody(body, power, useAspect);
         }
 
-        public static Power GetPowerLevelFromBody(CharacterBody body, Power skillPower, BuffDef aspectDef = null, bool useAspect = false)
+        public static Power GetPowerLevelFromBody(CharacterBody body, Power skillPower,  bool useAspect = false)
         {
             Power power = Power.None;
             if (AltArtiPassive.instanceLookup.ContainsKey(body.gameObject))
@@ -160,10 +157,7 @@ namespace AltArtificerExtended.Components
             }
             if (useAspect == true && power < Power.Unfathomable)
             {
-                if (aspectDef != null && body.HasBuff(aspectDef))
-                {
-                    power++;
-                }
+                
             }
 
             return power;

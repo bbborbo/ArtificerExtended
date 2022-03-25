@@ -64,8 +64,7 @@ namespace AltArtificerExtended.EntityState
                 this.rotator = this.modelTransform.Find("MageArmature").gameObject.AddComponent<Components.Rotator>();
 
             //base.characterMotor.useGravity = false;
-            base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Aura;
-
+            //base.characterMotor.set = CameraTargetParams.AimType.Aura;
             if (AltArtiPassive.instanceLookup.ContainsKey(base.gameObject))
             {
                 this.passive = AltArtiPassive.instanceLookup[base.gameObject];
@@ -87,8 +86,8 @@ namespace AltArtificerExtended.EntityState
         {
             this.rotator.ResetRotation(0.5f);
             //Reflection.SetPropertyValue<float>(base.characterMotor, "useGravity", true);
-            base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
 
+           // base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
             if (this.inputSpace)
             {
                 UnityEngine.Object.Destroy(this.inputSpace.gameObject);

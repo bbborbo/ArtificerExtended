@@ -15,7 +15,7 @@ namespace AltArtificerExtended.EntityState
 {
     class FireLaserbolts : BaseSkillState, SteppedSkillDef.IStepSetter
     {
-        public GameObject muzzleflashEffectPrefab = Resources.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageLightningLarge");
+        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageLightningLarge");
 
         public float procCoefficient = 1.0f;
 

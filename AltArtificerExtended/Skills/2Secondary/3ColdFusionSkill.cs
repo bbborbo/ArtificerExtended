@@ -56,7 +56,7 @@ namespace AltArtificerExtended.Skills
 
         private void CreateFusionTracer()
         {
-            fusionTracer = Resources.Load<GameObject>("prefabs/effects/tracers/TracerHuntressSnipe").InstantiateClone("tracerMageFusion", false); //TracerCommandoDefault, TracerGoldGat
+            fusionTracer = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/tracers/TracerHuntressSnipe").InstantiateClone("tracerMageFusion", false); //TracerCommandoDefault, TracerGoldGat
             Tracer shotgunTracer = fusionTracer.GetComponent<Tracer>();
             //shotgunTracer.length = 35f;
             shotgunTracer.speed = 75f;

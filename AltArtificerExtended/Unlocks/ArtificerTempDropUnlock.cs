@@ -40,7 +40,7 @@ namespace AltArtificerExtended.Unlocks
             BuffDef buff = ScriptableObject.CreateInstance<BuffDef>();
             {
                 buff.name = "avalancheUnlockTracker";
-                buff.iconSprite = Resources.Load<Sprite>("textures/bufficons/texBuffGenericShield");
+                buff.iconSprite = RoR2.LegacyResourcesAPI.Load<Sprite>("textures/bufficons/texBuffGenericShield");
                 buff.buffColor = Color.red;
                 buff.canStack = true;
                 buff.isDebuff = false;

@@ -14,7 +14,7 @@ namespace AltArtificerExtended.EntityState
 {
     public class FireShockwave : BaseState
     {
-        public GameObject fireEffectPrefab = Resources.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
+        public GameObject fireEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
         public Ray burstAimRay;
         public static float damage = Main.artiNanoDamage;
         public float procCoefficient = 1.0f;

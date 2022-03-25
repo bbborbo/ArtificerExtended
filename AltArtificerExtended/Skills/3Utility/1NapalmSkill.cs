@@ -63,8 +63,8 @@ namespace AltArtificerExtended.Skills
         }
         private void RegisterProjectileNapalm()
         {
-            projectilePrefabNapalm = Resources.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("NapalmSpit", true);
-            acidPrefabNapalm = Resources.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("NapalmFire", true);
+            projectilePrefabNapalm = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("NapalmSpit", true);
+            acidPrefabNapalm = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("NapalmFire", true);
 
             Color napalmColor = new Color32(255, 40, 0, 255);
 
@@ -78,7 +78,7 @@ namespace AltArtificerExtended.Skills
             projectileNapalmFX = ghostPrefab.InstantiateClone("NapalmSpitGhost", false);
             Tools.GetParticle(projectileNapalmFX, "SpitCore", napalmColor);
 
-            projectileNapalmImpact = Resources.Load<GameObject>("prefabs/effects/impacteffects/BeetleSpitExplosion").InstantiateClone("NapalmSpitExplosion", false);
+            projectileNapalmImpact = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/BeetleSpitExplosion").InstantiateClone("NapalmSpitExplosion", false);
             Tools.GetParticle(projectileNapalmImpact, "Bugs", Color.clear);
             Tools.GetParticle(projectileNapalmImpact, "Flames", napalmColor);
             Tools.GetParticle(projectileNapalmImpact, "Flash", Color.yellow);
@@ -112,7 +112,7 @@ namespace AltArtificerExtended.Skills
             transform.Find("Spittle").gameObject.SetActive(false);
 
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(
-                Resources.Load<GameObject>("prefabs/FireTrail").GetComponent<DamageTrail>().segmentPrefab, transform.transform);
+                RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/FireTrail").GetComponent<DamageTrail>().segmentPrefab, transform.transform);
             ParticleSystem.MainModule main = gameObject.GetComponent<ParticleSystem>().main;
             main.duration = 8f;
             main.gravityModifier = -0.075f;

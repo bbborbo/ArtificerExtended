@@ -7,7 +7,6 @@ using AltArtificerExtended.Unlocks;
 using UnityEngine;
 using AltArtificerExtended.EntityState;
 using RoR2.Projectile;
-using ThreeEyedGames;
 using R2API;
 using R2API.Utils;
 
@@ -78,7 +77,7 @@ namespace AltArtificerExtended.Skills
         }
         private void RegisterProjectileThunder()
         {
-            projectilePrefabThunder = Resources.Load<GameObject>("prefabs/projectiles/ElectricOrbProjectile").InstantiateClone("ThunderProjectile", true);
+            projectilePrefabThunder = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/ElectricOrbProjectile").InstantiateClone("ThunderProjectile", true);
 
             var pc = projectilePrefabThunder.GetComponent<ProjectileController>();
             var pd = projectilePrefabThunder.GetComponent<ProjectileDamage>();

@@ -59,7 +59,7 @@ namespace AltArtificerExtended.Skills
             float blastRadius = 4;
             float scale = 0.5f;
 
-            outerFireball = Resources.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballOuter", true);
+            outerFireball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballOuter", true);
             outerFireball.transform.localScale = Vector3.one * scale;
             var ps1 = outerFireball.GetComponent<ProjectileSimple>();
             ps1.desiredForwardSpeed = 80;
@@ -74,7 +74,7 @@ namespace AltArtificerExtended.Skills
             pie1.bonusBlastForce = Vector3.zero;
             pie1.lifetime = 0.275f;
 
-            innerFireball = Resources.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballInner", true);
+            innerFireball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballInner", true);
             innerFireball.transform.localScale = Vector3.one * scale;
             var ps2 = innerFireball.GetComponent<ProjectileSimple>();
             ps2.desiredForwardSpeed = ps1.desiredForwardSpeed;

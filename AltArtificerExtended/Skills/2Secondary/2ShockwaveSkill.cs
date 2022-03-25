@@ -63,7 +63,7 @@ namespace AltArtificerExtended.Skills
 
         private void RegisterProjectileShockwave()
         {
-            shockwaveZapConePrefab = Resources.Load<GameObject>("Prefabs/Projectiles/LoaderZapCone").InstantiateClone("shockwaveZapCone", true);
+            shockwaveZapConePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LoaderZapCone").InstantiateClone("shockwaveZapCone", true);
 
             ProjectileProximityBeamController ppbc = shockwaveZapConePrefab.GetComponent<ProjectileProximityBeamController>();
             ppbc.attackRange = shockwaveMaxRange - 5;

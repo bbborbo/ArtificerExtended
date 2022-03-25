@@ -26,7 +26,7 @@ namespace AltArtificerExtended.EntityState
 
         //specific charge stuff
         public GameObject muzzleflashEffectPrefab;
-        public GameObject chargeEffectPrefab = Resources.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
+        public GameObject chargeEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
         public string chargeSoundString = "Play_mage_m2_charge";
         public float baseChargeDuration = 2f;
         public float baseWinddownDuration = 0.5f;
@@ -117,10 +117,10 @@ namespace AltArtificerExtended.EntityState
                 }
             }
             base.PlayAnimation("Gesture, Additive", "ChargeNovaBomb", "ChargeNovaBomb.playbackRate", this.chargeDuration);
-            this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.defaultCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             if (ChargeNapalm.crosshairOverridePrefab)
             {
-                base.characterBody.crosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
+                base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
         }
 
@@ -141,7 +141,7 @@ namespace AltArtificerExtended.EntityState
                 Destroy(this.chargeEffectInstance);
             }
             AkSoundEngine.StopPlayingID(this.soundID);
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             base.characterBody.AddSpreadBloom(4);
 
             base.OnExit();
@@ -201,7 +201,7 @@ namespace AltArtificerExtended.EntityState
                 }
             }
 
-            base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
             this.handle.Fire(0f, 0.5f);

@@ -17,8 +17,8 @@ namespace AltArtificerExtended.EntityState
         public static float damageCoeff = Mathf.Ceil((Main.artiBoltDamage* 0.8f) * 10) / 10;
         public override void OnEnter()
         {
-            this.projectilePrefab = Resources.Load<GameObject>("prefabs/projectiles/MageIceBolt");
-            this.muzzleflashEffectPrefab = Resources.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+            this.projectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
+            this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
             this.damageCoefficient = damageCoeff;
             this.baseDuration = 0.55f;
             this.attackSoundString = "Play_mage_shift_wall_build";

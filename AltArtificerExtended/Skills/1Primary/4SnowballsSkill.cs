@@ -54,7 +54,7 @@ namespace AltArtificerExtended.Skills
 
         private void FixSnowballProjectile()
         {
-            var SnowballPrefab = Resources.Load<GameObject>("prefabs/projectiles/MageIceBolt");
+            var SnowballPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
 
             SnowballPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
             SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;

@@ -48,9 +48,9 @@ namespace AltArtificerExtended
             On.EntityStates.Mage.Weapon.Flamethrower.OnEnter += this.Flamethrower_OnEnter;
             On.EntityStates.Mage.Weapon.Flamethrower.FixedUpdate += this.Flamethrower_FixedUpdate;
             On.EntityStates.Mage.Weapon.Flamethrower.OnExit += this.Flamethrower_OnExit;
+            IL.RoR2.UI.CharacterSelectController.UpdateSurvivorInfoPanel/* was OnNetworkUserLoadoutChanged*/ += this.CharacterSelectController_OnNetworkUserLoadoutChanged; 
             On.RoR2.HealthComponent.TakeDamage += this.HealthComponent_TakeDamage;
             GlobalEventManager.onCharacterDeathGlobal += this.GlobalEventManager_OnCharacterDeath;
-            IL.RoR2.UI.CharacterSelectController.OnNetworkUserLoadoutChanged += this.CharacterSelectController_OnNetworkUserLoadoutChanged;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
@@ -198,7 +198,7 @@ namespace AltArtificerExtended
 
                             if (Util.CheckRoll((buffCount / 15) * 100, attackerBody.master))
                             {
-                                EffectManager.SimpleImpactEffect(Resources.Load<GameObject>("Prefabs/Effects/ImpactEffects/MagmaOrbExplosion"), damageInfo.position, Vector3.up, true);
+                                EffectManager.SimpleImpactEffect(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ImpactEffects/MagmaOrbExplosion"), damageInfo.position, Vector3.up, true);
                                 //ImpactWispEmber MagmaOrbExplosion IgniteDirectionalExplosionVFX IgniteExplosionVFX FireMeatBallExplosion
                             }
                         }

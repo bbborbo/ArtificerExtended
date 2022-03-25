@@ -21,10 +21,12 @@ namespace AltArtificerExtended
                 this.CreateLightningSword(i);
             }
         }
+
+        [Obsolete]
         private void CreateLightningSword(Int32 meshInd)
         {
             GameObject ghost = this.CreateLightningSwordGhost(meshInd);
-            GameObject proj = Resources.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
+            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
 
 
             ProjectileDamage projDamage = proj.GetComponent<ProjectileDamage>();
@@ -55,7 +57,7 @@ namespace AltArtificerExtended
             projStick.alignNormals = false;
 
             ProjectileImpactExplosion projExpl = proj.GetComponent<ProjectileImpactExplosion>();
-            projExpl.impactEffect = Resources.Load<GameObject>("Prefabs/Effects/LightningStakeNova");
+            projExpl.impactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/LightningStakeNova");
             projExpl.explosionSoundString = "Play_item_lunar_primaryReplace_impact";
             projExpl.lifetimeExpiredSoundString = "";
             projExpl.offsetForLifetimeExpiredSound = 0f;
@@ -97,7 +99,7 @@ namespace AltArtificerExtended
 
         private void CreateIceExplosion()
         {
-            GameObject blast = Resources.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast").InstantiateClone("IceDelayBlast", false);
+            GameObject blast = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast").InstantiateClone("IceDelayBlast", false);
             DelayBlast component = blast.GetComponent<DelayBlast>();
             component.crit = false;
             component.procCoefficient = 1.0f;

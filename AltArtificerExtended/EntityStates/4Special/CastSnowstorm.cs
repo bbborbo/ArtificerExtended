@@ -17,7 +17,7 @@ namespace AltArtificerExtended.EntityState
     public class CastSnowstorm : BaseSkillState
     {
         public static GameObject impactEffectPrefab = IceNova.impactEffectPrefab;
-        public static GameObject novaEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
+        public static GameObject novaEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
         public static GameObject areaIndicatorPrefab = ArrowRain.areaIndicatorPrefab;
         public static GameObject projectilePrefab = _1FrostbiteSkill.blizzardProjectilePrefab;
 
@@ -123,14 +123,14 @@ namespace AltArtificerExtended.EntityState
                     temporaryOverlay.animateShaderAlpha = true;
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.destroyComponentOnEnd = true;
-                    temporaryOverlay.originalMaterial = Resources.Load<Material>("Materials/matHuntressFlashBright");
+                    temporaryOverlay.originalMaterial = RoR2.LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashBright");
                     temporaryOverlay.AddToCharacerModel(this.modelTransform.GetComponent<CharacterModel>());
                     TemporaryOverlay temporaryOverlay2 = this.modelTransform.gameObject.AddComponent<TemporaryOverlay>();
                     temporaryOverlay2.duration = 0.7f;
                     temporaryOverlay2.animateShaderAlpha = true;
                     temporaryOverlay2.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay2.destroyComponentOnEnd = true;
-                    temporaryOverlay2.originalMaterial = Resources.Load<Material>("Materials/matHuntressFlashExpanded");
+                    temporaryOverlay2.originalMaterial = RoR2.LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded");
                     temporaryOverlay2.AddToCharacerModel(this.modelTransform.GetComponent<CharacterModel>());
                 }
 

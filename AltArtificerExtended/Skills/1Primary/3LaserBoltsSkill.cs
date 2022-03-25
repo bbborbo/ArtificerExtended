@@ -58,7 +58,7 @@ namespace AltArtificerExtended.Skills
 
         private void CreateTracer()
         {
-            tracerLaser = Resources.Load<GameObject>("prefabs/effects/tracers/TracerGolem").InstantiateClone("tracerMageLaser", false);
+            tracerLaser = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/tracers/TracerGolem").InstantiateClone("tracerMageLaser", false);
             Tracer buckshotTracer = tracerLaser.GetComponent<Tracer>();
             buckshotTracer.speed = 300f;
             buckshotTracer.length = 15f;

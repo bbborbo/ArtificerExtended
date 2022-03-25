@@ -17,9 +17,9 @@ namespace AltArtificerExtended.EntityState
 {
     class FireIceShard : BaseSkillState, SteppedSkillDef.IStepSetter
     {
-        public static GameObject effectPrefab = Resources.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
-        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
-        public GameObject muzzleflashEffectPrefab = Resources.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+        public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
+        public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
+        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
         public static float damageCoefficient = Main.artiBoltDamage + 2f;
         public static float procCoefficientPoint = 0.5f;
         public static float procCoefficientSpread = 0.5f;

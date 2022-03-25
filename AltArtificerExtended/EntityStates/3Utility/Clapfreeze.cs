@@ -40,7 +40,7 @@ namespace AltArtificerExtended.EntityState
             base.OnEnter();
             this.duration = Clapfreeze.baseDuration / this.attackSpeedStat;
             base.characterBody.SetAimTimer(this.duration + 2f);
-            this.cachedCrosshairPrefab = base.characterBody.crosshairPrefab;
+            this.cachedCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
             Util.PlaySound(Clapfreeze.prepWallSoundString, base.gameObject);
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(PrepWall.areaIndicatorPrefab);
@@ -65,7 +65,7 @@ namespace AltArtificerExtended.EntityState
                     this.areaIndicatorInstance.transform.right = -aimRay.direction;
                     this.goodPlacement = (Vector3.Angle(Vector3.up, raycastHit.normal) < PrepWall.maxSlopeAngle);
                 }
-                base.characterBody.crosshairPrefab = (this.goodPlacement ? PrepWall.goodCrosshairPrefab : PrepWall.badCrosshairPrefab);
+                base.characterBody._defaultCrosshairPrefab = (this.goodPlacement ? PrepWall.goodCrosshairPrefab : PrepWall.badCrosshairPrefab);
             }
             this.areaIndicatorInstance.SetActive(this.goodPlacement);
         }
@@ -129,7 +129,7 @@ namespace AltArtificerExtended.EntityState
                 }
             }
             global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
-            base.characterBody.crosshairPrefab = this.cachedCrosshairPrefab;
+            base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
             base.OnExit();
         }
 

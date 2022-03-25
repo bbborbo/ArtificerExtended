@@ -107,7 +107,7 @@ namespace AltArtificerExtended.Skills
                 blastAttack.damageType = DamageType.Freeze2s;
                 blastAttack.baseForce = 0;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
-                blastAttack.attackerFiltering = AttackerFiltering.NeverHit;
+                blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                 blastAttack.Fire();
             }
         }

@@ -19,7 +19,7 @@ namespace AltArtificerExtended
 
         public static void CreateNebulaOrbitals()
         {
-            GameObject teleporterPrefab = Resources.Load<GameObject>("prefabs/networkedobjects/teleporters/Teleporter1");
+            GameObject teleporterPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/networkedobjects/teleporters/Teleporter1");
             if(teleporterPrefab != null)
             {
                 List<GameObject> smallOrbs = new List<GameObject>();
@@ -56,7 +56,7 @@ namespace AltArtificerExtended
 
         private GameObject CreateLightningSwordGhost(Int32 meshInd)
         {
-            GameObject obj = Resources.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningSwordGhost", false);
+            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningSwordGhost", false);
 
             GameObject model = obj.transform.Find("mdlRock").gameObject;
             GameObject trail = obj.transform.Find("Trail").gameObject;
@@ -91,7 +91,7 @@ namespace AltArtificerExtended
                 case 0:
                     model.transform.localScale = new Vector3(0.5f, 0.5f, 1.5f);
 
-                    mesh = GameObject.Instantiate<Mesh>(Resources.Load<GameObject>("Prefabs/PickupModels/PickupTriTip").transform.Find("mdlTriTip").GetComponent<MeshFilter>().sharedMesh);
+                    mesh = GameObject.Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/PickupModels/PickupTriTip").transform.Find("mdlTriTip").GetComponent<MeshFilter>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;
@@ -111,7 +111,7 @@ namespace AltArtificerExtended
 
                 case 1:
                     model.transform.localScale = new Vector3(1f, 1f, 1f);
-                    mesh = Instantiate<Mesh>(Resources.Load<GameObject>("Prefabs/CharacterBodies/MercBody").transform.Find("ModelBase/mdlMerc/MercSwordMesh").GetComponent<SkinnedMeshRenderer>().sharedMesh);
+                    mesh = Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MercBody").transform.Find("ModelBase/mdlMerc/MercSwordMesh").GetComponent<SkinnedMeshRenderer>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;
@@ -132,7 +132,7 @@ namespace AltArtificerExtended
                 case 2:
                     model.transform.localScale = new Vector3(0.06f, 0.06f, 0.15f);
                     model.transform.eulerAngles = new Vector3(0f, 180f, 0f);
-                    mesh = GameObject.Instantiate<Mesh>(Resources.Load<GameObject>("Prefabs/CharacterBodies/TitanGoldBody").transform.Find("ModelBase/mdlTitan/TitanArmature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/hand.r/RightFist/Sword").GetComponent<MeshFilter>().sharedMesh);
+                    mesh = GameObject.Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/TitanGoldBody").transform.Find("ModelBase/mdlTitan/TitanArmature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/hand.r/RightFist/Sword").GetComponent<MeshFilter>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;
@@ -156,7 +156,7 @@ namespace AltArtificerExtended
         {
             this.CreateIceBombTex();
 
-            GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/AffixWhiteDelayEffect").InstantiateClone("iceDelay", false);
+            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/AffixWhiteDelayEffect").InstantiateClone("iceDelay", false);
             obj.GetComponent<DestroyOnTimer>().duration = 0.2f;
 
             ParticleSystemRenderer sphere = obj.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>();
@@ -173,7 +173,7 @@ namespace AltArtificerExtended
         {
             this.CreateIceBombTex();
 
-            GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/ImpactEffects/AffixWhiteExplosion").InstantiateClone("IceExplosion", false);
+            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ImpactEffects/AffixWhiteExplosion").InstantiateClone("IceExplosion", false);
             ParticleSystemRenderer sphere = obj.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>();
             Material mat = UnityEngine.Object.Instantiate<Material>(sphere.material);
             mat.SetTexture("_RemapTex", this.iceBombTex);

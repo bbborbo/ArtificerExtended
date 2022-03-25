@@ -35,7 +35,7 @@ namespace AltArtificerExtended
 
     [BepInDependency("com.Borbo.DuckSurvivorTweaks", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.Borbo.BalanceOverhaulRBO", BepInDependency.DependencyFlags.SoftDependency)]
-    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI), nameof(BuffAPI), nameof(PrefabAPI))]
+    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class Main : BaseUnityPlugin
     {
@@ -78,7 +78,7 @@ namespace AltArtificerExtended
 
         void Awake()
         {
-            mageObject = Resources.Load<GameObject>("prefabs/characterbodies/MageBody");
+            mageObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
             mageObject.AddComponent<ElementCounter>();
             mageBody = mageObject.GetComponent<CharacterBody>();
             mageSkillLocator = mageObject.GetComponent<SkillLocator>();
@@ -154,7 +154,7 @@ namespace AltArtificerExtended
         {
             orig();
 
-            SkillDef surge = Resources.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
+            SkillDef surge = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
             if (surge != null)
             {
                 Debug.Log("Changing ion surge");
@@ -366,7 +366,7 @@ namespace AltArtificerExtended
 
             LanguageAPI.Add("MAGE_OUTRO_FLAVOR", "..and so she left, her heart fixed on new horizons.");
 
-            GameObject iceWallPillarPrefab = Resources.Load<GameObject>("prefabs/projectiles/MageIcewallPillarProjectile");
+            GameObject iceWallPillarPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIcewallPillarProjectile");
             ProjectileImpactExplosion pie = iceWallPillarPrefab.GetComponentInChildren<ProjectileImpactExplosion>();
             if (pie)
             {
@@ -500,7 +500,7 @@ namespace AltArtificerExtended
 
         private void FixSkillFlamer(SkillFamily skillFamily)
         {
-            SkillDef flamer = Resources.Load<SkillDef>("skilldefs/magebody/MageBodyFlamethrower");
+            SkillDef flamer = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlamethrower");
             if (flamer == null)
             {
                 Debug.Log("Could not find Flamethrower by name. Using skillfamily index instead. Oh no!");
