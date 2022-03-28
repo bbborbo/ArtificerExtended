@@ -79,6 +79,11 @@ namespace AltArtificerExtended.Skills
                 FireIceShard.maxRange, 
                 "Determines the cutoff radius for Ice Shards bullets. Damage falloff still applies."
                 ).Value;
+            FireIceShard.damageCoefficient = config.Bind<float>(
+                SkillName, "Damage Per Pellet",
+                FireIceShard.damageCoefficient / totalShards,
+                "Determines the max damage per Ice Shards pellet. Damage falloff still applies."
+                ).Value * totalShards;
 
             KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
             CreateTracerEffects();
