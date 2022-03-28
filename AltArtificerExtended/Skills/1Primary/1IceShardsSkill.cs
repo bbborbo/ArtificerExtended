@@ -74,6 +74,12 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            FireIceShard.maxRange = config.Bind<float>(
+                SkillName, "Max Range", 
+                FireIceShard.maxRange, 
+                "Determines the cutoff radius for Ice Shards bullets. Damage falloff still applies."
+                ).Value;
+
             KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
             CreateTracerEffects();
             CreateLang();
