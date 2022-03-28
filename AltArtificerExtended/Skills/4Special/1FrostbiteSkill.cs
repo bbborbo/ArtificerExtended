@@ -79,8 +79,8 @@ namespace AltArtificerExtended.Skills
             }
 
             //Tools.DebugMaterial(blizzardArmorVFX);
-            Material blizzardArmorMaterial = new Material("Standard");
-            Tools.GetMaterial(blizzardArmorVFX, "ShieldMesh", Color.blue, ref blizzardArmorMaterial, 2.5f, true);
+            Material blizzardArmorMaterial = null;
+            Tools.GetMaterial(blizzardArmorVFX, "ShieldMesh", Color.cyan, ref blizzardArmorMaterial, 2.5f, true);
 
             //blizzardArmorVFX.AddComponent<NetworkIdentity>();
             //TemporaryVisualEffect tempEffect = blizzardArmorVFX.GetComponent<TemporaryVisualEffect>();

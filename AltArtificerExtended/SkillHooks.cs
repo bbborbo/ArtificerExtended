@@ -183,7 +183,7 @@ namespace AltArtificerExtended
                 this.frozenBy[self.gameObject] = damageInfo.attacker;
             }
 
-            if (damageInfo.dotIndex == Main.burnDot)
+            if (damageInfo.dotIndex == Main.burnDot || damageInfo.dotIndex == Main.strongBurnDot)
             {
                 if (damageInfo.attacker)
                 {

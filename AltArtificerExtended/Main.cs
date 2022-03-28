@@ -56,9 +56,6 @@ namespace AltArtificerExtended
         internal static ConfigFile CustomConfigFile { get; set; }
         public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
-        public static ConfigEntry<bool> NanobombChanges { get; set; }
-        public static ConfigEntry<bool> SnapfreezeChanges { get; set; }
-        public static ConfigEntry<bool> FlamethrowerChanges { get; set; }
         #endregion
 
         public static GameObject mageObject;

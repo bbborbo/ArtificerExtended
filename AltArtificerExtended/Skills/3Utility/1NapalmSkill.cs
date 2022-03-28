@@ -21,7 +21,7 @@ namespace AltArtificerExtended.Skills
         public static GameObject projectileNapalmImpact;
         public static GameObject projectileNapalmFX;
 
-        public static float napalmDotFireFrequency = 2f;
+        public static float napalmDotFireFrequency = 1.5f;
         public static int napalmMaxProjectiles = ChargeNapalm.maxProjectileCount * ChargeNapalm.maxRowCount;
         public static float napalmBurnDPS = (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
         public override string SkillName => "Napalm Cascade";
