@@ -57,6 +57,41 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            ChargeNapalm.minDamageCoefficient = config.Bind<float>(
+              SkillName, "Minimum damage",
+              ChargeNapalm.minDamageCoefficient,
+              "Determines the minimum damage napalm deals. Change both min and max damage coefficient(what is goin on herr)"
+              ).Value;
+            ChargeNapalm.maxDamageCoefficient = config.Bind<float>(
+                SkillName, "Maximum",
+                ChargeNapalm.maxDamageCoefficient,
+                "Determines the maximum damage napalm deals. Change both min and max damage coefficient(what is goin on herr)"
+                ).Value;
+            ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
+                SkillName, "Burn Damage Coefficient",
+                ChargeNapalm.napalmBurnDamageCoefficient,
+                "Determines the amount of damage napalm deals as a coefficient..? wat"
+                ).Value;
+            ChargeNapalm.projectileHSpeed = config.Bind<float>(
+                SkillName, "Projectile Speed",
+                ChargeNapalm.projectileHSpeed,
+                "Determines the speed of napalm projectiles."
+                ).Value;
+            napalmDotFireFrequency = config.Bind<float>(
+                SkillName, "DOT frequency",
+                napalmDotFireFrequency,
+                "Determines the frequency the DOT occurs. Higher values = less delay per damage tick."
+                ).Value;
+            ChargeNapalm.minRadius = config.Bind<float>(
+               SkillName, "Projectile Speed",
+               ChargeNapalm.minRadius,
+               "Determines the minimum radius of napalm pools."
+               ).Value;
+            ChargeNapalm.maxRadius = config.Bind<float>(
+               SkillName, "Projectile Speed",
+               ChargeNapalm.maxRadius,
+               "Determines the maximum radius of napalm pools."
+               ).Value;
             RegisterProjectileNapalm();
             CreateLang();
             CreateSkill();

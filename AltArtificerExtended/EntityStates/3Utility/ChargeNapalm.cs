@@ -54,8 +54,8 @@ namespace AltArtificerExtended.EntityState
         public static float selfForce = 2000f;
 
         //everything past here is generic charge stuff
-        public float minRadius = 0;
-        public float maxRadius = 0.5f;
+        public static float minRadius = 0;
+        public static float maxRadius = 0.5f;
 
         private const float minChargeDuration = 0.2f;
         private float stopwatch;
@@ -127,7 +127,7 @@ namespace AltArtificerExtended.EntityState
         public override void Update()
         {
             base.Update();
-            base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgress(), 0f, 1f, this.maxRadius, this.minRadius), true);
+            base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgress(), 0f, 1f, maxRadius, minRadius), true);
         }
 
         public override void OnExit()

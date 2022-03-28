@@ -135,7 +135,13 @@ namespace AltArtificerExtended
 
             this.ArtiChanges();
             this.InitializeSkills();
+            if ( CustomConfigFile.Bind<bool>(
+                "Setting for reworking flamethrower and Ion Surge", "Rework enabled ? ",
+                true,
+                "Determines whether ion surge and flamethrower get reworked."
+                ).Value) { 
             On.RoR2.Skills.SkillCatalog.Init += ReplaceSkillDefs;
+            }
             if (isScepterLoaded)
             {
                 Debug.Log("Fuck");

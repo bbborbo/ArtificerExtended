@@ -49,6 +49,29 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            ChargeFireBlast.minRadius = config.Bind<float>(
+                 SkillName, "Min Radius",
+                 ChargeFireBlast.minRadius,
+                 "Determines the minimum explosion radius of Fire Blast. This would just be tapping it."
+                 ).Value;
+            ChargeFireBlast.maxRadius = config.Bind<float>(
+                SkillName, "Max Radius",
+                ChargeFireBlast.maxRadius,
+                "Determines the max explosion radius of Fire Blast. More charge time bigger explosion."
+                ).Value;
+
+            ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
+                SkillName, "Minimum Damage Coefficient",
+                ChargeFireBlast.minDamageCoefficient,
+                "Determines the minimum damage of Fire Blast"
+                ).Value;
+            ChargeFireBlast.maxDamageCoefficient = config.Bind<float>(
+                SkillName, "Max Damage Coefficient",
+                ChargeFireBlast.maxDamageCoefficient,
+                "Determines the max damage of Fire Blast. "
+                ).Value;
+
+
             CreateProjectiles();
             CreateLang();
             CreateSkill();

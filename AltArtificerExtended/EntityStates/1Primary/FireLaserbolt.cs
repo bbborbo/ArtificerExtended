@@ -44,7 +44,7 @@ namespace AltArtificerExtended.EntityState
 
         private Gauntlet gauntlet;
         public static float baseRecoilAmplitude = 1.6f;
-        public float maxRange = 45;
+        public  static float maxRange = 45;
 
         public enum Gauntlet
         {

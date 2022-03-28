@@ -47,6 +47,27 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+
+            ColdFusion.maxRange = config.Bind<float>(
+                SkillName, "Max Range",
+                ColdFusion.maxRange,
+                "Determines the maximum range Cold Fusion has."
+                ).Value;
+            ColdFusion.totalDamageCoefficient = config.Bind<float>(
+                SkillName, "Damage Coefficient",
+                ColdFusion.totalDamageCoefficient,
+                "Determines the TOTAL damage coefficient Cold Fusion has."
+                ).Value;
+            ColdFusion.bulletCount = config.Bind<int>(
+                SkillName, "Spear Count",
+                ColdFusion.bulletCount,
+                "Determines the amount of spears/bullets Cold Fusion has."
+                ).Value;
+            ColdFusion.freezeChance = config.Bind<float>(
+                SkillName, "Freeze Chance",
+                ColdFusion.freezeChance,
+                "Determines the chance per spear/bullet has to freeze on hit."
+                ).Value;
             KeywordTokens = new string[2] { "ARTIFICEREXTENDED_KEYWORD_CHILL", "KEYWORD_FREEZING" };
 
             CreateFusionTracer();

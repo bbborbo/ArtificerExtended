@@ -27,8 +27,8 @@ namespace AltArtificerExtended.Skills
 
         public override string SkillName => "Frostbite";
 
-        public override string SkillDescription => "Cover yourself in a <style=cIsUtility>protective icy armor.</style> " +
-                "Erupts once for <style=cIsDamage>300% damage,</style> then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>500%.</style>";
+        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor.</style> for {Tools.ConvertDecimal(blizzardBuffDuration)} seconds" +
+                $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}%,</style> then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}%.</style>";
 
         public override string SkillLangTokenName => "FROSTBITE";
 
@@ -57,6 +57,28 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+        
+            Frostbite.blizzardDamageCoefficient = config.Bind<float>(
+             SkillName, "Damage Coefficient",
+             Frostbite.blizzardDamageCoefficient,
+             "Determines the damage coefficient of the initial frostbite."
+             ).Value;
+            Frostbite.blizzardRadius = config.Bind<float>(
+             SkillName, "Damage Radius",
+             Frostbite.blizzardRadius,
+             "Determines the radius of the initial frostbite."
+             ).Value;
+
+            Frostbite.novaDamageCoefficient = config.Bind<float>(
+            SkillName, "Damage Coefficient Explosion",
+            Frostbite.novaDamageCoefficient,
+            "Determines the damage coefficient of explosion frostbite."
+            ).Value;
+            Frostbite.novaRadius = config.Bind<float>(
+            SkillName, "Damage Radius Explosion",
+            Frostbite.novaRadius,
+            "Determines the radius of the explosion frostbite."
+            ).Value;
             KeywordTokens = new string[2] { "KEYWORD_FREEZING", "ARTIFICEREXTENDED_KEYWORD_CHILL" };
             RegisterBuffWhiteout();
             RegisterArmorEffects();

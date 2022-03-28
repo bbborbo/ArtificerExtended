@@ -44,6 +44,22 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            Avalanche.damageCoefficient = config.Bind<float>(
+             SkillName, "Damage Coefficient",
+             Avalanche.damageCoefficient,
+             "Determines the damage coefficient of temperature drop."
+             ).Value;
+            Avalanche.minRadius = config.Bind<float>(
+             SkillName, "Damage Coefficient",
+             Avalanche.minRadius,
+             "Determines the minimum radius of temperature drop."
+             ).Value;
+            Avalanche.maxRadius = config.Bind<float>(
+             SkillName, "Damage Coefficient",
+             Avalanche.maxRadius,
+             "Determines the maximum radius of temperature drop."
+             ).Value;
+
             KeywordTokens = new string[1] { "KEYWORD_FREEZING" };
 
             CreateLang();

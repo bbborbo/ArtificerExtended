@@ -51,6 +51,18 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            FireLaserbolts.maxRange = config.Bind<float>(
+                SkillName, "Max Range",
+                FireLaserbolts.maxRange,
+                "Determines the maximum range laser bolts has."
+                ).Value;
+            FireLaserbolts.damageCoefficient = config.Bind<float>(
+                SkillName, "Damage Coefficient",
+                FireLaserbolts.damageCoefficient,
+                "Determines the damage coefficient laser bolts has."
+                ).Value;
+
+
             CreateLang();
             CreateSkill();
             CreateTracer();

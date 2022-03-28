@@ -26,8 +26,8 @@ namespace AltArtificerExtended.EntityState
         public float baseChargeDuration = 1f;
         public float baseWinddownDuration = 0.2f;
 
-        public float minRadius = 0;
-        public float maxRadius = 0.5f;
+        public static float minRadius = 0;
+        public static float maxRadius = 0.5f;
 
         public static float minDamageCoefficient = 1.2f;
         public static float maxDamageCoefficient = Main.artiBoltDamage * 1.5f;
@@ -79,7 +79,7 @@ namespace AltArtificerExtended.EntityState
         {
             base.Update();
 
-            base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgressSmooth(), 0f, 1f, this.minRadius, this.maxRadius), true);
+            base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgressSmooth(), 0f, 1f, minRadius, maxRadius), true);
         }
         private float GetChargeProgressSmooth()
         {
