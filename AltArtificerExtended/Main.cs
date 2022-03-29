@@ -249,7 +249,7 @@ namespace AltArtificerExtended
 
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Gain a buff that temporarily " +
-                $"increases the <style=cIsDamage>burn damage</style> from Ignite" +
+                $"increases the <style=cIsDamage>burn damage</style> from Ignite " +
                 $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.burnDamageMult)} per stack.</style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "<style=cKeywordName>Arctic Blast</style>" +
                 "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
