@@ -75,12 +75,12 @@ namespace AltArtificerExtended.Skills
         public override void Init(ConfigFile config)
         {
             FireIceShard.maxRange = config.Bind<float>(
-                SkillName, "Max Range", 
+                "Skills Config: " + SkillName, "Max Range", 
                 FireIceShard.maxRange, 
                 "Determines the cutoff radius for Ice Shards bullets. Damage falloff still applies."
                 ).Value;
             FireIceShard.damageCoefficient = config.Bind<float>(
-                SkillName, "Damage Per Pellet",
+                "Skills Config: " + SkillName, "Damage Per Pellet",
                 FireIceShard.damageCoefficient / totalShards,
                 "Determines the max damage coefficient per Ice Shards pellet. Damage falloff still applies."
                 ).Value * totalShards;

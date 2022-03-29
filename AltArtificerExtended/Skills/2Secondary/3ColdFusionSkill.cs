@@ -49,22 +49,22 @@ namespace AltArtificerExtended.Skills
         {
 
             ColdFusion.maxRange = config.Bind<float>(
-                SkillName, "Max Range",
+                "Skills Config: " + SkillName, "Max Range",
                 ColdFusion.maxRange,
                 "Determines the maximum range Cold Fusion has. Damage Falloff still applies."
                 ).Value;
             ColdFusion.totalDamageCoefficient = config.Bind<float>(
-                SkillName, "Damage Coefficient",
+                "Skills Config: " + SkillName, "Damage Coefficient",
                 ColdFusion.totalDamageCoefficient,
                 "Determines the TOTAL damage coefficient Cold Fusion has. Damage Falloff still applies."
                 ).Value;
             ColdFusion.bulletCount = config.Bind<int>(
-                SkillName, "Spear Count",
+                "Skills Config: " + SkillName, "Spear Count",
                 ColdFusion.bulletCount,
                 "Determines the amount of spears/bullets Cold Fusion has."
                 ).Value;
             ColdFusion.freezeChance = config.Bind<float>(
-                SkillName, "Freeze Chance",
+                "Skills Config: " + SkillName, "Freeze Chance",
                 ColdFusion.freezeChance,
                 "Determines the chance per spear/bullet has to freeze on hit."
                 ).Value;

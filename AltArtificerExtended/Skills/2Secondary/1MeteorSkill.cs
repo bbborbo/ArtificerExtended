@@ -57,7 +57,7 @@ namespace AltArtificerExtended.Skills
             meteorImpactPrefab.transform.localScale = new Vector3(newScale, newScale, newScale);
 
             bool recolorMeteor = config.Bind<bool>(
-                "Cosmetic",
+                "Skills Config: " + SkillName,
                 "Recolor Nano-Meteor",
                 true,
                 "Choose to have either the ugly red nano-meteor or the ugly blue nano-meteor that is definitely not glowing meteorite."

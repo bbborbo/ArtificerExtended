@@ -58,24 +58,24 @@ namespace AltArtificerExtended.Skills
         public override void Init(ConfigFile config)
         {
             ChargeNapalm.maxDamageCoefficient = config.Bind<float>(
-                SkillName, "Primary Damage Coefficient",
+                "Skills Config: " + SkillName, "Primary Damage Coefficient",
                 ChargeNapalm.maxDamageCoefficient,
                 "Determines the damage dealt by each Napalm impact."
                 ).Value;
             ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
-                SkillName, "Secondary Damage Coefficient",
+                "Skills Config: " + SkillName, "Secondary Damage Coefficient",
                 ChargeNapalm.napalmBurnDamageCoefficient,
                 "Determines the damage per tick of napalm, expressed as a fraction of the Primary damage coefficient. " +
                 "Ex - if the Primary damage coefficient is 0.7, and the Secondary damage coefficient is 0.5, " +
                 "then each tick of damage will have a coefficient of 0.35."
                 ).Value;
             ChargeNapalm.projectileHSpeed = config.Bind<float>(
-                SkillName, "Projectile Speed",
+                "Skills Config: " + SkillName, "Projectile Speed",
                 ChargeNapalm.projectileHSpeed,
                 "Determines the speed of napalm projectiles."
                 ).Value;
             napalmDotFireFrequency = config.Bind<float>(
-                SkillName, "DOT frequency",
+                "Skills Config: " + SkillName, "DOT frequency",
                 napalmDotFireFrequency,
                 "Determines the amount of times each Napalm pool ticks each second."
                 ).Value;

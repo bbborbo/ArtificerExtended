@@ -59,23 +59,23 @@ namespace AltArtificerExtended.Skills
         {
         
             Frostbite.blizzardDamageCoefficient = config.Bind<float>(
-             SkillName, "Primary Damage Coefficient",
+             "Skills Config: " + SkillName, "Primary Damage Coefficient",
              Frostbite.blizzardDamageCoefficient,
              "Determines the damage coefficient of the nova created when Frostbite is cast."
              ).Value;
             Frostbite.blizzardRadius = config.Bind<float>(
-             SkillName, "Primary Blast Radius",
+             "Skills Config: " + SkillName, "Primary Blast Radius",
              Frostbite.blizzardRadius,
              "Determines the radius of the nova created when Frostbite is cast."
              ).Value;
 
             Frostbite.novaDamageCoefficient = config.Bind<float>(
-            SkillName, "Secondary Damage Coefficient",
+            "Skills Config: " + SkillName, "Secondary Damage Coefficient",
             Frostbite.novaDamageCoefficient,
             "Determines the damage coefficient of the nova created after the Frostbite buff expires."
             ).Value;
             Frostbite.novaRadius = config.Bind<float>(
-            SkillName, "Secondary Blast Radius",
+            "Skills Config: " + SkillName, "Secondary Blast Radius",
             Frostbite.novaRadius,
             "Determines the radius of the nova created after the Frostbite buff expires."
             ).Value;

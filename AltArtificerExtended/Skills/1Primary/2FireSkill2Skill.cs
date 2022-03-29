@@ -51,12 +51,12 @@ namespace AltArtificerExtended.Skills
         {
 
             ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
-                SkillName, "Minimum Damage Coefficient",
+                "Skills Config: " + SkillName, "Minimum Damage Coefficient",
                 ChargeFireBlast.minDamageCoefficient,
                 "Determines the minimum damage of Fire Blast."
                 ).Value;
             ChargeFireBlast.maxDamageCoefficient = config.Bind<float>(
-                SkillName, "Max Damage Coefficient",
+                "Skills Config: " + SkillName, "Max Damage Coefficient",
                 ChargeFireBlast.maxDamageCoefficient,
                 "Determines the max damage of Fire Blast. "
                 ).Value;

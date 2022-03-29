@@ -45,17 +45,17 @@ namespace AltArtificerExtended.Skills
         public override void Init(ConfigFile config)
         {
             Avalanche.damageCoefficient = config.Bind<float>(
-             SkillName, "Damage Coefficient",
+             "Skills Config: " + SkillName, "Damage Coefficient",
              Avalanche.damageCoefficient,
              "Determines the damage coefficient of temperature drop."
              ).Value;
             Avalanche.minRadius = config.Bind<float>(
-             SkillName, "Minimum Blast Radius",
+             "Skills Config: " + SkillName, "Minimum Blast Radius",
              Avalanche.minRadius,
              "Determines the minimum radius of temperature drop."
              ).Value;
             Avalanche.maxRadius = config.Bind<float>(
-             SkillName, "Maximum Blast Radius",
+             "Skills Config: " + SkillName, "Maximum Blast Radius",
              Avalanche.maxRadius,
              "Determines the maximum radius of temperature drop."
              ).Value;
