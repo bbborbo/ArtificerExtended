@@ -50,12 +50,12 @@ namespace AltArtificerExtended.Skills
              "Determines the damage coefficient of temperature drop."
              ).Value;
             Avalanche.minRadius = config.Bind<float>(
-             SkillName, "Damage Coefficient",
+             SkillName, "Minimum Blast Radius",
              Avalanche.minRadius,
              "Determines the minimum radius of temperature drop."
              ).Value;
             Avalanche.maxRadius = config.Bind<float>(
-             SkillName, "Damage Coefficient",
+             SkillName, "Maximum Blast Radius",
              Avalanche.maxRadius,
              "Determines the maximum radius of temperature drop."
              ).Value;

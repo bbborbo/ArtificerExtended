@@ -20,9 +20,9 @@ namespace AltArtificerExtended.Skills
 
         public override string SkillName => "Flame Burst";
 
-        public override string SkillDescription => $"Charge a spread of 3 fireballs for " +
+        public override string SkillDescription => $"Ignite. Charge a spread of 3 fireballs for " +
             $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +
-            $"damage each</style> that converge on a point in front of you. Each fireball <style=cIsUtility>burns</style> enemies.";
+            $"damage each</style> that converge on a point in front of you.";
 
         public override string SkillLangTokenName => "FIREBALLS";
 
@@ -49,21 +49,11 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-            ChargeFireBlast.minRadius = config.Bind<float>(
-                 SkillName, "Min Radius",
-                 ChargeFireBlast.minRadius,
-                 "Determines the minimum explosion radius of Fire Blast. This would just be tapping it."
-                 ).Value;
-            ChargeFireBlast.maxRadius = config.Bind<float>(
-                SkillName, "Max Radius",
-                ChargeFireBlast.maxRadius,
-                "Determines the max explosion radius of Fire Blast. More charge time bigger explosion."
-                ).Value;
 
             ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
                 SkillName, "Minimum Damage Coefficient",
                 ChargeFireBlast.minDamageCoefficient,
-                "Determines the minimum damage of Fire Blast"
+                "Determines the minimum damage of Fire Blast."
                 ).Value;
             ChargeFireBlast.maxDamageCoefficient = config.Bind<float>(
                 SkillName, "Max Damage Coefficient",
@@ -71,6 +61,8 @@ namespace AltArtificerExtended.Skills
                 "Determines the max damage of Fire Blast. "
                 ).Value;
 
+
+            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
 
             CreateProjectiles();
             CreateLang();

@@ -32,7 +32,6 @@ namespace AltArtificerExtended.EntityState
         public float baseWinddownDuration = 0.5f;
 
         //generic attack stuff
-        public static float minDamageCoefficient = 3f;
         public static float maxDamageCoefficient = 3f;
         public static float napalmBurnDamageCoefficient = 1f;
 
@@ -176,7 +175,7 @@ namespace AltArtificerExtended.EntityState
                 {
                     float rows = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minRowCount, ChargeNapalm.maxRowCount);
                     float projectilesPerRow = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minProjectileCount, ChargeNapalm.maxProjectileCount);
-                    float totalDamage = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minDamageCoefficient, ChargeNapalm.maxDamageCoefficient);
+                    float totalDamage = ChargeNapalm.maxDamageCoefficient;
                     float pitchSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxPitchSpread, ChargeNapalm.minPitchSpread);
                     float yawSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxYawSpread, ChargeNapalm.minYawSpread);
 

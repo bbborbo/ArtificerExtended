@@ -51,12 +51,12 @@ namespace AltArtificerExtended.Skills
             ColdFusion.maxRange = config.Bind<float>(
                 SkillName, "Max Range",
                 ColdFusion.maxRange,
-                "Determines the maximum range Cold Fusion has."
+                "Determines the maximum range Cold Fusion has. Damage Falloff still applies."
                 ).Value;
             ColdFusion.totalDamageCoefficient = config.Bind<float>(
                 SkillName, "Damage Coefficient",
                 ColdFusion.totalDamageCoefficient,
-                "Determines the TOTAL damage coefficient Cold Fusion has."
+                "Determines the TOTAL damage coefficient Cold Fusion has. Damage Falloff still applies."
                 ).Value;
             ColdFusion.bulletCount = config.Bind<int>(
                 SkillName, "Spear Count",

@@ -59,25 +59,25 @@ namespace AltArtificerExtended.Skills
         {
         
             Frostbite.blizzardDamageCoefficient = config.Bind<float>(
-             SkillName, "Damage Coefficient",
+             SkillName, "Primary Damage Coefficient",
              Frostbite.blizzardDamageCoefficient,
-             "Determines the damage coefficient of the initial frostbite."
+             "Determines the damage coefficient of the nova created when Frostbite is cast."
              ).Value;
             Frostbite.blizzardRadius = config.Bind<float>(
-             SkillName, "Damage Radius",
+             SkillName, "Primary Blast Radius",
              Frostbite.blizzardRadius,
-             "Determines the radius of the initial frostbite."
+             "Determines the radius of the nova created when Frostbite is cast."
              ).Value;
 
             Frostbite.novaDamageCoefficient = config.Bind<float>(
-            SkillName, "Damage Coefficient Explosion",
+            SkillName, "Secondary Damage Coefficient",
             Frostbite.novaDamageCoefficient,
-            "Determines the damage coefficient of explosion frostbite."
+            "Determines the damage coefficient of the nova created after the Frostbite buff expires."
             ).Value;
             Frostbite.novaRadius = config.Bind<float>(
-            SkillName, "Damage Radius Explosion",
+            SkillName, "Secondary Blast Radius",
             Frostbite.novaRadius,
-            "Determines the radius of the explosion frostbite."
+            "Determines the radius of the nova created after the Frostbite buff expires."
             ).Value;
             KeywordTokens = new string[2] { "KEYWORD_FREEZING", "ARTIFICEREXTENDED_KEYWORD_CHILL" };
             RegisterBuffWhiteout();

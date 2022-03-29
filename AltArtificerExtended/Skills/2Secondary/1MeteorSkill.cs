@@ -18,9 +18,8 @@ namespace AltArtificerExtended.Skills
 
         public override string SkillName => "Channeled Nano-Meteor";
 
-        public override string SkillDescription => $"Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
-                $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeMeteors.meteorDamageCoefficient)} damage</style> " +
-            $"and <style=cIsDamage>ignite</style> all enemies hit.";
+        public override string SkillDescription => $"Ignite. Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
+                $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeMeteors.meteorDamageCoefficient)} damage</style>.";
 
         public override string SkillLangTokenName => "METEORS";
 
@@ -63,6 +62,8 @@ namespace AltArtificerExtended.Skills
                 true,
                 "Choose to have either the ugly red nano-meteor or the ugly blue nano-meteor that is definitely not glowing meteorite."
                 ).Value;
+
+            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
 
             if (recolorMeteor)
             {

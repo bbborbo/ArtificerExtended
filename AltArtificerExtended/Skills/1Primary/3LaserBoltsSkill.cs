@@ -54,12 +54,12 @@ namespace AltArtificerExtended.Skills
             FireLaserbolts.maxRange = config.Bind<float>(
                 SkillName, "Max Range",
                 FireLaserbolts.maxRange,
-                "Determines the maximum range laser bolts has."
+                "Determines the maximum range laser bolts has. Damage Falloff still applies."
                 ).Value;
             FireLaserbolts.damageCoefficient = config.Bind<float>(
                 SkillName, "Damage Coefficient",
                 FireLaserbolts.damageCoefficient,
-                "Determines the damage coefficient laser bolts has."
+                "Determines the damage coefficient laser bolts has. Damage Falloff still applies."
                 ).Value;
 
 

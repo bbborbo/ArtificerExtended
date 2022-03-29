@@ -56,6 +56,7 @@ namespace AltArtificerExtended
         internal static ConfigFile CustomConfigFile { get; set; }
         public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
+        public static ConfigEntry<bool> SurgeRework { get; set; }
         #endregion
 
         public static GameObject mageObject;
@@ -135,13 +136,7 @@ namespace AltArtificerExtended
 
             this.ArtiChanges();
             this.InitializeSkills();
-            if ( CustomConfigFile.Bind<bool>(
-                "Setting for reworking flamethrower and Ion Surge", "Rework enabled ? ",
-                true,
-                "Determines whether ion surge and flamethrower get reworked."
-                ).Value) { 
             On.RoR2.Skills.SkillCatalog.Init += ReplaceSkillDefs;
-            }
             if (isScepterLoaded)
             {
                 Debug.Log("Fuck");
@@ -158,37 +153,7 @@ namespace AltArtificerExtended
         {
             orig();
 
-            SkillDef surge = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
-            if (surge != null)
-            {
-                Debug.Log("Changing ion surge");
-                SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge));
-                LanguageAPI.Add(SkillBase.Token + "ALTIONSURGE_DESC", "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
-
-                SkillDef newSurge = CloneSkillDef(surge);
-                surge.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge));
-                surge.baseRechargeInterval = 6f;
-                surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
-                surge.keywordTokens = new string[0];
-            }
-
-            SkillDef surge2 = SkillCatalog.GetSkillDef(SkillCatalog.FindSkillIndexByName("Antimatter Surge"));
-            if (surge2 != null)
-            {
-                SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge));
-
-                LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_LIGHTNING", "Antimatter Surge");
-                LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_DESC",
-                    "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
-                    "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
-
-                surge2.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge2));
-                surge2.baseRechargeInterval = 6f;
-                surge2.skillDescriptionToken = SkillBase.Token + "ALTANTISURGE_DESC";
-                surge2.skillNameToken = SkillBase.Token + "ALTANTISURGE_LIGHTNING";
-                surge2.keywordTokens = new string[0];
-            }
-
+            //flamethrower changes only changes the description of the ancient scepter skill for flamethrower
             SkillDef flamer2 = SkillCatalog.GetSkillDef(SkillCatalog.FindSkillIndexByName("Dragon's Breath"));
             if (flamer2 != null)
             {
@@ -198,6 +163,40 @@ namespace AltArtificerExtended
                     "\n<color=#d299ff>SCEPTER: Hits leave behind a lingering fire cloud.</color>");
                 flamer2.skillNameToken = SkillBase.Token + "FLAMETHROWER2_FIRE";
                 flamer2.skillDescriptionToken = SkillBase.Token + "FLAMETHROWER2_DESC";
+            }
+
+            if (SurgeRework.Value == true)
+            {
+                SkillDef surge = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
+                if (surge != null)
+                {
+                    Debug.Log("Changing ion surge");
+                    SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge));
+                    LanguageAPI.Add(SkillBase.Token + "ALTIONSURGE_DESC", "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
+
+                    SkillDef newSurge = CloneSkillDef(surge);
+                    surge.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge));
+                    surge.baseRechargeInterval = 6f;
+                    surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
+                    surge.keywordTokens = new string[0];
+                }
+
+                SkillDef surge2 = SkillCatalog.GetSkillDef(SkillCatalog.FindSkillIndexByName("Antimatter Surge"));
+                if (surge2 != null)
+                {
+                    SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge));
+
+                    LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_LIGHTNING", "Antimatter Surge");
+                    LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_DESC",
+                        "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
+                        "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
+
+                    surge2.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge2));
+                    surge2.baseRechargeInterval = 6f;
+                    surge2.skillDescriptionToken = SkillBase.Token + "ALTANTISURGE_DESC";
+                    surge2.skillNameToken = SkillBase.Token + "ALTANTISURGE_LIGHTNING";
+                    surge2.keywordTokens = new string[0];
+                }
             }
         }
 
@@ -321,9 +320,14 @@ namespace AltArtificerExtended
                 "Cosmetic",
                 "Allow Broken SFX",
                 false,
-                "Some SFX (the snapfreeze cast sound, specifically) create a nigh-unstoppable droning/ringing sound. \n" +
+                "Some SFX (the snapfreeze cast sound, specifically) create an unstoppable droning/ringing sound. \n" +
                 "They are disabled by default, but if you would like to have SFX and dont mind the bug, then you may enable them."
                 );
+
+            SurgeRework = CustomConfigFile.Bind<bool>(
+                "Ion Surge", "Enable Rework",
+                true,
+                "Determines whether Ion Surge gets reworked. Note that vanilla Ion Surge is INCOMPATIBLE with ALL alt-passives. Use at your own risk.");
         }
 
         private void ArtiChanges()
@@ -389,10 +393,9 @@ namespace AltArtificerExtended
                     orig(self);
                 };
 
-
-                LanguageAPI.Add("MAGE_SPECIAL_FIRE_DESCRIPTION",
-                    "Burn all enemies in front of you for <style=cIsDamage>2000% damage</style>. " +
-                    "Each hit has a <style=cIsDamage>50% chance to ignite</style>.");
+                flamethrowerDesc = "Burn all enemies in front of you for <style=cIsDamage>2000% damage</style>. " +
+                    "Each hit has a <style=cIsDamage>50% chance to Ignite</style>.";
+                LanguageAPI.Add("MAGE_SPECIAL_FIRE_DESCRIPTION", flamethrowerDesc);
             }
         }
         public static string flamethrowerDesc;

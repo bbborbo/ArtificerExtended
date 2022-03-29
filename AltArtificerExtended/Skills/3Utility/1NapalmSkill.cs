@@ -27,7 +27,7 @@ namespace AltArtificerExtended.Skills
         public override string SkillName => "Napalm Cascade";
 
         public override string SkillDescription => $"Charge up a barrage of fiery napalm, creating flaming pools that " +
-            $"<style=cIsUtility>continuously burn</style> enemies " +
+            $"<style=cIsUtility>continuously Ignites</style> enemies " +
             $"for <style=cIsDamage>{napalmMaxProjectiles}x{Tools.ConvertDecimal(napalmBurnDPS)} damage per second</style>. " +
             $"Charging focuses the cone of fire.";
 
@@ -57,20 +57,17 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-            ChargeNapalm.minDamageCoefficient = config.Bind<float>(
-              SkillName, "Minimum damage",
-              ChargeNapalm.minDamageCoefficient,
-              "Determines the minimum damage napalm deals. Change both min and max damage coefficient(what is goin on herr)"
-              ).Value;
             ChargeNapalm.maxDamageCoefficient = config.Bind<float>(
-                SkillName, "Maximum",
+                SkillName, "Primary Damage Coefficient",
                 ChargeNapalm.maxDamageCoefficient,
-                "Determines the maximum damage napalm deals. Change both min and max damage coefficient(what is goin on herr)"
+                "Determines the damage dealt by each Napalm impact."
                 ).Value;
             ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
-                SkillName, "Burn Damage Coefficient",
+                SkillName, "Secondary Damage Coefficient",
                 ChargeNapalm.napalmBurnDamageCoefficient,
-                "Determines the amount of damage napalm deals as a coefficient..? wat"
+                "Determines the damage per tick of napalm, expressed as a fraction of the Primary damage coefficient. " +
+                "Ex - if the Primary damage coefficient is 0.7, and the Secondary damage coefficient is 0.5, " +
+                "then each tick of damage will have a coefficient of 0.35."
                 ).Value;
             ChargeNapalm.projectileHSpeed = config.Bind<float>(
                 SkillName, "Projectile Speed",
@@ -80,18 +77,11 @@ namespace AltArtificerExtended.Skills
             napalmDotFireFrequency = config.Bind<float>(
                 SkillName, "DOT frequency",
                 napalmDotFireFrequency,
-                "Determines the frequency the DOT occurs. Higher values = less delay per damage tick."
+                "Determines the amount of times each Napalm pool ticks each second."
                 ).Value;
-            ChargeNapalm.minRadius = config.Bind<float>(
-               SkillName, "Projectile Speed",
-               ChargeNapalm.minRadius,
-               "Determines the minimum radius of napalm pools."
-               ).Value;
-            ChargeNapalm.maxRadius = config.Bind<float>(
-               SkillName, "Projectile Speed",
-               ChargeNapalm.maxRadius,
-               "Determines the maximum radius of napalm pools."
-               ).Value;
+
+            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
+
             RegisterProjectileNapalm();
             CreateLang();
             CreateSkill();
