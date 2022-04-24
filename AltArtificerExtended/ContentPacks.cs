@@ -39,7 +39,7 @@ namespace AltArtificerExtended
             contentPack.projectilePrefabs.Add(projectilePrefabs.ToArray());
             contentPack.skillDefs.Add(skillDefs.ToArray());
             contentPack.skillFamilies.Add(skillFamilies.ToArray());
-            contentPack.unlockableDefs.Add(UnlockableAPI.unlockableDefs.ToArray());
+            // contentPack.unlockableDefs.Add(UnlockableAPI.unlockableDefs.ToArray()); We don't need to add achievements to content pack anymore, doing so will cause a "Duplicated Asset" error
 
             args.ReportProgress(1f);
             yield break;

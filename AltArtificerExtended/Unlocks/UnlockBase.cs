@@ -28,7 +28,7 @@ namespace AltArtificerExtended.Unlocks
         public abstract string AchievementName { get; }
         public abstract string AchievementDesc { get; }
 
-        public override bool ForceDisable => false;
+        public virtual bool ForceDisable => false;
         public override string AchievementIdentifier => Token + UnlockLangTokenName + "_ACHIEVEMENT_ID";
 
         public override string UnlockableIdentifier => Token + UnlockLangTokenName + "_REWARD_ID";
@@ -48,6 +48,24 @@ namespace AltArtificerExtended.Unlocks
         public override BodyIndex LookUpRequiredBodyIndex()
         {
             return BodyCatalog.FindBodyIndex("MageBody");
+        }
+
+        public override Func<string> GetHowToUnlock
+        {
+            get => () => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+                            {
+                                Language.GetString(AchievementNameToken),
+                                Language.GetString(AchievementDescToken)
+                            });
+        }
+
+        public override Func<string> GetUnlocked
+        {
+            get => () => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+                            {
+                                Language.GetString(AchievementNameToken),
+                                Language.GetString(AchievementDescToken)
+                            });
         }
 
         public abstract void Init(ConfigFile config);
