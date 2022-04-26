@@ -407,13 +407,12 @@ namespace AltArtificerExtended
             var UnlockTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(UnlockBase)));
             var baseMethod = typeof(UnlockableAPI).GetMethod("AddUnlockable", new Type[] { typeof(bool) });
 
-            Debug.Log("Function found for unlockables:");
-            Debug.Log(baseMethod);
+            Debug.Log("ARTIFICEREXTENDED Initializing unlocks!:");
 
             foreach (Type unlockType in UnlockTypes)
             {
                 UnlockBase unlock = (UnlockBase)System.Activator.CreateInstance(unlockType);
-                Debug.Log("Current unlockType: " + unlockType);
+                Debug.Log(unlockType);
 
                 if (!unlock.HideUnlock)
                 {
