@@ -35,7 +35,7 @@ namespace AltArtificerExtended
 
     [BepInDependency("com.Borbo.DuckSurvivorTweaks", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.Borbo.BalanceOverhaulRBO", BepInDependency.DependencyFlags.SoftDependency)]
-    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
+    [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class Main : BaseUnityPlugin
     {
