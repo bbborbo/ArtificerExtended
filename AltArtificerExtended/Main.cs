@@ -29,7 +29,7 @@ using RoR2.Projectile;
 
 namespace AltArtificerExtended
 {
-    [BepInDependency(R2API.R2API.PluginGUID)]
+    [BepInDependency(R2API.R2API.PluginGUID, "4.3.6")]
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
 
@@ -41,7 +41,7 @@ namespace AltArtificerExtended
     {
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
-        public const string version = "3.3.1";
+        public const string version = "3.3.2";
 
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
@@ -405,16 +405,19 @@ namespace AltArtificerExtended
         private void InitializeUnlocks()
         {
             var UnlockTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(UnlockBase)));
+            var baseMethod = typeof(UnlockableAPI).GetMethod("AddUnlockable", new Type[] { typeof(bool) });
+
+            Debug.Log("ARTIFICEREXTENDED Initializing unlocks!:");
 
             foreach (Type unlockType in UnlockTypes)
             {
                 UnlockBase unlock = (UnlockBase)System.Activator.CreateInstance(unlockType);
+                Debug.Log(unlockType);
 
                 if (!unlock.HideUnlock)
                 {
                     unlock.Init(CustomConfigFile);
 
-                    var baseMethod = typeof(Unlocks.UnlockableAPI).GetMethod("AddUnlockable");
                     UnlockableDef unlockableDef = (UnlockableDef)baseMethod.MakeGenericMethod(new Type[] { unlockType }).Invoke(null, new object[] { true });
 
                     bool forceUnlock = unlock.ForceDisable;
