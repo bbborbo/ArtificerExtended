@@ -31,13 +31,14 @@ namespace AltArtificerExtended
             UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
             netID.localPlayerAuthority = true;
 
+
             ProjectileDamage projDamage = proj.GetComponent<ProjectileDamage>();
             projDamage.damage = AltArtiPassive.lightningDamageMult;
 
             ProjectileController projController = proj.GetComponent<ProjectileController>();
             projController.ghostPrefab = ghost;
-            projController.allowPrediction = true;
             projController.procCoefficient = AltArtiPassive.lightningProcCoef;
+            projController.allowPrediction = true;
 
             ProjectileSimple projSimple = proj.GetComponent<ProjectileSimple>();
             projSimple.enabled = true;
