@@ -43,7 +43,7 @@ namespace AltArtificerExtended.EntityState
         {
             base.OnEnter();
             //Util.PlaySound(this.sound, base.gameObject);
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
 
             base.SmallHop(base.characterMotor, smallHopVelocity);
             base.AddRecoil(-1f * recoilAmplitude, -2f * recoilAmplitude, -0.5f * recoilAmplitude, 0.5f * recoilAmplitude);

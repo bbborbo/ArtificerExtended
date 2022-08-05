@@ -68,11 +68,13 @@ namespace AltArtificerExtended.EntityState
             }*/
             this.blinkVector = this.GetBlinkVector();
             this.CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
         }
 
         protected virtual Vector3 GetBlinkVector()
         {
-            blinkAimRay = base.GetAimRay();
+            blinkAimRay = (!VRStuff.VRInstalled)? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
             return blinkAimRay.direction;
         }
         private void CreateBlinkEffect(Vector3 origin)

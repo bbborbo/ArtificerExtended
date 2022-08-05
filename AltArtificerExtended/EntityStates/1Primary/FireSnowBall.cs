@@ -23,6 +23,8 @@ namespace AltArtificerExtended.EntityState
             this.baseDuration = 0.55f;
             this.attackSoundString = "Play_mage_shift_wall_build";
             this.attackSoundPitch = 10;
+            if(VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(true, "Cast");
             base.OnEnter();
 
             /*GameObject obj = base.outer.gameObject;

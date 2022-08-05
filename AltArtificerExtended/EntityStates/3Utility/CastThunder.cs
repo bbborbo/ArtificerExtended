@@ -52,6 +52,8 @@ namespace AltArtificerExtended.EntityState
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteor.areaIndicatorPrefab);
             this.UpdateAreaIndicator();
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
             base.OnEnter();
         }
 
@@ -62,7 +64,7 @@ namespace AltArtificerExtended.EntityState
             {
                 float num = 1000f;
                 float num2 = 0f;
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
                     out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -119,6 +121,8 @@ namespace AltArtificerExtended.EntityState
                 global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             }
             base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 

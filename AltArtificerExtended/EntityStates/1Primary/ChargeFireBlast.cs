@@ -73,6 +73,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(true, "Charge");
         }
 
         public override void Update()
@@ -128,7 +130,7 @@ namespace AltArtificerExtended.EntityState
             if (base.isAuthority)
             {
                 float charge = this.GetChargeProgressSmooth();
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(true);
                 if (this.projectilePrefabOuter != null && this.projectilePrefabInner != null)
                 {
                     float damage = Util.Remap(charge, 0, 1, minDamageCoefficient, maxDamageCoefficient);
@@ -178,6 +180,8 @@ namespace AltArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(true, "Cast");
             base.OnExit();
         }
 

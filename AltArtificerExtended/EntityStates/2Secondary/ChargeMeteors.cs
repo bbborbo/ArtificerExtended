@@ -118,6 +118,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         private void UpdateAreaIndicator()
@@ -128,7 +130,7 @@ namespace AltArtificerExtended.EntityState
 
                 float num = 1000f;
                 float num2 = 0f;
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
                     out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -195,7 +197,7 @@ namespace AltArtificerExtended.EntityState
             this.hasFiredBomb = true;
             //base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
             base.PlayAnimation("Gesture, Additive", "FireWall");
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
             if (this.chargeEffectInstance)
             {
                 global::EntityStates.EntityState.Destroy(this.chargeEffectInstance);
@@ -217,7 +219,7 @@ namespace AltArtificerExtended.EntityState
 
                     float num = 1000f;
                     float num2 = 0f;
-                    Ray aRay = base.GetAimRay();
+                    Ray aRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     RaycastHit raycastHit;
                     if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out num2),
                         out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -288,6 +290,8 @@ namespace AltArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 

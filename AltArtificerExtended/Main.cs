@@ -32,7 +32,7 @@ namespace AltArtificerExtended
     [BepInDependency(R2API.R2API.PluginGUID, "4.3.6")]
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-
+    [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.Borbo.DuckSurvivorTweaks", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.Borbo.BalanceOverhaulRBO", BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
@@ -146,7 +146,10 @@ namespace AltArtificerExtended
             On.RoR2.CharacterMaster.OnBodyStart += AddAAEBodyFX;
 
             new ContentPacks().Initialize();
+
+            VRStuff.SetupVR();
         }
+
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void ReplaceSkillDefs(On.RoR2.Skills.SkillCatalog.orig_Init orig)
