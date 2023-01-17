@@ -219,7 +219,8 @@ namespace AltArtificerExtended
                     "Antimatter Surge WILL break Artificer Extended's alt passives. \n" +
                     "Either turn on ArtificerExtended's Ion Surge rework to use ArtificerExtended's Antimatter Surge, " +
                     "avoid using Antimatter Surge with ArtificerExtended's alt passive, " +
-                    "or tell the Ancient Scepter developers to get in contact to fix Antimatter Surge.");
+                    "or tell the Ancient Scepter developers to get in contact to fix Antimatter Surge. \n" +
+                    "This is NOT an error that can be fixed on the ArtificerExtended side.");
             }
         }
 
