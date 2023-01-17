@@ -82,7 +82,9 @@ namespace AltArtificerExtended
             mageBody = mageObject.GetComponent<CharacterBody>();
             mageSkillLocator = mageObject.GetComponent<SkillLocator>();
             if (mageObject && mageBody && mageSkillLocator)
+            {
                 Debug.Log("ARTIFICEREXTENDED setup succeeded! Proceeding to allocate skill families!");
+            }
 
             InitializeConfig();
             this.InitializeUnlocks();
@@ -334,8 +336,6 @@ namespace AltArtificerExtended
             Array.Resize<EntityStateMachine>(ref idles, 1);
             stateOnHurt.idleStateMachine = idles;
         }
-
-
         private void InitializeConfig()
         {
             CustomConfigFile = new ConfigFile(Paths.ConfigPath + "\\ArtificerExtended.cfg", true);
