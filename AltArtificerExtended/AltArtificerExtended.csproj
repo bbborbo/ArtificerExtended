@@ -38,7 +38,6 @@
 	    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
-	
     <Reference Include="R2API">
       <HintPath>libs\R2API.dll</HintPath>
     </Reference>
@@ -48,8 +47,6 @@
 	<Reference Include="Decalicious">
       <HintPath>libs\Decalicious.dll</HintPath>
     </Reference>
-	
-
   </ItemGroup>
 
   <ItemGroup>
