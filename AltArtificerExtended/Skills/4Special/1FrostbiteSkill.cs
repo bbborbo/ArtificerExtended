@@ -27,8 +27,8 @@ namespace AltArtificerExtended.Skills
 
         public override string SkillName => "Frostbite";
 
-        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor.</style> for {Tools.ConvertDecimal(blizzardBuffDuration)} seconds" +
-                $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}%,</style> then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}%.</style>";
+        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds." +
+                $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}%, </style>then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}%.</style>";
 
         public override string SkillLangTokenName => "FROSTBITE";
 
