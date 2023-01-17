@@ -36,19 +36,11 @@ namespace AltArtificerExtended
             buffDefs.Add(buff);
         }
 
-        #region AltArtiPassive
-        //public static BuffDef chillDebuff;
+        #region EnergeticResonance
         public static BuffDef meltBuff;
 
         void AddAAPassiveBuffs()
         {
-            /*chillDebuff = ScriptableObject.CreateInstance<BuffDef>();
-            {
-                chillDebuff.buffColor = new Color(0.4f, 0.4f, 0.9f);
-                chillDebuff.canStack = true;
-                chillDebuff.iconSprite = RoR2.LegacyResourcesAPI.Load<Sprite>("RoR2/Base/Common/texBuffSlow50Icon.png");
-                chillDebuff.isDebu*/
-
             Sprite meltSprite = LegacyResourcesAPI.Load<Sprite>("RoR2/DLC1/StrengthenBurn/texBuffStrongerBurnIcon.png");
             meltBuff = ScriptableObject.CreateInstance<BuffDef>();
             {

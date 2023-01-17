@@ -29,7 +29,7 @@ using RoR2.Projectile;
 
 namespace AltArtificerExtended
 {
-    [BepInDependency(R2API.R2API.PluginGUID, "4.3.6")]
+    [BepInDependency(R2API.R2API.PluginGUID, "5.0.3")]
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
 
@@ -41,7 +41,7 @@ namespace AltArtificerExtended
     {
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
-        public const string version = "3.3.2";
+        public const string version = "3.3.3";
 
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
@@ -50,7 +50,7 @@ namespace AltArtificerExtended
         public static bool isScepterLoaded = Tools.isLoaded("com.DestroyedClone.AncientScepter");
         public static bool autosprintLoaded = Tools.isLoaded("com.johnedwa.RTAutoSprintEx");
         public static bool isDstLoaded = Tools.isLoaded("com.Borbo.DuckSurvivorTweaks");
-        public static bool isBorboLoaded = Tools.isLoaded("com.Borbo.BalanceOverhaulRBO");
+        public static bool isBorboLoaded = Tools.isLoaded("com.HouseOfFruits.RiskierRain");
 
         #region Config
         internal static ConfigFile CustomConfigFile { get; set; }
