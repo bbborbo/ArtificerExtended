@@ -90,6 +90,12 @@ namespace AltArtificerExtended
             InitializeConfig();
             this.InitializeUnlocks();
 
+            if (is2r4rLoaded)
+            {
+                artiNanoDamage = 12f;
+                artiUtilCooldown = 8f;
+            }
+
             this.ArtiChanges();
             this.InitializeSkills();
             if (isScepterLoaded)
