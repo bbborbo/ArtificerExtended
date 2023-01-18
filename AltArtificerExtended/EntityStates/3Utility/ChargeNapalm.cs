@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
+//using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 
 namespace AltArtificerExtended.EntityState
@@ -76,7 +76,7 @@ namespace AltArtificerExtended.EntityState
 
         private Ray aimRay;
 
-        private AltArtiPassive.BatchHandle handle;
+        //private AltArtiPassive.BatchHandle handle;
 
         public override void OnEnter()
         {
@@ -84,7 +84,7 @@ namespace AltArtificerExtended.EntityState
             this.stopwatch = 0f;
             this.timer = 0f;
 
-            this.handle = new AltArtiPassive.BatchHandle();
+            //this.handle = new AltArtiPassive.BatchHandle();
 
             this.windDownDuration = this.baseWinddownDuration / this.attackSpeedStat;
             this.chargeDuration = this.baseChargeDuration / this.attackSpeedStat;
@@ -203,7 +203,7 @@ namespace AltArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
-            this.handle.Fire(0f, 0.5f);
+            //this.handle.Fire(0f, 0.5f);
         }
 
         private void FireBlob(Ray aimRay, float bonusPitch, float bonusYaw, float projectileDamageCoeff, Vector3 direction, Vector3 origin)
@@ -229,7 +229,7 @@ namespace AltArtificerExtended.EntityState
             this.stopwatch += Time.fixedDeltaTime;
             this.timer += Time.fixedDeltaTime * base.characterBody.attackSpeed;
             
-            GameObject obj = base.outer.gameObject;
+            /*GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 while (this.timer > this.frequency)
@@ -237,7 +237,7 @@ namespace AltArtificerExtended.EntityState
                     this.timer -= this.frequency;
                     passive.SkillCast(handle);
                 }
-            }
+            }*/
 
             if (!this.hasFiredBomb && (this.stopwatch >= this.chargeDuration || !IsKeyDownAuthority()) 
                 && this.stopwatch >= ChargeNapalm.minChargeDuration)

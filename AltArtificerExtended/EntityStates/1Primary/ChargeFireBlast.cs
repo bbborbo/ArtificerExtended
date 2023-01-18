@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 
 namespace AltArtificerExtended.EntityState
@@ -30,7 +29,7 @@ namespace AltArtificerExtended.EntityState
         public static float maxRadius = 0.5f;
 
         public static float minDamageCoefficient = 1.2f;
-        public static float maxDamageCoefficient = Main.artiBoltDamage * 1.5f;
+        public static float maxDamageCoefficient = ArtificerExtendedPlugin.artiBoltDamage * 1.5f;
         public static float procCoefficient = 1f;
         public float force = 0;
         public float selfForce = 150;
@@ -51,13 +50,13 @@ namespace AltArtificerExtended.EntityState
         private GameObject defaultCrosshairPrefab;
         private uint soundID;
 
-        private AltArtiPassive.BatchHandle handle;
+        //private AltArtiPassive.BatchHandle handle;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            this.handle = new AltArtiPassive.BatchHandle();
+            //this.handle = new AltArtiPassive.BatchHandle();
 
             this.windDownDuration = this.baseWinddownDuration / this.attackSpeedStat;
             this.chargeDuration = this.baseChargeDuration / this.attackSpeedStat;
@@ -94,14 +93,14 @@ namespace AltArtificerExtended.EntityState
             this.timer += Time.fixedDeltaTime * base.characterBody.attackSpeed;
 
             GameObject obj = base.outer.gameObject;
-            if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
+            /*if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 while (this.timer > this.frequency)
                 {
                     this.timer -= this.frequency;
                     passive.SkillCast(handle);
                 }
-            }
+            }*/
 
             if (!this.hasFiredBomb && (this.stopwatch >= chargeDuration || !IsKeyDownAuthority()) &&
                 !this.hasFiredBomb && this.stopwatch >= minChargeDuration)
@@ -146,7 +145,7 @@ namespace AltArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
-            this.handle.Fire(0f, 0.5f);
+            //this.handle.Fire(0f, 0.5f);
         }
 
         void FireOuterFireballs(Ray aimRay, float damage, bool isCrit)

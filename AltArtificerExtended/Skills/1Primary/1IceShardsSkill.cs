@@ -35,7 +35,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireIceShard);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         ( 
@@ -68,8 +68,8 @@ namespace AltArtificerExtended.Skills
             buckshotAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             buckshotAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            Main.CreateEffect(tracerShotgun);
-            Main.CreateEffect(tracerBuckshot);
+            ArtificerExtendedPlugin.CreateEffect(tracerShotgun);
+            ArtificerExtendedPlugin.CreateEffect(tracerBuckshot);
         }
 
         public override void Init(ConfigFile config)

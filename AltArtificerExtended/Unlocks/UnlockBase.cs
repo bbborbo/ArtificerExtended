@@ -22,7 +22,7 @@ namespace AltArtificerExtended.Unlocks
     }
     public abstract class UnlockBase : ModdedUnlockable
     {
-        public static string Token = Main.TokenName + "UNLOCK_";
+        public static string Token = ArtificerExtendedPlugin.TokenName + "UNLOCK_";
         public abstract string UnlockLangTokenName { get; }
         public abstract string UnlockName { get; }
         public abstract string AchievementName { get; }
@@ -42,7 +42,7 @@ namespace AltArtificerExtended.Unlocks
 
         internal Sprite GetSpriteProvider(string iconName)
         {
-            return Main.iconBundle.LoadAsset<Sprite>(Main.iconsPath + iconName + ".png");
+            return ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + iconName + ".png");
         }
 
         public override BodyIndex LookUpRequiredBodyIndex()

@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ChargeMeteors);
 
-        public override SkillFamily SkillSlot => Main.mageSecondary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
                 Tools.GetParticle(meteorImpactPrefab, "Flash Lines, Fire", napalmColor);
                 Tools.GetParticle(meteorImpactPrefab, "Fire", napalmColor);
             }
-            Main.CreateEffect(meteorImpactPrefab);
+            ArtificerExtendedPlugin.CreateEffect(meteorImpactPrefab);
         }
     }
 }

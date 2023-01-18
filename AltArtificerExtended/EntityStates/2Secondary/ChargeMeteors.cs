@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 
 namespace AltArtificerExtended.EntityState
@@ -31,7 +30,7 @@ namespace AltArtificerExtended.EntityState
         public static float meteorDamageCoefficient = 2f;
         public static float procCoefficient = 0.8f;
         public static int minMeteors = 0;
-        public static int maxMeteors = (int)Mathf.Ceil(Main.artiNanoDamage / meteorDamageCoefficient);
+        public static int maxMeteors = (int)Mathf.Ceil(ArtificerExtendedPlugin.artiNanoDamage / meteorDamageCoefficient);
         public static float minMeteorRadius = 2.5f;
         public static float maxMeteorRadius = 6f;
         public float force = 300;
@@ -55,7 +54,7 @@ namespace AltArtificerExtended.EntityState
         private GameObject defaultCrosshairPrefab;
         private uint soundID;
 
-        private AltArtiPassive.BatchHandle handle;
+        //private AltArtiPassive.BatchHandle handle;
 
         public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
         public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
@@ -78,7 +77,7 @@ namespace AltArtificerExtended.EntityState
             else
                 Debug.Log("Damn, area indicator prefab null?");
 
-            this.handle = new AltArtiPassive.BatchHandle();
+            //this.handle = new AltArtiPassive.BatchHandle();
 
             this.windDownDuration = this.baseWinddownDuration / this.attackSpeedStat;
             this.chargeDuration = this.baseChargeDuration / this.attackSpeedStat;
@@ -170,14 +169,14 @@ namespace AltArtificerExtended.EntityState
 
             
             GameObject obj = base.outer.gameObject;
-            if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
+            /*if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 while (this.timer > AltArtiPassive.nanoBombInterval)
                 {
                     this.timer -= AltArtiPassive.nanoBombInterval;
                     passive.SkillCast(handle);
                 }
-            }
+            }*/
             if (!this.hasFiredBomb && (this.stopwatch >= this.chargeDuration || !IsKeyDownAuthority()) &&
                 !this.hasFiredBomb && this.stopwatch >= ChargeMeteors.minChargeDuration)
             {
@@ -266,7 +265,7 @@ namespace AltArtificerExtended.EntityState
             global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             disableIndicator = true;
 
-            this.handle.Fire(0f, 0.5f);
+            //this.handle.Fire(0f, 0.5f);
         }
 
         public override void OnExit()
@@ -275,11 +274,11 @@ namespace AltArtificerExtended.EntityState
             {
                 base.PlayAnimation("Gesture, Additive", "Empty");
 
-                GameObject obj = base.outer.gameObject;
+                /*GameObject obj = base.outer.gameObject;
                 if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
                 {
                     passive.SkillCast();
-                }
+                }*/
             }
             if (this.chargeEffectInstance)
             {

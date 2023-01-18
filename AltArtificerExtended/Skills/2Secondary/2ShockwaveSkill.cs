@@ -33,7 +33,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(CastShockwave);
 
-        public override SkillFamily SkillSlot => Main.mageSecondary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (

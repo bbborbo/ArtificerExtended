@@ -32,7 +32,7 @@ namespace AltArtificerExtended.Skills
         public virtual SkillSlot TargetSlot { get; set; } = RoR2.SkillSlot.Special;
         public abstract int TargetVariant { get; }
 
-        public static string Token = Main.TokenName + "SKILL";
+        public static string Token = ArtificerExtendedPlugin.TokenName + "SKILL";
         public abstract string SkillName { get; }
         public abstract string SkillDescription { get; }
         public abstract string SkillLangTokenName { get; }
@@ -74,7 +74,7 @@ namespace AltArtificerExtended.Skills
         protected void CreateSkill()
         {
             //Debug.Log(s);
-            if (TargetBodyName == "" || !Main.isScepterLoaded)
+            if (TargetBodyName == "" || !ArtificerExtendedPlugin.isScepterLoaded)
                 return;
 
             var skillDef = ScriptableObject.CreateInstance<SkillDef>();
@@ -87,13 +87,13 @@ namespace AltArtificerExtended.Skills
             skillDef.skillDescriptionToken = Token + SkillLangTokenName + "_DESCRIPTION";
             skillDef.activationStateMachineName = "Weapon";
 
-            skillDef.icon = Main.iconBundle.LoadAsset<Sprite>(Main.iconsPath + IconName + ".png");
+            skillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
 
             #region SkillData
             skillDef.baseMaxStock = SkillData.baseMaxStock;
             skillDef.baseRechargeInterval = SkillData.baseRechargeInterval;
             skillDef.beginSkillCooldownOnSkillEnd = SkillData.beginSkillCooldownOnSkillEnd;
-            skillDef.canceledFromSprinting = Main.autosprintLoaded ? false : SkillData.canceledFromSprinting;
+            skillDef.canceledFromSprinting = ArtificerExtendedPlugin.autosprintLoaded ? false : SkillData.canceledFromSprinting;
             skillDef.cancelSprintingOnActivation = SkillData.cancelSprintingOnActivation;
             skillDef.dontAllowPastMaxStocks = SkillData.dontAllowPastMaxStocks;
             skillDef.fullRestockOnAssign = SkillData.fullRestockOnAssign;
@@ -120,7 +120,7 @@ namespace AltArtificerExtended.Skills
         {
             UnlockableDef u = null;
 
-            foreach (KeyValuePair<UnlockBase, UnlockableDef> keyValuePair in Main.UnlockBaseDictionary)
+            foreach (KeyValuePair<UnlockBase, UnlockableDef> keyValuePair in ArtificerExtendedPlugin.UnlockBaseDictionary)
             {
                 string key = keyValuePair.Key.ToString();
                 UnlockableDef value = keyValuePair.Value;
@@ -137,14 +137,14 @@ namespace AltArtificerExtended.Skills
         public static bool RegisterEntityState(Type entityState)
         {
             //Check if the entity state has already been registered, is abstract, or is not a subclass of the base EntityState
-            if (Main.entityStates.Contains(entityState) || !entityState.IsSubclassOf(typeof(EntityStates.EntityState)) || entityState.IsAbstract)
+            if (ArtificerExtendedPlugin.entityStates.Contains(entityState) || !entityState.IsSubclassOf(typeof(EntityStates.EntityState)) || entityState.IsAbstract)
             {
                 //LogCore.LogE(entityState.AssemblyQualifiedName + " is either abstract, not a subclass of an entity state, or has already been registered.");
                 //LogCore.LogI("Is Abstract: " + entityState.IsAbstract + " Is not Subclass: " + !entityState.IsSubclassOf(typeof(EntityState)) + " Is already added: " + EntityStateDefinitions.Contains(entityState));
                 return false;
             }
             //If not, add it to our EntityStateDefinitions
-            Main.entityStates.Add(entityState);
+            ArtificerExtendedPlugin.entityStates.Add(entityState);
             return true;
         }
     }

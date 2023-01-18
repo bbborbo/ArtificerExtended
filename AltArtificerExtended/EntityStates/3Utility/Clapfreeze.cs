@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AltArtificerExtended.Passive;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
 using EntityStates.Mage.Weapon;
@@ -93,11 +92,11 @@ namespace AltArtificerExtended.EntityState
                 if (this.goodPlacement)
                 {
                     
-                    GameObject obj = base.outer.gameObject;
+                    /*GameObject obj = base.outer.gameObject;
                     if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
                     {
                         passive.SkillCast();
-                    }
+                    }*/
 
                     base.PlayAnimation("Gesture, Additive", "FireWall");
                     Util.PlaySound(PrepWall.fireSoundString, base.gameObject);

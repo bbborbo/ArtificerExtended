@@ -28,7 +28,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireSnowBall);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (

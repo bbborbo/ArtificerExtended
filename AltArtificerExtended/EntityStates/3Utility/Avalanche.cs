@@ -1,5 +1,4 @@
-﻿using AltArtificerExtended.Passive;
-using EntityStates;
+﻿using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
 using System;
@@ -16,7 +15,7 @@ namespace AltArtificerExtended.EntityState
         public static float damageCoefficient = 10f;
 
         public static float minRadius = 6;
-        public static float maxRadius = Main.meleeRangeSingle;
+        public static float maxRadius = ArtificerExtendedPlugin.meleeRangeSingle;
         float endHopVelocity = 10;
 
         public float downForce = -12.5f;
@@ -98,7 +97,7 @@ namespace AltArtificerExtended.EntityState
             }
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        /*[MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         public void SkillCast()
         {
             GameObject obj = base.outer.gameObject;
@@ -106,15 +105,15 @@ namespace AltArtificerExtended.EntityState
             {
                 passive.SkillCast();
             }
-        }
+        }*/
 
         public void CastNova(float fallDuration)
         {
-            GameObject obj = base.outer.gameObject;
+            /*GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }
+            }*/
 
             //Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             float radius = Util.Remap(fallDuration, 0, fallTimerMaxScaled, minRadius, maxRadius);

@@ -15,9 +15,11 @@ namespace AltArtificerExtended
         public static List<SkillDef> skillDefs = new List<SkillDef>();
         public static List<GameObject> projectilePrefabs = new List<GameObject>();
         public static List<GameObject> networkedObjectPrefabs = new List<GameObject>();
+        public static List<BuffDef> buffDefs = new List<BuffDef>();
+        public static List<EffectDef> effectDefs = new List<EffectDef>();
 
         internal ContentPack contentPack = new ContentPack();
-        public string identifier => Main.modName;
+        public string identifier => ArtificerExtendedPlugin.modName;
 
         public void Initialize()
         {
@@ -33,9 +35,9 @@ namespace AltArtificerExtended
         {
             this.contentPack.identifier = this.identifier;
 
-            contentPack.buffDefs.Add(Main.buffDefs.ToArray());
-            contentPack.effectDefs.Add(Main.effectDefs.ToArray());
-            contentPack.entityStateTypes.Add(Main.entityStates.ToArray());
+            contentPack.buffDefs.Add(buffDefs.ToArray());
+            contentPack.effectDefs.Add(effectDefs.ToArray());
+            contentPack.entityStateTypes.Add(ArtificerExtendedPlugin.entityStates.ToArray());
             contentPack.projectilePrefabs.Add(projectilePrefabs.ToArray());
             contentPack.skillDefs.Add(skillDefs.ToArray());
             contentPack.skillFamilies.Add(skillFamilies.ToArray());

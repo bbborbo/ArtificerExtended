@@ -41,11 +41,11 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ChargeNapalm);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: Main.artiUtilCooldown,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
                 interruptPriority: InterruptPriority.Skill,
                 beginSkillCooldownOnSkillEnd: true
             );
@@ -167,7 +167,7 @@ namespace AltArtificerExtended.Skills
             component2.intensity = 4f;
             component2.range = 7.5f;
 
-            Main.CreateEffect(projectileNapalmImpact);
+            ArtificerExtendedPlugin.CreateEffect(projectileNapalmImpact);
             ContentPacks.projectilePrefabs.Add(projectilePrefabNapalm);
             ContentPacks.projectilePrefabs.Add(acidPrefabNapalm);
         }

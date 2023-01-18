@@ -1,5 +1,4 @@
-﻿using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+﻿using AltArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -19,7 +18,7 @@ namespace AltArtificerExtended.EntityState
 
         public float procCoefficient = 1.0f;
 
-        public static float damageCoefficient = Main.artiBoltDamage;
+        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage;
 
         public float force = 20f;
 
@@ -154,11 +153,11 @@ namespace AltArtificerExtended.EntityState
                 }.Fire();
             }
 
-            GameObject obj = base.outer.gameObject;
+            /*GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }
+            }*/
         }
 
         public override void FixedUpdate()

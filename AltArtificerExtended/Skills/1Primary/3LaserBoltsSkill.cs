@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireLaserbolts);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
             main.startSizeYMultiplier *= 0.4f;
             main.startSizeZMultiplier *= 2f;
 
-            Main.CreateEffect(tracerLaser);
+            ArtificerExtendedPlugin.CreateEffect(tracerLaser);
         }
     }
 }

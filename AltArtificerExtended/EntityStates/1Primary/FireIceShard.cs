@@ -9,7 +9,6 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
-using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 
@@ -20,12 +19,12 @@ namespace AltArtificerExtended.EntityState
         public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
         public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
-        public static float damageCoefficient = Main.artiBoltDamage + 2f;
+        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage + 2f;
         public static float procCoefficientPoint = 0.5f;
         public static float procCoefficientSpread = 0.5f;
         public static float procCoefficientBuckshot = 0.7f;
         public static float bulletRadius = 0.15f;
-        public static float maxRange = Main.meleeRangeSingle;
+        public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount;
         public static int bulletCountPoint = 1;
@@ -124,12 +123,12 @@ namespace AltArtificerExtended.EntityState
                 return;
             }
 
-            
-            GameObject obj = base.outer.gameObject;
+
+            /*GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }
+            }*/
 
             base.characterBody.AddSpreadBloom(FireIceShard.bloom);
             this.hasFiredGauntlet = true;

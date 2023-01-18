@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ColdFusion);
 
-        public override SkillFamily SkillSlot => Main.mageSecondary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
             shotgunAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             shotgunAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            Main.CreateEffect(fusionTracer);
+            ArtificerExtendedPlugin.CreateEffect(fusionTracer);
         }
     }
 }

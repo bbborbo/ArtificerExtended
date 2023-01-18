@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AltArtificerExtended.Passive;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -14,7 +13,7 @@ namespace AltArtificerExtended.EntityState
 {
     public class FireSnowBall : FireFireBolt, SteppedSkillDef.IStepSetter
     {
-        public static float damageCoeff = Mathf.Ceil((Main.artiBoltDamage* 0.8f) * 10) / 10;
+        public static float damageCoeff = Mathf.Ceil((ArtificerExtendedPlugin.artiBoltDamage* 0.8f) * 10) / 10;
         public override void OnEnter()
         {
             this.projectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");

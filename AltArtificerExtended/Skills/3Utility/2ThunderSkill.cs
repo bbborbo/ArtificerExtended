@@ -35,12 +35,12 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(CastThunder);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseMaxStock: maxCharges,
-                baseRechargeInterval: Main.artiUtilCooldown / 2,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown / 2,
                 interruptPriority: InterruptPriority.Skill,
                 canceledFromSprinting: true
 

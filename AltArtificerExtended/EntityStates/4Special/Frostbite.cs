@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
@@ -21,11 +20,11 @@ namespace AltArtificerExtended.EntityState
 
         public static float blizzardDamageCoefficient = 3f;
         public static float blizzardProcCoefficient = 1f;
-        public static float blizzardRadius = Main.meleeRangeChannel;
+        public static float blizzardRadius = ArtificerExtendedPlugin.meleeRangeChannel;
 
         public static float novaDamageCoefficient = 5f;
         public static float novaProcCoefficient = 1f;
-        public static float novaRadius = Main.meleeRangeChannel;
+        public static float novaRadius = ArtificerExtendedPlugin.meleeRangeChannel;
 
         private static float buffduration = _1FrostbiteSkill.blizzardBuffDuration;
         public static float baseDuration = 0.4f;
@@ -39,21 +38,21 @@ namespace AltArtificerExtended.EntityState
             base.OnEnter();
             this.duration = Frostbite.baseDuration / this.attackSpeedStat;
 
-            if(Main.AllowBrokenSFX.Value == true)
+            if(ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                 Util.PlaySound(CastSnowstorm.beginSoundString, base.gameObject);
             base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.duration);
         }
 
         public override void OnExit()
         {
-            GameObject obj = base.outer.gameObject;
+            /*GameObject obj = base.outer.gameObject;
 
             //this.CastBlizzard();
             
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }
+            }*/
 
             base.PlayAnimation("Gesture, Additive", "FireWall");
             base.characterBody.AddTimedBuffAuthority(_1FrostbiteSkill.artiIceShield.buffIndex, buffduration);

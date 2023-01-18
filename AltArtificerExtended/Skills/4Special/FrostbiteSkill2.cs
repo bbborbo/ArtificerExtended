@@ -49,12 +49,12 @@ namespace AltArtificerExtended.Skills
             artiIceShield = ScriptableObject.CreateInstance<BuffDef>();
             {
                 artiIceShield.name = "artiIceShield2";
-                artiIceShield.iconSprite = Main.iconBundle.LoadAsset<Sprite>(Main.iconsPath + "texBuffFrostbiteShield.png");
+                artiIceShield.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
                 artiIceShield.canStack = true;
                 artiIceShield.isDebuff = false;
                 artiIceShield.buffColor = Color.magenta;
             }
-            Main.AddBuff(artiIceShield);
+            ArtificerExtendedPlugin.AddBuff(artiIceShield);
 
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
@@ -88,7 +88,7 @@ namespace AltArtificerExtended.Skills
         {
             if (NetworkServer.active)
             {
-                if (Main.AllowBrokenSFX.Value == true)
+                if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                     Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
                 EffectManager.SpawnEffect(EntityState.Frostbite.novaEffectPrefab, new EffectData

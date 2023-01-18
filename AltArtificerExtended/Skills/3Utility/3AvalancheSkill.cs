@@ -28,11 +28,11 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(Avalanche);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: Main.artiUtilCooldown,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
                 interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true
             );

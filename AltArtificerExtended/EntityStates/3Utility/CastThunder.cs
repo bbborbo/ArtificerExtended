@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
 using AltArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
@@ -47,7 +46,7 @@ namespace AltArtificerExtended.EntityState
             this.cachedCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
 
-            if (Main.AllowBrokenSFX.Value == true)
+            if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                 Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteor.areaIndicatorPrefab);
             this.UpdateAreaIndicator();
@@ -100,11 +99,11 @@ namespace AltArtificerExtended.EntityState
                 EffectManager.SimpleMuzzleFlash(CastThunder.muzzleflashEffect, base.gameObject, "Muzzle", false);
                 if (!this.outer.destroying && base.isAuthority)
                 {
-                    GameObject obj = base.outer.gameObject;
+                    /*GameObject obj = base.outer.gameObject;
                     if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
                     {
                         passive.SkillCast();
-                    }
+                    }*/
 
                     EffectManager.SpawnEffect(CastThunder.aoeEffect, new EffectData
                     {
