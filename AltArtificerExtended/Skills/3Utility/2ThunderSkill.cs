@@ -3,14 +3,14 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _2ThunderSkill : SkillBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
 using EntityStates.Mage.Weapon;
@@ -10,7 +10,7 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class CastThunder : BaseSkillState
     {

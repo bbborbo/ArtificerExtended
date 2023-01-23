@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.Unlocks;
 using RoR2;
 using RoR2.ContentManagement;
 using RoR2.Skills;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended
+namespace ArtificerExtended
 {
     internal class ContentPacks : IContentPackProvider
     {

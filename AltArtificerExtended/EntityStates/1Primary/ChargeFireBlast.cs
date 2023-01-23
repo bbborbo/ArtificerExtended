@@ -11,9 +11,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class ChargeFireBlast : BaseSkillState
     {

@@ -47,6 +47,9 @@
 	<Reference Include="Decalicious">
       <HintPath>libs\Decalicious.dll</HintPath>
     </Reference>
+	<Reference Include="RiskyMod">
+      <HintPath>libs\RiskyMod.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

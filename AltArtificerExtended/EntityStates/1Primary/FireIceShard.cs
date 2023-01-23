@@ -9,10 +9,12 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
+using System.Runtime.CompilerServices;
+using RiskyMod.Survivors.Mage.Components;
 //using AlternativeArtificer.States.Main;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class FireIceShard : BaseSkillState, SteppedSkillDef.IStepSetter
     {
@@ -114,8 +116,19 @@ namespace AltArtificerExtended.EntityState
                 this.FireGauntlet();
                 return;
             }
-        }
 
+            if(ArtificerExtendedPlugin.isRiskyModLoaded)
+                FireSkill();
+        }
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        public void FireSkill()
+        {
+            var msc = this.gameObject.GetComponent<MageStockController>();
+            if (msc)
+            {
+                msc.FireSkill(this.duration);
+            }
+        }
         private void FireGauntlet()
         {
             if (this.hasFiredGauntlet)

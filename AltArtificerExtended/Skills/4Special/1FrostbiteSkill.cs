@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.EntityState;
-using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -14,7 +14,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {

@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     public abstract class SkillBase<T> : SkillBase where T : SkillBase<T>
     {

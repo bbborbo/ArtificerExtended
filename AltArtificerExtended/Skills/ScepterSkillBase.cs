@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using AncientScepter;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     public abstract class ScepterSkillBase<T> : ScepterSkillBase where T : ScepterSkillBase<T>
     {

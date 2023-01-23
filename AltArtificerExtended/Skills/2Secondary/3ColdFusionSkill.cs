@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.EntityState;
+﻿using ArtificerExtended.EntityState;
 using BepInEx.Configuration;
 using EntityStates;
 using R2API;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _3ColdFusionSkill : SkillBase
     {

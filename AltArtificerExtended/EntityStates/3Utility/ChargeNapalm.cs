@@ -12,9 +12,9 @@ using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
 //using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     // Token: 0x020009E0 RID: 2528
     public class ChargeNapalm : BaseSkillState

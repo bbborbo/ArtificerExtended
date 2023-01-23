@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended;
+﻿using ArtificerExtended;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     public abstract class UnlockBase<T> : UnlockBase where T : UnlockBase<T>
     {

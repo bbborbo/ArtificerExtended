@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Helpers
+namespace ArtificerExtended.Helpers
 {
     public class InstancedRandom
     {

@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     class ArtificerFlameBurstUnlock : UnlockBase
     {

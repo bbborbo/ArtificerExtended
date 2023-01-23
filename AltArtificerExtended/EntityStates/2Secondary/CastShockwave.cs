@@ -1,7 +1,7 @@
 ﻿//using AlternativeArtificer.States.Main;
 
 //using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
 using EntityStates.Mage;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class CastShockwave : BaseState
     {

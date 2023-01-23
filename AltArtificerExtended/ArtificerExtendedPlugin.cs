@@ -11,12 +11,12 @@ using EntityStates.Mage.Weapon;
 using R2API;
 using R2API.Utils;
 using System.Collections.Generic;
-using AltArtificerExtended.Skills;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Skills;
+using ArtificerExtended.Unlocks;
 using System.Reflection;
 using System.Linq;
 using EntityStates;
-using AltArtificerExtended.Components;
+using ArtificerExtended.Components;
 using System.Runtime.CompilerServices;
 using RoR2.Projectile;
 
@@ -26,13 +26,14 @@ using RoR2.Projectile;
 [module: UnverifiableCode]
 #pragma warning disable 
 
-namespace AltArtificerExtended
+namespace ArtificerExtended
 {
     [BepInDependency(R2API.R2API.PluginGUID, "5.0.3")]
 
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.HouseOfFruits.RiskierRain", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.RiskyLives.RiskyMod", BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin
@@ -48,6 +49,7 @@ namespace AltArtificerExtended
         public static bool isScepterLoaded = Tools.isLoaded("com.DestroyedClone.AncientScepter");
         public static bool autosprintLoaded = Tools.isLoaded("com.johnedwa.RTAutoSprintEx");
         public static bool is2r4rLoaded = Tools.isLoaded("com.HouseOfFruits.RiskierRain");
+        public static bool isRiskyModLoaded = Tools.isLoaded("com.RiskyLives.RiskyMod");
 
         #region Config
         internal static ConfigFile CustomConfigFile { get; set; }

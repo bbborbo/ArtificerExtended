@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Skills;
+﻿using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Treebot.Weapon;
 using RoR2;
@@ -10,7 +10,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class FireShockwave : BaseState
     {

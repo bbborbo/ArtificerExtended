@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class Avalanche : BaseSkillState
     {

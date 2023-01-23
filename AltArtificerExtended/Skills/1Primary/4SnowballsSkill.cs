@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.EntityState;
-using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using RoR2;
 using RoR2.Projectile;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _4SnowballsSkill : SkillBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
 using EntityStates.Huntress;
@@ -12,7 +12,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class Frostbite : BaseSkillState
     {

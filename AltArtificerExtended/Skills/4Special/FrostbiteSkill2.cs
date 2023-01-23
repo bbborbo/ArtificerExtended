@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.EntityState;
-using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
 using EntityStates.Mage.Weapon;
@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class FrostbiteSkill2 : ScepterSkillBase
     {

@@ -10,7 +10,7 @@ using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class Clapfreeze : BaseSkillState
     {
