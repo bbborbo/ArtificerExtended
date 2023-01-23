@@ -28,6 +28,9 @@ namespace AltArtificerExtended
             GameObject ghost = this.CreateLightningSwordGhost(meshInd);
             GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
 
+            UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
+            netID.localPlayerAuthority = true;
+
 
             ProjectileDamage projDamage = proj.GetComponent<ProjectileDamage>();
             projDamage.damage = AltArtiPassive.lightningDamageMult;
@@ -35,6 +38,7 @@ namespace AltArtificerExtended
             ProjectileController projController = proj.GetComponent<ProjectileController>();
             projController.ghostPrefab = ghost;
             projController.procCoefficient = AltArtiPassive.lightningProcCoef;
+            projController.allowPrediction = true;
 
             ProjectileSimple projSimple = proj.GetComponent<ProjectileSimple>();
             projSimple.enabled = true;
