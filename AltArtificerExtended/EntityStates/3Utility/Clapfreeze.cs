@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
@@ -44,6 +45,8 @@ namespace ArtificerExtended.EntityState
             Util.PlaySound(Clapfreeze.prepWallSoundString, base.gameObject);
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(PrepWall.areaIndicatorPrefab);
             this.UpdateAreaIndicator();
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         private void UpdateAreaIndicator()
@@ -54,7 +57,7 @@ namespace ArtificerExtended.EntityState
             {
                 float num = PrepWall.maxDistance;
                 float num2 = 0f;
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2), 
                     out raycastHit, num + num2, LayerIndex.world.mask))
@@ -130,6 +133,8 @@ namespace ArtificerExtended.EntityState
             global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
             base.OnExit();
+            if(VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

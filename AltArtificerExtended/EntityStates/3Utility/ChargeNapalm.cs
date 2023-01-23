@@ -121,6 +121,8 @@ namespace ArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         public override void Update()
@@ -143,6 +145,8 @@ namespace ArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             base.characterBody.AddSpreadBloom(4);
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 
@@ -152,7 +156,7 @@ namespace ArtificerExtended.EntityState
 
             base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
 
-            this.aimRay = base.GetAimRay();
+            this.aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
 
             if (this.chargeEffectInstance)
             {
@@ -179,7 +183,7 @@ namespace ArtificerExtended.EntityState
                     float pitchSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxPitchSpread, ChargeNapalm.minPitchSpread);
                     float yawSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxYawSpread, ChargeNapalm.minYawSpread);
 
-                    Ray aimRay2 = base.GetAimRay();
+                    Ray aimRay2 = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     Vector3 direction = aimRay2.direction;
                     Vector3 origin = aimRay2.origin;
 

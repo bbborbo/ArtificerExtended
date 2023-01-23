@@ -111,6 +111,8 @@ namespace ArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         public override void Update()
@@ -137,6 +139,8 @@ namespace ArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 
@@ -165,7 +169,7 @@ namespace ArtificerExtended.EntityState
 
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    this.aimRay = base.GetAimRay();
+                    this.aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     Vector3 direction = aimRay.direction;
                     float bonusPitch = ((float)bulletCount / pitchSpread - (float)i) * pitchSpread;
                     Vector3 forward = Util.ApplySpread(aimRay.direction, 0, spread, 0, 1f, 0, bonusPitch - 6f);

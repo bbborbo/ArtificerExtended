@@ -32,7 +32,7 @@ namespace ArtificerExtended.EntityState
             base.PlayAnimation("Gesture, Additive", "FireSonicBoom");
             Util.PlaySound(this.sound, base.gameObject);
 
-            var aimRay = base.GetAimRay();
+            var aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
 
             if (base.isAuthority)
             {

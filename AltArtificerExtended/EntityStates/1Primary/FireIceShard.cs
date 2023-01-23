@@ -145,7 +145,15 @@ namespace ArtificerExtended.EntityState
 
             base.characterBody.AddSpreadBloom(FireIceShard.bloom);
             this.hasFiredGauntlet = true;
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay;
+            if (VRStuff.VRInstalled)
+            {
+                this.muzzleString = "MuzzleRight";
+                aimRay = VRStuff.GetVRHandAimRay(true);
+                VRStuff.AnimateVRHand(true, "Cast");
+            } 
+            else
+                aimRay = base.GetAimRay();
             if (this.childLocator)
             {
                 this.muzzleTransform = this.childLocator.FindChild(this.muzzleString);
