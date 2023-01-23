@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended
+namespace ArtificerExtended
 {
     public static class VRStuff
     {
