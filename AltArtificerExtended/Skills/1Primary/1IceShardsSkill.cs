@@ -40,7 +40,8 @@ namespace ArtificerExtended.Skills
         public override SimpleSkillData SkillData => new SimpleSkillData
         ( 
             baseMaxStock: 4,
-            baseRechargeInterval: 1.3f
+            baseRechargeInterval: 1.3f,
+            rechargeStock: ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1
         );
         public override bool useSteppedDef { get; set; } = true;
 

@@ -41,8 +41,9 @@ namespace ArtificerExtended
     {
         public const string guid = "com.HouseOfFruits.ArtificerExtended";
         public const string modName = "ArtificerExtended";
-        public const string version = "3.4.0";
 
+        public const string version = "3.4.0";
+        
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
         public static string TokenName = "ARTIFICEREXTENDED_";

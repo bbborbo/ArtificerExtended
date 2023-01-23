@@ -218,7 +218,7 @@ namespace ArtificerExtended.EntityState
             //Vector3 forward = Util.ApplySpread(direction, 0, 0, 1f, 1f, bonusYaw, bonusPitch - 6f);
             ProjectileManager.instance.FireProjectile(this.projectilePrefab, origin,
                 Util.QuaternionSafeLookRotation(forward), base.gameObject, this.damageStat * projectileDamageCoeff,
-                0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1);
+                0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, projectileHSpeed);
         }
 
         private float GetChargeProgress()

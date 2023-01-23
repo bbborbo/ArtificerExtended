@@ -68,6 +68,10 @@ namespace ArtificerExtended.EntityState
         public override void OnEnter()
         {
             base.OnEnter();
+
+            if (ArtificerExtendedPlugin.isRiskyModLoaded)
+                FireSkill();
+
             bulletCount = bulletCountPoint + bulletCountSpread + bulletCountBuckshot;
 
             base.AddRecoil(-1f * FireIceShard.recoilAmplitude, -2f * FireIceShard.recoilAmplitude, -0.5f * FireIceShard.recoilAmplitude, 0.5f * FireIceShard.recoilAmplitude);
@@ -116,17 +120,24 @@ namespace ArtificerExtended.EntityState
                 this.FireGauntlet();
                 return;
             }
-
-            if(ArtificerExtendedPlugin.isRiskyModLoaded)
-                FireSkill();
         }
+        public static bool hasAssignedToRiskyModReload = false;
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         public void FireSkill()
         {
-            var msc = this.gameObject.GetComponent<MageStockController>();
-            if (msc)
+            if (!hasAssignedToRiskyModReload)
             {
-                msc.FireSkill(this.duration);
+                MageStockController.StatePairs.Add(typeof(FireIceShard), MageStockController.iceMuzzleflashEffectPrefab);
+                hasAssignedToRiskyModReload = true;
+            }
+
+            if (hasAssignedToRiskyModReload)
+            {
+                var msc = this.gameObject.GetComponent<MageStockController>();
+                if (msc)
+                {
+                    msc.FireSkill(this.duration);
+                }
             }
         }
         private void FireGauntlet()
