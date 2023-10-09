@@ -28,7 +28,10 @@ using RoR2.Projectile;
 
 namespace ArtificerExtended
 {
-    [BepInDependency(R2API.R2API.PluginGUID, "5.0.3")]
+    [BepInDependency(R2API.LanguageAPI.PluginGUID)]
+    [BepInDependency(R2API.LoadoutAPI.PluginGUID)]
+    [BepInDependency(R2API.PrefabAPI.PluginGUID)]
+    [BepInDependency(R2API.UnlockableAPI.PluginGUID)]
 
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
@@ -39,10 +42,10 @@ namespace ArtificerExtended
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin
     {
-        public const string guid = "com.HouseOfFruits.ArtificerExtended";
+        public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
 
-        public const string version = "3.4.0";
+        public const string version = "3.4.2";
         
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
