@@ -7,6 +7,7 @@ using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
 using EntityStates.Mage.Weapon;
+using R2API;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
@@ -95,10 +96,13 @@ namespace ArtificerExtended.EntityState
             blastAttack.crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
             blastAttack.baseDamage = base.characterBody.damage * Frostbite.blizzardDamageCoefficient;
             blastAttack.falloffModel = BlastAttack.FalloffModel.None;
-            blastAttack.damageType = DamageType.SlowOnHit;
+            blastAttack.damageType = DamageType.Generic;
             blastAttack.baseForce = force;
             blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
             blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+
+            blastAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+
             blastAttack.Fire();
         }
     }

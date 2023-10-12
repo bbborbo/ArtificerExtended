@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static R2API.DamageAPI;
 
 namespace ArtificerExtended.Skills
 {
@@ -46,7 +47,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-            KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
             FixSnowballProjectile();
             CreateLang();
             CreateSkill();
@@ -57,8 +58,9 @@ namespace ArtificerExtended.Skills
             var SnowballPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
 
             SnowballPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
-            SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
+            SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
             SnowballPrefab.GetComponent<ProjectileController>().procCoefficient = 0.8f;
+            SnowballPrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
         }
     }
 }

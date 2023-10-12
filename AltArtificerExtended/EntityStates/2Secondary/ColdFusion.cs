@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
 using ArtificerExtended.Skills;
+using R2API;
 
 namespace ArtificerExtended.EntityState
 {
@@ -179,15 +180,8 @@ namespace ArtificerExtended.EntityState
                         base.characterMotor.ApplyForce(aimRay.direction * -selfForce, false, false);
                     }
 
-                    GameObject impactEffectPrefab = coldImpactPrefab;
-                    DamageType damageType = DamageType.SlowOnHit;
-                    if(Util.CheckRoll(50, base.characterBody.master) || i == bulletCount - 1)
-                    {
-                        impactEffectPrefab = freezeImpactPrefab;
-                        damageType = DamageType.Freeze2s;
-                    }
 
-                    new BulletAttack
+                    BulletAttack ba = new BulletAttack
                     {
                         owner = base.gameObject,
                         weapon = base.gameObject,
@@ -200,14 +194,25 @@ namespace ArtificerExtended.EntityState
                         force = force,
                         tracerEffectPrefab = _3ColdFusionSkill.fusionTracer,
                         muzzleName = this.muzzleString,
-                        hitEffectPrefab = impactEffectPrefab,
                         isCrit = isCrit,
                         radius = 0.4f,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         maxDistance = maxRange,
-                        smartCollision = true,
-                        damageType = damageType
-                    }.Fire();
+                        smartCollision = true
+                    };
+
+                    if (Util.CheckRoll(50, base.characterBody.master) || i == bulletCount - 1)
+                    {
+                        ba.hitEffectPrefab = freezeImpactPrefab;
+                        ba.damageType = DamageType.Freeze2s;
+                    }
+                    else
+                    {
+                        ba.hitEffectPrefab = coldImpactPrefab;
+                        ba.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+                    }
+
+                    ba.Fire();
 
                     Util.PlaySound(attackSoundString, base.gameObject);
                     base.AddRecoil(recoil, recoil, recoil * recoilBias * 0.75f, recoil * recoilBias);

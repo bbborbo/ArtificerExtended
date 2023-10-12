@@ -68,7 +68,7 @@ namespace ArtificerExtended.Skills
                 ColdFusion.freezeChance,
                 "Determines the chance per spear/bullet has to freeze on hit."
                 ).Value;
-            KeywordTokens = new string[2] { "ARTIFICEREXTENDED_KEYWORD_CHILL", "KEYWORD_FREEZING" };
+            KeywordTokens = new string[2] { ChillRework.ChillRework.chillKeywordToken, "KEYWORD_FREEZING" };
 
             CreateFusionTracer();
             CreateLang();

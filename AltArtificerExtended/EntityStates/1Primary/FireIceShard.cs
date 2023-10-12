@@ -13,6 +13,7 @@ using ArtificerExtended.Skills;
 using System.Runtime.CompilerServices;
 using RiskyMod.Survivors.Mage.Components;
 //using AlternativeArtificer.States.Main;
+using static R2API.DamageAPI;
 
 namespace ArtificerExtended.EntityState
 {
@@ -182,79 +183,52 @@ namespace ArtificerExtended.EntityState
             {
                 float baseSpread = base.characterBody.spreadBloomAngle * spreadAmplitude;
                 bool crit = Util.CheckRoll(this.critStat, base.characterBody.master);
-                //point
-                new BulletAttack
-                {
-                    damageType = DamageType.SlowOnHit,
-                    owner = base.gameObject,
-                    weapon = base.gameObject,
-                    origin = aimRay.origin,
-                    aimVector = aimRay.direction,
-                    minSpread = 0f,
-                    maxSpread = 0f,
-                    bulletCount = (uint)((FireIceShard.bulletCountPoint > 0) ? FireIceShard.bulletCountPoint : 0),
-                    procCoefficient = FireIceShard.procCoefficientPoint,
-                    damage = FireIceShard.damageCoefficient * this.damageStat / bulletCount,
-                    force = FireIceShard.force,
-                    falloffModel = BulletAttack.FalloffModel.None,
-                    tracerEffectPrefab = _1IceShardsSkill.tracerShotgun,
-                    muzzleName = muzzleString,
-                    hitEffectPrefab = hitEffectPrefab,
-                    isCrit = crit,
-                    HitEffectNormal = false,
-                    radius = bulletRadius,
-                    maxDistance = maxRange * 1.1f
-                }.Fire();
-                //spread
-                new BulletAttack
-                {
-                    damageType = DamageType.SlowOnHit,
-                    owner = base.gameObject,
-                    weapon = base.gameObject,
-                    origin = aimRay.origin,
-                    aimVector = aimRay.direction,
-                    minSpread = baseSpread * 0.1f,
-                    maxSpread = baseSpread * spreadShotFraction,
-                    bulletCount = (uint)((FireIceShard.bulletCountSpread > 0) ? FireIceShard.bulletCountSpread : 0),
-                    procCoefficient = FireIceShard.procCoefficientSpread,
-                    damage = FireIceShard.damageCoefficient * this.damageStat / bulletCount,
-                    force = FireIceShard.force,
-                    falloffModel = BulletAttack.FalloffModel.DefaultBullet,
-                    tracerEffectPrefab = _1IceShardsSkill.tracerShotgun,
-                    muzzleName = muzzleString,
-                    hitEffectPrefab = FireIceShard.hitEffectPrefab,
-                    isCrit = crit,
-                    HitEffectNormal = false,
-                    radius = bulletRadius,
-                    maxDistance = maxRange
-                }.Fire();
-                //buckshot
-                int a =(int)UnityEngine.Random.Range(1, 5);
-                float buckshotcount = (float)a / 2;
 
-                new BulletAttack
-                {
-                    damageType = DamageType.Generic,
-                    owner = base.gameObject,
-                    weapon = base.gameObject,
-                    origin = aimRay.origin,
-                    aimVector = aimRay.direction,
-                    minSpread = baseSpread * 0.5f,
-                    maxSpread = baseSpread,
-                    bulletCount = (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0),
-                    procCoefficient = FireIceShard.procCoefficientBuckshot,
-                    damage = (FireIceShard.damageCoefficient * this.damageStat) / bulletCount,
-                    force = FireIceShard.force,
-                    falloffModel = BulletAttack.FalloffModel.Buckshot,
-                    tracerEffectPrefab = _1IceShardsSkill.tracerBuckshot,
-                    muzzleName = muzzleString,
-                    hitEffectPrefab = FireIceShard.hitEffectPrefab,
-                    isCrit = crit,
-                    HitEffectNormal = false,
-                    radius = bulletRadius,
-                    maxDistance = maxRange
-                }.Fire();
+                //point
+                CreateIceShardSpread(aimRay, 0, 0, 
+                    (uint)((FireIceShard.bulletCountPoint > 0) ? FireIceShard.bulletCountPoint : 1), 
+                    procCoefficientPoint, BulletAttack.FalloffModel.None, crit, true).Fire();
+
+                //spread
+                CreateIceShardSpread(aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
+                    (uint)((FireIceShard.bulletCountSpread > 0) ? FireIceShard.bulletCountSpread : 0), 
+                    procCoefficientSpread, BulletAttack.FalloffModel.DefaultBullet, crit, true).Fire();
+
+                //buckshot
+                CreateIceShardSpread(aimRay, baseSpread * 0.5f, baseSpread, 
+                    (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0), 
+                    procCoefficientBuckshot, BulletAttack.FalloffModel.Buckshot, crit, false).Fire();
             }
+        }
+        internal BulletAttack CreateIceShardSpread(Ray aimRay, float minSpread, float maxSpread, 
+            uint bulletsPerSpread, float procCoefficient, BulletAttack.FalloffModel falloffModel, bool isCrit, bool useChill = true)
+        {
+            BulletAttack bulletAttack = new BulletAttack();
+
+            bulletAttack.damageType = DamageType.Generic;
+            bulletAttack.owner = base.gameObject;
+            bulletAttack.weapon = base.gameObject;
+            bulletAttack.origin = aimRay.origin;
+            bulletAttack.aimVector = aimRay.direction;
+            bulletAttack.minSpread = minSpread;
+            bulletAttack.maxSpread = maxSpread;
+            bulletAttack.bulletCount = bulletsPerSpread;
+            bulletAttack.procCoefficient = procCoefficient;
+            bulletAttack.damage = FireIceShard.damageCoefficient * this.damageStat / bulletCount;
+            bulletAttack.force = FireIceShard.force;
+            bulletAttack.falloffModel = falloffModel;
+            bulletAttack.tracerEffectPrefab = _1IceShardsSkill.tracerShotgun;
+            bulletAttack.muzzleName = muzzleString;
+            bulletAttack.hitEffectPrefab = hitEffectPrefab;
+            bulletAttack.isCrit = isCrit;
+            bulletAttack.HitEffectNormal = false;
+            bulletAttack.radius = bulletRadius;
+            bulletAttack.maxDistance = maxRange;
+
+            if(useChill)
+                bulletAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+
+            return bulletAttack;
         }
 
         // Token: 0x060037D7 RID: 14295 RVA: 0x000300F3 File Offset: 0x0002E2F3

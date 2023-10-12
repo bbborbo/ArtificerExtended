@@ -81,7 +81,7 @@ namespace ArtificerExtended.Skills
             Frostbite.novaRadius,
             "Determines the radius of the nova created after the Frostbite buff expires."
             ).Value;
-            KeywordTokens = new string[2] { "KEYWORD_FREEZING", "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[2] { "KEYWORD_FREEZING", ChillRework.ChillRework.chillKeywordToken };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
 
@@ -163,10 +163,12 @@ namespace ArtificerExtended.Skills
                 blastAttack.crit = Util.CheckRoll(self.crit, self.master);
                 blastAttack.baseDamage = self.damage * Frostbite.novaDamageCoefficient;
                 blastAttack.falloffModel = BlastAttack.FalloffModel.SweetSpot;
-                blastAttack.damageType = DamageType.Freeze2s;
                 blastAttack.baseForce = 0;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+
+                blastAttack.damageType = DamageType.Freeze2s;
+
                 blastAttack.Fire();
             }
         }

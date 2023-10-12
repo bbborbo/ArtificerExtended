@@ -86,7 +86,7 @@ namespace ArtificerExtended.Skills
                 "Determines the max damage coefficient per Ice Shards pellet. Damage falloff still applies."
                 ).Value * totalShards;
 
-            KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
             CreateTracerEffects();
             CreateLang();
             CreateSkill();

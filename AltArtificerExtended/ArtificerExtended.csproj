@@ -41,12 +41,6 @@
   </ItemGroup>
 
   <ItemGroup> 
-    <Reference Include="MMHOOK_RoR2">
-      <HintPath>libs\MMHOOK_RoR2.dll</HintPath>
-    </Reference>
-	  <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="R2API">
       <HintPath>libs\R2API.dll</HintPath>
     </Reference>
@@ -56,13 +50,13 @@
 	  <Reference Include="Decalicious">
       <HintPath>libs\Decalicious.dll</HintPath>
     </Reference>
-    
     <Reference Include="VRAPI">
       <HintPath>libs\VRAPI.dll</HintPath>
     </Reference>
-	
-
-	<Reference Include="RiskyMod">
+    <Reference Include="ChillRework">
+      <HintPath>libs\ChillRework.dll</HintPath>
+    </Reference>
+    <Reference Include="RiskyMod">
       <HintPath>libs\RiskyMod.dll</HintPath>
     </Reference>
   </ItemGroup>

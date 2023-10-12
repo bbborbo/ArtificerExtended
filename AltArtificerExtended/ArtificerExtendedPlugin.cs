@@ -33,9 +33,10 @@ namespace ArtificerExtended
     [BepInDependency(R2API.PrefabAPI.PluginGUID)]
     [BepInDependency(R2API.UnlockableAPI.PluginGUID)]
 
+    [BepInDependency(ChillRework.ChillRework.guid, BepInDependency.DependencyFlags.HardDependency)]
+
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.HouseOfFruits.RiskierRain", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.RiskyLives.RiskyMod", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
@@ -110,86 +111,9 @@ namespace ArtificerExtended
                 this.InitializeScepterSkills();
             }
             On.RoR2.CharacterMaster.OnBodyStart += AddAEBodyFX;
-            ChillBasic();
 
             new ContentPacks().Initialize();
             VRStuff.SetupVR();
-        }
-
-        private void ChillBasic()
-        {
-            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
-
-
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_CHILL", "<style=cKeywordName>Chilling</style>" +
-                $"<style=cSub>Has a chance to temporarily <style=cIsUtility>slow enemy speed</style> by <style=cIsDamage>80%.</style></style>");
-
-            LanguageAPI.Add("KEYWORD_FREEZING",
-                "<style=cKeywordName>Freezing</style>" +
-                "<style=cSub>Freeze enemies in place and <style=cIsUtility>Chill</style> them, slowing them by 80% after they thaw. " +
-                "Frozen enemies are <style=cIsHealth>instantly killed</style> if below <style=cIsHealth>30%</style> health.");
-
-
-            LanguageAPI.Add("ITEM_ICICLE_DESC",
-                "Killing an enemy surrounds you with an <style=cIsDamage>ice storm</style> " +
-                "that deals <style=cIsDamage>600% damage per second</style> and " +
-                "<style=cIsUtility>Chills</style> enemies for <style=cIsUtility>1.5s</style>. " +
-                "The storm <style=cIsDamage>grows with every kill</style>, " +
-                "increasing its radius by <style=cIsDamage>1m</style>. " +
-                "Stacks up to <style=cIsDamage>6m</style> <style=cStack>(+6m per stack)</style>.");
-
-            LanguageAPI.Add("ITEM_ICERING_DESC",
-                $"Hits that deal <style=cIsDamage>more than 400% damage</style> also blasts enemies with a " +
-                $"<style=cIsDamage>runic ice blast</style>, " +
-                $"<style=cIsUtility>Chilling</style> them for <style=cIsUtility>3s</style> <style=cStack>(+3s per stack)</style> and " +
-                $"dealing <style=cIsDamage>250%</style> <style=cStack>(+250% per stack)</style> TOTAL damage. " +
-                $"Recharges every <style=cIsUtility>10</style> seconds.");
-        }
-
-        static int freezeProcCount = 3;
-        static int chillProcDuration = 8;
-        static int slowProcChance = 100;
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
-        {
-            CharacterBody vBody = self.body;
-            CharacterBody aBody = null;
-            if (damageInfo.attacker != null)
-                aBody = damageInfo.attacker.GetComponent<CharacterBody>();
-
-            if (vBody != null && aBody != null && damageInfo.procCoefficient != 0 && !damageInfo.rejected)
-            {
-                float debuffDuration = chillProcDuration;
-
-                if (damageInfo.damageType.HasFlag(DamageType.Freeze2s))
-                {
-                    float chillCount = freezeProcCount;
-                    if (damageInfo.damageType.HasFlag(DamageType.AOE))
-                    {
-                        chillCount -= 1;
-                    }
-                    for (int i = 0; i < chillCount; i++)
-                    {
-                        if (Util.CheckRoll(damageInfo.procCoefficient * 100, aBody.master))
-                        {
-                            vBody.AddTimedBuffAuthority(RoR2Content.Buffs.Slow80.buffIndex, debuffDuration);
-                        }
-                    }
-                }
-                else if (damageInfo.damageType.HasFlag(DamageType.SlowOnHit))
-                {
-                    if (aBody.bodyIndex == BodyCatalog.FindBodyIndex(mageBody))
-                    {
-                        damageInfo.damageType = damageInfo.damageType & ~DamageType.SlowOnHit;
-                        float procChance = slowProcChance * damageInfo.procCoefficient;
-
-                        if (Util.CheckRoll(procChance, aBody.master))
-                        {
-                            vBody.AddTimedBuffAuthority(RoR2Content.Buffs.Slow80.buffIndex, debuffDuration);
-                        }
-                    }
-                }
-            }
-            orig(self, damageInfo);
         }
 
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
