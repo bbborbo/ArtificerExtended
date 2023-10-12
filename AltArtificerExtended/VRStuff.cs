@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 using System.Text;
 using UnityEngine;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
+#pragma warning restore CS0618 // Type or member is obsolete
+[module: System.Security.UnverifiableCode]
+#pragma warning disable 
 namespace ArtificerExtended
 {
     public static class VRStuff
