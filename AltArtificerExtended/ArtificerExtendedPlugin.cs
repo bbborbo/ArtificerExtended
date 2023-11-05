@@ -136,7 +136,10 @@ namespace ArtificerExtended
             hoverSkillDef.skillNameToken = skillLocator.passiveSkill.skillNameToken;
             (hoverSkillDef as ScriptableObject).name = skillLocator.passiveSkill.skillNameToken;
             hoverSkillDef.skillDescriptionToken = skillLocator.passiveSkill.skillDescriptionToken;
+            hoverSkillDef.activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Mage.MageCharacterMain));
             hoverSkillDef.icon = skillLocator.passiveSkill.icon;
+            hoverSkillDef.activationStateMachineName = "Body";
+            hoverSkillDef.cancelSprintingOnActivation = false;
 
             passiveFamily.variants[0] = new SkillFamily.Variant { skillDef = hoverSkillDef, viewableNode = new ViewablesCatalog.Node(hoverSkillDef.skillNameToken, false, null) };
 
