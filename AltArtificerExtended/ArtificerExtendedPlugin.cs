@@ -19,6 +19,10 @@ using EntityStates;
 using ArtificerExtended.Components;
 using System.Runtime.CompilerServices;
 using RoR2.Projectile;
+using MonoMod.Cil;
+using RoR2.UI;
+using static RoR2.UI.CharacterSelectController;
+using Mono.Cecil.Cil;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -68,7 +72,8 @@ namespace ArtificerExtended
         public static CharacterBody mageBody;
         public static SkillLocator mageSkillLocator;
 
-        public static SkillFamily magePassive;
+        public static GenericSkill magePassive;
+        public static SkillFamily magePassiveFamily;
         public static SkillFamily magePrimary;
         public static SkillFamily mageSecondary;
         public static SkillFamily mageUtility;
@@ -90,6 +95,8 @@ namespace ArtificerExtended
                 Debug.Log("ARTIFICEREXTENDED setup succeeded!");
             }
 
+            magePassive = CreateMagePassiveSlot(mageObject, mageSkillLocator);
+            magePassiveFamily = magePassive.skillFamily;
             magePrimary = mageSkillLocator.primary.skillFamily;
             mageSecondary = mageSkillLocator.secondary.skillFamily;
             mageUtility = mageSkillLocator.utility.skillFamily;
@@ -114,6 +121,88 @@ namespace ArtificerExtended
 
             new ContentPacks().Initialize();
             VRStuff.SetupVR();
+        }
+
+        private GenericSkill CreateMagePassiveSlot(GameObject body, SkillLocator skillLocator)
+        {
+            SkillFamily passiveFamily = ScriptableObject.CreateInstance<SkillFamily>();
+            (passiveFamily as ScriptableObject).name = "MageBodyPassive";
+            passiveFamily.variants = new SkillFamily.Variant[1];
+
+            GenericSkill passiveSkill = body.gameObject.AddComponent<GenericSkill>();
+            passiveSkill._skillFamily = passiveFamily;
+
+            SkillDef hoverSkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            hoverSkillDef.skillNameToken = skillLocator.passiveSkill.skillNameToken;
+            (hoverSkillDef as ScriptableObject).name = skillLocator.passiveSkill.skillNameToken;
+            hoverSkillDef.skillDescriptionToken = skillLocator.passiveSkill.skillDescriptionToken;
+            hoverSkillDef.icon = skillLocator.passiveSkill.icon;
+
+            passiveFamily.variants[0] = new SkillFamily.Variant { skillDef = hoverSkillDef, viewableNode = new ViewablesCatalog.Node(hoverSkillDef.skillNameToken, false, null) };
+
+            ContentPacks.skillFamilies.Add(passiveFamily);
+            ContentPacks.skillDefs.Add(hoverSkillDef);
+
+            skillLocator.passiveSkill.enabled = false;
+            /*
+            On.RoR2.UI.LoadoutPanelController.Row.FromSkillSlot += (orig, owner, bodyI, slotI, slot) => {
+                LoadoutPanelController.Row row = (LoadoutPanelController.Row)orig(owner, bodyI, slotI, slot);
+                if ((slot.skillFamily as ScriptableObject).name.Contains("Passive"))
+                {
+                    Transform label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
+                    if (label)
+                        label.GetComponent<LanguageTextMeshController>().token = "Misc";
+                }
+                return row;
+            };
+            IL.RoR2.UI.CharacterSelectController.BuildSkillStripDisplayData += (il) => {
+                ILCursor c = new ILCursor(il);
+                int skillIndex = -1;
+                int defIndex = -1;
+                var label = c.DefineLabel();
+                if (c.TryGotoNext(x => x.MatchLdloc(out skillIndex), 
+                    x => x.MatchLdfld(typeof(GenericSkill).GetField("hideInCharacterSelect")), 
+                    x => x.MatchBrtrue(out label)) && skillIndex != (-1) 
+                    && c.TryGotoNext(MoveType.After, 
+                    x => x.MatchLdfld(typeof(SkillFamily.Variant).GetField("skillDef")), 
+                    x => x.MatchStloc(out defIndex)))
+                {
+                    c.Emit(OpCodes.Ldloc, defIndex);
+                    c.EmitDelegate<System.Func<SkillDef, bool>>((def) => def == hoverSkillDef);
+                    c.Emit(OpCodes.Brtrue, label);
+                    if (c.TryGotoNext(x => x.MatchCallOrCallvirt(typeof(List<StripDisplayData>).GetMethod("Add"))))
+                    {
+                        c.Remove();
+                        c.Emit(OpCodes.Ldloc, skillIndex);
+                        c.EmitDelegate<System.Action<List<StripDisplayData>, StripDisplayData, GenericSkill>>((list, disp, ski) => {
+                            if ((ski.skillFamily as ScriptableObject).name.Contains("Misc"))
+                            {
+                                list.Insert(0, disp);
+                            }
+                            else
+                            {
+                                list.Add(disp);
+                            }
+                        });
+                    }
+                }
+            };
+            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) => {
+                ILCursor c = new ILCursor(il);
+                if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt(typeof(LoadoutPanelController.Row).GetMethod(nameof(LoadoutPanelController.Row.FromSkillSlot), (System.Reflection.BindingFlags)(-1)))))
+                {
+                    c.EmitDelegate<System.Func<LoadoutPanelController.Row, LoadoutPanelController.Row>>((orig) => {
+                        var label = orig.rowPanelTransform.Find("SlotLabel") ?? orig.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
+                        if (label && label.GetComponent<LanguageTextMeshController>().token == "Misc")
+                        {
+                            orig.rowPanelTransform.SetSiblingIndex(0);
+                        }
+                        return orig;
+                    });
+                }
+            };
+            */
+            return passiveSkill;
         }
 
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
