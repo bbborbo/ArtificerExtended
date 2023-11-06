@@ -37,8 +37,9 @@ namespace ArtificerExtended.EntityState
 
         private Components.Rotator rotator;
         private Transform modelTransform;
-        private AltArtiPassive passive;
-        private readonly AltArtiPassive.BatchHandle[] handles = new AltArtiPassive.BatchHandle[steps];
+        //private AltArtiPassive passive;
+        private AltArtiPassive.BatchHandle handle;
+        //private readonly AltArtiPassive.BatchHandle[] handles = new AltArtiPassive.BatchHandle[steps];
 
         public override void OnEnter()
         {
@@ -65,10 +66,11 @@ namespace ArtificerExtended.EntityState
 
             //base.characterMotor.useGravity = false;
             //base.characterMotor.set = CameraTargetParams.AimType.Aura;
-            if (AltArtiPassive.instanceLookup.ContainsKey(base.gameObject))
+            this.handle = new AltArtiPassive.BatchHandle();
+            /*if (AltArtiPassive.instanceLookup.ContainsKey(base.gameObject))
             {
                 this.passive = AltArtiPassive.instanceLookup[base.gameObject];
-            }
+            }*/
         }
 
         public override void FixedUpdate()
@@ -99,13 +101,14 @@ namespace ArtificerExtended.EntityState
                 base.characterMotor.onHitGround += this.CharacterMotor_onHitGround;
             }
 
-            for (Int32 i = 0; i < this.handles.Length; i++)
+            this.handle.Fire(0f, 0.5f);
+            /*for (Int32 i = 0; i < this.handles.Length; i++)
             {
                 if (this.handles[i] != null)
                 {
                     this.handles[i].Fire(0f, 0f);
                 }
-            }
+            }*/
 
             base.OnExit();
         }
@@ -122,15 +125,14 @@ namespace ArtificerExtended.EntityState
             base.characterMotor.onHitGround -= this.CharacterMotor_onHitGround;
         }
 
-        public override void HandleMovements()
+        public override void HandleMovements() 
         {
             base.HandleMovements();
-
             if (this.halting)
             {
                 if (this.haltingFirst && base.fixedAge >= this.stepTimes[this.stepCounter] + stepHalt)
                 {
-                    //base.passive.SkillCast( skillLocator.special );
+                    //passive.SkillCast( skillLocator.special );
                     this.haltingFirst = false;
                 }
                 if (base.fixedAge >= this.stepTimes[this.stepCounter] + stepHalt)
@@ -174,12 +176,6 @@ namespace ArtificerExtended.EntityState
 
                     base.characterBody.isSprinting = true;
                     this.halting = false;
-
-                    this.handles[this.stepCounter - 1] = new AltArtiPassive.BatchHandle();
-                    if (this.passive != null)
-                    {
-                        this.passive.SkillCast(this.handles[this.stepCounter - 1]);
-                    }
                 }
             }
             else
@@ -205,6 +201,23 @@ namespace ArtificerExtended.EntityState
         internal virtual void OnMovementDone()
         {
             this.stepCounter++;
+            if (AltArtiPassive.instanceLookup.TryGetValue(base.outer.gameObject, out var passive))
+            {
+                passive.SkillCast(handle);
+            }
+            /*this.handles[this.stepCounter - 1] = new AltArtiPassive.BatchHandle();
+            if (this.passive != null)
+            {
+                this.passive.SkillCast(this.handles[this.stepCounter - 1]);
+            }
+            else
+            {
+                Debug.LogError("passive null");
+            }
+            if (AltArtiPassive.instanceLookup.TryGetValue(base.outer.gameObject, out var passive))
+            {
+                passive.SkillCast();
+            }*/
         }
 
         //public override void UpdateAnimationParameters() => base.UpdateAnimationParameters();

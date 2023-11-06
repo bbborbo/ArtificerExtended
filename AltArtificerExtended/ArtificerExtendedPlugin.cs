@@ -273,7 +273,7 @@ namespace ArtificerExtended
             {
                 new PassiveSkillDef.StateMachineDefaults
                 {
-                    machineName = "Body",
+                    machineName = "Jet",
                     initalState = new SerializableEntityStateType( typeof( Passive.AltArtiPassive ) ),
                     mainState = new SerializableEntityStateType( typeof( Passive.AltArtiPassive ) ),
                     defaultInitalState = new SerializableEntityStateType( typeof( Idle ) ),
@@ -321,6 +321,11 @@ namespace ArtificerExtended
                     surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
                     surge.keywordTokens = new string[0];
                 }
+                else
+                {
+                    SkillBase.RegisterEntityState(typeof(EntityState.VanillaIonSurge));
+                    surge.activationState = new SerializableEntityStateType(typeof(EntityState.VanillaIonSurge));
+                }
             }
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -362,12 +367,14 @@ namespace ArtificerExtended
             }
             else
             {
-                Debug.LogError("ArtificerExtended could not replace Ancient Scepter's Antimatter Surge. " +
+                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
+                    "ArtificerExtended could not replace Ancient Scepter's Antimatter Surge. " +
                     "Antimatter Surge WILL break Artificer Extended's alt passives. \n" +
                     "Either turn on ArtificerExtended's Ion Surge rework to use ArtificerExtended's Antimatter Surge, " +
                     "avoid using Antimatter Surge with ArtificerExtended's alt passive, " +
                     "or tell the Ancient Scepter developers to get in contact to fix Antimatter Surge. \n" +
-                    "This is NOT an error that can be fixed on the ArtificerExtended side.");
+                    "This is NOT an error that can be fixed on the ArtificerExtended side.\n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
