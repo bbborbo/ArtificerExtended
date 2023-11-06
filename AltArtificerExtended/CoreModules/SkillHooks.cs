@@ -49,7 +49,7 @@ namespace ArtificerExtended
             On.EntityStates.Mage.Weapon.Flamethrower.OnEnter += this.Flamethrower_OnEnter;
             On.EntityStates.Mage.Weapon.Flamethrower.FixedUpdate += this.Flamethrower_FixedUpdate;
             On.EntityStates.Mage.Weapon.Flamethrower.OnExit += this.Flamethrower_OnExit;
-            //On.RoR2.HealthComponent.TakeDamage += this.HealthComponent_TakeDamage;
+            On.RoR2.HealthComponent.TakeDamage += this.HealthComponent_TakeDamage;
             //GlobalEventManager.onCharacterDeathGlobal += this.GlobalEventManager_OnCharacterDeath;
             //On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
