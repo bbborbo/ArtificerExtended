@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using RiskyMod.Survivors.Mage.Components;
 //using AlternativeArtificer.States.Main;
 using static R2API.DamageAPI;
+using ArtificerExtended.Passive;
 
 namespace ArtificerExtended.EntityState
 {
@@ -149,11 +150,11 @@ namespace ArtificerExtended.EntityState
             }
 
 
-            /*GameObject obj = base.outer.gameObject;
+            GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }*/
+            }
 
             base.characterBody.AddSpreadBloom(FireIceShard.bloom);
             this.hasFiredGauntlet = true;

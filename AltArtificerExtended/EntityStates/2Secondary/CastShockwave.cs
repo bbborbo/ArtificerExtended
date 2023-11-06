@@ -1,6 +1,7 @@
 ﻿//using AlternativeArtificer.States.Main;
 
 //using AltArtificerExtended.Passive;
+using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
@@ -129,11 +130,11 @@ namespace ArtificerExtended.EntityState
             this.stopwatch += Time.fixedDeltaTime;
             if (this.stopwatch >= this.duration)
             {
-                /*GameObject obj = base.outer.gameObject;
+                GameObject obj = base.outer.gameObject;
                 if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
                 {
                     passive.SkillCast();
-                }*/
+                }
 
                 base.PlayAnimation("Gesture, Additive", "FireWall");
 

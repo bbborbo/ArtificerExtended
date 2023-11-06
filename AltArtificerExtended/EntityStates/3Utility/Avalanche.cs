@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using ArtificerExtended.Passive;
+using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
 using System;
@@ -97,7 +98,7 @@ namespace ArtificerExtended.EntityState
             }
         }
 
-        /*[MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         public void SkillCast()
         {
             GameObject obj = base.outer.gameObject;
@@ -105,7 +106,7 @@ namespace ArtificerExtended.EntityState
             {
                 passive.SkillCast();
             }
-        }*/
+        }
 
         public void CastNova(float fallDuration)
         {
@@ -114,6 +115,7 @@ namespace ArtificerExtended.EntityState
             {
                 passive.SkillCast();
             }*/
+            SkillCast();
 
             //Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             float radius = Util.Remap(fallDuration, 0, fallTimerMaxScaled, minRadius, maxRadius);

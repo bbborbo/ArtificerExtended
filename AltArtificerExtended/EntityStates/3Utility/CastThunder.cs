@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
@@ -101,11 +102,11 @@ namespace ArtificerExtended.EntityState
                 EffectManager.SimpleMuzzleFlash(CastThunder.muzzleflashEffect, base.gameObject, "Muzzle", false);
                 if (!this.outer.destroying && base.isAuthority)
                 {
-                    /*GameObject obj = base.outer.gameObject;
+                    GameObject obj = base.outer.gameObject;
                     if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
                     {
                         passive.SkillCast();
-                    }*/
+                    }
 
                     EffectManager.SpawnEffect(CastThunder.aoeEffect, new EffectData
                     {

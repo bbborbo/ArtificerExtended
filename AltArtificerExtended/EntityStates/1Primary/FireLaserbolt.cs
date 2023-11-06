@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.Skills;
+﻿using ArtificerExtended.Passive;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -162,11 +163,11 @@ namespace ArtificerExtended.EntityState
                 }.Fire();
             }
 
-            /*GameObject obj = base.outer.gameObject;
+            GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }*/
+            }
         }
 
         public override void FixedUpdate()

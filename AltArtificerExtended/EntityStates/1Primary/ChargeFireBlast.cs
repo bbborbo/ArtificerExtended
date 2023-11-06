@@ -9,9 +9,9 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
-//using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
 using ArtificerExtended.Skills;
+using ArtificerExtended.Passive;
 
 namespace ArtificerExtended.EntityState
 {
@@ -50,13 +50,13 @@ namespace ArtificerExtended.EntityState
         private GameObject defaultCrosshairPrefab;
         private uint soundID;
 
-        //private AltArtiPassive.BatchHandle handle;
+        private AltArtiPassive.BatchHandle handle;
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            //this.handle = new AltArtiPassive.BatchHandle();
+            this.handle = new AltArtiPassive.BatchHandle();
 
             this.windDownDuration = this.baseWinddownDuration / this.attackSpeedStat;
             this.chargeDuration = this.baseChargeDuration / this.attackSpeedStat;
@@ -95,14 +95,14 @@ namespace ArtificerExtended.EntityState
             this.timer += Time.fixedDeltaTime * base.characterBody.attackSpeed;
 
             GameObject obj = base.outer.gameObject;
-            /*if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
+            if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 while (this.timer > this.frequency)
                 {
                     this.timer -= this.frequency;
                     passive.SkillCast(handle);
                 }
-            }*/
+            }
 
             if (!this.hasFiredBomb && (this.stopwatch >= chargeDuration || !IsKeyDownAuthority()) &&
                 !this.hasFiredBomb && this.stopwatch >= minChargeDuration)

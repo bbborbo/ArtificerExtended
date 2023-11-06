@@ -25,12 +25,6 @@ namespace ArtificerExtended.EntityState
             if(VRStuff.VRInstalled)
                 VRStuff.AnimateVRHand(true, "Cast");
             base.OnEnter();
-
-            /*GameObject obj = base.outer.gameObject;
-            if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
-            {
-                passive.SkillCast();
-            }*/
         }
     }
 }

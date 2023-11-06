@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
@@ -41,14 +42,14 @@ namespace ArtificerExtended.EntityState
 
         public override void OnExit()
         {
-            /*GameObject obj = base.outer.gameObject;
+            GameObject obj = base.outer.gameObject;
 
             //this.CastBlizzard();
             
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }*/
+            }
 
             base.PlayAnimation("Gesture, Additive", "FireWall");
             base.characterBody.AddTimedBuffAuthority(FrostbiteSkill2.artiIceShield.buffIndex, buffduration);

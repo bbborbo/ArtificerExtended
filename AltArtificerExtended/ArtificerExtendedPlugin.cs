@@ -23,6 +23,7 @@ using MonoMod.Cil;
 using RoR2.UI;
 using static RoR2.UI.CharacterSelectController;
 using Mono.Cecil.Cil;
+using ArtificerExtended.Passive;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -88,6 +89,7 @@ namespace ArtificerExtended
         void Awake()
         {
             mageObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
+            mageObject.AddComponent<ElementCounter>();
             mageBody = mageObject.GetComponent<CharacterBody>();
             mageSkillLocator = mageObject.GetComponent<SkillLocator>();
             if (mageObject && mageBody && mageSkillLocator)
@@ -105,12 +107,21 @@ namespace ArtificerExtended
             InitializeConfig();
             this.InitializeUnlocks();
 
+            Debug.Log("ArtificerExtended setup succeeded!");
+
+            CreateMagePassives(magePassiveFamily);
+
             if (is2r4rLoaded)
             {
                 artiNanoDamage = 12f;
                 artiUtilCooldown = 8f;
             }
 
+            AddHooks();
+            Buffs.CreateBuffs();
+            Projectiles.CreateLightningSwords();
+            Projectiles.CreateIceExplosion();
+            Effects.DoEffects();
             this.ArtiChanges();
             this.InitializeSkills();
             if (isScepterLoaded)
@@ -125,29 +136,30 @@ namespace ArtificerExtended
 
         private GenericSkill CreateMagePassiveSlot(GameObject body, SkillLocator skillLocator)
         {
+            foreach (var skill in body.GetComponents<GenericSkill>())
+                if ((skill.skillFamily as ScriptableObject).name.ToLower().Contains("passive"))
+                    return skill;
+
+            //
+
             SkillFamily passiveFamily = ScriptableObject.CreateInstance<SkillFamily>();
-            (passiveFamily as ScriptableObject).name = "MageBodyPassive";
             passiveFamily.variants = new SkillFamily.Variant[1];
 
             GenericSkill passiveSkill = body.gameObject.AddComponent<GenericSkill>();
             passiveSkill._skillFamily = passiveFamily;
-
-            SkillDef hoverSkillDef = ScriptableObject.CreateInstance<SkillDef>();
-            hoverSkillDef.skillNameToken = skillLocator.passiveSkill.skillNameToken;
-            (hoverSkillDef as ScriptableObject).name = skillLocator.passiveSkill.skillNameToken;
-            hoverSkillDef.skillDescriptionToken = skillLocator.passiveSkill.skillDescriptionToken;
-            hoverSkillDef.activationState = new EntityStates.SerializableEntityStateType(typeof(EntityStates.Mage.MageCharacterMain));
-            hoverSkillDef.icon = skillLocator.passiveSkill.icon;
-            hoverSkillDef.activationStateMachineName = "Body";
-            hoverSkillDef.cancelSprintingOnActivation = false;
-
-            passiveFamily.variants[0] = new SkillFamily.Variant { skillDef = hoverSkillDef, viewableNode = new ViewablesCatalog.Node(hoverSkillDef.skillNameToken, false, null) };
+            (passiveSkill.skillFamily as ScriptableObject).name = "MageBodyPassive";
 
             ContentPacks.skillFamilies.Add(passiveFamily);
-            ContentPacks.skillDefs.Add(hoverSkillDef);
 
             skillLocator.passiveSkill.enabled = false;
-            /*
+            foreach (var machine in body.GetComponents<EntityStateMachine>())
+            {
+                if (machine.customName == "Body")
+                {
+                    machine.mainStateType = new EntityStates.SerializableEntityStateType(typeof(EntityStates.GenericCharacterMain));
+                }
+            }
+
             On.RoR2.UI.LoadoutPanelController.Row.FromSkillSlot += (orig, owner, bodyI, slotI, slot) => {
                 LoadoutPanelController.Row row = (LoadoutPanelController.Row)orig(owner, bodyI, slotI, slot);
                 if ((slot.skillFamily as ScriptableObject).name.Contains("Passive"))
@@ -171,14 +183,14 @@ namespace ArtificerExtended
                     x => x.MatchStloc(out defIndex)))
                 {
                     c.Emit(OpCodes.Ldloc, defIndex);
-                    c.EmitDelegate<System.Func<SkillDef, bool>>((def) => def == hoverSkillDef);
+                    c.EmitDelegate<System.Func<SkillDef, bool>>((def) => def == passiveFamily.variants[0].skillDef);
                     c.Emit(OpCodes.Brtrue, label);
                     if (c.TryGotoNext(x => x.MatchCallOrCallvirt(typeof(List<StripDisplayData>).GetMethod("Add"))))
                     {
                         c.Remove();
                         c.Emit(OpCodes.Ldloc, skillIndex);
-                        c.EmitDelegate<System.Action<List<StripDisplayData>, StripDisplayData, GenericSkill>>((list, disp, ski) => {
-                            if ((ski.skillFamily as ScriptableObject).name.Contains("Misc"))
+                        c.EmitDelegate<System.Action<List<StripDisplayData>, StripDisplayData, GenericSkill>>((list, disp, skill) => {
+                            if ((skill.skillFamily as ScriptableObject).name == "MageBodyPassive")
                             {
                                 list.Insert(0, disp);
                             }
@@ -204,8 +216,88 @@ namespace ArtificerExtended
                     });
                 }
             };
-            */
             return passiveSkill;
+        }
+        public void CreateMagePassives(SkillFamily passiveFamily)
+        {
+            PassiveSkillDef hoverSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
+            hoverSkillDef.skillNameToken = mageSkillLocator.passiveSkill.skillNameToken;
+            (hoverSkillDef as ScriptableObject).name = mageSkillLocator.passiveSkill.skillNameToken;
+            hoverSkillDef.skillDescriptionToken = mageSkillLocator.passiveSkill.skillDescriptionToken;
+            hoverSkillDef.icon = mageSkillLocator.passiveSkill.icon;
+            hoverSkillDef.cancelSprintingOnActivation = false;
+            hoverSkillDef.hideFlags = HideFlags.None;
+            hoverSkillDef.stateMachineDefaults = new PassiveSkillDef.StateMachineDefaults[1]
+            {
+                new PassiveSkillDef.StateMachineDefaults
+                {
+                    machineName = "Body",
+                    initalState = new SerializableEntityStateType( typeof( MageCharacterMain ) ),
+                    mainState = new SerializableEntityStateType( typeof( MageCharacterMain ) ),
+                    defaultInitalState = new SerializableEntityStateType( typeof( GenericCharacterMain ) ),
+                    defaultMainState = new SerializableEntityStateType( typeof( GenericCharacterMain ) )
+                }
+            };
+
+            #region lang
+            LanguageAPI.Add("MAGE_PASSIVE_ENERGY_NAME", "Energetic Resonance");
+            /*LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
+                "- Selecting <style=cIsDamage>FIRE</style> skills increases the intensity of <style=cIsUtility>Incinerate.</style>" +
+                "\n- Selecting <style=cIsDamage>ICE</style> skills increases the power of <style=cIsUtility>Arctic Blasts.</style>" +
+                "\n- Selecting <style=cIsDamage>LIGHTNING</style> skills creates additional <style=cIsUtility>Lightning Bolts.</style>");*/
+            LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
+                "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
+                "\n- <style=cIsUtility>Arctic Blasts</style> increase in power for each <style=cIsDamage>ICE</style> skill." +
+                "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
+
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
+                $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Gain a buff that temporarily " +
+                $"increases the <style=cIsDamage>burn damage</style> from Ignite " +
+                $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.burnDamageMult)} per stack.</style>");
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "<style=cKeywordName>Arctic Blast</style>" +
+                "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
+                "causes an <style=cIsUtility>Arctic Blast,</style> " +
+                "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
+                $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
+                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult + AltArtiPassive.lightningBlastDamageMult)} damage.</style>");
+            #endregion
+
+            PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
+            resonanceSkillDef.skillNameToken = "MAGE_PASSIVE_ENERGY_NAME";
+            resonanceSkillDef.skillDescriptionToken = "MAGE_PASSIVE_ENERGY_DESC";
+            resonanceSkillDef.icon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
+            resonanceSkillDef.stateMachineDefaults = new PassiveSkillDef.StateMachineDefaults[1]
+            {
+                new PassiveSkillDef.StateMachineDefaults
+                {
+                    machineName = "Body",
+                    initalState = new SerializableEntityStateType( typeof( Passive.AltArtiPassive ) ),
+                    mainState = new SerializableEntityStateType( typeof( Passive.AltArtiPassive ) ),
+                    defaultInitalState = new SerializableEntityStateType( typeof( Idle ) ),
+                    defaultMainState = new SerializableEntityStateType( typeof( Idle ) )
+                },
+            };
+            resonanceSkillDef.keywordTokens = new string[3] { "ARTIFICEREXTENDED_KEYWORD_MELT", "ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "ARTIFICEREXTENDED_KEYWORD_BOLTS" };
+
+            passiveFamily.variants = new SkillFamily.Variant[2]
+            {
+                new SkillFamily.Variant
+                {
+                    skillDef = hoverSkillDef,
+                    unlockableName = "",
+                    viewableNode = new ViewablesCatalog.Node(hoverSkillDef.skillNameToken, false, null)
+                },
+                new SkillFamily.Variant
+                {
+                    skillDef = resonanceSkillDef,
+                    unlockableDef = resonanceSkillDef.GetUnlockDef(typeof(ArtificerEnergyPassiveUnlock)),
+                    viewableNode = new ViewablesCatalog.Node(resonanceSkillDef.skillNameToken, false, null)
+                }
+            };
+            //
+            ContentPacks.skillDefs.Add(hoverSkillDef);
+            ContentPacks.skillDefs.Add(resonanceSkillDef);
         }
 
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
