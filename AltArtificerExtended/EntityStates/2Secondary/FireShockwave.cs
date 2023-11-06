@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Skills;
+﻿using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Treebot.Weapon;
 using RoR2;
@@ -10,18 +10,18 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class FireShockwave : BaseState
     {
         public GameObject fireEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
         public Ray burstAimRay;
-        public static float damage = Main.artiNanoDamage;
+        public static float damage = ArtificerExtendedPlugin.artiNanoDamage;
         public float procCoefficient = 1.0f;
         public float baseDuration = 0.7f;
 
         public float backupDistance = 2.5f;
-        public float maxDistance = Main.meleeRangeSingle;
+        public float maxDistance = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float smallHopVelocity = 7;
         public static float recoilAmplitude = 3.5f;
 
@@ -43,7 +43,7 @@ namespace AltArtificerExtended.EntityState
         {
             base.OnEnter();
             //Util.PlaySound(this.sound, base.gameObject);
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
 
             base.SmallHop(base.characterMotor, smallHopVelocity);
             base.AddRecoil(-1f * recoilAmplitude, -2f * recoilAmplitude, -0.5f * recoilAmplitude, 0.5f * recoilAmplitude);

@@ -1,5 +1,4 @@
-﻿
-using AltArtificerExtended.Components;
+﻿using ArtificerExtended.Components;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -8,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using static AltArtificerExtended.Components.ElementCounter;
-using static AltArtificerExtended.Passive.AltArtiPassive;
+using static ArtificerExtended.Components.ElementCounter;
+using static ArtificerExtended.Passive.AltArtiPassive;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     class ArtificerEnergyPassiveUnlock : UnlockBase
     {
@@ -49,7 +48,7 @@ namespace AltArtificerExtended.Unlocks
         {
             orig(self);
             ElementCounter power = self.characterBody?.GetComponent<ElementCounter>();
-            if(power != null)
+            if (power != null)
             {
                 if (power.firePower >= Power.Extreme || power.icePower >= Power.Extreme || power.lightningPower >= Power.Extreme)
                 {

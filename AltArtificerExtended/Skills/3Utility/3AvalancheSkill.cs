@@ -3,12 +3,12 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _3AvalancheSkill : SkillBase
     {
@@ -28,11 +28,11 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(Avalanche);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: Main.artiUtilCooldown,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
                 interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true
             );

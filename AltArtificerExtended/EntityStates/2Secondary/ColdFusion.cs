@@ -8,10 +8,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
+using R2API;
+using ArtificerExtended.Passive;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class ColdFusion : BaseSkillState
     {
@@ -30,7 +31,7 @@ namespace AltArtificerExtended.EntityState
         public string attackSoundString = new EntityStates.Toolbot.FireSpear().fireSoundString;
 
         //generic attack stuff
-        public static float totalDamageCoefficient = Main.artiNanoDamage + 8;
+        public static float totalDamageCoefficient = ArtificerExtendedPlugin.artiNanoDamage + 8;
         public static int bulletCount = 6;
         public static float freezeChance = 50;
 
@@ -41,7 +42,7 @@ namespace AltArtificerExtended.EntityState
 
         public float force = 600f;
         public static float selfForce = 400f;
-        public static float maxRange = Main.meleeRangeSingle;
+        public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
 
         //everything past here is generic charge stuff
         public float minRadius = 0;
@@ -112,6 +113,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         public override void Update()
@@ -138,6 +141,8 @@ namespace AltArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 
@@ -166,7 +171,7 @@ namespace AltArtificerExtended.EntityState
 
                 for (int i = 0; i < bulletCount; i++)
                 {
-                    this.aimRay = base.GetAimRay();
+                    this.aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     Vector3 direction = aimRay.direction;
                     float bonusPitch = ((float)bulletCount / pitchSpread - (float)i) * pitchSpread;
                     Vector3 forward = Util.ApplySpread(aimRay.direction, 0, spread, 0, 1f, 0, bonusPitch - 6f);
@@ -176,15 +181,8 @@ namespace AltArtificerExtended.EntityState
                         base.characterMotor.ApplyForce(aimRay.direction * -selfForce, false, false);
                     }
 
-                    GameObject impactEffectPrefab = coldImpactPrefab;
-                    DamageType damageType = DamageType.SlowOnHit;
-                    if(Util.CheckRoll(50, base.characterBody.master) || i == bulletCount - 1)
-                    {
-                        impactEffectPrefab = freezeImpactPrefab;
-                        damageType = DamageType.Freeze2s;
-                    }
 
-                    new BulletAttack
+                    BulletAttack ba = new BulletAttack
                     {
                         owner = base.gameObject,
                         weapon = base.gameObject,
@@ -197,14 +195,25 @@ namespace AltArtificerExtended.EntityState
                         force = force,
                         tracerEffectPrefab = _3ColdFusionSkill.fusionTracer,
                         muzzleName = this.muzzleString,
-                        hitEffectPrefab = impactEffectPrefab,
                         isCrit = isCrit,
                         radius = 0.4f,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         maxDistance = maxRange,
-                        smartCollision = true,
-                        damageType = damageType
-                    }.Fire();
+                        smartCollision = true
+                    };
+
+                    if (Util.CheckRoll(50, base.characterBody.master) || i == bulletCount - 1)
+                    {
+                        ba.hitEffectPrefab = freezeImpactPrefab;
+                        ba.damageType = DamageType.Freeze2s;
+                    }
+                    else
+                    {
+                        ba.hitEffectPrefab = coldImpactPrefab;
+                        ba.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+                    }
+
+                    ba.Fire();
 
                     Util.PlaySound(attackSoundString, base.gameObject);
                     base.AddRecoil(recoil, recoil, recoil * recoilBias * 0.75f, recoil * recoilBias);

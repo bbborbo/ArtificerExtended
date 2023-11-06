@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.EntityState;
-using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using RoR2;
 using RoR2.Projectile;
@@ -8,8 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using static R2API.DamageAPI;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _4SnowballsSkill : SkillBase
     {
@@ -28,7 +29,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireSnowBall);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
@@ -46,7 +47,7 @@ namespace AltArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-            KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
             FixSnowballProjectile();
             CreateLang();
             CreateSkill();
@@ -57,8 +58,9 @@ namespace AltArtificerExtended.Skills
             var SnowballPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
 
             SnowballPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
-            SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.SlowOnHit;
+            SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
             SnowballPrefab.GetComponent<ProjectileController>().procCoefficient = 0.8f;
+            SnowballPrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
         }
     }
 }

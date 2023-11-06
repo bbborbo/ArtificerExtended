@@ -3,7 +3,7 @@ using RoR2;
 using System;
 using UnityEngine;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     class ArtificerIceShardsUnlock : UnlockBase
     {

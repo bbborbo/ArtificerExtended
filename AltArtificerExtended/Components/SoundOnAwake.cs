@@ -6,7 +6,7 @@ using RoR2;
 
 using UnityEngine;
 
-namespace AltArtificerExtended.Components
+namespace ArtificerExtended.Components
 {
 
     public class SoundOnAwake : MonoBehaviour

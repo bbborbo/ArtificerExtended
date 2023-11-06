@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Passive;
+﻿using ArtificerExtended.Passive;
 using EntityStates;
 using RoR2;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Components
+namespace ArtificerExtended.Components
 {
     public class ElementCounter : MonoBehaviour
     {
@@ -28,11 +28,11 @@ namespace AltArtificerExtended.Components
         public Power lightningPower;
         SkillLocator loc = null;
 
-        public void GetPowers(EquipmentIndex equipIndex, bool updateEquipment = false, SkillLocator skillLocator = null)
+        public void GetPowers(SkillLocator skillLocator = null)
         {
-            if(loc == null)
+            if (loc == null)
             {
-                if(skillLocator == null)
+                if (skillLocator == null)
                 {
                     Debug.Log("Element Counter has no state assigned!");
                     return;
@@ -76,12 +76,12 @@ namespace AltArtificerExtended.Components
             }
 
             EquipmentIndex equipIndex = EquipmentIndex.None;
-            if(skill.characterBody.equipmentSlot != null)
+            if (skill.characterBody.equipmentSlot != null)
             {
                 equipIndex = skill.characterBody.equipmentSlot.equipmentIndex;
             }
 
-            skill.onSkillChanged += (s) => this.GetPowers(equipIndex);
+            skill.onSkillChanged += (s) => this.GetPowers();
         }
 
         #region static methods
@@ -148,7 +148,7 @@ namespace AltArtificerExtended.Components
             return GetPowerLevelFromBody(body, power, useAspect);
         }
 
-        public static Power GetPowerLevelFromBody(CharacterBody body, Power skillPower,  bool useAspect = false)
+        public static Power GetPowerLevelFromBody(CharacterBody body, Power skillPower, bool useAspect = false)
         {
             Power power = Power.None;
             if (AltArtiPassive.instanceLookup.ContainsKey(body.gameObject))
@@ -157,7 +157,7 @@ namespace AltArtificerExtended.Components
             }
             if (useAspect == true && power < Power.Unfathomable)
             {
-                
+
             }
 
             return power;

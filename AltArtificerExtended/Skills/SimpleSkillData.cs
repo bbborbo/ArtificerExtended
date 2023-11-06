@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     public class SimpleSkillData
     {

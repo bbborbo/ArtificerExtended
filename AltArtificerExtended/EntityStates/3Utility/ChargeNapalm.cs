@@ -11,10 +11,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+//using AltArtificerExtended.Passive;
+using ArtificerExtended.Skills;
+using ArtificerExtended.Passive;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     // Token: 0x020009E0 RID: 2528
     public class ChargeNapalm : BaseSkillState
@@ -121,6 +122,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeNapalm.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         public override void Update()
@@ -143,6 +146,8 @@ namespace AltArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             base.characterBody.AddSpreadBloom(4);
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 
@@ -152,7 +157,7 @@ namespace AltArtificerExtended.EntityState
 
             base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
 
-            this.aimRay = base.GetAimRay();
+            this.aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
 
             if (this.chargeEffectInstance)
             {
@@ -179,7 +184,7 @@ namespace AltArtificerExtended.EntityState
                     float pitchSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxPitchSpread, ChargeNapalm.minPitchSpread);
                     float yawSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxYawSpread, ChargeNapalm.minYawSpread);
 
-                    Ray aimRay2 = base.GetAimRay();
+                    Ray aimRay2 = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     Vector3 direction = aimRay2.direction;
                     Vector3 origin = aimRay2.origin;
 
@@ -214,7 +219,7 @@ namespace AltArtificerExtended.EntityState
             //Vector3 forward = Util.ApplySpread(direction, 0, 0, 1f, 1f, bonusYaw, bonusPitch - 6f);
             ProjectileManager.instance.FireProjectile(this.projectilePrefab, origin,
                 Util.QuaternionSafeLookRotation(forward), base.gameObject, this.damageStat * projectileDamageCoeff,
-                0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1);
+                0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, projectileHSpeed);
         }
 
         private float GetChargeProgress()

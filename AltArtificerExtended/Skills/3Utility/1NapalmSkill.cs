@@ -3,15 +3,15 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using ThreeEyedGames;
 using R2API;
 using R2API.Utils;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _1NapalmSkill : SkillBase
     {
@@ -41,11 +41,11 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ChargeNapalm);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: Main.artiUtilCooldown,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
                 interruptPriority: InterruptPriority.Skill,
                 beginSkillCooldownOnSkillEnd: true
             );
@@ -167,7 +167,7 @@ namespace AltArtificerExtended.Skills
             component2.intensity = 4f;
             component2.range = 7.5f;
 
-            Main.CreateEffect(projectileNapalmImpact);
+            ArtificerExtendedPlugin.CreateEffect(projectileNapalmImpact);
             ContentPacks.projectilePrefabs.Add(projectilePrefabNapalm);
             ContentPacks.projectilePrefabs.Add(acidPrefabNapalm);
         }

@@ -1,7 +1,8 @@
 ﻿//using AlternativeArtificer.States.Main;
 
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+//using AltArtificerExtended.Passive;
+using ArtificerExtended.Passive;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
 using EntityStates.Mage;
@@ -14,7 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class CastShockwave : BaseState
     {
@@ -68,11 +69,13 @@ namespace AltArtificerExtended.EntityState
             }*/
             this.blinkVector = this.GetBlinkVector();
             this.CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
         }
 
         protected virtual Vector3 GetBlinkVector()
         {
-            blinkAimRay = base.GetAimRay();
+            blinkAimRay = (!VRStuff.VRInstalled)? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
             return blinkAimRay.direction;
         }
         private void CreateBlinkEffect(Vector3 origin)

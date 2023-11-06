@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Components
+namespace ArtificerExtended.Components
 {
     public class Rotator : MonoBehaviour
     {

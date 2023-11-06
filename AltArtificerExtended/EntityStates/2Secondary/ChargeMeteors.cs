@@ -11,10 +11,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 //using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
+using ArtificerExtended.Passive;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     // Token: 0x020009E0 RID: 2528
     public class ChargeMeteors : BaseSkillState
@@ -31,7 +31,7 @@ namespace AltArtificerExtended.EntityState
         public static float meteorDamageCoefficient = 2f;
         public static float procCoefficient = 0.8f;
         public static int minMeteors = 0;
-        public static int maxMeteors = (int)Mathf.Ceil(Main.artiNanoDamage / meteorDamageCoefficient);
+        public static int maxMeteors = (int)Mathf.Ceil(ArtificerExtendedPlugin.artiNanoDamage / meteorDamageCoefficient);
         public static float minMeteorRadius = 2.5f;
         public static float maxMeteorRadius = 6f;
         public float force = 300;
@@ -118,6 +118,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
         }
 
         private void UpdateAreaIndicator()
@@ -128,7 +130,7 @@ namespace AltArtificerExtended.EntityState
 
                 float num = 1000f;
                 float num2 = 0f;
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
                     out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -193,9 +195,9 @@ namespace AltArtificerExtended.EntityState
         private async void FireMeteor()
         {
             this.hasFiredBomb = true;
-            //base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
+            base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
             base.PlayAnimation("Gesture, Additive", "FireWall");
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
             if (this.chargeEffectInstance)
             {
                 global::EntityStates.EntityState.Destroy(this.chargeEffectInstance);
@@ -217,7 +219,7 @@ namespace AltArtificerExtended.EntityState
 
                     float num = 1000f;
                     float num2 = 0f;
-                    Ray aRay = base.GetAimRay();
+                    Ray aRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     RaycastHit raycastHit;
                     if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out num2),
                         out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -288,6 +290,8 @@ namespace AltArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 

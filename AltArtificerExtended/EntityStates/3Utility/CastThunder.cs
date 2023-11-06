@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Passive;
+using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
 using EntityStates.Mage.Weapon;
@@ -11,7 +11,7 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     public class CastThunder : BaseSkillState
     {
@@ -47,11 +47,13 @@ namespace AltArtificerExtended.EntityState
             this.cachedCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
 
-            if (Main.AllowBrokenSFX.Value == true)
+            if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                 Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteor.areaIndicatorPrefab);
             this.UpdateAreaIndicator();
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Charge");
             base.OnEnter();
         }
 
@@ -62,7 +64,7 @@ namespace AltArtificerExtended.EntityState
             {
                 float num = 1000f;
                 float num2 = 0f;
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
                     out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
@@ -119,6 +121,8 @@ namespace AltArtificerExtended.EntityState
                 global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             }
             base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(false, "Cast");
             base.OnExit();
         }
 

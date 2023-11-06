@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     class ArtificerTempDropUnlock : UnlockBase
     {

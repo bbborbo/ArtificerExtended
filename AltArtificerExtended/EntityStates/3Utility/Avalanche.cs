@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.Passive;
+﻿using ArtificerExtended.Passive;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -9,14 +9,14 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class Avalanche : BaseSkillState
     {
         public static float damageCoefficient = 10f;
 
         public static float minRadius = 6;
-        public static float maxRadius = Main.meleeRangeSingle;
+        public static float maxRadius = ArtificerExtendedPlugin.meleeRangeSingle;
         float endHopVelocity = 10;
 
         public float downForce = -12.5f;
@@ -110,11 +110,12 @@ namespace AltArtificerExtended.EntityState
 
         public void CastNova(float fallDuration)
         {
-            GameObject obj = base.outer.gameObject;
+            /*GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
             {
                 passive.SkillCast();
-            }
+            }*/
+            SkillCast();
 
             //Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             float radius = Util.Remap(fallDuration, 0, fallTimerMaxScaled, minRadius, maxRadius);

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended
+namespace ArtificerExtended
 {
     public static class Tools
     {

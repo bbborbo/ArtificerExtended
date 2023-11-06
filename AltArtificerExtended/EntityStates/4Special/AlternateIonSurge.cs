@@ -9,9 +9,9 @@ using RoR2;
 
 using UnityEngine;
 using UnityEngine.Networking;
-using AltArtificerExtended.Passive;
+using ArtificerExtended.Passive;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
 
     public class AlternateIonSurge : GenericCharacterMain
@@ -37,8 +37,9 @@ namespace AltArtificerExtended.EntityState
 
         private Components.Rotator rotator;
         private Transform modelTransform;
-        private AltArtiPassive passive;
-        private readonly AltArtiPassive.BatchHandle[] handles = new AltArtiPassive.BatchHandle[steps];
+        //private AltArtiPassive passive;
+        private AltArtiPassive.BatchHandle handle;
+        //private readonly AltArtiPassive.BatchHandle[] handles = new AltArtiPassive.BatchHandle[steps];
 
         public override void OnEnter()
         {
@@ -60,22 +61,23 @@ namespace AltArtificerExtended.EntityState
 
             this.modelTransform = base.GetModelTransform();
             this.rotator = this.modelTransform.Find("MageArmature").GetComponent<Components.Rotator>();
-            if(rotator == null)
+            if (rotator == null)
                 this.rotator = this.modelTransform.Find("MageArmature").gameObject.AddComponent<Components.Rotator>();
 
             //base.characterMotor.useGravity = false;
             //base.characterMotor.set = CameraTargetParams.AimType.Aura;
-            if (AltArtiPassive.instanceLookup.ContainsKey(base.gameObject))
+            this.handle = new AltArtiPassive.BatchHandle();
+            /*if (AltArtiPassive.instanceLookup.ContainsKey(base.gameObject))
             {
                 this.passive = AltArtiPassive.instanceLookup[base.gameObject];
-            }
+            }*/
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             bool earlyCancel = stepCounter > 0 && inputBank.skill4.justPressed;
-            
+
             if ((base.fixedAge >= this.duration || earlyCancel) && base.isAuthority)
             {
                 base.outer.SetNextStateToMain();
@@ -87,7 +89,7 @@ namespace AltArtificerExtended.EntityState
             this.rotator.ResetRotation(0.5f);
             //Reflection.SetPropertyValue<float>(base.characterMotor, "useGravity", true);
 
-           // base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
+            // base.cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
             if (this.inputSpace)
             {
                 UnityEngine.Object.Destroy(this.inputSpace.gameObject);
@@ -99,13 +101,14 @@ namespace AltArtificerExtended.EntityState
                 base.characterMotor.onHitGround += this.CharacterMotor_onHitGround;
             }
 
-            for (Int32 i = 0; i < this.handles.Length; i++)
+            this.handle.Fire(0f, 0.5f);
+            /*for (Int32 i = 0; i < this.handles.Length; i++)
             {
                 if (this.handles[i] != null)
                 {
                     this.handles[i].Fire(0f, 0f);
                 }
-            }
+            }*/
 
             base.OnExit();
         }
@@ -122,15 +125,14 @@ namespace AltArtificerExtended.EntityState
             base.characterMotor.onHitGround -= this.CharacterMotor_onHitGround;
         }
 
-        public override void HandleMovements()
+        public override void HandleMovements() 
         {
             base.HandleMovements();
-
             if (this.halting)
             {
                 if (this.haltingFirst && base.fixedAge >= this.stepTimes[this.stepCounter] + stepHalt)
                 {
-                    //base.passive.SkillCast( skillLocator.special );
+                    //passive.SkillCast( skillLocator.special );
                     this.haltingFirst = false;
                 }
                 if (base.fixedAge >= this.stepTimes[this.stepCounter] + stepHalt)
@@ -160,6 +162,8 @@ namespace AltArtificerExtended.EntityState
                     forward = Vector3.Normalize(forward);
                     this.flyVector = this.inputSpace.TransformDirection(forward);
 
+                    OnMovementDone();
+
                     _ = Util.PlaySound(FlyUpState.beginSoundString, base.gameObject);
                     this.CreateBlinkEffect(Util.GetCorePosition(base.gameObject));
                     base.PlayCrossfade("Body", "FlyUp", "FlyUp.playbackRate", dashTime, 0.1f);
@@ -172,13 +176,6 @@ namespace AltArtificerExtended.EntityState
 
                     base.characterBody.isSprinting = true;
                     this.halting = false;
-                    this.stepCounter++;
-
-                    this.handles[this.stepCounter - 1] = new AltArtiPassive.BatchHandle();
-                    if (this.passive != null)
-                    {
-                        this.passive.SkillCast(this.handles[this.stepCounter - 1]);
-                    }
                 }
             }
             else
@@ -199,6 +196,28 @@ namespace AltArtificerExtended.EntityState
 
             }
             base.characterMotor.velocity.y = 0f;
+        }
+
+        internal virtual void OnMovementDone()
+        {
+            this.stepCounter++;
+            if (AltArtiPassive.instanceLookup.TryGetValue(base.outer.gameObject, out var passive))
+            {
+                passive.SkillCast(handle);
+            }
+            /*this.handles[this.stepCounter - 1] = new AltArtiPassive.BatchHandle();
+            if (this.passive != null)
+            {
+                this.passive.SkillCast(this.handles[this.stepCounter - 1]);
+            }
+            else
+            {
+                Debug.LogError("passive null");
+            }
+            if (AltArtiPassive.instanceLookup.TryGetValue(base.outer.gameObject, out var passive))
+            {
+                passive.SkillCast();
+            }*/
         }
 
         //public override void UpdateAnimationParameters() => base.UpdateAnimationParameters();

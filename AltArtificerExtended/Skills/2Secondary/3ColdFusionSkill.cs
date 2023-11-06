@@ -1,4 +1,4 @@
-﻿using AltArtificerExtended.EntityState;
+﻿using ArtificerExtended.EntityState;
 using BepInEx.Configuration;
 using EntityStates;
 using R2API;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _3ColdFusionSkill : SkillBase
     {
@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ColdFusion);
 
-        public override SkillFamily SkillSlot => Main.mageSecondary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -68,7 +68,7 @@ namespace AltArtificerExtended.Skills
                 ColdFusion.freezeChance,
                 "Determines the chance per spear/bullet has to freeze on hit."
                 ).Value;
-            KeywordTokens = new string[2] { "ARTIFICEREXTENDED_KEYWORD_CHILL", "KEYWORD_FREEZING" };
+            KeywordTokens = new string[2] { ChillRework.ChillRework.chillKeywordToken, "KEYWORD_FREEZING" };
 
             CreateFusionTracer();
             CreateLang();
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
             shotgunAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             shotgunAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            Main.CreateEffect(fusionTracer);
+            ArtificerExtendedPlugin.CreateEffect(fusionTracer);
         }
     }
 }

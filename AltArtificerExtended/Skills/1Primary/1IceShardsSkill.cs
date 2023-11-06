@@ -3,13 +3,13 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using R2API;
 using R2API.Utils;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _1IceShardsSkill : SkillBase
     {
@@ -35,12 +35,13 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireIceShard);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         ( 
             baseMaxStock: 4,
-            baseRechargeInterval: 1.3f
+            baseRechargeInterval: 1.3f,
+            rechargeStock: ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1
         );
         public override bool useSteppedDef { get; set; } = true;
 
@@ -68,8 +69,8 @@ namespace AltArtificerExtended.Skills
             buckshotAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             buckshotAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            Main.CreateEffect(tracerShotgun);
-            Main.CreateEffect(tracerBuckshot);
+            ArtificerExtendedPlugin.CreateEffect(tracerShotgun);
+            ArtificerExtendedPlugin.CreateEffect(tracerBuckshot);
         }
 
         public override void Init(ConfigFile config)
@@ -85,7 +86,7 @@ namespace AltArtificerExtended.Skills
                 "Determines the max damage coefficient per Ice Shards pellet. Damage falloff still applies."
                 ).Value * totalShards;
 
-            KeywordTokens = new string[1] { "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
             CreateTracerEffects();
             CreateLang();
             CreateSkill();

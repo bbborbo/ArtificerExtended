@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+﻿using ArtificerExtended.Passive;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class FireLaserbolts : BaseSkillState, SteppedSkillDef.IStepSetter
     {
@@ -19,7 +19,7 @@ namespace AltArtificerExtended.EntityState
 
         public float procCoefficient = 1.0f;
 
-        public static float damageCoefficient = Main.artiBoltDamage;
+        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage;
 
         public float force = 20f;
 
@@ -122,7 +122,16 @@ namespace AltArtificerExtended.EntityState
             base.characterBody.AddSpreadBloom(FireFireBolt.bloom);
             this.hasFiredGauntlet = true;
 
-            Ray aimRay = base.GetAimRay();
+            Ray aimRay;
+            if (VRStuff.VRInstalled)
+            {
+                this.muzzleString = "MuzzleRight";
+                aimRay = VRStuff.GetVRHandAimRay(true);
+                VRStuff.AnimateVRHand(true, "Cast");
+            }
+            else
+                aimRay = base.GetAimRay();
+
             if (this.childLocator)
             {
                 this.muzzleTransform = this.childLocator.FindChild(this.muzzleString);

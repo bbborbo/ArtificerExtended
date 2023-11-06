@@ -3,13 +3,13 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using R2API;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _3LaserBoltsSkill : SkillBase
     {
@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(FireLaserbolts);
 
-        public override SkillFamily SkillSlot => Main.magePrimary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
             main.startSizeYMultiplier *= 0.4f;
             main.startSizeZMultiplier *= 2f;
 
-            Main.CreateEffect(tracerLaser);
+            ArtificerExtendedPlugin.CreateEffect(tracerLaser);
         }
     }
 }

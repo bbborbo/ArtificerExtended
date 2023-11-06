@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using ArtificerExtended.Passive;
+using EntityStates;
 using EntityStates.Mage;
 using RoR2;
 using System;
@@ -7,10 +8,10 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
-    public class VanillaIonSurge : GenericCharacterMain
-    {
+	public class VanillaIonSurge : GenericCharacterMain
+	{
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -42,6 +43,11 @@ namespace AltArtificerExtended.EntityState
 				blastAttack.damageType = DamageType.Stun1s;
 				blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
 				blastAttack.Fire();
+			}
+
+			if (AltArtiPassive.instanceLookup.TryGetValue(base.outer.gameObject, out var passive))
+			{
+				passive.SkillCast();
 			}
 		}
 

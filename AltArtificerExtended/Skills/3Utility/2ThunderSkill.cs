@@ -3,14 +3,14 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _2ThunderSkill : SkillBase
     {
@@ -35,12 +35,12 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(CastThunder);
 
-        public override SkillFamily SkillSlot => Main.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseMaxStock: maxCharges,
-                baseRechargeInterval: Main.artiUtilCooldown / 2,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown / 2,
                 interruptPriority: InterruptPriority.Skill,
                 canceledFromSprinting: true
 

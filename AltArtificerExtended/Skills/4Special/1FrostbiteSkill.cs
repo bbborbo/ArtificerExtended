@@ -1,5 +1,5 @@
-﻿using AltArtificerExtended.EntityState;
-using AltArtificerExtended.Unlocks;
+﻿using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
@@ -14,7 +14,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {
@@ -28,7 +28,9 @@ namespace AltArtificerExtended.Skills
         public override string SkillName => "Frostbite";
 
         public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds." +
-                $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}%, </style>then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}%.</style>";
+            $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}, " +
+            $"</style>then another <style=cIsUtility>Freezing</style> blast " +
+            $"for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}.</style>";
 
         public override string SkillLangTokenName => "FROSTBITE";
 
@@ -40,7 +42,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(Frostbite);
 
-        public override SkillFamily SkillSlot => Main.mageSpecial;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSpecial;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -79,7 +81,7 @@ namespace AltArtificerExtended.Skills
             Frostbite.novaRadius,
             "Determines the radius of the nova created after the Frostbite buff expires."
             ).Value;
-            KeywordTokens = new string[2] { "KEYWORD_FREEZING", "ARTIFICEREXTENDED_KEYWORD_CHILL" };
+            KeywordTokens = new string[2] { "KEYWORD_FREEZING", ChillRework.ChillRework.chillKeywordToken };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
 
@@ -115,11 +117,11 @@ namespace AltArtificerExtended.Skills
             artiIceShield = ScriptableObject.CreateInstance<BuffDef>();
             {
                 artiIceShield.name = "artiIceShield";
-                artiIceShield.iconSprite = Main.iconBundle.LoadAsset<Sprite>(Main.iconsPath + "texBuffFrostbiteShield.png");
+                artiIceShield.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
                 artiIceShield.canStack = true;
                 artiIceShield.isDebuff = false;
             }
-            Main.AddBuff(artiIceShield);
+            ArtificerExtendedPlugin.AddBuff(artiIceShield);
 
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
@@ -145,7 +147,7 @@ namespace AltArtificerExtended.Skills
         {
             if (NetworkServer.active)
             {
-                if (Main.AllowBrokenSFX.Value == true)
+                if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                     Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
                 EffectManager.SpawnEffect(EntityState.Frostbite.novaEffectPrefab, new EffectData
@@ -161,10 +163,12 @@ namespace AltArtificerExtended.Skills
                 blastAttack.crit = Util.CheckRoll(self.crit, self.master);
                 blastAttack.baseDamage = self.damage * Frostbite.novaDamageCoefficient;
                 blastAttack.falloffModel = BlastAttack.FalloffModel.SweetSpot;
-                blastAttack.damageType = DamageType.Freeze2s;
                 blastAttack.baseForce = 0;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
                 blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+
+                blastAttack.damageType = DamageType.Freeze2s;
+
                 blastAttack.Fire();
             }
         }

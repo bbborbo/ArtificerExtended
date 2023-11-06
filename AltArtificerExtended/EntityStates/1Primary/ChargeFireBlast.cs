@@ -9,12 +9,11 @@ using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
-//using AlternativeArtificer.States.Main;
 using System.Threading.Tasks;
-using AltArtificerExtended.Passive;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
+using ArtificerExtended.Passive;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     class ChargeFireBlast : BaseSkillState
     {
@@ -30,7 +29,7 @@ namespace AltArtificerExtended.EntityState
         public static float maxRadius = 0.5f;
 
         public static float minDamageCoefficient = 1.2f;
-        public static float maxDamageCoefficient = Main.artiBoltDamage * 1.5f;
+        public static float maxDamageCoefficient = ArtificerExtendedPlugin.artiBoltDamage * 1.5f;
         public static float procCoefficient = 1f;
         public float force = 0;
         public float selfForce = 150;
@@ -73,6 +72,8 @@ namespace AltArtificerExtended.EntityState
             {
                 base.characterBody._defaultCrosshairPrefab = ChargeMeteors.crosshairOverridePrefab;
             }
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(true, "Charge");
         }
 
         public override void Update()
@@ -128,7 +129,7 @@ namespace AltArtificerExtended.EntityState
             if (base.isAuthority)
             {
                 float charge = this.GetChargeProgressSmooth();
-                Ray aimRay = base.GetAimRay();
+                Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(true);
                 if (this.projectilePrefabOuter != null && this.projectilePrefabInner != null)
                 {
                     float damage = Util.Remap(charge, 0, 1, minDamageCoefficient, maxDamageCoefficient);
@@ -146,7 +147,7 @@ namespace AltArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
-            this.handle.Fire(0f, 0.5f);
+            //this.handle.Fire(0f, 0.5f);
         }
 
         void FireOuterFireballs(Ray aimRay, float damage, bool isCrit)
@@ -178,6 +179,8 @@ namespace AltArtificerExtended.EntityState
             AkSoundEngine.StopPlayingID(this.soundID);
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
 
+            if (VRStuff.VRInstalled)
+                VRStuff.AnimateVRHand(true, "Cast");
             base.OnExit();
         }
 

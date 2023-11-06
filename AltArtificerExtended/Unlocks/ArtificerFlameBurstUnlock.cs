@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AltArtificerExtended.Unlocks
+namespace ArtificerExtended.Unlocks
 {
     class ArtificerFlameBurstUnlock : UnlockBase
     {
@@ -61,7 +61,9 @@ namespace AltArtificerExtended.Unlocks
                 {
                     DamageInfo damageInfo = obj.damageInfo;
                     bool isBurnDamage = (damageInfo.damageType.HasFlag(DamageType.IgniteOnHit) || damageInfo.damageType.HasFlag(DamageType.PercentIgniteOnHit));
-                    bool isBurnDot = (damageInfo.dotIndex == DotController.DotIndex.Burn || damageInfo.dotIndex == DotController.DotIndex.PercentBurn);
+                    bool isBurnDot = (damageInfo.dotIndex == DotController.DotIndex.Burn 
+                        || damageInfo.dotIndex == DotController.DotIndex.PercentBurn 
+                        || damageInfo.dotIndex == DotController.DotIndex.StrongerBurn);
 
                     if (isBurnDamage || isBurnDot)
                     {

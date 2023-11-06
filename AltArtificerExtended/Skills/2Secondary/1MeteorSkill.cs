@@ -3,13 +3,13 @@ using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using BepInEx.Configuration;
-using AltArtificerExtended.Unlocks;
+using ArtificerExtended.Unlocks;
 using UnityEngine;
-using AltArtificerExtended.EntityState;
+using ArtificerExtended.EntityState;
 using R2API;
 using R2API.Utils;
 
-namespace AltArtificerExtended.Skills
+namespace ArtificerExtended.Skills
 {
     class _1MeteorSkill : SkillBase
     {
@@ -31,7 +31,7 @@ namespace AltArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ChargeMeteors);
 
-        public override SkillFamily SkillSlot => Main.mageSecondary;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
@@ -85,7 +85,7 @@ namespace AltArtificerExtended.Skills
                 Tools.GetParticle(meteorImpactPrefab, "Flash Lines, Fire", napalmColor);
                 Tools.GetParticle(meteorImpactPrefab, "Fire", napalmColor);
             }
-            Main.CreateEffect(meteorImpactPrefab);
+            ArtificerExtendedPlugin.CreateEffect(meteorImpactPrefab);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AltArtificerExtended.Skills;
+using ArtificerExtended.Skills;
 //using AlternativeArtificer.States.Main;
 using EntityStates;
 using EntityStates.Huntress;
@@ -11,7 +11,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace AltArtificerExtended.EntityState
+namespace ArtificerExtended.EntityState
 {
     
     public class CastSnowstorm : BaseSkillState
