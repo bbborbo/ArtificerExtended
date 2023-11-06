@@ -110,6 +110,8 @@ namespace ArtificerExtended
             Debug.Log("ArtificerExtended setup succeeded!");
 
             CreateMagePassives(magePassiveFamily);
+            On.RoR2.Skills.SkillCatalog.Init += ReplaceSkillDefs;
+            On.RoR2.Skills.SkillCatalog.Init += ReplaceScepterSkillDefs;
 
             if (is2r4rLoaded)
             {
@@ -299,7 +301,75 @@ namespace ArtificerExtended
             ContentPacks.skillDefs.Add(hoverSkillDef);
             ContentPacks.skillDefs.Add(resonanceSkillDef);
         }
+        private void ReplaceSkillDefs(On.RoR2.Skills.SkillCatalog.orig_Init orig)
+        {
+            orig();
 
+            SkillDef surge = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
+            if (surge != null)
+            {
+                Debug.Log("Changing ion surge");
+
+                //SkillDef newSurge = CloneSkillDef(surge);
+                if (SurgeRework.Value == true)
+                {
+                    SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge));
+                    LanguageAPI.Add(SkillBase.Token + "ALTIONSURGE_DESC",
+                        "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
+                    surge.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge));
+                    surge.baseRechargeInterval = 6f;
+                    surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
+                    surge.keywordTokens = new string[0];
+                }
+            }
+        }
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private void ReplaceScepterSkillDefs(On.RoR2.Skills.SkillCatalog.orig_Init orig)
+        {
+            orig();
+
+            //flamethrower changes only changes the description of the ancient scepter skill for flamethrower
+            /*SkillDef flamer2 = SkillCatalog.GetSkillDef(SkillCatalog.FindSkillIndexByName("Dragon's Breath"));
+            if (flamer2 != null)
+            {
+                LanguageAPI.Add(SkillBase.Token + "FLAMETHROWER2_FIRE", "Dragon's Breath");
+                LanguageAPI.Add(SkillBase.Token + "FLAMETHROWER2_DESC",
+                    flamethrowerDesc +
+                    "\n<color=#d299ff>SCEPTER: Hits leave behind a lingering fire cloud.</color>");
+                flamer2.skillNameToken = SkillBase.Token + "FLAMETHROWER2_FIRE";
+                flamer2.skillDescriptionToken = SkillBase.Token + "FLAMETHROWER2_DESC";
+            }*/
+
+            SkillDef surge = RoR2.LegacyResourcesAPI.Load<SkillDef>("skilldefs/magebody/MageBodyFlyUp");
+            if (SurgeRework.Value == true && surge != null)
+            {
+                SkillDef surge2 = SkillCatalog.GetSkillDef(SkillCatalog.FindSkillIndexByName($"{surge.skillName}Scepter"));
+                if (surge2 != null)
+                {
+                    SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge2));
+
+                    LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_LIGHTNING", "Antimatter Surge");
+                    LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_DESC",
+                        "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
+                        "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
+
+                    surge2.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge2));
+                    surge2.baseRechargeInterval = 6f;
+                    surge2.skillDescriptionToken = SkillBase.Token + "ALTANTISURGE_DESC";
+                    surge2.skillNameToken = SkillBase.Token + "ALTANTISURGE_LIGHTNING";
+                    surge2.keywordTokens = new string[0];
+                }
+            }
+            else
+            {
+                Debug.LogError("ArtificerExtended could not replace Ancient Scepter's Antimatter Surge. " +
+                    "Antimatter Surge WILL break Artificer Extended's alt passives. \n" +
+                    "Either turn on ArtificerExtended's Ion Surge rework to use ArtificerExtended's Antimatter Surge, " +
+                    "avoid using Antimatter Surge with ArtificerExtended's alt passive, " +
+                    "or tell the Ancient Scepter developers to get in contact to fix Antimatter Surge. \n" +
+                    "This is NOT an error that can be fixed on the ArtificerExtended side.");
+            }
+        }
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
             orig(self, body);
