@@ -24,6 +24,7 @@ using RoR2.UI;
 using static RoR2.UI.CharacterSelectController;
 using Mono.Cecil.Cil;
 using ArtificerExtended.Passive;
+using ArtificerExtended.CoreModules;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -44,7 +45,7 @@ namespace ArtificerExtended
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.RiskyLives.RiskyMod", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
-    [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI))]
+    [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI), nameof(DamageAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin
     {
@@ -120,6 +121,7 @@ namespace ArtificerExtended
             }
 
             AddHooks();
+            Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
             Projectiles.CreateIceExplosion();
@@ -262,7 +264,7 @@ namespace ArtificerExtended
                 "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
-                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult + AltArtiPassive.lightningBlastDamageMult)} damage.</style>");
+                $"for <style=cIsDamage>2x{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
             #endregion
 
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();

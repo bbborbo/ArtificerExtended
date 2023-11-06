@@ -14,6 +14,7 @@ using UnityEngine.Networking;
 using ArtificerExtended.Components;
 using static ArtificerExtended.Components.ElementCounter;
 using ArtificerExtended.Helpers;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Passive
 {
@@ -48,10 +49,10 @@ namespace ArtificerExtended.Passive
 
 
         #region Public Statics
-        public static Single lightningDamageMult = 0.3f;
-        public static Single lightningBlastDamageMult = 0.7f;
+        public static Single lightningDamageMult = 0.4f;
+        public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
-        public static Single lightningProcCoef = 0.3f;
+        public static Single lightningProcCoef = 0.2f;
 
         public static Single burnDamageMult = 0.075f;
         public static Single burnBuffDuration = 2f;

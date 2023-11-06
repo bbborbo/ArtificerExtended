@@ -23,6 +23,7 @@ using ArtificerExtended.Components;
 using static ArtificerExtended.Passive.AltArtiPassive;
 using static ArtificerExtended.Components.ElementCounter;
 using static ChillRework.ChillRework;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended
 {
@@ -133,7 +134,7 @@ namespace ArtificerExtended
             {
                 this.frozenBy[self.gameObject] = damageInfo.attacker;
             }
-
+            orig(self, damageInfo);
             if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
             {
                 if (damageInfo.attacker)

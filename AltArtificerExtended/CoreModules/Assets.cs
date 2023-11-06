@@ -1,18 +1,107 @@
-﻿using System;
+﻿using ArtificerExtended.Components;
+using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using ArtificerExtended.Passive;
+using UnityEngine;
 using R2API;
 using R2API.Utils;
-using Rewired.ComponentControls.Effects;
-using RoR2;
 using RoR2.Projectile;
+using ArtificerExtended.Passive;
+using RoR2.EntityLogic;
+using static R2API.DamageAPI;
+using RoR2.Orbs;
 
-using UnityEngine;
-
-namespace ArtificerExtended
+namespace ArtificerExtended.CoreModules
 {
+    public static class Assets
+    {
+        static float zapDistance = 8f;
+        static float zapDamageFraction = 1f;
+        static float zapDamageCoefficient = 0.2f;
+        public static ModdedDamageType ZapOnHit;
+        public static void CreateZapDamageType()
+        {
+            ZapOnHit = ReserveDamageType();
+            //On.RoR2.GlobalEventManager.OnHitAll += ZapDamageTypeHook;
+        }
 
+        private static void ZapDamageTypeHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
+        {
+            if (damageInfo.HasModdedDamageType(ZapOnHit))
+            {
+                LightningOrb lightningOrb2 = new LightningOrb();
+                lightningOrb2.origin = damageInfo.position;
+                lightningOrb2.damageValue = damageInfo.damage * zapDamageFraction;
+                lightningOrb2.isCrit = damageInfo.crit;
+                lightningOrb2.bouncesRemaining = 0;
+                lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
+                lightningOrb2.attacker = damageInfo.attacker;
+                lightningOrb2.bouncedObjects = new List<HealthComponent>();
+                HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
+                if (victimHealthComponent)
+                    lightningOrb2.bouncedObjects.Add(victimHealthComponent);
+                lightningOrb2.procChainMask = damageInfo.procChainMask;
+                lightningOrb2.procCoefficient = 0.2f;
+                lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
+                lightningOrb2.damageColorIndex = DamageColorIndex.Default;
+                lightningOrb2.range = zapDistance;
+                lightningOrb2.canBounceOnSameTarget = false;
+                HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
+                if (hurtBox2)
+                {
+                    lightningOrb2.target = hurtBox2;
+                    OrbManager.instance.AddOrb(lightningOrb2);
+                }
+            }
+            orig(self, damageInfo, hitObject);
+        }
+    }
+    public static class Buffs
+    {
+        public static List<BuffDef> buffDefs = new List<BuffDef>();
+
+        public static DotController.DotIndex burnDot;
+        public static DotController.DotIndex strongBurnDot;
+
+
+        public static void CreateBuffs()
+        {
+            burnDot = DotController.DotIndex.Burn;
+            strongBurnDot = DotController.DotIndex.StrongerBurn;
+
+            AddAAPassiveBuffs();
+        }
+
+        internal static void AddBuff(BuffDef buff)
+        {
+            buffDefs.Add(buff);
+        }
+
+        #region EnergeticResonance
+        public static BuffDef meltBuff;
+
+        static void AddAAPassiveBuffs()
+        {
+            Sprite meltSprite = LegacyResourcesAPI.Load<Sprite>("RoR2/DLC1/StrengthenBurn/texBuffStrongerBurnIcon.png");
+            meltBuff = ScriptableObject.CreateInstance<BuffDef>();
+            {
+                meltBuff.buffColor = new Color(0.9f, 0.4f, 0.2f);
+                meltBuff.canStack = true;
+                meltBuff.iconSprite = meltSprite;
+                meltBuff.isDebuff = false;
+                meltBuff.name = "AltArtiFireBuff";
+            }
+            AddBuff(meltBuff);
+            RoR2Application.onLoad += Fucksadghuderfbghujlaergh;
+        }
+
+        private static void Fucksadghuderfbghujlaergh()
+        {
+            meltBuff.iconSprite = DLC1Content.Buffs.StrongerBurn.iconSprite;
+        }
+        #endregion
+    }
     public class Effects
     {
         public static List<EffectDef> effectDefs = new List<EffectDef>();
@@ -278,6 +367,113 @@ namespace ArtificerExtended
 
             effectDefs.Add(def);
             return def;
+        }
+    }
+    public static class Projectiles
+    {
+        internal static void CreateLightningSwords()
+        {
+            AltArtiPassive.lightningProjectile = new GameObject[3];
+            for (Int32 i = 0; i < AltArtiPassive.lightningProjectile.Length; i++)
+            {
+                CreateLightningSword(i);
+            }
+        }
+
+        private static void CreateLightningSword(Int32 meshInd)
+        {
+            GameObject ghost = Effects.CreateLightningSwordGhost(meshInd);
+            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
+
+            UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
+            netID.localPlayerAuthority = true;
+
+
+            ProjectileDamage projDamage = proj.GetComponent<ProjectileDamage>();
+            projDamage.damage = 1;
+
+            ProjectileController projController = proj.GetComponent<ProjectileController>();
+            projController.ghostPrefab = ghost;
+            projController.procCoefficient = AltArtiPassive.lightningProcCoef;
+            projController.allowPrediction = true;
+
+            ProjectileSimple projSimple = proj.GetComponent<ProjectileSimple>();
+            projSimple.enabled = true;
+            projSimple.enableVelocityOverLifetime = false;
+            projSimple.desiredForwardSpeed = 80f;
+
+
+            ProjectileDirectionalTargetFinder projTargetFind = proj.GetComponent<ProjectileDirectionalTargetFinder>();
+            projTargetFind.enabled = true;
+            projTargetFind.lookRange = 150;
+            projTargetFind.lookCone = 25;
+
+            ProjectileSteerTowardTarget projSteering = proj.GetComponent<ProjectileSteerTowardTarget>();
+            projSteering.enabled = true;
+            projSteering.rotationSpeed = 120f;
+
+            ProjectileStickOnImpact projStick = proj.GetComponent<ProjectileStickOnImpact>();
+            projStick.ignoreCharacters = false;
+            projStick.ignoreWorld = false;
+            projStick.alignNormals = false;
+
+            ProjectileImpactExplosion projExpl = proj.GetComponent<ProjectileImpactExplosion>();
+            projExpl.impactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/LightningStakeNova");
+            projExpl.explosionSoundString = "Play_item_proc_dagger_impact";// "Play_item_lunar_primaryReplace_impact";
+            projExpl.lifetimeExpiredSoundString = "";
+            projExpl.offsetForLifetimeExpiredSound = 0f;
+            projExpl.destroyOnEnemy = true;
+            projExpl.destroyOnWorld = true;
+            projExpl.falloffModel = BlastAttack.FalloffModel.None;
+            projExpl.lifetime = 10f;
+            projExpl.lifetimeRandomOffset = 0f;
+            projExpl.blastRadius = 0.1f;
+            projExpl.blastDamageCoefficient = AltArtiPassive.lightningBlastDamageMult;
+            projExpl.blastProcCoefficient = AltArtiPassive.lightningProcCoef;
+            projExpl.bonusBlastForce = Vector3.zero;
+            projExpl.fireChildren = false;
+            projExpl.childrenProjectilePrefab = null;
+            projExpl.childrenCount = 0;
+            projExpl.childrenDamageCoefficient = 0f;
+            projExpl.minAngleOffset = Vector3.zero;
+            projExpl.maxAngleOffset = Vector3.zero;
+            projExpl.transformSpace = ProjectileImpactExplosion.TransformSpace.World;
+            projExpl.projectileHealthComponent = null;
+
+            /*ProjectileSingleTargetImpact projStimp = proj.GetComponent<ProjectileSingleTargetImpact>();
+            projStimp.destroyOnWorld = false;
+            projStimp.hitSoundString = "Play_item_proc_dagger_impact";
+            projStimp.enemyHitSoundString = "Play_item_proc_dagger_impact";*/
+
+            ModdedDamageTypeHolderComponent mdtyhc = proj.AddComponent<ModdedDamageTypeHolderComponent>();
+            mdtyhc.Add(Assets.ZapOnHit);
+
+
+            proj.AddComponent<Components.SoundOnAwake>().sound = "Play_item_proc_dagger_spawn";
+
+            //UnityEngine.Object.DestroyImmediate( proj.GetComponent<ProjectileSingleTargetImpact>() );
+            UnityEngine.Object.Destroy(proj.GetComponent<AwakeEvent>());
+            UnityEngine.Object.Destroy(proj.GetComponent<DelayedEvent>());
+
+            ContentPacks.projectilePrefabs.Add(proj);
+            AltArtiPassive.lightningProjectile[meshInd] = proj;
+        }
+
+        internal static void CreateIceExplosion()
+        {
+            GameObject blast = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast").InstantiateClone("IceDelayBlast", false);
+            DelayBlast component = blast.GetComponent<DelayBlast>();
+            component.crit = false;
+            component.procCoefficient = 1.0f;
+            component.maxTimer = 0.25f;
+            component.falloffModel = BlastAttack.FalloffModel.None;
+            component.explosionEffect = Effects.CreateIceExplosionEffect();
+            component.delayEffect = Effects.CreateIceDelayEffect();
+            component.damageType = DamageType.Freeze2s;
+            component.baseForce = 250f;
+
+            AltArtiPassive.iceBlast = blast;
+            //projectilePrefabs.Add(blast);
         }
     }
 }

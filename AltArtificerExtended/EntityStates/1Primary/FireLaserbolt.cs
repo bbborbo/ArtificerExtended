@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.Passive;
+﻿using ArtificerExtended.CoreModules;
+using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Mage.Weapon;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static R2API.DamageAPI;
 
 namespace ArtificerExtended.EntityState
 {
@@ -19,7 +21,7 @@ namespace ArtificerExtended.EntityState
 
         public float procCoefficient = 1.0f;
 
-        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage;
+        public static float damageCoefficient = 2.2f;
 
         public float force = 20f;
 
@@ -142,25 +144,27 @@ namespace ArtificerExtended.EntityState
             }
             if (base.isAuthority)
             {
-                new BulletAttack
-                {
-                    owner = base.gameObject,
-                    weapon = base.gameObject,
-                    origin = aimRay.origin,
-                    aimVector = aimRay.direction,
-                    minSpread = 0f,
-                    maxSpread = 0f,
-                    damage = damageCoefficient * this.damageStat,
-                    force = FireLaserbolt.force,
-                    tracerEffectPrefab = _3LaserBoltsSkill.tracerLaser,
-                    muzzleName = this.muzzleString,
-                    hitEffectPrefab = FireLaserbolt.impactEffectPrefab,
-                    isCrit = Util.CheckRoll(this.critStat, base.characterBody.master),
-                    radius = 0.25f,
-                    falloffModel = BulletAttack.FalloffModel.None,
-                    //maxDistance = maxRange,
-                    smartCollision = true
-                }.Fire();
+                BulletAttack bulletAttack = new BulletAttack();
+                bulletAttack.owner = base.gameObject;
+                bulletAttack.weapon = base.gameObject;
+                bulletAttack.origin = aimRay.origin;
+                bulletAttack.aimVector = aimRay.direction;
+                bulletAttack.minSpread = 0f;
+                bulletAttack.maxSpread = 0f;
+                bulletAttack.damage = damageCoefficient * this.damageStat;
+                bulletAttack.force = FireLaserbolt.force;
+                bulletAttack.tracerEffectPrefab = _3LaserBoltsSkill.tracerLaser;
+                bulletAttack.muzzleName = this.muzzleString;
+                bulletAttack.hitEffectPrefab = FireLaserbolt.impactEffectPrefab;
+                bulletAttack.isCrit = Util.CheckRoll(this.critStat, base.characterBody.master);
+                bulletAttack.radius = 0.25f;
+                bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
+                //maxDistance = maxRange;
+                bulletAttack.smartCollision = true;
+
+                bulletAttack.AddModdedDamageType(Assets.ZapOnHit);
+                
+                bulletAttack.Fire();
             }
 
             GameObject obj = base.outer.gameObject;
