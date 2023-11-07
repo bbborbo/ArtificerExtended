@@ -147,7 +147,7 @@ namespace ArtificerExtended.EntityState
             base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
             this.stopwatch = 0f;
             this.timer = 0f;
-            //this.handle.Fire(0f, 0.5f);
+            this.handle.Fire(0f, 0.5f);
         }
 
         void FireOuterFireballs(Ray aimRay, float damage, bool isCrit)

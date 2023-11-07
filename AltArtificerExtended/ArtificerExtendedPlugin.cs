@@ -229,8 +229,8 @@ namespace ArtificerExtended
             (hoverSkillDef as ScriptableObject).name = mageSkillLocator.passiveSkill.skillNameToken;
             hoverSkillDef.skillDescriptionToken = mageSkillLocator.passiveSkill.skillDescriptionToken;
             hoverSkillDef.icon = mageSkillLocator.passiveSkill.icon;
+            hoverSkillDef.canceledFromSprinting = false;
             hoverSkillDef.cancelSprintingOnActivation = false;
-            hoverSkillDef.hideFlags = HideFlags.None;
             hoverSkillDef.stateMachineDefaults = new PassiveSkillDef.StateMachineDefaults[1]
             {
                 new PassiveSkillDef.StateMachineDefaults
@@ -271,6 +271,8 @@ namespace ArtificerExtended
             resonanceSkillDef.skillNameToken = "MAGE_PASSIVE_ENERGY_NAME";
             resonanceSkillDef.skillDescriptionToken = "MAGE_PASSIVE_ENERGY_DESC";
             resonanceSkillDef.icon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
+            resonanceSkillDef.canceledFromSprinting = false;
+            resonanceSkillDef.cancelSprintingOnActivation = false;
             resonanceSkillDef.stateMachineDefaults = new PassiveSkillDef.StateMachineDefaults[1]
             {
                 new PassiveSkillDef.StateMachineDefaults

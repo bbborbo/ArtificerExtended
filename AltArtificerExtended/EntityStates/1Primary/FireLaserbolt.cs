@@ -162,7 +162,7 @@ namespace ArtificerExtended.EntityState
                 //maxDistance = maxRange;
                 bulletAttack.smartCollision = true;
 
-                bulletAttack.AddModdedDamageType(Assets.ZapOnHit);
+                bulletAttack.AddModdedDamageType(Assets.ChainLightning);
                 
                 bulletAttack.Fire();
             }

@@ -16,46 +16,46 @@ namespace ArtificerExtended.CoreModules
 {
     public static class Assets
     {
-        static float zapDistance = 8f;
+        static float zapDistance = 15f;
         static float zapDamageFraction = 1f;
         static float zapDamageCoefficient = 0.2f;
-        public static ModdedDamageType ZapOnHit;
+        public static ModdedDamageType ChainLightning;
         public static void CreateZapDamageType()
         {
-            ZapOnHit = ReserveDamageType();
-            //On.RoR2.GlobalEventManager.OnHitAll += ZapDamageTypeHook;
+            ChainLightning = ReserveDamageType();
+            On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
         }
 
-        private static void ZapDamageTypeHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
+private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
+{
+    if (damageInfo.HasModdedDamageType(ChainLightning))
+    {
+        LightningOrb lightningOrb2 = new LightningOrb();
+        lightningOrb2.origin = damageInfo.position;
+        lightningOrb2.damageValue = damageInfo.damage * zapDamageFraction;
+        lightningOrb2.isCrit = damageInfo.crit;
+        lightningOrb2.bouncesRemaining = 0;
+        lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
+        lightningOrb2.attacker = damageInfo.attacker;
+        lightningOrb2.bouncedObjects = new List<HealthComponent>();
+        HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
+        if (victimHealthComponent)
+            lightningOrb2.bouncedObjects.Add(victimHealthComponent);
+        lightningOrb2.procChainMask = damageInfo.procChainMask;
+        lightningOrb2.procCoefficient = 0.2f;
+        lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
+        lightningOrb2.damageColorIndex = DamageColorIndex.Default;
+        lightningOrb2.range = zapDistance;
+        lightningOrb2.canBounceOnSameTarget = false;
+        HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
+        if (hurtBox2)
         {
-            if (damageInfo.HasModdedDamageType(ZapOnHit))
-            {
-                LightningOrb lightningOrb2 = new LightningOrb();
-                lightningOrb2.origin = damageInfo.position;
-                lightningOrb2.damageValue = damageInfo.damage * zapDamageFraction;
-                lightningOrb2.isCrit = damageInfo.crit;
-                lightningOrb2.bouncesRemaining = 0;
-                lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
-                lightningOrb2.attacker = damageInfo.attacker;
-                lightningOrb2.bouncedObjects = new List<HealthComponent>();
-                HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
-                if (victimHealthComponent)
-                    lightningOrb2.bouncedObjects.Add(victimHealthComponent);
-                lightningOrb2.procChainMask = damageInfo.procChainMask;
-                lightningOrb2.procCoefficient = 0.2f;
-                lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
-                lightningOrb2.damageColorIndex = DamageColorIndex.Default;
-                lightningOrb2.range = zapDistance;
-                lightningOrb2.canBounceOnSameTarget = false;
-                HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
-                if (hurtBox2)
-                {
-                    lightningOrb2.target = hurtBox2;
-                    OrbManager.instance.AddOrb(lightningOrb2);
-                }
-            }
-            orig(self, damageInfo, hitObject);
+            lightningOrb2.target = hurtBox2;
+            OrbManager.instance.AddOrb(lightningOrb2);
         }
+    }
+    orig(self, damageInfo, hitObject);
+}
     }
     public static class Buffs
     {
@@ -413,9 +413,10 @@ namespace ArtificerExtended.CoreModules
             projSteering.rotationSpeed = 120f;
 
             ProjectileStickOnImpact projStick = proj.GetComponent<ProjectileStickOnImpact>();
-            projStick.ignoreCharacters = false;
+            GameObject.Destroy(projStick);
+            /*projStick.ignoreCharacters = false;
             projStick.ignoreWorld = false;
-            projStick.alignNormals = false;
+            projStick.alignNormals = false;*/
 
             ProjectileImpactExplosion projExpl = proj.GetComponent<ProjectileImpactExplosion>();
             projExpl.impactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/LightningStakeNova");
@@ -446,7 +447,7 @@ namespace ArtificerExtended.CoreModules
             projStimp.enemyHitSoundString = "Play_item_proc_dagger_impact";*/
 
             ModdedDamageTypeHolderComponent mdtyhc = proj.AddComponent<ModdedDamageTypeHolderComponent>();
-            mdtyhc.Add(Assets.ZapOnHit);
+            mdtyhc.Add(Assets.ChainLightning);
 
 
             proj.AddComponent<Components.SoundOnAwake>().sound = "Play_item_proc_dagger_spawn";
