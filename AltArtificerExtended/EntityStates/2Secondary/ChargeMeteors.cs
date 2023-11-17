@@ -217,12 +217,12 @@ namespace ArtificerExtended.EntityState
                 else
                 {
 
-                    float num = 1000f;
-                    float num2 = 0f;
+                    float maxDistance = 1000f;
+                    float extraDistance = 0f;
                     Ray aRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     RaycastHit raycastHit;
-                    if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out num2),
-                        out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
+                    if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out extraDistance),
+                        out raycastHit, maxDistance + extraDistance, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
                     {
                         aimPos = raycastHit.point;
                     }

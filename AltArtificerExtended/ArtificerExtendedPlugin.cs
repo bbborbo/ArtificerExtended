@@ -38,6 +38,7 @@ namespace ArtificerExtended
     [BepInDependency(R2API.LoadoutAPI.PluginGUID)]
     [BepInDependency(R2API.PrefabAPI.PluginGUID)]
     [BepInDependency(R2API.UnlockableAPI.PluginGUID)]
+    [BepInDependency(R2API.DamageAPI.PluginGUID)]
 
     [BepInDependency(ChillRework.ChillRework.guid, BepInDependency.DependencyFlags.HardDependency)]
 
