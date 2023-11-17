@@ -265,7 +265,7 @@ namespace ArtificerExtended
                 "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
-                $"for <style=cIsDamage>2x{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
+                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
             #endregion
 
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
