@@ -53,7 +53,7 @@ namespace ArtificerExtended
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
 
-        public const string version = "3.5.1";
+        public const string version = "3.6.0";
         
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
@@ -125,7 +125,6 @@ namespace ArtificerExtended
             Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
-            Projectiles.CreateIceExplosion();
             Effects.DoEffects();
             this.ArtiChanges();
             this.InitializeSkills();
