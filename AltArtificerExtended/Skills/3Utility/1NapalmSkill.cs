@@ -10,6 +10,7 @@ using RoR2.Projectile;
 using ThreeEyedGames;
 using R2API;
 using R2API.Utils;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
@@ -23,11 +24,11 @@ namespace ArtificerExtended.Skills
 
         public static float napalmDotFireFrequency = 1.5f;
         public static int napalmMaxProjectiles = ChargeNapalm.maxProjectileCount * ChargeNapalm.maxRowCount;
-        public static float napalmBurnDPS = (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
+        public static float napalmBurnDPS => (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
         public override string SkillName => "Napalm Cascade";
 
         public override string SkillDescription => $"Charge up a barrage of fiery napalm, creating flaming pools that " +
-            $"<style=cIsUtility>continuously Ignites</style> enemies " +
+            $"<style=cIsUtility>continuously Ignite</style> enemies " +
             $"for <style=cIsDamage>{napalmMaxProjectiles}x{Tools.ConvertDecimal(napalmBurnDPS)} damage per second</style>. " +
             $"Charging focuses the cone of fire.";
 
@@ -123,7 +124,7 @@ namespace ArtificerExtended.Skills
 
             ProjectileDotZone pdz = acidPrefabNapalm.GetComponent<ProjectileDotZone>();
             pdz.lifetime = 8f;
-            pdz.fireFrequency = napalmDotFireFrequency;
+            pdz.resetFrequency = napalmDotFireFrequency;
             pdz.damageCoefficient = ChargeNapalm.napalmBurnDamageCoefficient;
             pdz.overlapProcCoefficient = 0.5f;
             pdz.attackerFiltering = AttackerFiltering.Default;
@@ -167,7 +168,7 @@ namespace ArtificerExtended.Skills
             component2.intensity = 4f;
             component2.range = 7.5f;
 
-            ArtificerExtendedPlugin.CreateEffect(projectileNapalmImpact);
+            Effects.CreateEffect(projectileNapalmImpact);
             ContentPacks.projectilePrefabs.Add(projectilePrefabNapalm);
             ContentPacks.projectilePrefabs.Add(acidPrefabNapalm);
         }

@@ -432,44 +432,6 @@ namespace ArtificerExtended
         }
 
         #region Init
-        public static void AddBuff(BuffDef buffDef)
-        {
-            ContentPacks.buffDefs.Add(buffDef);
-        }
-        public static EffectDef CreateEffect(GameObject effect)
-        {
-            if (effect == null)
-            {
-                Debug.LogError("Effect prefab was null");
-                return null;
-            }
-
-            var effectComp = effect.GetComponent<EffectComponent>();
-            if (effectComp == null)
-            {
-                Debug.LogErrorFormat("Effect prefab: \"{0}\" does not have an EffectComponent.", effect.name);
-                return null;
-            }
-
-            var vfxAttrib = effect.GetComponent<VFXAttributes>();
-            if (vfxAttrib == null)
-            {
-                Debug.LogErrorFormat("Effect prefab: \"{0}\" does not have a VFXAttributes component.", effect.name);
-                return null;
-            }
-
-            var def = new EffectDef
-            {
-                prefab = effect,
-                prefabEffectComponent = effectComp,
-                prefabVfxAttributes = vfxAttrib,
-                prefabName = effect.name,
-                spawnSoundEventName = effectComp.soundName
-            };
-
-            ContentPacks.effectDefs.Add(def);
-            return def;
-        }
         public static Dictionary<UnlockBase, UnlockableDef> UnlockBaseDictionary = new Dictionary<UnlockBase, UnlockableDef>();
         private void InitializeUnlocks()
         {

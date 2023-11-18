@@ -8,6 +8,7 @@ using UnityEngine;
 using ArtificerExtended.EntityState;
 using R2API;
 using R2API.Utils;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
@@ -69,8 +70,8 @@ namespace ArtificerExtended.Skills
             buckshotAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             buckshotAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            ArtificerExtendedPlugin.CreateEffect(tracerShotgun);
-            ArtificerExtendedPlugin.CreateEffect(tracerBuckshot);
+            Effects.CreateEffect(tracerShotgun);
+            Effects.CreateEffect(tracerBuckshot);
         }
 
         public override void Init(ConfigFile config)

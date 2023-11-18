@@ -59,8 +59,6 @@ namespace ArtificerExtended.CoreModules
     }
     public static class Buffs
     {
-        public static List<BuffDef> buffDefs = new List<BuffDef>();
-
         public static DotController.DotIndex burnDot;
         public static DotController.DotIndex strongBurnDot;
 
@@ -73,9 +71,9 @@ namespace ArtificerExtended.CoreModules
             AddAAPassiveBuffs();
         }
 
-        internal static void AddBuff(BuffDef buff)
+        public static void AddBuff(BuffDef buffDef)
         {
-            buffDefs.Add(buff);
+            ContentPacks.buffDefs.Add(buffDef);
         }
 
         #region EnergeticResonance
@@ -104,8 +102,6 @@ namespace ArtificerExtended.CoreModules
     }
     public class Effects
     {
-        public static List<EffectDef> effectDefs = new List<EffectDef>();
-
         public static void DoEffects() => CreateLightningPreFire();
 
         public static void CreateNebulaOrbitals()
@@ -120,17 +116,12 @@ namespace ArtificerExtended.CoreModules
                     Debug.Log(ps.gameObject.name);
                     if (ps.gameObject.name == "SmallOrb")
                     {
-                        Debug.Log("shit");
                         GameObject newOrb = ps.gameObject.InstantiateClone("NebulaOrb" + i, false);
                         i++;
                         smallOrbs.Add(newOrb);
                     }
                 }
                 Debug.Log(smallOrbs.Count);
-            }
-            else
-            {
-                Debug.Log("SHIT!!!!!");
             }
         }
 
@@ -242,98 +233,6 @@ namespace ArtificerExtended.CoreModules
                     break;
             }
         }
-
-        internal static GameObject CreateIceDelayEffect()
-        {
-            CreateIceBombTex();
-
-            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/AffixWhiteDelayEffect").InstantiateClone("iceDelay", false);
-            obj.GetComponent<DestroyOnTimer>().duration = 0.2f;
-
-            ParticleSystemRenderer sphere = obj.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>();
-            Material mat = UnityEngine.Object.Instantiate<Material>(sphere.material);
-            mat.SetTexture("_RemapTex", iceBombTex);
-            sphere.material = mat;
-
-            CreateEffect(obj);
-
-            return obj;
-        }
-
-        internal static GameObject CreateIceExplosionEffect()
-        {
-            CreateIceBombTex();
-
-            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ImpactEffects/AffixWhiteExplosion").InstantiateClone("IceExplosion", false);
-            ParticleSystemRenderer sphere = obj.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>();
-            Material mat = UnityEngine.Object.Instantiate<Material>(sphere.material);
-            mat.SetTexture("_RemapTex", iceBombTex);
-            sphere.material = mat;
-
-            CreateEffect(obj);
-
-            return obj;
-        }
-
-        internal static Texture2D iceBombTex;
-        internal static void CreateIceBombTex()
-        {
-            if (iceBombTex != null)
-            {
-                return;
-            }
-
-            var iceGrad = new Gradient
-            {
-                mode = GradientMode.Blend,
-                alphaKeys = new GradientAlphaKey[8]
-                {
-                    new GradientAlphaKey( 0f, 0f ),
-                    new GradientAlphaKey( 0f, 0.14f ),
-                    new GradientAlphaKey( 0.22f, 0.46f ),
-                    new GradientAlphaKey( 0.22f, 0.61f),
-                    new GradientAlphaKey( 0.72f, 0.63f ),
-                    new GradientAlphaKey( 0.72f, 0.8f ),
-                    new GradientAlphaKey( 0.87f, 0.81f ),
-                    new GradientAlphaKey( 0.87f, 1f )
-                },
-                colorKeys = new GradientColorKey[8]
-                {
-                    new GradientColorKey( new Color( 0f, 0f, 0f ), 0f ),
-                    new GradientColorKey( new Color( 0f, 0f, 0f ), 0.14f ),
-                    new GradientColorKey( new Color( 0.179f, 0.278f, 0.250f ), 0.46f ),
-                    new GradientColorKey( new Color( 0.179f, 0.278f, 0.250f ), 0.61f ),
-                    new GradientColorKey( new Color( 0.5f, 0.8f, 0.75f ), 0.63f ),
-                    new GradientColorKey( new Color( 0.5f, 0.8f, 0.75f ), 0.8f ),
-                    new GradientColorKey( new Color( 0.6f, 0.9f, 0.85f ), 0.81f ),
-                    new GradientColorKey( new Color( 0.6f, 0.9f, 0.85f ), 1f )
-                }
-            };
-
-            iceBombTex = CreateNewRampTex(iceGrad);
-        }
-
-        private static Texture2D CreateNewRampTex(Gradient grad)
-        {
-            var tex = new Texture2D(256, 8, TextureFormat.RGBA32, false);
-
-            Color tempC;
-            var tempCs = new Color[8];
-
-            for (Int32 i = 0; i < 256; i++)
-            {
-                tempC = grad.Evaluate(i / 255f);
-                for (Int32 j = 0; j < 8; j++)
-                {
-                    tempCs[j] = tempC;
-                }
-
-                tex.SetPixels(i, 0, 1, 8, tempCs);
-            }
-            tex.wrapMode = TextureWrapMode.Clamp;
-            tex.Apply();
-            return tex;
-        }
         public static EffectDef CreateEffect(GameObject effect)
         {
             if (effect == null)
@@ -365,7 +264,7 @@ namespace ArtificerExtended.CoreModules
                 spawnSoundEventName = effectComp.soundName
             };
 
-            effectDefs.Add(def);
+            ContentPacks.effectDefs.Add(def);
             return def;
         }
     }
@@ -458,23 +357,6 @@ namespace ArtificerExtended.CoreModules
 
             ContentPacks.projectilePrefabs.Add(proj);
             AltArtiPassive.lightningProjectile[meshInd] = proj;
-        }
-
-        internal static void CreateIceExplosion()
-        {
-            GameObject blast = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/GenericDelayBlast").InstantiateClone("IceDelayBlast", false);
-            DelayBlast component = blast.GetComponent<DelayBlast>();
-            component.crit = false;
-            component.procCoefficient = 1.0f;
-            component.maxTimer = 0.25f;
-            component.falloffModel = BlastAttack.FalloffModel.None;
-            component.explosionEffect = Effects.CreateIceExplosionEffect();
-            component.delayEffect = Effects.CreateIceDelayEffect();
-            component.damageType = DamageType.Freeze2s;
-            component.baseForce = 250f;
-
-            AltArtiPassive.iceBlast = blast;
-            //projectilePrefabs.Add(blast);
         }
     }
 }

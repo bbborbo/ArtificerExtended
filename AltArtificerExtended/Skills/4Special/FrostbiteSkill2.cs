@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.EntityState;
+﻿using ArtificerExtended.CoreModules;
+using ArtificerExtended.EntityState;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
@@ -54,7 +55,7 @@ namespace ArtificerExtended.Skills
                 artiIceShield.isDebuff = false;
                 artiIceShield.buffColor = Color.magenta;
             }
-            ArtificerExtendedPlugin.AddBuff(artiIceShield);
+            Buffs.AddBuff(artiIceShield);
 
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
