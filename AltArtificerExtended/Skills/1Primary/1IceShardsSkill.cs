@@ -22,9 +22,9 @@ namespace ArtificerExtended.Skills
 
 
         float totalShards = FireIceShard.bulletCountBuckshot + FireIceShard.bulletCountPoint + FireIceShard.bulletCountSpread;
-        public override string SkillDescription => $"Fire a blast of ice shards for " +
-                $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(FireIceShard.damageCoefficient / totalShards)} damage</style> total, " +
-            "which <style=cIsUtility>Chills</style> enemies. Hold up to 4.";
+        public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. Fire a blast of ice shards for " +
+            $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(FireIceShard.damageCoefficient / totalShards)} damage</style> total. " +
+            $"Hold up to 4.";
 
         public override string SkillLangTokenName => "ICESHARDS";
 

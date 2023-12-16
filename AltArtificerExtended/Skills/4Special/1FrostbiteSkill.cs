@@ -28,7 +28,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Frostbite";
 
-        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds." +
+        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds. " +
             $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}, " +
             $"</style>then another <style=cIsUtility>Freezing</style> blast " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}.</style>";

@@ -258,10 +258,6 @@ namespace ArtificerExtended
                 $"<style=cSub><style=cIsUtility>On FIRE SKILL Cast:</style> Gain a buff that " +
                 $"increases your <style=cIsDamage>attack speed</style> on all skills " +
                 $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.meltAspdIncrease)}</style> per stack.");
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "<style=cKeywordName>Arctic Blast</style>" +
-                "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
-                "causes an <style=cIsUtility>Arctic Blast,</style> " +
-                "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", $"<style=cKeywordName>Arctic Blast</style>" +
                 $"<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
                 $"causes an <style=cIsUtility>Arctic Blast,</style> " +

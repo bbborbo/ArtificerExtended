@@ -28,7 +28,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Napalm Cascade";
 
         public override string SkillDescription => $"Charge up a barrage of fiery napalm, creating flaming pools that " +
-            $"<style=cIsUtility>continuously Ignite</style> enemies " +
+            $"<style=cIsDamage>continuously Ignite</style> enemies " +
             $"for <style=cIsDamage>{napalmMaxProjectiles}x{Tools.ConvertDecimal(napalmBurnDPS)} damage per second</style>. " +
             $"Charging focuses the cone of fire.";
 

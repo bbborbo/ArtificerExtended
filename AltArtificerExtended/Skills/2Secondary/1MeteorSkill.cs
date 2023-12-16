@@ -19,7 +19,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Channeled Nano-Meteor";
 
-        public override string SkillDescription => $"Ignite. Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
+        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeMeteors.meteorDamageCoefficient)} damage</style>.";
 
         public override string SkillLangTokenName => "METEORS";

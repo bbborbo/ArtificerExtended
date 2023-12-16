@@ -65,7 +65,7 @@ namespace ArtificerExtended.Passive
         public static Single novaMaxRadius = 8f;
         public static Single novaMinRadius = 3f;
         public static Single novaRadiusPerPower = 1.5f;
-        public static Single novaBaseDamage = 6f;
+        public static Single novaBaseDamage = 3.8f;
 
         public static Single targetUpdateFreq = 10f;
         public static Single targetRange = 60f;

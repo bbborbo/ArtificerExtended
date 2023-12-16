@@ -19,8 +19,9 @@ namespace ArtificerExtended.Skills
         int maxStock = 4;
         public override string SkillName => "Laserbolts";
 
-        public override string SkillDescription => $"Fire a long-range laser for <style=cIsDamage>{Tools.ConvertDecimal(FireLaserbolts.damageCoefficient)} damage</style>. " +
-                $"Hold up to 4, recharging all at once.";
+        public override string SkillDescription => $"Fire a long-range laser that <style=cIsUtility>chains lightning</style> " +
+            $"for <style=cIsDamage>{Tools.ConvertDecimal(FireLaserbolts.damageCoefficient)} damage</style>. " +
+            $"Hold up to 4, recharging all at once.";
 
         public override string SkillLangTokenName => "LASERS";
 

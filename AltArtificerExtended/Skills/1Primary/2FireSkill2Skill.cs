@@ -20,9 +20,9 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Flame Burst";
 
-        public override string SkillDescription => $"Ignite. Charge a spread of 3 fireballs for " +
-            $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +
-            $"damage each</style> that converge on a point in front of you.";
+        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge a spread of fireballs for " +
+            $"<style=cIsDamage>3x{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +
+            $"damage</style> that converge on a point in front of you.";
 
         public override string SkillLangTokenName => "FIREBALLS";
 

@@ -16,8 +16,9 @@ namespace ArtificerExtended.Skills
     {
         public override string SkillName => "Snowball";
 
-        public override string SkillDescription => $"Fire a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style> " +
-                $"that <style=cIsUtility>Chills</style> enemies. Has no cooldown.";
+        public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
+            $"Fire a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>. " +
+            $"Has no cooldown.";
 
         public override string SkillLangTokenName => "SNOWBALL";
 
