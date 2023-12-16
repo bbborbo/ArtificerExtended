@@ -181,6 +181,13 @@ namespace ArtificerExtended
                 if (icePower > Power.None) //Arctic Blast
                 {
                     vBody.ClearTimedBuffs(RoR2Content.Buffs.Slow80);
+
+                    SetStateOnHurt ssoh = vBody.GetComponent<SetStateOnHurt>();
+                    if (ssoh)
+                    {
+                        ssoh.SetFrozen(1f);
+                    }
+
                     AltArtiPassive.DoNova(aBody, icePower, damageInfo.position);
                 }
             }

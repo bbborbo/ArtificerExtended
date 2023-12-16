@@ -62,9 +62,10 @@ namespace ArtificerExtended.Passive
         public static Single freezeProcCount = 3f;
         public static Single chillProcDuration = 8f;
 
-        public const int novaDebuffThreshold = 10;
         public static Single novaMaxRadius = 8f;
         public static Single novaMinRadius = 3f;
+        public static Single novaRadiusPerPower = 1.5f;
+        public static Single novaBaseDamage = 6f;
 
         public static Single targetUpdateFreq = 10f;
         public static Single targetRange = 60f;
@@ -389,7 +390,7 @@ namespace ArtificerExtended.Passive
             if (attacker == null || currentPower == Power.None || strength == 0)
                 return;
 
-            float radiusByPower = 1 + (1 * (int)currentPower);
+            float radiusByPower = (1 * (int)currentPower);
             float radiusByBuffs = Util.Remap((float)strength, 0, ChillRework.ChillRework.chillStacksMax, novaMinRadius, novaMaxRadius);
             CreateIceBlast(attacker, currentPower, position, radiusByPower + radiusByBuffs);
         }
@@ -423,6 +424,8 @@ namespace ArtificerExtended.Passive
         {
             if (NetworkServer.active)
             {
+                ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
+
                 GameObject blast = UnityEngine.Object.Instantiate<GameObject>(ChillRework.ChillRework.iceExplosion, position, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
@@ -432,6 +435,8 @@ namespace ArtificerExtended.Passive
                 delay.procCoefficient = 0.3f + (0.1f * (int)icePowerToUse);
                 delay.attacker = attacker.gameObject;
                 delay.radius = radius;
+                delay.damageType = DamageType.Generic;
+                delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blast.GetComponent<TeamFilter>().teamIndex = attacker.teamComponent.teamIndex;
             }
         }

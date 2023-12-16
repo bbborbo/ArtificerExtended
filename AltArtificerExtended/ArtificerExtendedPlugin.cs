@@ -262,6 +262,12 @@ namespace ArtificerExtended
                 "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
                 "causes an <style=cIsUtility>Arctic Blast,</style> " +
                 "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", $"<style=cKeywordName>Arctic Blast</style>" +
+                $"<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
+                $"causes an <style=cIsUtility>Arctic Blast,</style> " +
+                $"<style=cIsUtility>Chilling</style> nearby enemies " +
+                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.novaBaseDamage)} damage</style> " +
+                $"and <style=cIsUtility>Freezing</style> the target.</style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
                 $"for <style=cIsDamage>2x{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
