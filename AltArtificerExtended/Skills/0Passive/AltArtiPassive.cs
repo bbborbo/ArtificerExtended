@@ -54,8 +54,9 @@ namespace ArtificerExtended.Passive
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
 
-        public static Single burnDamageMult = 0.075f;
-        public static Single burnBuffDuration = 2f;
+        public static Single meltAspdIncrease = 0.05f;
+        public static Single burnBuffDurationBase = 3;
+        public static Single burnBuffDurationStack = 2;
 
         public static Single slowProcChance = 1f;
         public static Single freezeProcCount = 3f;
@@ -371,7 +372,7 @@ namespace ArtificerExtended.Passive
 
 
         #region External Methods
-        public void SkillCast(BatchHandle handle = null)
+        public void SkillCast(BatchHandle handle = null, bool isFire = false)
         {
             if (elementPower == null)
             {
@@ -379,8 +380,8 @@ namespace ArtificerExtended.Passive
                 return;
             }
             this.DoLightning(elementPower.lightningPower, handle);
-            this.DoFire(elementPower.firePower);
-            this.DoIce(elementPower.icePower);
+            if(isFire)
+                this.DoFire(elementPower.firePower);
         }
 
         public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = novaDebuffThreshold)
@@ -409,23 +410,13 @@ namespace ArtificerExtended.Passive
         {
             if (NetworkServer.active)
             {
-                for (Int32 i = 0; i < (Int32)power; i++)
+                /*for (Int32 i = 0; i < (Int32)power; i++)
                 {
-                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDuration + 0.1f * i);
-                }
-            }
-        }
+                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + 0.1f * i);
+                }*/
 
-        private void DoIce(Power power)
-        {
-            /*if (NetworkServer.active)
-            {
-                BuffIndex ice = Main.chillBuff.buffIndex;
-                for (Int32 i = 0; i < (Int32)power; i++)
-                {
-                    //base.characterBody.AddTimedBuff(ice, iceBuffDuration);
-                }
-            }*/
+                base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+            }
         }
 
         public static void CreateIceBlast(CharacterBody attacker, Power icePowerToUse, Vector3 position, Single radius)

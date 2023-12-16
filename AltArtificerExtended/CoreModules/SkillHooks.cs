@@ -23,6 +23,7 @@ using ArtificerExtended.Components;
 using static ArtificerExtended.Passive.AltArtiPassive;
 using static ArtificerExtended.Components.ElementCounter;
 using static ChillRework.ChillRework;
+using static R2API.RecalculateStatsAPI;
 using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended
@@ -56,8 +57,17 @@ namespace ArtificerExtended
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             OnMaxChill += FrostNovaOnMaxChill;
+            GetStatCoefficients += MeltAttackSpeedBuff;
         }
 
+        private void MeltAttackSpeedBuff(CharacterBody sender, StatHookEventArgs args)
+        {
+            int meltBuffCount = sender.GetBuffCount(Buffs.meltBuff);
+            if(meltBuffCount > 0)
+            {
+                args.baseAttackSpeedAdd += AltArtiPassive.meltAspdIncrease * meltBuffCount;
+            }
+        }
 
         private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
@@ -135,7 +145,7 @@ namespace ArtificerExtended
                 this.frozenBy[self.gameObject] = damageInfo.attacker;
             }
             orig(self, damageInfo);
-            if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
+            /*if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
             {
                 if (damageInfo.attacker)
                 {
@@ -156,7 +166,7 @@ namespace ArtificerExtended
                         }
                     }
                 }
-            }
+            }*/
         }
 
         private void FrostNovaOnMaxChill(DamageInfo damageInfo, GameObject victimObject)
@@ -198,7 +208,7 @@ namespace ArtificerExtended
             {
                 AltArtiPassive passive = AltArtiPassive.instanceLookup[obj];
                 var context = new FlamethrowerContext(passive);
-                passive.SkillCast();
+                passive.SkillCast(isFire: true);
                 this.flamethrowerContext[self] = context;
             }
         }
@@ -212,7 +222,7 @@ namespace ArtificerExtended
                 Int32 count = 0;
                 while (context.timer >= context.passive.ext_flamethrowerInterval && count <= context.passive.ext_flamethrowerMaxPerTick)
                 {
-                    context.passive.SkillCast();
+                    context.passive.SkillCast(isFire: true);
                     count++;
                     context.timer -= context.passive.ext_flamethrowerInterval;
                 }
@@ -224,7 +234,7 @@ namespace ArtificerExtended
             if (this.flamethrowerContext.ContainsKey(self))
             {
                 FlamethrowerContext context = this.flamethrowerContext[self];
-                context.passive.SkillCast();
+                context.passive.SkillCast(isFire: true);
                 _ = this.flamethrowerContext.Remove(self);
             }
         }
@@ -356,7 +366,7 @@ namespace ArtificerExtended
             GameObject obj = self.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out AltArtiPassive passive))
             {
-                passive.SkillCast();
+                passive.SkillCast(isFire: (self is FireFireBolt));
             }
         }
         #endregion

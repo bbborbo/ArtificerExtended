@@ -177,7 +177,7 @@ namespace ArtificerExtended.EntityState
                 while (this.timer > AltArtiPassive.nanoBombInterval)
                 {
                     this.timer -= AltArtiPassive.nanoBombInterval;
-                    passive.SkillCast(handle);
+                    passive.SkillCast(handle, true);
                 }
             }
             if (!this.hasFiredBomb && (this.stopwatch >= this.chargeDuration || !IsKeyDownAuthority()) &&

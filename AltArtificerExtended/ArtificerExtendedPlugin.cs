@@ -251,14 +251,14 @@ namespace ArtificerExtended
                 "\n- Selecting <style=cIsDamage>ICE</style> skills increases the power of <style=cIsUtility>Arctic Blasts.</style>" +
                 "\n- Selecting <style=cIsDamage>LIGHTNING</style> skills creates additional <style=cIsUtility>Lightning Bolts.</style>");*/
             LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
-                "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
-                "\n- <style=cIsUtility>Arctic Blasts</style> increase in power for each <style=cIsDamage>ICE</style> skill." +
+                "- <style=cIsUtility>Incinerate</style> increases in duration for each <style=cIsDamage>FIRE</style> skill." +
+                "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
                 "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
 
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
-                $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Gain a buff that temporarily " +
-                $"increases the <style=cIsDamage>burn damage</style> from Ignite " +
-                $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.burnDamageMult)} per stack.</style>");
+                $"<style=cSub><style=cIsUtility>On FIRE SKILL Cast:</style> Gain a buff that " +
+                $"increases your <style=cIsDamage>attack speed</style> on all skills " +
+                $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.meltAspdIncrease)}</style> per stack.");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "<style=cKeywordName>Arctic Blast</style>" +
                 "<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
                 "causes an <style=cIsUtility>Arctic Blast,</style> " +

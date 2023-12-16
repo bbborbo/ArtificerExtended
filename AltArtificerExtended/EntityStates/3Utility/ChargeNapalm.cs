@@ -240,7 +240,7 @@ namespace ArtificerExtended.EntityState
                 while (this.timer > this.frequency)
                 {
                     this.timer -= this.frequency;
-                    passive.SkillCast(handle);
+                    passive.SkillCast(handle, true);
                 }
             }
 
