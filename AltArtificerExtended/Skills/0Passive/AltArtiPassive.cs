@@ -49,12 +49,12 @@ namespace ArtificerExtended.Passive
 
 
         #region Public Statics
-        public static Single lightningDamageMult = 0.2f;
+        public static Single lightningDamageMult = 0.25f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
 
-        public static Single meltAspdIncrease = 0.04f;
+        public static Single meltAspdIncrease = 0.03f;
         public static Single burnBuffDurationBase = 4f;
         public static Single burnBuffDurationStack = -0.5f;
 
