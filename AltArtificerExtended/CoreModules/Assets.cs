@@ -23,7 +23,7 @@ namespace ArtificerExtended.CoreModules
         public static void CreateZapDamageType()
         {
             ChainLightning = ReserveDamageType();
-            //On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
+            On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
         }
 
         private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)

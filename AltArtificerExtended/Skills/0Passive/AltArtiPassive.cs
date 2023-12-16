@@ -49,7 +49,7 @@ namespace ArtificerExtended.Passive
 
 
         #region Public Statics
-        public static Single lightningDamageMult = 0.4f;
+        public static Single lightningDamageMult = 0.2f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
