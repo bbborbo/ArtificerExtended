@@ -8,6 +8,7 @@ using UnityEngine;
 using ArtificerExtended.EntityState;
 using R2API;
 using R2API.Utils;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
@@ -85,7 +86,7 @@ namespace ArtificerExtended.Skills
                 Tools.GetParticle(meteorImpactPrefab, "Flash Lines, Fire", napalmColor);
                 Tools.GetParticle(meteorImpactPrefab, "Fire", napalmColor);
             }
-            ArtificerExtendedPlugin.CreateEffect(meteorImpactPrefab);
+            Effects.CreateEffect(meteorImpactPrefab);
         }
     }
 }

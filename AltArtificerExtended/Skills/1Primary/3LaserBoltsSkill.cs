@@ -8,6 +8,7 @@ using UnityEngine;
 using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using R2API;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
@@ -85,7 +86,7 @@ namespace ArtificerExtended.Skills
             main.startSizeYMultiplier *= 0.4f;
             main.startSizeZMultiplier *= 2f;
 
-            ArtificerExtendedPlugin.CreateEffect(tracerLaser);
+            Effects.CreateEffect(tracerLaser);
         }
     }
 }

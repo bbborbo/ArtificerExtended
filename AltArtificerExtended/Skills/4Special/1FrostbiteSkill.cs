@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
@@ -121,7 +122,7 @@ namespace ArtificerExtended.Skills
                 artiIceShield.canStack = true;
                 artiIceShield.isDebuff = false;
             }
-            ArtificerExtendedPlugin.AddBuff(artiIceShield);
+            Buffs.AddBuff(artiIceShield);
 
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {

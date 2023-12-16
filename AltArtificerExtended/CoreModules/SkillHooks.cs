@@ -169,19 +169,18 @@ namespace ArtificerExtended
             }*/
         }
 
-        private void FrostNovaOnMaxChill(DamageInfo damageInfo, GameObject victimObject)
+        private void FrostNovaOnMaxChill(DamageInfo damageInfo, CharacterBody vBody)
         {
-            CharacterBody vBody = victimObject.GetComponent<CharacterBody>();
             CharacterBody aBody = null;
             if (damageInfo.attacker != null)
                 aBody = damageInfo.attacker.GetComponent<CharacterBody>();
-            if(aBody != null && vBody != null)
+            if(aBody != null)
             {
                 Power icePower = GetIcePowerLevelFromBody(aBody);
                 if (icePower > Power.None) //Arctic Blast
                 {
                     vBody.ClearTimedBuffs(RoR2Content.Buffs.Slow80);
-                    AltArtiPassive.DoNova(aBody, icePower, damageInfo.position, AltArtiPassive.novaDebuffThreshold);
+                    AltArtiPassive.DoNova(aBody, icePower, damageInfo.position);
                 }
             }
         }

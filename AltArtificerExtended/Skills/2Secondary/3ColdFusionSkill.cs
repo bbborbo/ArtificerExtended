@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.EntityState;
+﻿using ArtificerExtended.CoreModules;
+using ArtificerExtended.EntityState;
 using BepInEx.Configuration;
 using EntityStates;
 using R2API;
@@ -85,7 +86,7 @@ namespace ArtificerExtended.Skills
             shotgunAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             shotgunAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            ArtificerExtendedPlugin.CreateEffect(fusionTracer);
+            Effects.CreateEffect(fusionTracer);
         }
     }
 }

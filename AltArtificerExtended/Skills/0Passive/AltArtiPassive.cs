@@ -49,7 +49,7 @@ namespace ArtificerExtended.Passive
 
 
         #region Public Statics
-        public static Single lightningDamageMult = 0.2f;
+        public static Single lightningDamageMult = 0.4f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
@@ -384,13 +384,13 @@ namespace ArtificerExtended.Passive
                 this.DoFire(elementPower.firePower);
         }
 
-        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = novaDebuffThreshold)
+        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = ChillRework.ChillRework.chillStacksMax)
         {
             if (attacker == null || currentPower == Power.None || strength == 0)
                 return;
 
             float radiusByPower = 1 + (1 * (int)currentPower);
-            float radiusByBuffs = Util.Remap((float)strength, 0, novaDebuffThreshold, novaMinRadius, novaMaxRadius);
+            float radiusByBuffs = Util.Remap((float)strength, 0, ChillRework.ChillRework.chillStacksMax, novaMinRadius, novaMaxRadius);
             CreateIceBlast(attacker, currentPower, position, radiusByPower + radiusByBuffs);
         }
         #endregion
@@ -423,7 +423,7 @@ namespace ArtificerExtended.Passive
         {
             if (NetworkServer.active)
             {
-                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(iceBlast, position, Quaternion.identity);
+                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(ChillRework.ChillRework.iceExplosion, position, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
                 delay.maxTimer += UnityEngine.Random.Range(-0.1f, 0.1f);

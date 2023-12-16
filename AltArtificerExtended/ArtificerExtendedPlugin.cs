@@ -125,7 +125,6 @@ namespace ArtificerExtended
             Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
-            Projectiles.CreateIceExplosion();
             Effects.DoEffects();
             this.ArtiChanges();
             this.InitializeSkills();
@@ -265,7 +264,7 @@ namespace ArtificerExtended
                 "clearing the effect and <style=cIsDamage>Freezing nearby enemies.</style></style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
                 $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
-                $"for <style=cIsDamage>2x{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
+                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
             #endregion
 
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
@@ -432,44 +431,6 @@ namespace ArtificerExtended
         }
 
         #region Init
-        public static void AddBuff(BuffDef buffDef)
-        {
-            ContentPacks.buffDefs.Add(buffDef);
-        }
-        public static EffectDef CreateEffect(GameObject effect)
-        {
-            if (effect == null)
-            {
-                Debug.LogError("Effect prefab was null");
-                return null;
-            }
-
-            var effectComp = effect.GetComponent<EffectComponent>();
-            if (effectComp == null)
-            {
-                Debug.LogErrorFormat("Effect prefab: \"{0}\" does not have an EffectComponent.", effect.name);
-                return null;
-            }
-
-            var vfxAttrib = effect.GetComponent<VFXAttributes>();
-            if (vfxAttrib == null)
-            {
-                Debug.LogErrorFormat("Effect prefab: \"{0}\" does not have a VFXAttributes component.", effect.name);
-                return null;
-            }
-
-            var def = new EffectDef
-            {
-                prefab = effect,
-                prefabEffectComponent = effectComp,
-                prefabVfxAttributes = vfxAttrib,
-                prefabName = effect.name,
-                spawnSoundEventName = effectComp.soundName
-            };
-
-            ContentPacks.effectDefs.Add(def);
-            return def;
-        }
         public static Dictionary<UnlockBase, UnlockableDef> UnlockBaseDictionary = new Dictionary<UnlockBase, UnlockableDef>();
         private void InitializeUnlocks()
         {
