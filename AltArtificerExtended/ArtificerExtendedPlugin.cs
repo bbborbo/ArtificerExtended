@@ -250,7 +250,7 @@ namespace ArtificerExtended
                 "\n- Selecting <style=cIsDamage>ICE</style> skills increases the power of <style=cIsUtility>Arctic Blasts.</style>" +
                 "\n- Selecting <style=cIsDamage>LIGHTNING</style> skills creates additional <style=cIsUtility>Lightning Bolts.</style>");*/
             LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
-                "- <style=cIsUtility>Incinerate</style> increases in duration for each <style=cIsDamage>FIRE</style> skill." +
+                "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
                 "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
                 "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
 

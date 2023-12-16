@@ -54,9 +54,9 @@ namespace ArtificerExtended.Passive
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
 
-        public static Single meltAspdIncrease = 0.05f;
-        public static Single burnBuffDurationBase = 3;
-        public static Single burnBuffDurationStack = 2;
+        public static Single meltAspdIncrease = 0.04f;
+        public static Single burnBuffDurationBase = 4f;
+        public static Single burnBuffDurationStack = -0.5f;
 
         public static Single slowProcChance = 1f;
         public static Single freezeProcCount = 3f;
@@ -410,12 +410,12 @@ namespace ArtificerExtended.Passive
         {
             if (NetworkServer.active)
             {
-                /*for (Int32 i = 0; i < (Int32)power; i++)
+                for (Int32 i = 0; i < (Int32)power; i++)
                 {
-                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + 0.1f * i);
-                }*/
+                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+                }
 
-                base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+                //base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
             }
         }
 

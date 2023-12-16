@@ -25,6 +25,7 @@ using static ArtificerExtended.Components.ElementCounter;
 using static ChillRework.ChillRework;
 using static R2API.RecalculateStatsAPI;
 using ArtificerExtended.CoreModules;
+using ArtificerExtended.EntityState;
 
 namespace ArtificerExtended
 {
@@ -365,7 +366,7 @@ namespace ArtificerExtended
             GameObject obj = self.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out AltArtiPassive passive))
             {
-                passive.SkillCast(isFire: (self is FireFireBolt));
+                passive.SkillCast(isFire: !(self is FireLightningBolt) && !(self is FireSnowBall));
             }
         }
         #endregion
