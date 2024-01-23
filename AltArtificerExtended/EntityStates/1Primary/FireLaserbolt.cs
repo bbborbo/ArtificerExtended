@@ -21,7 +21,7 @@ namespace ArtificerExtended.EntityState
 
         public float procCoefficient = 1.0f;
 
-        public static float damageCoefficient = 2.2f;
+        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage;
 
         public float force = 20f;
 

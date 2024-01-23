@@ -23,7 +23,7 @@ namespace ArtificerExtended.EntityState
         public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
         public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
-        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage + 2f;
+        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage + 1.4f;
         public static float procCoefficientPoint = 0.5f;
         public static float procCoefficientSpread = 0.5f;
         public static float procCoefficientBuckshot = 0.7f;
