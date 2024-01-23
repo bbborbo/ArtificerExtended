@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2;
@@ -16,7 +17,7 @@ namespace ArtificerExtended.EntityState
         public static float damageCoeff = ArtificerExtendedPlugin.artiBoltDamage;//Mathf.Ceil((ArtificerExtendedPlugin.artiBoltDamage * 0.8f) * 10) / 10;
         public override void OnEnter()
         {
-            this.projectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
+            this.projectilePrefab = _4SnowballsSkill.snowballProjectilePrefab;
             this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
             this.damageCoefficient = damageCoeff;
             this.baseDuration = 0.45f;

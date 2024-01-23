@@ -14,6 +14,7 @@ namespace ArtificerExtended.Skills
 {
     class _4SnowballsSkill : SkillBase
     {
+        public static GameObject snowballProjectilePrefab;
         public override string SkillName => "Snowball";
 
         public override string SkillDescription => $"Fire a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style> " +
@@ -55,12 +56,12 @@ namespace ArtificerExtended.Skills
 
         private void FixSnowballProjectile()
         {
-            var SnowballPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
+           snowballProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
 
-            SnowballPrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
-            SnowballPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
-            SnowballPrefab.GetComponent<ProjectileController>().procCoefficient = 0.8f;
-            SnowballPrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
+            snowballProjectilePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
+            snowballProjectilePrefab.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
+            snowballProjectilePrefab.GetComponent<ProjectileController>().procCoefficient = 0.75f;
+            snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
         }
     }
 }
