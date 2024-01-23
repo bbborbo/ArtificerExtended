@@ -57,7 +57,8 @@ namespace ArtificerExtended.Components
             bool isProperToken = skill.baseSkill.skillNameToken.Contains("_");
             if (isProperToken)
             {
-                String name = skill.baseSkill.skillNameToken.Split('_')[2].ToLower();
+                string[] s = skill.baseSkill.skillNameToken.Split('_');
+                String name = s.Length > 2 ? s[2].ToLower() : "";
                 switch (name)
                 {
                     default:
