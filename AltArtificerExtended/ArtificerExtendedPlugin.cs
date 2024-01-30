@@ -412,7 +412,8 @@ namespace ArtificerExtended
         private void ArtiChanges()
         {
 
-            LanguageAPI.Add("MAGE_OUTRO_FLAVOR", "..and so she left, her heart fixed on new horizons.");
+            //LanguageAPI.Add("MAGE_OUTRO_FLAVOR", "..and so she left, her heart fixed on new horizons.");
+            LanguageAPI.Add("MAGE_OUTRO_FLAVOR", "..and so she left, in search of a heaven that no longer exists.");
 
             GameObject iceWallPillarPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIcewallPillarProjectile");
             ProjectileImpactExplosion pie = iceWallPillarPrefab.GetComponentInChildren<ProjectileImpactExplosion>();
