@@ -139,6 +139,7 @@ namespace ArtificerExtended.CoreModules
         internal static GameObject CreateLightningSwordGhost(Int32 meshInd)
         {
             GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningSwordGhost", false);
+            EffectComponent effectComponent = obj.AddComponent<EffectComponent>();
 
             GameObject model = obj.transform.Find("mdlRock").gameObject;
             GameObject trail = obj.transform.Find("Trail").gameObject;
@@ -154,7 +155,7 @@ namespace ArtificerExtended.CoreModules
             _ = GameObject.Instantiate<Material>(trailRen.material);
             model.GetComponent<MeshRenderer>().material = trailRen.material;
 
-            //CreateEffect(obj);
+            CreateEffect(obj);
 
             return obj;
         }
