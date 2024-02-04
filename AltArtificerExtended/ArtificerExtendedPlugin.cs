@@ -82,7 +82,7 @@ namespace ArtificerExtended
         public static SkillFamily mageUtility;
         public static SkillFamily mageSpecial;
 
-        public static float artiBoltDamage = 2.2f;
+        public static float artiBoltDamage = 2.8f;
         public static float artiNanoDamage = 20;
         public static float artiUtilCooldown = 12;
         public static float meleeRangeChannel = 21; //flamethrower

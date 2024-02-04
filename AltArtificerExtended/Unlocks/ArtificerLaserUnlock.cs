@@ -63,11 +63,14 @@ namespace ArtificerExtended.Unlocks
 
                 if (self.canBeStunned && !isStunnedAlready && (damageInfo.damageType.HasFlag(DamageType.Stun1s)))
                 {
-                    StatSheet currentStats = damageReport.attackerMaster.playerStatsComponent.currentStats;
-                    currentStats.PushStatValue(stunCounter, 1UL);
-                    if (base.userProfile.statSheet.GetStatValueULong(stunCounter) >= stunRequirementTotal)
+                    StatSheet currentStats = damageReport.attackerMaster.playerStatsComponent?.currentStats;
+                    if(currentStats != null)
                     {
-                        base.Grant();
+                        currentStats.PushStatValue(stunCounter, 1UL);
+                        if (base.userProfile.statSheet.GetStatValueULong(stunCounter) >= stunRequirementTotal)
+                        {
+                            base.Grant();
+                        }
                     }
                 }
             }

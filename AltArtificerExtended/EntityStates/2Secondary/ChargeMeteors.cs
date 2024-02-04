@@ -222,7 +222,7 @@ namespace ArtificerExtended.EntityState
                     Ray aRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     RaycastHit raycastHit;
                     if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out extraDistance),
-                        out raycastHit, maxDistance + extraDistance, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
+                        out raycastHit, maxDistance + extraDistance, LayerIndex.world.mask))
                     {
                         aimPos = raycastHit.point;
                     }

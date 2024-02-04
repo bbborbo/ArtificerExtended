@@ -29,7 +29,7 @@ namespace ArtificerExtended.EntityState
         public static float maxRadius = 0.5f;
 
         public static float minDamageCoefficient = 1.2f;
-        public static float maxDamageCoefficient = ArtificerExtendedPlugin.artiBoltDamage * 1.5f;
+        public static float maxDamageCoefficient = ArtificerExtendedPlugin.artiBoltDamage * 1.25f;
         public static float procCoefficient = 1f;
         public float force = 0;
         public float selfForce = 150;

@@ -67,7 +67,7 @@ namespace ArtificerExtended.EntityState
                 Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
                 if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
-                    out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
+                    out raycastHit, num + num2, LayerIndex.world.mask))
                 {
                     this.areaIndicatorInstance.transform.position = raycastHit.point;
                     this.areaIndicatorInstance.transform.up = Vector3.one;// raycastHit.normal;
