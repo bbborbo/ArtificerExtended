@@ -13,6 +13,7 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
+using System.Linq;
 
 namespace ArtificerExtended.EntityState
 {
@@ -221,8 +222,8 @@ namespace ArtificerExtended.EntityState
                     float extraDistance = 0f;
                     Ray aRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     RaycastHit raycastHit;
-                    if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out extraDistance),
-                        out raycastHit, maxDistance + extraDistance, LayerIndex.world.mask))
+                    if (Util.CharacterRaycast(this.gameObject, CameraRigController.ModifyAimRayIfApplicable(aRay, base.gameObject, out extraDistance),
+                        out raycastHit, maxDistance + extraDistance, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
                     {
                         aimPos = raycastHit.point;
                     }

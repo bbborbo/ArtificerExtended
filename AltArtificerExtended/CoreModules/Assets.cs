@@ -140,6 +140,8 @@ namespace ArtificerExtended.CoreModules
         {
             GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningSwordGhost", false);
             EffectComponent effectComponent = obj.AddComponent<EffectComponent>();
+            DestroyOnTimer dot = obj.AddComponent<DestroyOnTimer>();
+            dot.duration = 15;
 
             GameObject model = obj.transform.Find("mdlRock").gameObject;
             GameObject trail = obj.transform.Find("Trail").gameObject;
