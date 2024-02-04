@@ -37,7 +37,8 @@ namespace ArtificerExtended.Skills
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseRechargeInterval: 5,
-                beginSkillCooldownOnSkillEnd: true
+                beginSkillCooldownOnSkillEnd: true,
+                mustKeyPress: true
             );
 
 
