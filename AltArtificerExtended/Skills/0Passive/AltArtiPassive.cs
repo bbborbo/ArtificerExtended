@@ -376,7 +376,7 @@ namespace ArtificerExtended.Passive
                 EffectManager.SpawnEffect(AltArtiPassive.lightningPreFireEffect[proj.type], new EffectData
                 {
                     origin = this.location.position + proj.localPos
-                }, true);
+                }, false);
             }
         }
         #endregion
