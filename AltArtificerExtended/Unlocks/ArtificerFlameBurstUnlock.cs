@@ -60,7 +60,7 @@ namespace ArtificerExtended.Unlocks
                 if (attackerBody.bodyIndex == LookUpRequiredBodyIndex() && victimBody.HasBuff(RoR2Content.Buffs.AffixRed))
                 {
                     DamageInfo damageInfo = obj.damageInfo;
-                    bool isBurnDamage = (damageInfo.damageType.HasFlag(DamageType.IgniteOnHit) || damageInfo.damageType.HasFlag(DamageType.PercentIgniteOnHit));
+                    bool isBurnDamage = (damageInfo.damageType.damageType.HasFlag(DamageType.IgniteOnHit) || damageInfo.damageType.damageType.HasFlag(DamageType.PercentIgniteOnHit));
                     bool isBurnDot = (damageInfo.dotIndex == DotController.DotIndex.Burn 
                         || damageInfo.dotIndex == DotController.DotIndex.PercentBurn 
                         || damageInfo.dotIndex == DotController.DotIndex.StrongerBurn);

@@ -53,7 +53,7 @@ namespace ArtificerExtended.Unlocks
                 if (attackerBody.bodyIndex == LookUpRequiredBodyIndex() && isImpOverlord)
                 {
                     if((damageInfo.force == Vector3.down * 1500 
-                        || (damageInfo.force == Vector3.down * 3000 && damageInfo.damageType.HasFlag(DamageType.Stun1s))) 
+                        || (damageInfo.force == Vector3.down * 3000 && damageInfo.damageType.damageType.HasFlag(DamageType.Stun1s))) 
                         && damageInfo.inflictor == null) //only the orbs use a null inflictor! && damageInfo.inflictor == null) //only the orbs use a null inflictor!
                     {
                         base.Grant();

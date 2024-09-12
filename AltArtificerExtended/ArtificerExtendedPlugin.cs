@@ -122,7 +122,7 @@ namespace ArtificerExtended
             }
 
             AddHooks();
-            Assets.CreateZapDamageType();
+            ArtificerExtended.CoreModules.Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
             Effects.DoEffects();

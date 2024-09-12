@@ -61,7 +61,7 @@ namespace ArtificerExtended.Unlocks
                     }
                 }
 
-                if (self.canBeStunned && !isStunnedAlready && (damageInfo.damageType.HasFlag(DamageType.Stun1s)))
+                if (self.canBeStunned && !isStunnedAlready && (damageInfo.damageType.damageType.HasFlag(DamageType.Stun1s)))
                 {
                     StatSheet currentStats = damageReport.attackerMaster.playerStatsComponent?.currentStats;
                     if(currentStats != null)
