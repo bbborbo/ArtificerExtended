@@ -39,8 +39,8 @@ namespace ArtificerExtended.Passive
 
                         if (mach.state.GetType() == def.defaultMainState.stateType)
                         {
-                            Type sest = def.mainState.stateType;
-                            mach.SetNextState(EntityStateCatalog.InstantiateState(EntityStateCatalog.GetStateIndex(sest)));
+                            SerializableEntityStateType state = def.mainState;
+                            mach.SetNextState(EntityStateCatalog.InstantiateState(ref state));
                         }
 
                         break;
@@ -65,8 +65,8 @@ namespace ArtificerExtended.Passive
 
                         if (mach.state.GetType() == def.mainState.stateType)
                         {
-                            Type sest = def.defaultMainState.stateType;
-                            mach.SetNextState(EntityStateCatalog.InstantiateState(EntityStateCatalog.GetStateIndex(sest)));
+                            SerializableEntityStateType state = def.defaultMainState;
+                            mach.SetNextState(EntityStateCatalog.InstantiateState(ref state));
                         }
 
                         break;
