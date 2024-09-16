@@ -363,10 +363,22 @@ namespace ArtificerExtended.Passive
                 {
                     UnityEngine.Object.Destroy(this.effect);
                 }
+
                 this.effect = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[proj.type], this.location);
+                EffectComponent ec = this.effect.GetComponent<EffectComponent>();
+                ec.effectData = new EffectData
+                {
+                    origin = this.location.position + proj.localPos
+                };
                 this.effect.transform.localScale = Vector3.one;
                 this.effect.transform.localPosition = proj.localPos;
                 this.effect.transform.localRotation = Quaternion.identity;
+
+                return;
+                EffectManager.SpawnEffect(AltArtiPassive.lightningPreFireEffect[proj.type], new EffectData
+                {
+                    origin = this.location.position + proj.localPos
+                }, false);
             }
         }
         #endregion

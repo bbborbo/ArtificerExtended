@@ -69,6 +69,7 @@ namespace ArtificerExtended
         public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
         public static ConfigEntry<bool> SurgeRework { get; set; }
+        public static ConfigEntry<bool> ReducedEffectsSurgeRework { get; set; }
         #endregion
 
         public static GameObject mageObject;
@@ -122,7 +123,7 @@ namespace ArtificerExtended
             }
 
             AddHooks();
-            Assets.CreateZapDamageType();
+            ArtificerExtended.CoreModules.Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
             Effects.DoEffects();
@@ -407,6 +408,11 @@ namespace ArtificerExtended
                 "Ion Surge", "Enable Rework",
                 true,
                 "Determines whether Ion Surge gets reworked. Note that vanilla Ion Surge is INCOMPATIBLE with ALL alt-passives. Use at your own risk.");
+
+            ReducedEffectsSurgeRework = CustomConfigFile.Bind<bool>(
+                "Ion Surge", "Reduce Effects",
+                false,
+                "Setting to TRUE will remove reworked Ion Surge's blink effect, for users who have trouble with the ability's flashing.");
         }
 
         private void ArtiChanges()
