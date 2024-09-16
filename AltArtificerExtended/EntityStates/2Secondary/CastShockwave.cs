@@ -95,20 +95,20 @@ namespace ArtificerExtended.EntityState
                 this.modelTransform = base.GetModelTransform();
                 if (this.modelTransform)
                 {
-                    TemporaryOverlay temporaryOverlay = this.modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                    TemporaryOverlayInstance temporaryOverlay = TemporaryOverlayManager.AddOverlay(this.modelTransform.gameObject);
                     temporaryOverlay.duration = 0.6f;
                     temporaryOverlay.animateShaderAlpha = true;
                     temporaryOverlay.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay.destroyComponentOnEnd = true;
                     temporaryOverlay.originalMaterial = RoR2.LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashBright");
-                    temporaryOverlay.AddToCharacerModel(this.modelTransform.GetComponent<CharacterModel>());
-                    TemporaryOverlay temporaryOverlay2 = this.modelTransform.gameObject.AddComponent<TemporaryOverlay>();
+                    temporaryOverlay.AddToCharacterModel(this.modelTransform.GetComponent<CharacterModel>());
+                    TemporaryOverlayInstance temporaryOverlay2 = TemporaryOverlayManager.AddOverlay(this.modelTransform.gameObject);
                     temporaryOverlay2.duration = 0.7f;
                     temporaryOverlay2.animateShaderAlpha = true;
                     temporaryOverlay2.alphaCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
                     temporaryOverlay2.destroyComponentOnEnd = true;
                     temporaryOverlay2.originalMaterial = RoR2.LegacyResourcesAPI.Load<Material>("Materials/matHuntressFlashExpanded");
-                    temporaryOverlay2.AddToCharacerModel(this.modelTransform.GetComponent<CharacterModel>());
+                    temporaryOverlay2.AddToCharacterModel(this.modelTransform.GetComponent<CharacterModel>());
                 }
             }
             if (this.characterModel)

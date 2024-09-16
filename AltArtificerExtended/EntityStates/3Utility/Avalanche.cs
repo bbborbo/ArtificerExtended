@@ -39,7 +39,7 @@ namespace ArtificerExtended.EntityState
             if (NetworkServer.active && !base.characterBody.bodyFlags.HasFlag(CharacterBody.BodyFlags.IgnoreFallDamage))
             {
                 base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
-                base.characterMotor.onHitGround += this.CharacterMotor_onHitGround;
+                base.characterMotor.onHitGroundServer += this.CharacterMotor_onHitGround;
             }
         }
 
@@ -52,7 +52,7 @@ namespace ArtificerExtended.EntityState
 
             // TODO: May need to redo the flag assignment?
 
-            base.characterMotor.onHitGround -= this.CharacterMotor_onHitGround;
+            base.characterMotor.onHitGroundServer -= this.CharacterMotor_onHitGround;
         }
 
         public override void OnExit()

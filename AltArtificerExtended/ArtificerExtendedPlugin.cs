@@ -53,7 +53,7 @@ namespace ArtificerExtended
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
 
-        public const string version = "3.7.0";
+        public const string version = "3.7.3";
         
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
@@ -69,6 +69,7 @@ namespace ArtificerExtended
         public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
         public static ConfigEntry<bool> SurgeRework { get; set; }
+        public static ConfigEntry<bool> ReducedEffectsSurgeRework { get; set; }
         #endregion
 
         public static GameObject mageObject;
@@ -405,6 +406,11 @@ namespace ArtificerExtended
                 "Ion Surge", "Enable Rework",
                 true,
                 "Determines whether Ion Surge gets reworked. Note that vanilla Ion Surge is INCOMPATIBLE with ALL alt-passives. Use at your own risk.");
+
+            ReducedEffectsSurgeRework = CustomConfigFile.Bind<bool>(
+                "Ion Surge", "Reduce Effects",
+                false,
+                "Setting to TRUE will remove reworked Ion Surge's blink effect, for users who have trouble with the ability's flashing.");
         }
 
         private void ArtiChanges()
