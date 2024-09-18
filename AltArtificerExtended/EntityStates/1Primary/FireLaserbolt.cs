@@ -177,12 +177,16 @@ namespace ArtificerExtended.EntityState
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (this.animator.GetFloat("FireGauntlet.fire") > 0f && !this.hasFiredGauntlet)
+            if (this.animator != null && this.animator.GetFloat("FireGauntlet.fire") > 0f && !this.hasFiredGauntlet)
             {
                 this.FireGauntlet();
             }
             if (base.fixedAge >= this.duration && base.isAuthority)
             {
+                if (!this.hasFiredGauntlet)
+                {
+                    this.FireGauntlet();
+                }
                 this.outer.SetNextStateToMain();
             }
         }

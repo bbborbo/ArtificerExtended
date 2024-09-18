@@ -232,27 +232,28 @@ namespace ArtificerExtended.EntityState
             return bulletAttack;
         }
 
-        // Token: 0x060037D7 RID: 14295 RVA: 0x000300F3 File Offset: 0x0002E2F3
         public override void OnExit()
         {
             base.OnExit();
         }
 
-        // Token: 0x060037D8 RID: 14296 RVA: 0x000ED2EC File Offset: 0x000EB4EC
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (this.animator.GetFloat("FireGauntlet.fire") > 0f && !this.hasFiredGauntlet)
+            if (this.animator != null && this.animator.GetFloat("FireGauntlet.fire") > 0f && !this.hasFiredGauntlet)
             {
                 this.FireGauntlet();
             }
             if (base.fixedAge >= this.duration && base.isAuthority)
             {
+                if (!this.hasFiredGauntlet)
+                {
+                    this.FireGauntlet();
+                }
                 this.outer.SetNextStateToMain();
             }
         }
 
-        // Token: 0x060037D9 RID: 14297 RVA: 0x000ED341 File Offset: 0x000EB541
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Skill;
