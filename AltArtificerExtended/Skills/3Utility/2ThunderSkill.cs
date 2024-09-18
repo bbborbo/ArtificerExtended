@@ -9,21 +9,26 @@ using ArtificerExtended.EntityState;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.Skills
 {
     class _2ThunderSkill : SkillBase
     {
+        public static int totalStrikes = 8;
+        public static float delayBetweenStrikes = 0.5f;
+        public static float rollerVelocity = 11f;
+        public static float thunderBlastRadius = 6f;
+
         //thunder
+        public static GameObject magnetRollerProjectilePrefab;
         public static GameObject projectilePrefabThunder;
-        public static float desiredForwardSpeedMax = 22.5f;
-        public static float thunderBlastRadius = 8;
+        public static float desiredForwardSpeedMax = 2;
         int maxCharges = 2;
         public override string SkillName => "Rolling Thunder";
 
-        public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Summon a rain of<style=cIsDamage> explosive</style> lightning bolts " +
-            $"for <style=cIsDamage>{CastThunder.meatballCount}x{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>. " +
-            $"Can hold up to {maxCharges} charges.";
+        public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Roll a <style=cIsUtility>magnetic sphere</style> that " +
+            $"periodically attracts lightning strikes for <style=cIsDamage>{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>.";
 
         public override string SkillLangTokenName => "THUNDERMEATBALLS";
 
@@ -39,8 +44,8 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseMaxStock: maxCharges,
-                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown / 2,
+                baseMaxStock: 1,
+                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
                 interruptPriority: InterruptPriority.Skill,
                 canceledFromSprinting: true
 
@@ -72,31 +77,99 @@ namespace ArtificerExtended.Skills
             KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
 
             RegisterProjectileThunder();
+            RegisterMagnetRoller();
             CreateLang();
             CreateSkill();
         }
+
+        private void RegisterMagnetRoller()
+        {
+            magnetRollerProjectilePrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIcewallWalkerProjectile").InstantiateClone("MagnetRollerProjectile", true);
+
+            ProjectileCharacterController pcc = magnetRollerProjectilePrefab.GetComponent<ProjectileCharacterController>();
+            pcc.lifetime = totalStrikes * delayBetweenStrikes + 0.1f;
+            pcc.velocity = rollerVelocity;
+
+            ProjectileMageFirewallWalkerController walkerController = magnetRollerProjectilePrefab.GetComponent<ProjectileMageFirewallWalkerController>();
+            walkerController.dropInterval = delayBetweenStrikes;
+            walkerController.firePillarPrefab = projectilePrefabThunder;
+            walkerController.totalProjectiles = totalStrikes;
+
+            ProjectileController pc = magnetRollerProjectilePrefab.GetComponent<ProjectileController>();
+            pc.ghostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab").WaitForCompletion();
+        }
+
         private void RegisterProjectileThunder()
         {
-            projectilePrefabThunder = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/ElectricOrbProjectile").InstantiateClone("ThunderProjectile", true);
+            GameObject projectilePrefan = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbProjectile.prefab").WaitForCompletion();
+            projectilePrefabThunder = projectilePrefan.InstantiateClone("ThunderProjectile", true);
+            GameObject impact = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Lightning/LightningStrikeImpact.prefab").WaitForCompletion();
+            GameObject impactEffect = impact.InstantiateClone("ThunderImpact", false);
+            if(impactEffect != null)
+            {
+                ShakeEmitter shakeEmitter = impactEffect.GetComponent<ShakeEmitter>();
+                if (shakeEmitter)
+                {
+                    shakeEmitter.radius = 20;
+                    shakeEmitter.duration = 0.1f;
+                }
+
+                Transform pointLight = impactEffect.transform.Find("Point Light");
+                if (pointLight) 
+                {
+                    Debug.LogWarning("Destroying thunder point light");
+                    //GameObject.Destroy(pointLight.gameObject);
+                }
+                Transform flash = impactEffect.transform.Find("Flash");
+                if (flash) 
+                {
+                    Debug.LogWarning("Destroying thunder flash");
+                    GameObject.Destroy(flash.gameObject);
+                }
+                Transform lines = impactEffect.transform.Find("Flash Lines");
+                if (lines) 
+                {
+                    Debug.LogWarning("Destroying thunder lines");
+                    GameObject.Destroy(lines.gameObject);
+                }
+                Transform pp = impactEffect.transform.Find("PostProcess");
+                if (pp) 
+                {
+                    Debug.LogWarning("Destroying thunder pp");
+                    GameObject.Destroy(pp.gameObject);
+                }
+                Transform sphere = impactEffect.transform.Find("Sphere");
+                if (sphere) 
+                {
+                    Debug.LogWarning("Destroying thunder point light");
+                    sphere.localScale = Vector3.one * thunderBlastRadius / 4;
+                }
+            }
 
             var pc = projectilePrefabThunder.GetComponent<ProjectileController>();
-            var pd = projectilePrefabThunder.GetComponent<ProjectileDamage>();
-            var ps = projectilePrefabThunder.GetComponent<ProjectileSimple>();
-            var pie = projectilePrefabThunder.GetComponent<ProjectileImpactExplosion>();
+            pc.procCoefficient = 1f;
 
-            float scale = 0.2f;
-            projectilePrefabThunder.transform.localScale = new Vector3(scale, scale, scale);
+            var pd = projectilePrefabThunder.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.Stun1s;
+
+            var ps = projectilePrefabThunder.GetComponent<ProjectileSimple>();
             ps.desiredForwardSpeed = desiredForwardSpeedMax;
             ps.lifetime = 10;
+
+            var pie = projectilePrefabThunder.GetComponent<ProjectileImpactExplosion>();
             pie.childrenCount = 0;
             pie.bonusBlastForce = Vector3.zero;
             pie.blastRadius = thunderBlastRadius;
             pie.falloffModel = BlastAttack.FalloffModel.None;
             pie.blastProcCoefficient = 1f;
-            pc.procCoefficient = 0.6f;
+            pie.impactEffect = impactEffect;
+
+            float scale = 0.2f;
+            projectilePrefabThunder.transform.localScale = new Vector3(scale, scale, scale);
 
             ContentPacks.projectilePrefabs.Add(projectilePrefabThunder);
+            EffectDef newEffect = new EffectDef(impactEffect);
+            ContentPacks.effectDefs.Add(newEffect);
         }
     }
 }
