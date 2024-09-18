@@ -19,7 +19,7 @@ namespace ArtificerExtended.Skills
         public static BuffDef artiIceShield;
         public override int TargetVariant => 2;
 
-        public override string SkillName => "Cryostasis";
+        public override string SkillName => "Cryogenesis";
 
         public override string SkillDescription => "Cover yourself in a <style=cIsUtility>protective icy armor.</style> " +
                 "Erupts once for <style=cIsDamage>300% damage,</style> then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>500%.</style>" +

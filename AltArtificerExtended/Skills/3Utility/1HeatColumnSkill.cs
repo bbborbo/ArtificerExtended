@@ -32,8 +32,8 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Rising Flame";
 
-        public override string SkillDescription => $"Create a column of heat that continually " +
-            $"<style=cIsDamage>ignites</style> enemies inside for <style=cIsDamage>{Tools.ConvertDecimal(igniteDamage / igniteFrequency)} damage</style>. " +
+        public override string SkillDescription => $"Create a column of heat, " +
+            $"<style=cIsDamage>igniting</style> enemies inside for <style=cIsDamage>{Tools.ConvertDecimal(igniteDamage / igniteFrequency)} damage per second</style>. " +
             $"Allies inside the column <style=cIsUtility>rise into the air</style> while holding the Jump key.";
 
         public override string SkillLangTokenName => "HEATCOLUMN";

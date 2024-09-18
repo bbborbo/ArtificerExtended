@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
         public static float blizzardBuffDuration = 3;
 
 
-        public override string SkillName => "Frostbite";
+        public override string SkillName => "Polar Rift";
 
         public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds. " +
             $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}, " +
@@ -50,7 +50,8 @@ namespace ArtificerExtended.Skills
                 baseRechargeInterval: 8,
                 interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: false,
-                canceledFromSprinting: true
+                canceledFromSprinting: true,
+                machi
             );
 
 

@@ -23,7 +23,7 @@ namespace ArtificerExtended.Skills
         //thunder
         public static GameObject magnetRollerProjectilePrefab;
         public static GameObject projectilePrefabThunder;
-        public static float desiredForwardSpeedMax = 2;
+        public static float desiredForwardSpeedMax = 0;
         int maxCharges = 2;
         public override string SkillName => "Rolling Thunder";
 
@@ -110,7 +110,7 @@ namespace ArtificerExtended.Skills
                 ShakeEmitter shakeEmitter = impactEffect.GetComponent<ShakeEmitter>();
                 if (shakeEmitter)
                 {
-                    shakeEmitter.radius = 20;
+                    shakeEmitter.radius = 15;
                     shakeEmitter.duration = 0.1f;
                 }
 
@@ -148,6 +148,7 @@ namespace ArtificerExtended.Skills
 
             var pc = projectilePrefabThunder.GetComponent<ProjectileController>();
             pc.procCoefficient = 1f;
+            pc.ghostPrefab = null;
 
             var pd = projectilePrefabThunder.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.Stun1s;
