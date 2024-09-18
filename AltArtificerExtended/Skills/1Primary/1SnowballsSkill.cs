@@ -12,10 +12,10 @@ using static R2API.DamageAPI;
 
 namespace ArtificerExtended.Skills
 {
-    class _4SnowballsSkill : SkillBase
+    class _1SnowballsSkill : SkillBase
     {
         public static GameObject snowballProjectilePrefab;
-        public override string SkillName => "Snowball";
+        public override string SkillName => "Frost Bolt";
 
         public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
             $"Fire a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>. " +
@@ -35,10 +35,10 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            baseRechargeInterval: 9899999,
+            baseRechargeInterval: 1.2f,
             mustKeyPress: false,
-            stockToConsume: 0,
-            requiredStock: 0
+            stockToConsume: 1,
+            requiredStock: 1
         );
         public override bool useSteppedDef { get; set; } = true;
 

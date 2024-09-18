@@ -22,8 +22,8 @@ namespace ArtificerExtended.EntityState
     {
 
         //specific attack stuff
-        public GameObject projectilePrefab = _1NapalmSkill.projectilePrefabNapalm;
-        public GameObject acidPrefab = _1NapalmSkill.acidPrefabNapalm;
+        public GameObject projectilePrefab = _4NapalmSkill.projectilePrefabNapalm;
+        public GameObject acidPrefab = _4NapalmSkill.acidPrefabNapalm;
 
         //specific charge stuff
         public GameObject muzzleflashEffectPrefab;
@@ -33,8 +33,8 @@ namespace ArtificerExtended.EntityState
         public float baseWinddownDuration = 0.5f;
 
         //generic attack stuff
-        public static float maxDamageCoefficient = 3f;
-        public static float napalmBurnDamageCoefficient = 1f;
+        public static float totalImpactDamageCoefficient = 6f;
+        public static float napalmBurnDamageCoefficient = 0.5f;
 
         public static int minRowCount = 2;
         public static int maxRowCount = 2;
@@ -180,7 +180,7 @@ namespace ArtificerExtended.EntityState
                 {
                     float rows = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minRowCount, ChargeNapalm.maxRowCount);
                     float projectilesPerRow = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.minProjectileCount, ChargeNapalm.maxProjectileCount);
-                    float totalDamage = ChargeNapalm.maxDamageCoefficient;
+                    float totalDamage = ChargeNapalm.totalImpactDamageCoefficient;
                     float pitchSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxPitchSpread, ChargeNapalm.minPitchSpread);
                     float yawSpread = Util.Remap(chargeProgress, 0f, 1f, ChargeNapalm.maxYawSpread, ChargeNapalm.minYawSpread);
 

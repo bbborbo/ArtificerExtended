@@ -16,53 +16,13 @@ namespace ArtificerExtended.CoreModules
 {
     public static class Assets
     {
-        static float zapDistance = 25f;
-        static float zapDamageFraction = 1f;
-        static float zapDamageCoefficient = 0.2f;
+        public static float zapDistance = 25f;
+        public static float zapDamageFraction = 1f;
+        public static float zapDamageCoefficient = 0.2f;
         public static ModdedDamageType ChainLightning;
         public static void CreateZapDamageType()
         {
             ChainLightning = ReserveDamageType();
-            On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
-        }
-
-        private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
-        {
-            if (damageInfo.HasModdedDamageType(ChainLightning))
-            {
-                LightningOrb lightningOrb2 = new LightningOrb();
-                lightningOrb2.origin = damageInfo.position;
-                lightningOrb2.damageValue = damageInfo.damage * zapDamageFraction;
-                lightningOrb2.isCrit = damageInfo.crit;
-                lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
-                lightningOrb2.attacker = damageInfo.attacker;
-
-                lightningOrb2.bouncesRemaining = 0; //will connect to one new target, no bounce
-                lightningOrb2.canBounceOnSameTarget = false;
-                lightningOrb2.bouncedObjects = new List<HealthComponent>();
-                HurtBox victim = hitObject.GetComponent<HurtBox>();
-                if (victim && victim.healthComponent)
-                    lightningOrb2.bouncedObjects.Add(victim.healthComponent);
-                else
-                {
-                    HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
-                    if (victimHealthComponent)
-                        lightningOrb2.bouncedObjects.Add(victimHealthComponent);
-                }
-
-                lightningOrb2.procChainMask = damageInfo.procChainMask;
-                lightningOrb2.procCoefficient = 0.2f;
-                lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
-                lightningOrb2.damageColorIndex = DamageColorIndex.Default;
-                lightningOrb2.range = zapDistance;
-                HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
-                if (hurtBox2)
-                {
-                    lightningOrb2.target = hurtBox2;
-                    OrbManager.instance.AddOrb(lightningOrb2);
-                }
-            }
-            orig(self, damageInfo, hitObject);
         }
     }
     public static class Buffs

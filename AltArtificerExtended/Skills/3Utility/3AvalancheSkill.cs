@@ -44,6 +44,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            return;
             Avalanche.damageCoefficient = config.Bind<float>(
              "Skills Config: " + SkillName, "Damage Coefficient",
              Avalanche.damageCoefficient,

@@ -26,6 +26,8 @@ using static ChillRework.ChillRework;
 using static R2API.RecalculateStatsAPI;
 using ArtificerExtended.CoreModules;
 using ArtificerExtended.EntityState;
+using RoR2.Projectile;
+using RoR2.Orbs;
 
 namespace ArtificerExtended
 {
@@ -59,6 +61,100 @@ namespace ArtificerExtended
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             OnMaxChill += FrostNovaOnMaxChill;
             GetStatCoefficients += MeltAttackSpeedBuff;
+
+            On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
+            On.RoR2.BuffWard.BuffTeam += ApplyDotWard;
+        }
+
+        private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
+        {
+            if (damageInfo.HasModdedDamageType(CoreModules.Assets.ChainLightning))
+            {
+                LightningOrb lightningOrb2 = new LightningOrb();
+                lightningOrb2.origin = damageInfo.position;
+                lightningOrb2.damageValue = damageInfo.damage * CoreModules.Assets.zapDamageFraction;
+                lightningOrb2.isCrit = damageInfo.crit;
+                lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
+                lightningOrb2.attacker = damageInfo.attacker;
+
+                lightningOrb2.bouncesRemaining = 0; //will connect to one new target, no bounce
+                lightningOrb2.canBounceOnSameTarget = false;
+                lightningOrb2.bouncedObjects = new List<HealthComponent>();
+                HurtBox victim = hitObject.GetComponent<HurtBox>();
+                if (victim && victim.healthComponent)
+                    lightningOrb2.bouncedObjects.Add(victim.healthComponent);
+                else
+                {
+                    HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
+                    if (victimHealthComponent)
+                        lightningOrb2.bouncedObjects.Add(victimHealthComponent);
+                }
+
+                lightningOrb2.procChainMask = damageInfo.procChainMask;
+                lightningOrb2.procCoefficient = 0.2f;
+                lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
+                lightningOrb2.damageColorIndex = DamageColorIndex.Default;
+                lightningOrb2.range = CoreModules.Assets.zapDistance;
+                HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
+                if (hurtBox2)
+                {
+                    lightningOrb2.target = hurtBox2;
+                    OrbManager.instance.AddOrb(lightningOrb2);
+                }
+            }
+            orig(self, damageInfo, hitObject);
+        }
+
+        private void ApplyDotWard(On.RoR2.BuffWard.orig_BuffTeam orig, BuffWard self, IEnumerable<TeamComponent> recipients, float radiusSqr, Vector3 currentPosition)
+        {
+            if(!(self is DotWard dotWard))
+            {
+                orig(self, recipients, radiusSqr, currentPosition);
+                return;
+            }
+
+            if (!NetworkServer.active)
+            {
+                return;
+            }
+            if (dotWard.dotIndex == DotController.DotIndex.None)
+            {
+                return;
+            }
+
+            GameObject owner = dotWard.ownerObject;
+            CharacterBody body = dotWard.ownerBody;
+            Inventory inv = dotWard.ownerInventory;
+
+            foreach (TeamComponent teamComponent in recipients)
+            {
+                Vector3 vector = teamComponent.transform.position - currentPosition;
+                if (self.shape == BuffWard.BuffWardShape.VerticalTube)
+                {
+                    vector.y = 0f;
+                }
+                if (vector.sqrMagnitude <= radiusSqr)
+                {
+                    CharacterBody component = teamComponent.GetComponent<CharacterBody>();
+                    if (component && (!self.requireGrounded || !component.characterMotor || component.characterMotor.isGrounded))
+                    {
+                        InflictDotInfo inflictDotInfo = new InflictDotInfo
+                        {
+                            attackerObject = owner,
+                            victimObject = component.gameObject,
+                            totalDamage = new float?(dotWard.damageCoefficient * body.damage), 
+                            damageMultiplier = 1f,
+                            dotIndex = dotWard.dotIndex,
+                            maxStacksFromAttacker = null
+                        };
+
+                        if(inv != null)
+                            StrengthenBurnUtils.CheckDotForUpgrade(inv, ref inflictDotInfo);
+
+                        DotController.InflictDot(ref inflictDotInfo);
+                    }
+                }
+            }
         }
 
         private void MeltAttackSpeedBuff(CharacterBody sender, StatHookEventArgs args)

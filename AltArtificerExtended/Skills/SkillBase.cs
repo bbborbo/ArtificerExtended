@@ -74,7 +74,7 @@ namespace ArtificerExtended.Skills
 
         protected void CreateSkill()
         {
-            string s = $"ArtificerExtended: {SkillName} initializing to unlock {UnlockDef.cachedName}!";
+            string s = $"ArtificerExtended: {SkillName} initializing to unlock {(UnlockDef != null ? UnlockDef.cachedName : "(null)")}!";
             //Debug.Log(s);
 
             var skillDef = ScriptableObject.CreateInstance<SkillDef>();
@@ -92,7 +92,8 @@ namespace ArtificerExtended.Skills
             skillDef.activationStateMachineName = "Weapon";
 
             skillDef.keywordTokens = KeywordTokens;
-            skillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
+            if(IconName != "")
+                skillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
 
             #region SkillData
             skillDef.baseMaxStock = SkillData.baseMaxStock;

@@ -14,7 +14,7 @@ using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
-    class _1NapalmSkill : SkillBase
+    class _4NapalmSkill : SkillBase
     {
         //napalm
         public static GameObject projectilePrefabNapalm;
@@ -22,9 +22,9 @@ namespace ArtificerExtended.Skills
         public static GameObject projectileNapalmImpact;
         public static GameObject projectileNapalmFX;
 
-        public static float napalmDotFireFrequency = 1.5f;
+        public static float napalmDotFireFrequency = 2f;
         public static int napalmMaxProjectiles = ChargeNapalm.maxProjectileCount * ChargeNapalm.maxRowCount;
-        public static float napalmBurnDPS => (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.maxDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
+        public static float napalmBurnDPS => (ChargeNapalm.napalmBurnDamageCoefficient * ChargeNapalm.totalImpactDamageCoefficient * napalmDotFireFrequency) / napalmMaxProjectiles;
         public override string SkillName => "Napalm Cascade";
 
         public override string SkillDescription => $"Charge up a barrage of fiery napalm, creating flaming pools that " +
@@ -42,11 +42,11 @@ namespace ArtificerExtended.Skills
 
         public override Type ActivationState => typeof(ChargeNapalm);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
+        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
+                baseRechargeInterval: 8,
                 interruptPriority: InterruptPriority.Skill,
                 beginSkillCooldownOnSkillEnd: true
             );
@@ -58,10 +58,10 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-            ChargeNapalm.maxDamageCoefficient = config.Bind<float>(
+            ChargeNapalm.totalImpactDamageCoefficient = config.Bind<float>(
                 "Skills Config: " + SkillName, "Primary Damage Coefficient",
-                ChargeNapalm.maxDamageCoefficient,
-                "Determines the damage dealt by each Napalm impact."
+                ChargeNapalm.totalImpactDamageCoefficient,
+                "Determines the total damage dealt by each Napalm impact. This is divided by six, for each projectile."
                 ).Value;
             ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
                 "Skills Config: " + SkillName, "Secondary Damage Coefficient",
@@ -83,9 +83,9 @@ namespace ArtificerExtended.Skills
 
             KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
 
-            RegisterProjectileNapalm();
-            CreateLang();
             CreateSkill();
+            CreateLang();
+            RegisterProjectileNapalm();
         }
         private void RegisterProjectileNapalm()
         {
@@ -116,14 +116,14 @@ namespace ArtificerExtended.Skills
             projectilePrefabNapalm.GetComponent<ProjectileController>().ghostPrefab = projectileNapalmFX;
             pieNapalm.impactEffect = projectileNapalmImpact;
             //projectilePrefabNapalm.GetComponent<ProjectileImpactExplosion>().destroyOnEnemy = true;
-            pieNapalm.blastProcCoefficient = 0.6f;
+            pieNapalm.blastProcCoefficient = 0.5f;
             pieNapalm.bonusBlastForce = new Vector3(0, 500, 0);
 
             ProjectileDamage pd = projectilePrefabNapalm.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.IgniteOnHit;
 
             ProjectileDotZone pdz = acidPrefabNapalm.GetComponent<ProjectileDotZone>();
-            pdz.lifetime = 8f;
+            pdz.lifetime = 4f;
             pdz.resetFrequency = napalmDotFireFrequency;
             pdz.damageCoefficient = ChargeNapalm.napalmBurnDamageCoefficient;
             pdz.overlapProcCoefficient = 0.5f;
@@ -132,7 +132,7 @@ namespace ArtificerExtended.Skills
             acidPrefabNapalm.GetComponent<ProjectileController>().procCoefficient = 1f;
 
             float decalScale = 3.5f;
-            acidPrefabNapalm.GetComponent<Transform>().localScale = new Vector3(decalScale, decalScale, decalScale);
+            acidPrefabNapalm.transform.localScale = new Vector3(decalScale, decalScale, decalScale);
 
             Transform transform = acidPrefabNapalm.transform.Find("FX");
             transform.Find("Spittle").gameObject.SetActive(false);

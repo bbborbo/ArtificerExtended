@@ -17,7 +17,7 @@ namespace ArtificerExtended.Skills
         public static GameObject tracerLaser;
 
         int maxStock = 4;
-        public override string SkillName => "Laserbolts";
+        public override string SkillName => "Laser Bolts";
 
         public override string SkillDescription => $"Fire a long-range laser that <style=cIsUtility>chains lightning</style> " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(FireLaserbolts.damageCoefficient)} damage</style>. " +

@@ -18,7 +18,7 @@ namespace ArtificerExtended.Skills
         public static GameObject outerFireball;
         public static GameObject innerFireball;
 
-        public override string SkillName => "Flame Burst";
+        public override string SkillName => "Lava Bolts";
 
         public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge a spread of fireballs for " +
             $"<style=cIsDamage>3x{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +

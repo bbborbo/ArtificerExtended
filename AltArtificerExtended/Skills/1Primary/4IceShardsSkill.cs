@@ -12,13 +12,13 @@ using ArtificerExtended.CoreModules;
 
 namespace ArtificerExtended.Skills
 {
-    class _1IceShardsSkill : SkillBase
+    class _4IceShardsSkill : SkillBase
     {
         //ice shard
         public static GameObject tracerShotgun;
         public static GameObject tracerBuckshot;
 
-        public override string SkillName => "Ice Shards";
+        public override string SkillName => "Icicle Bolts";
 
 
         float totalShards = FireIceShard.bulletCountBuckshot + FireIceShard.bulletCountPoint + FireIceShard.bulletCountSpread;

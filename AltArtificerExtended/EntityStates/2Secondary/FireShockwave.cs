@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static R2API.DamageAPI;
 
 namespace ArtificerExtended.EntityState
 {
@@ -16,7 +17,7 @@ namespace ArtificerExtended.EntityState
     {
         public GameObject fireEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/TreebotShockwaveEffect");
         public Ray burstAimRay;
-        public static float damage = ArtificerExtendedPlugin.artiNanoDamage;
+        public static float damage = 12;
         public float procCoefficient = 1.0f;
         public float baseDuration = 0.7f;
 
@@ -98,6 +99,8 @@ namespace ArtificerExtended.EntityState
                             procCoefficient = this.CalculateProcCoefficient()
                             //, damageType = DamageType.Stun1s
                         };
+                        damageInfo.AddModdedDamageType(CoreModules.Assets.ChainLightning);
+
                         AddDebuff(body);
                         hurtBox.healthComponent.TakeDamageForce(a * (num * num2), true, true);
                         hurtBox.healthComponent.TakeDamage(damageInfo);

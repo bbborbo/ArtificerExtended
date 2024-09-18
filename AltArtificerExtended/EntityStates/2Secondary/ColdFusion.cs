@@ -17,8 +17,8 @@ namespace ArtificerExtended.EntityState
     class ColdFusion : BaseSkillState
     {
         //specific attack stuff
-        public GameObject projectilePrefab = _1NapalmSkill.projectilePrefabNapalm;
-        public GameObject acidPrefab = _1NapalmSkill.acidPrefabNapalm;
+        public GameObject projectilePrefab = _4NapalmSkill.projectilePrefabNapalm;
+        public GameObject acidPrefab = _4NapalmSkill.acidPrefabNapalm;
 
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageIceLarge");
         public GameObject chargeEffectPrefab = new EntityStates.Mage.Weapon.ChargeIcebomb().chargeEffectPrefab;
@@ -31,9 +31,9 @@ namespace ArtificerExtended.EntityState
         public string attackSoundString = new EntityStates.Toolbot.FireSpear().fireSoundString;
 
         //generic attack stuff
-        public static float totalDamageCoefficient = ArtificerExtendedPlugin.artiNanoDamage + 8;
-        public static int bulletCount = 6;
-        public static float freezeChance = 50;
+        public static float totalDamageCoefficient = ArtificerExtendedPlugin.artiNanoDamage + 10;
+        public static int bulletCount = 10;
+        public static float freezeChance = 0;
 
         public static float pitchSpread = 0.25f;//pitch is vertical angle
         public static float spread = 1f;
@@ -41,7 +41,7 @@ namespace ArtificerExtended.EntityState
         public static float maxRecoilBias = 0.2f;
 
         public float force = 600f;
-        public static float selfForce = 400f;
+        public static float selfForce = 150f;
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
 
         //everything past here is generic charge stuff
@@ -202,21 +202,13 @@ namespace ArtificerExtended.EntityState
                         smartCollision = true
                     };
 
-                    if (Util.CheckRoll(50, base.characterBody.master) || i == bulletCount - 1)
-                    {
-                        ba.hitEffectPrefab = freezeImpactPrefab;
-                        ba.damageType = DamageType.Freeze2s;
-                    }
-                    else
-                    {
-                        ba.hitEffectPrefab = coldImpactPrefab;
-                        ba.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
-                    }
+                    ba.hitEffectPrefab = coldImpactPrefab;
+                    ba.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
 
                     ba.Fire();
 
                     Util.PlaySound(attackSoundString, base.gameObject);
-                    base.AddRecoil(recoil, recoil, recoil * recoilBias * 0.75f, recoil * recoilBias);
+                    //base.AddRecoil(recoil, recoil, recoil * recoilBias * 0.75f, recoil * recoilBias);
                     await Task.Delay(35);
                 }
             }

@@ -218,7 +218,7 @@ namespace ArtificerExtended.EntityState
             bulletAttack.damage = FireIceShard.damageCoefficient * this.damageStat / bulletCount;
             bulletAttack.force = FireIceShard.force;
             bulletAttack.falloffModel = falloffModel;
-            bulletAttack.tracerEffectPrefab = _1IceShardsSkill.tracerShotgun;
+            bulletAttack.tracerEffectPrefab = _4IceShardsSkill.tracerShotgun;
             bulletAttack.muzzleName = muzzleString;
             bulletAttack.hitEffectPrefab = hitEffectPrefab;
             bulletAttack.isCrit = isCrit;

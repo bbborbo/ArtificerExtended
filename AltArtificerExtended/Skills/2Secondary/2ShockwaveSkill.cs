@@ -21,7 +21,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Shockwave";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Burst forward, producing a powerful shockwave " +
-            $"in front of you for <style=cIsDamage>{Tools.ConvertDecimal(FireShockwave.damage)} damage.</style>";
+            $"that chains lightning for <style=cIsDamage>2x{Tools.ConvertDecimal(FireShockwave.damage)} damage.</style>";
 
         public override string SkillLangTokenName => "SHOCKWAVE";
 

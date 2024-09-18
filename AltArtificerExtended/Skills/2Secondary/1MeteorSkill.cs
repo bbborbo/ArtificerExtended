@@ -17,7 +17,7 @@ namespace ArtificerExtended.Skills
         //meteor
         public static GameObject meteorImpactPrefab;
 
-        public override string SkillName => "Channeled Nano-Meteor";
+        public override string SkillName => "Channeled Nano-Inferno";
 
         public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeMeteors.meteorDamageCoefficient)} damage</style>.";
