@@ -20,7 +20,7 @@ namespace ArtificerExtended.EntityState
             this.projectilePrefab = _4SnowballsSkill.snowballProjectilePrefab;
             this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
             this.damageCoefficient = damageCoeff;
-            this.baseDuration = 0.45f;
+            this.baseDuration = 0.5f;
             this.attackSoundString = "Play_mage_shift_wall_build";
             this.attackSoundPitch = 10;
             if(VRStuff.VRInstalled)

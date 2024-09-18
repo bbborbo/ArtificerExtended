@@ -34,10 +34,11 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            baseRechargeInterval: 9899999,
+            baseRechargeInterval: 0.5f,
             mustKeyPress: false,
-            stockToConsume: 0,
-            requiredStock: 0
+            stockToConsume: 1,
+            requiredStock: 1,
+            useAttackSpeedScaling: true
         );
         public override bool useSteppedDef { get; set; } = true;
 

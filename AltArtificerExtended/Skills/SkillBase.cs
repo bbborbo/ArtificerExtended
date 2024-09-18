@@ -89,7 +89,6 @@ namespace ArtificerExtended.Skills
             skillDef.skillNameToken = Token + SkillLangTokenName + GetElementString(Element);
             skillDef.skillName = SkillName;
             skillDef.skillDescriptionToken = Token + SkillLangTokenName + "_DESCRIPTION";
-            skillDef.activationStateMachineName = "Weapon";
 
             skillDef.keywordTokens = KeywordTokens;
             skillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
@@ -109,6 +108,8 @@ namespace ArtificerExtended.Skills
             skillDef.requiredStock = SkillData.requiredStock;
             skillDef.resetCooldownTimerOnUse = SkillData.resetCooldownTimerOnUse;
             skillDef.stockToConsume = SkillData.stockToConsume;
+            skillDef.attackSpeedBuffsRestockSpeed = SkillData.useAttackSpeedScaling;
+            skillDef.activationStateMachineName = SkillData.activationStateMachineName;
             #endregion
 
             ContentPacks.skillDefs.Add(skillDef);

@@ -41,7 +41,8 @@ namespace ArtificerExtended.Skills
                 interruptPriority: InterruptPriority.Any,
                 rechargeStock: maxStock,
                 resetCooldownTimerOnUse: true,
-                beginSkillCooldownOnSkillEnd: true
+                beginSkillCooldownOnSkillEnd: true,
+                useAttackSpeedScaling: true
             );
         public override bool useSteppedDef { get; set; } = true;
 
