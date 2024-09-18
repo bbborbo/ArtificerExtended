@@ -39,7 +39,8 @@ namespace ArtificerExtended.Skills
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseRechargeInterval: 2,
-                beginSkillCooldownOnSkillEnd: true
+                beginSkillCooldownOnSkillEnd: true,
+                useAttackSpeedScaling: true
             );
 
         public override void Hooks()

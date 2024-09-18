@@ -11,7 +11,8 @@ namespace ArtificerExtended.Skills
             bool canceledFromSprinting = false, bool cancelSprintingOnActivation = true, bool dontAllowPastMaxStocks = true, 
             bool fullRestockOnAssign = true, InterruptPriority interruptPriority = InterruptPriority.Any, 
             bool isCombatSkill = true, bool mustKeyPress = false, int rechargeStock = 1, 
-            int requiredStock = 1, bool resetCooldownTimerOnUse = false, int stockToConsume = 1)
+            int requiredStock = 1, bool resetCooldownTimerOnUse = false, int stockToConsume = 1,
+            bool useAttackSpeedScaling = false, string activationStateMachineName = "Weapon")
         {
             this.baseMaxStock = baseMaxStock;
             this.baseRechargeInterval = baseRechargeInterval;
@@ -27,6 +28,8 @@ namespace ArtificerExtended.Skills
             this.requiredStock = requiredStock;
             this.resetCooldownTimerOnUse = resetCooldownTimerOnUse;
             this.stockToConsume = stockToConsume;
+            this.useAttackSpeedScaling = useAttackSpeedScaling;
+            this.activationStateMachineName = activationStateMachineName;
         }
 
         internal int baseMaxStock;
@@ -43,5 +46,7 @@ namespace ArtificerExtended.Skills
         internal int requiredStock;
         internal bool resetCooldownTimerOnUse;
         internal int stockToConsume;
+        internal bool useAttackSpeedScaling;
+        internal string activationStateMachineName;
     }
 }

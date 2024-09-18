@@ -42,7 +42,8 @@ namespace ArtificerExtended.Skills
         ( 
             baseMaxStock: 4,
             baseRechargeInterval: 1.3f,
-            rechargeStock: ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1
+            rechargeStock: ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1,
+            useAttackSpeedScaling: true
         );
         public override bool useSteppedDef { get; set; } = true;
 
