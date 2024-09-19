@@ -23,7 +23,7 @@ namespace ArtificerExtended.EntityState
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
 
         public static float minMeteorRadius = _2ThunderSkill.thunderBlastRadius;
-        public static float damagePerMeatball = 2.5f;
+        public static float damagePerMeatball = 3f;
 
         public static int meatballCount = 3;
         public static float meatballForce = 250;
