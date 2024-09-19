@@ -24,7 +24,7 @@ namespace ArtificerExtended.Skills
     {
         public static int bonusArmor = 100;
         public static int icicleCount = 3;
-        public static float icicleDamage = 0.25f;
+        public static float icicleDamage = 0.35f;
         public static int buffsForZeroMovementIncrease = 6;
         public static float movementIncreasePerBuff = 0.12f;
         public static float movementDecreasePerBuff = 0.15f;
@@ -140,7 +140,7 @@ namespace ArtificerExtended.Skills
             if (pc)
             {
                 pc.ghostPrefab = icicleGhostPrefab;
-                pc.procCoefficient = 0.15f;
+                pc.procCoefficient = 0.1f;
             }
             ProjectileOwnerOrbiter poo = icicleProjectilePrefab.GetComponent<ProjectileOwnerOrbiter>();
             if (poo)
