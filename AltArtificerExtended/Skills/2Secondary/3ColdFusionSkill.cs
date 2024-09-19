@@ -18,9 +18,8 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Cold Fusion";
 
         public override string SkillDescription => $"<style=cIsUtility>Chilling.</style> Channel a blast of cold spikes " +
-            $"for <style=cIsDamage>{Tools.ConvertDecimal(ColdFusion.totalDamageCoefficient)} total damage.</style> " +
-            $"Each hit has a <style=cIsUtility>{ColdFusion.freezeChance}% chance to Freeze.</style> " +
-            $"Releasing the attack before fully charging returns a stock and doesn't fire.";
+            $"for <style=cIsDamage>{ColdFusion.minBulletCount}-{ColdFusion.maxBulletCount}x" +
+            $"{Tools.ConvertDecimal(ColdFusion.totalDamageCoefficient / ColdFusion.maxBulletCount)} damage.</style>";
 
         public override string SkillLangTokenName => "COLDFUSION";
 
@@ -59,9 +58,9 @@ namespace ArtificerExtended.Skills
                 ColdFusion.totalDamageCoefficient,
                 "Determines the TOTAL damage coefficient Cold Fusion has. Damage Falloff still applies."
                 ).Value;
-            ColdFusion.bulletCount = config.Bind<int>(
+            ColdFusion.minBulletCount = config.Bind<int>(
                 "Skills Config: " + SkillName, "Spear Count",
-                ColdFusion.bulletCount,
+                ColdFusion.minBulletCount,
                 "Determines the amount of spears/bullets Cold Fusion has."
                 ).Value;
             ColdFusion.freezeChance = config.Bind<float>(

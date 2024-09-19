@@ -68,11 +68,11 @@ namespace ArtificerExtended.EntityState
         {
             if (base.isAuthority)
             {
-                EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
+                /*EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
                 if (entityStateMachine != null)
                 {
                     entityStateMachine.SetNextStateToMain();
-                }
+                }*/
 
                 EntityStateMachine entityStateMachine2 = EntityStateMachine.FindByCustomName(base.gameObject, "Jet");
                 if (entityStateMachine2 == null || entityStateMachine2.state.GetType() != typeof(JetpackOn))

@@ -76,7 +76,7 @@ namespace ArtificerExtended.Skills
                         float verticalVelocity = motor.velocity.y;
                         float maxUpVelocity = Mathf.Clamp(maxHeatRiseRate * (body.moveSpeed / body.baseMoveSpeed), JetpackOn.hoverVelocity, maxHeatRiseRate);
 
-                        float multiplier = verticalVelocity < 0 ? 2f : 0.5f;
+                        float multiplier = verticalVelocity < 0 ? 2f : 1f;
                         verticalVelocity = Mathf.MoveTowards(verticalVelocity, maxUpVelocity, JetpackOn.hoverAcceleration * self.GetDeltaTime() * multiplier);
                         motor.velocity = new Vector3(motor.velocity.x, verticalVelocity, motor.velocity.z);
                     }

@@ -20,6 +20,12 @@ namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {
+        public static int bonusArmor = 100;
+        public static int icicleCount = 6;
+        public static float icicleDamage = 0.25f;
+        public static int buffsForZeroMovementIncrease = 6;
+        public static float movementIncreasePerBuff = 0.12f;
+        public static float movementDecreasePerBuff = 0.15f;
         //whiteout
         public static GameObject blizzardProjectilePrefab;
         public static GameObject blizzardArmorVFX;
@@ -31,10 +37,10 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Polar Vortex";
 
-        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor</style> for {maxDuration} seconds. " +
-            $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}, " +
-            $"</style>then another <style=cIsUtility>Freezing</style> blast " +
-            $"for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}.</style>";
+        public override string SkillDescription => $"<style=cIsUtility>Agile</style>. <style=cIsUtility>Chilling</style>. " +
+            $"Create a blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)} damage</style>, then " +
+            $"cover yourself in <style=cIsUtility>Frost Armor</style> for up to {maxDuration} seconds. " +
+            $"Press again to cancel.";
 
         public override string SkillLangTokenName => "FROSTBITE";
 
@@ -72,10 +78,10 @@ namespace ArtificerExtended.Skills
             if(buffCount > 0)
             {
                 args.armorAdd += 100;
-                if (buffCount < 6)
-                    args.moveSpeedMultAdd += 0.12f * (6 - buffCount);
-                else if (buffCount > 6)
-                    args.moveSpeedReductionMultAdd += 0.15f * (buffCount - 6);
+                if (buffCount < buffsForZeroMovementIncrease)
+                    args.moveSpeedMultAdd += 0.12f * (buffsForZeroMovementIncrease - buffCount);
+                else if (buffCount > buffsForZeroMovementIncrease)
+                    args.moveSpeedReductionMultAdd += 0.15f * (buffCount - buffsForZeroMovementIncrease);
             }
         }
 
@@ -103,7 +109,7 @@ namespace ArtificerExtended.Skills
             Frostbite.novaRadius,
             "Determines the radius of the nova created after the Frostbite buff expires."
             ).Value;
-            KeywordTokens = new string[2] { "KEYWORD_FREEZING", ChillRework.ChillRework.chillKeywordToken };
+            KeywordTokens = new string[3] { "KEYWORD_AGILE", ChillRework.ChillRework.chillKeywordToken, "ARTIFICEREXTENDED_KEYWORD_FROSTARMOR" };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
 

@@ -18,17 +18,17 @@ namespace ArtificerExtended.Skills
 
         public override UnlockableDef UnlockDef => null;
 
-        public override string IconName => "frostbitesketch2";
+        public override string IconName => "AvalancheIcon";
 
         public override MageElement Element => MageElement.Ice;
 
-        public override Type ActivationState => typeof(GenericCharacterMain);
+        public override Type ActivationState => typeof(Idle);
 
         public override SkillFamily SkillSlot => null;
 
         public override SimpleSkillData SkillData => new SimpleSkillData 
         { 
-            requiredStock = 1,
+            requiredStock = 0,
             rechargeStock = 0,
             baseMaxStock = 0,
             baseRechargeInterval = 0,

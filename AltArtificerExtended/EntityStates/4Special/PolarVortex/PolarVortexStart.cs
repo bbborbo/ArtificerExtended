@@ -10,8 +10,8 @@ namespace ArtificerExtended.EntityState
 {
     class PolarVortexStart : PolarVortexBase
     {
-        public static float baseDurationEnter = 1.5f;
-        public static float baseDurationExit = 0.8f;
+        public static float baseDurationEnter = 1f;
+        public static float baseDurationExit = 0.6f;
         float duration;
         public bool exiting = false;
 
@@ -23,7 +23,7 @@ namespace ArtificerExtended.EntityState
             base.StopSkills();
             // play animation
             if(!exiting)
-                base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.duration);
+                base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
         }
         public override void OnExit()
         {

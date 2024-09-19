@@ -35,22 +35,21 @@ namespace ArtificerExtended.EntityState
             base.FixedUpdate();
             if (isAuthority)
             {
-                float delta = (ending ? Time.fixedDeltaTime * endingSpeedMultiplier : Time.fixedDeltaTime);
-                stopwatch += delta;
-                armorAddStopwatch += delta;
-
-                if (stopwatch >= _1FrostbiteSkill.maxDuration)
-                {
-                    if(!ending)
-                        base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 0.3f / this.attackSpeedStat);
-                    this.SetNextState();
-                    return;
-                }
+                armorAddStopwatch += (ending ? Time.fixedDeltaTime * endingSpeedMultiplier : Time.fixedDeltaTime); 
 
                 while (armorAddStopwatch > _1FrostbiteSkill.buffInterval)
                 {
                     armorAddStopwatch -= _1FrostbiteSkill.buffInterval;
                     AddIceArmorBuff();
+
+                    int buffCount = characterBody.GetBuffCount(_1FrostbiteSkill.artiIceShield);
+                    if (buffCount >= _1FrostbiteSkill.maxBuffStacks)
+                    {
+                        if (!ending)
+                            base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 0.3f / this.attackSpeedStat);
+                        this.SetNextState();
+                        return;
+                    }
                 }
 
                 if (!ending)

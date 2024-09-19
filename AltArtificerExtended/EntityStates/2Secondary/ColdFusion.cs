@@ -32,7 +32,8 @@ namespace ArtificerExtended.EntityState
 
         //generic attack stuff
         public static float totalDamageCoefficient = ArtificerExtendedPlugin.artiNanoDamage + 10;
-        public static int bulletCount = 10;
+        public static int maxBulletCount = 10;
+        public static int minBulletCount = 2;
         public static float freezeChance = 0;
 
         public static float pitchSpread = 0.25f;//pitch is vertical angle
@@ -164,16 +165,17 @@ namespace ArtificerExtended.EntityState
             }
             if (base.isAuthority)
             {
-                float projectileDamageCoeff = totalDamageCoefficient / bulletCount;
+                float projectileDamageCoeff = totalDamageCoefficient / maxBulletCount;
                 bool isCrit = Util.CheckRoll(this.critStat, base.characterBody.master);
                 float recoil = -baseRecoilAmplitude / this.attackSpeedStat;
                 float recoilBias = Random.Range(-maxRecoilBias, maxRecoilBias);
+                int bulletsToFire = Mathf.FloorToInt(Util.Remap(this.GetChargeProgress(this.fixedAge), 0f, 1f, minBulletCount, (float)maxBulletCount));
 
-                for (int i = 0; i < bulletCount; i++)
+                for (int i = 0; i < bulletsToFire; i++)
                 {
                     this.aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                     Vector3 direction = aimRay.direction;
-                    float bonusPitch = ((float)bulletCount / pitchSpread - (float)i) * pitchSpread;
+                    float bonusPitch = ((float)maxBulletCount / pitchSpread - (float)i) * pitchSpread;
                     Vector3 forward = Util.ApplySpread(aimRay.direction, 0, spread, 0, 1f, 0, bonusPitch - 6f);
 
                     if (base.characterMotor)
@@ -243,17 +245,7 @@ namespace ArtificerExtended.EntityState
 
             if (!this.hasFiredBomb)
             {
-                if (!IsKeyDownAuthority())
-                {
-                    endChargeProgress = GetChargeProgress(stopwatch);
-                    base.PlayAnimation("Gesture, Additive", "FireWall");
-                    activatorSkillSlot.AddOneStock();
-                    this.hasFiredBomb = true;
-                    base.characterBody._defaultCrosshairPrefab = this.defaultCrosshairPrefab;
-                    this.stopwatch = 0f;
-                    this.timer = 0f;
-                }
-                else if(this.stopwatch >= this.chargeDuration)
+                if (!IsKeyDownAuthority() || this.stopwatch >= this.chargeDuration)
                 {
                     this.FireFusionBolts();
                 }

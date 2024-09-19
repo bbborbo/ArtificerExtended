@@ -87,7 +87,7 @@ namespace ArtificerExtended
         public static float artiNanoDamage = 20;
         public static float artiUtilCooldown = 12;
         public static float meleeRangeChannel = 21; //flamethrower
-        public static float meleeRangeSingle = meleeRangeChannel + 4f;
+        public static float meleeRangeSingle = meleeRangeChannel + 7f;
 
         void Awake()
         {
@@ -255,6 +255,15 @@ namespace ArtificerExtended
                 "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
                 "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
 
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_FROSTARMOR", $"<style=cKeywordName>Frost Armor</style>" +
+                $"<style=cSub>Gain <style=cIsHealing>+{_1FrostbiteSkill.bonusArmor} armor</style>, " +
+                $"and <style=cIsUtility>Chill</style> nearby enemies for " +
+                $"<style=cIsDamage>{_1FrostbiteSkill.icicleCount}x{Tools.ConvertDecimal(_1FrostbiteSkill.icicleDamage)} damage</style>. " +
+                $"\nWhile armored, move " +
+                $"<style=cIsUtility>up to +{Tools.ConvertDecimal(_1FrostbiteSkill.movementIncreasePerBuff * (_1FrostbiteSkill.buffsForZeroMovementIncrease - 1))} faster</style>, " +
+                $"gradually decaying to " +
+                $"<style=cIsUtility>-{Tools.ConvertDecimal(_1FrostbiteSkill.movementDecreasePerBuff * (10 - _1FrostbiteSkill.buffsForZeroMovementIncrease))} slower</style>. " +
+                $"\nFrost Armor disables hovering, but prevents fall damage.</style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
                 $"<style=cSub><style=cIsUtility>On FIRE SKILL Cast:</style> Gain a buff that " +
                 $"increases your <style=cIsDamage>attack speed</style> on all skills " +
