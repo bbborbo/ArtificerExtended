@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -17,22 +18,26 @@ namespace ArtificerExtended.Skills
 
         public override UnlockableDef UnlockDef => null;
 
-        public override string IconName => "AvalancheIcon";
+        public override string IconName => "frostbitesketch2";
 
         public override MageElement Element => MageElement.Ice;
 
-        public override Type ActivationState => null;
+        public override Type ActivationState => typeof(GenericCharacterMain);
 
         public override SkillFamily SkillSlot => null;
 
         public override SimpleSkillData SkillData => new SimpleSkillData 
         { 
-            requiredStock = 0,
+            requiredStock = 1,
             rechargeStock = 0,
-            baseMaxStock = 1,
+            baseMaxStock = 0,
             baseRechargeInterval = 0,
             stockToConsume = 0,
-            fullRestockOnAssign = true
+            fullRestockOnAssign = true,
+            interruptPriority = InterruptPriority.Any,
+            mustKeyPress = true,
+            isCombatSkill = true,
+            activationStateMachineName = "Body"
         };
 
         public override void Hooks()

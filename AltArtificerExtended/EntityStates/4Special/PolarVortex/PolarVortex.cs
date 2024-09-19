@@ -76,7 +76,7 @@ namespace ArtificerExtended.EntityState
             base.OnExit();
             if (activatorSkillSlot && ToolbotDualWieldBase.cancelSkillDef != null)
             {
-                activatorSkillSlot.UnsetSkillOverride(this, ToolbotDualWieldBase.cancelSkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                activatorSkillSlot.UnsetSkillOverride(this, CancelFrostbiteSkill.instance.SkillDef, GenericSkill.SkillOverridePriority.Contextual);
             }
             //clear spiral projectiles
         }

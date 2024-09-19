@@ -25,7 +25,7 @@ namespace ArtificerExtended.Skills
         public static GameObject blizzardArmorVFX;
         public static BuffDef artiIceShield;
 
-        public static float buffInterval = 1.5f;
+        public static float buffInterval = 1.2f;
         public static int maxBuffStacks = 10;
         public static float maxDuration => buffInterval * maxBuffStacks;
 
@@ -75,7 +75,7 @@ namespace ArtificerExtended.Skills
                 if (buffCount < 6)
                     args.moveSpeedMultAdd += 0.12f * (6 - buffCount);
                 else if (buffCount > 6)
-                    args.moveSpeedReductionMultAdd += 0.25f * (buffCount - 6);
+                    args.moveSpeedReductionMultAdd += 0.15f * (buffCount - 6);
             }
         }
 
