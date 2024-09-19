@@ -85,7 +85,7 @@ namespace ArtificerExtended.EntityState
 
         public void InflictSnow()
         {
-            EffectManager.SpawnEffect(CastSnowstorm.novaEffectPrefab, new EffectData
+            EffectManager.SpawnEffect(Frostbite.novaEffectPrefab, new EffectData
             {
                 origin = base.transform.position,
                 scale = Frostbite.blizzardRadius

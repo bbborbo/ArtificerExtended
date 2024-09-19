@@ -36,7 +36,7 @@ namespace ArtificerExtended.EntityState
             this.duration = Frostbite.baseDuration / this.attackSpeedStat;
 
             if(ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                Util.PlaySound(CastSnowstorm.beginSoundString, base.gameObject);
+                Util.PlaySound(beginSoundString, base.gameObject);
             base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.duration);
         }
 
@@ -80,7 +80,7 @@ namespace ArtificerExtended.EntityState
 
         public void InflictSnow()
         {
-            EffectManager.SpawnEffect(CastSnowstorm.novaEffectPrefab, new EffectData
+            EffectManager.SpawnEffect(novaEffectPrefab, new EffectData
             {
                 origin = base.transform.position,
                 scale = Frostbite.blizzardRadius

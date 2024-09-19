@@ -15,19 +15,21 @@ using UnityEngine;
 using UnityEngine.Networking;
 using ArtificerExtended.CoreModules;
 using static R2API.RecalculateStatsAPI;
+using UnityEngine.AddressableAssets;
+using static R2API.DamageAPI;
 
 namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {
         public static int bonusArmor = 100;
-        public static int icicleCount = 6;
+        public static int icicleCount = 3;
         public static float icicleDamage = 0.25f;
         public static int buffsForZeroMovementIncrease = 6;
         public static float movementIncreasePerBuff = 0.12f;
         public static float movementDecreasePerBuff = 0.15f;
         //whiteout
-        public static GameObject blizzardProjectilePrefab;
+        public static GameObject icicleProjectilePrefab;
         public static GameObject blizzardArmorVFX;
         public static BuffDef artiIceShield;
 
@@ -112,10 +114,51 @@ namespace ArtificerExtended.Skills
             KeywordTokens = new string[3] { "KEYWORD_AGILE", ChillRework.ChillRework.chillKeywordToken, "ARTIFICEREXTENDED_KEYWORD_FROSTARMOR" };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
+            CreateIcicleProjectile();
 
             Hooks();
             CreateLang();
             CreateSkill();
+        }
+
+        private void CreateIcicleProjectile()
+        {
+            icicleProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/Seeker/SoulSpiralProjectile.prefab").WaitForCompletion().InstantiateClone("ArtiOrbitIcicle", true);
+            GameObject icicleGhostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Mage/MageIceboltExpandedGhost.prefab").WaitForCompletion().InstantiateClone("ArtiOrbitIcicleGhost");
+            AnimateShaderAlpha asa = icicleGhostPrefab.GetComponentInChildren<AnimateShaderAlpha>();
+            if (asa)
+            {
+                asa.timeMax = maxDuration;
+            }
+            ObjectScaleCurve osc = icicleGhostPrefab.GetComponentInChildren<ObjectScaleCurve>();
+            if (osc)
+            {
+                osc.timeMax = maxDuration;
+            }
+
+            ProjectileController pc = icicleProjectilePrefab.GetComponent<ProjectileController>();
+            if (pc)
+            {
+                pc.ghostPrefab = icicleGhostPrefab;
+                pc.procCoefficient = 0.15f;
+            }
+            ProjectileOwnerOrbiter poo = icicleProjectilePrefab.GetComponent<ProjectileOwnerOrbiter>();
+            if (poo)
+            {
+                poo.degreesPerSecond = -90;
+            }
+            ProjectileDamage pd = icicleProjectilePrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType = DamageTypeCombo.Generic;
+
+                icicleProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
+            }
+            UnseenHandHealingProjectile uhhp = icicleProjectilePrefab.GetComponent<UnseenHandHealingProjectile>();
+            if(uhhp)
+            {
+                GameObject.Destroy(uhhp);
+            }
         }
 
         private void RegisterArmorEffects()

@@ -1,9 +1,11 @@
-﻿using EntityStates;
+﻿using ArtificerExtended.Passive;
+using EntityStates;
 using EntityStates.Toolbot;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.EntityState
@@ -21,8 +23,14 @@ namespace ArtificerExtended.EntityState
             // determine duration
             duration = (exiting ? baseDurationExit : baseDurationEnter) / this.attackSpeedStat;
             base.StopSkills();
+
+            GameObject obj = base.outer.gameObject;
+            if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
+            {
+                passive.SkillCast();
+            }
             // play animation
-            if(!exiting)
+            if (!exiting)
                 base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
         }
         public override void OnExit()
