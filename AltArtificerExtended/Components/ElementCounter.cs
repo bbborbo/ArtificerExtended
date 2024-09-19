@@ -28,7 +28,7 @@ namespace ArtificerExtended.Components
         public Power lightningPower;
         SkillLocator loc = null;
 
-        public void GetPowers(SkillLocator skillLocator = null)
+        public void OnBodyStart(SkillLocator skillLocator = null)
         {
             if (loc == null)
             {
@@ -40,19 +40,41 @@ namespace ArtificerExtended.Components
                 loc = skillLocator;
             }
 
+            loc.primary.onSkillChanged += (s) => RecalculatePowers();
+            loc.secondary.onSkillChanged += (s) => RecalculatePowers();
+            loc.utility.onSkillChanged += (s) => RecalculatePowers();
+            loc.special.onSkillChanged += (s) => RecalculatePowers();
+
+            RecalculatePowers();
+        }
+
+        public void OnBodyEnd()
+        {
+            if (loc == null)
+                return;
+
+            loc.primary.onSkillChanged -= (s) => RecalculatePowers();
+            loc.secondary.onSkillChanged -= (s) => RecalculatePowers();
+            loc.utility.onSkillChanged -= (s) => RecalculatePowers();
+            loc.special.onSkillChanged -= (s) => RecalculatePowers();
+        }
+
+        public void RecalculatePowers()
+        {
             this.firePower = Power.None;
             this.icePower = Power.None;
             this.lightningPower = Power.None;
 
-            this.GetSkillPower(loc.primary);
-            this.GetSkillPower(loc.secondary);
-            this.GetSkillPower(loc.utility);
-            this.GetSkillPower(loc.special);
+            this.GetPowerFromSkill(loc.primary);
+            this.GetPowerFromSkill(loc.secondary);
+            this.GetPowerFromSkill(loc.utility);
+            this.GetPowerFromSkill(loc.special);
+
 
             Debug.Log($"Fire: {this.firePower}\nIce: {this.icePower}\nLightning: {this.lightningPower}");
         }
 
-        private void GetSkillPower(GenericSkill skill)
+        private void GetPowerFromSkill(GenericSkill skill)
         {
             bool isProperToken = skill.baseSkill.skillNameToken.Contains("_");
             if (isProperToken)
@@ -75,14 +97,6 @@ namespace ArtificerExtended.Components
                         break;
                 }
             }
-
-            EquipmentIndex equipIndex = EquipmentIndex.None;
-            if (skill.characterBody.equipmentSlot != null)
-            {
-                equipIndex = skill.characterBody.equipmentSlot.equipmentIndex;
-            }
-
-            skill.onSkillChanged += (s) => this.GetPowers();
         }
 
         #region static methods
