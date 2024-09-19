@@ -182,13 +182,6 @@ namespace ArtificerExtended
                 Power icePower = GetIcePowerLevelFromBody(aBody);
                 if (icePower > Power.None) //Arctic Blast
                 {
-
-                    SetStateOnHurt ssoh = vBody.GetComponent<SetStateOnHurt>();
-                    if (ssoh)
-                    {
-                        ssoh.SetFrozen(1f);
-                    }
-
                     AltArtiPassive.DoNova(aBody, icePower, damageInfo.position);
                 }
             }
