@@ -25,7 +25,7 @@ namespace ArtificerExtended.Skills
 
         public static float heatWardRadius = 12f;
         public static float heatWardDuration = 8f;
-        public static float maxHeatRiseRate = 8f;
+        public static float maxHeatRiseRate = 9f;
         public static float igniteDuration = 1;
         public static float igniteFrequency = 0.5f;
         public static float igniteDamage = 0.75f;
@@ -74,9 +74,10 @@ namespace ArtificerExtended.Skills
                     if (jumpButtonState == true)
                     {
                         float verticalVelocity = motor.velocity.y;
-                        float maxUpVelocity = Mathf.Clamp(maxHeatRiseRate * (body.moveSpeed / body.baseMoveSpeed), 0, maxHeatRiseRate);
+                        float maxUpVelocity = Mathf.Clamp(maxHeatRiseRate * (body.moveSpeed / body.baseMoveSpeed), JetpackOn.hoverVelocity, maxHeatRiseRate);
 
-                        verticalVelocity = Mathf.MoveTowards(verticalVelocity, maxUpVelocity, JetpackOn.hoverAcceleration * self.GetDeltaTime() * 1.5f);
+                        float multiplier = verticalVelocity < 0 ? 2f : 0.5f;
+                        verticalVelocity = Mathf.MoveTowards(verticalVelocity, maxUpVelocity, JetpackOn.hoverAcceleration * self.GetDeltaTime() * multiplier);
                         motor.velocity = new Vector3(motor.velocity.x, verticalVelocity, motor.velocity.z);
                     }
                 }

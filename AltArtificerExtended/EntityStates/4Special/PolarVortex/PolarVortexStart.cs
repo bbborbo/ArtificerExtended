@@ -1,0 +1,66 @@
+﻿using EntityStates;
+using EntityStates.Toolbot;
+using RoR2;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine.Networking;
+
+namespace ArtificerExtended.EntityState
+{
+    class PolarVortexStart : PolarVortexBase
+    {
+        public static float baseDurationEnter = 1.5f;
+        public static float baseDurationExit = 0.8f;
+        float duration;
+        public bool exiting = false;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            // determine duration
+            duration = (exiting ? baseDurationExit : baseDurationEnter) / this.attackSpeedStat;
+            base.StopSkills();
+            // play animation
+            if(!exiting)
+                base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.duration);
+        }
+        public override void OnExit()
+        {
+            base.OnExit();
+            // cast nova
+            if(NetworkServer.active)
+                InflictSnow();
+        }
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if(fixedAge >= duration)
+            {
+                //play exit animation
+                base.PlayAnimation("Gesture, Additive", "FireWall");
+                if (isAuthority)
+                {
+                    //InflictSnow();
+                    SetNextState();
+                }
+            }
+        }
+
+        protected override void SetNextState()
+        {
+            if(exiting)
+            {
+                base.SetNextState();
+                return;
+            }
+
+            continuing = true;
+            outer.SetNextState(new PolarVortex
+            {
+                addedFallImmunity = this.addedFallImmunity,
+                activatorSkillSlot = this.activatorSkillSlot
+            });
+        }
+    }
+}

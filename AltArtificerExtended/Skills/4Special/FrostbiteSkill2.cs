@@ -38,7 +38,9 @@ namespace ArtificerExtended.Skills
                 baseRechargeInterval: 6,
                 interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: false,
-                canceledFromSprinting: true
+                canceledFromSprinting: true,
+                activationStateMachineName: "Body",
+                beginSkillCooldownOnSkillEnd: true
             );
 
         public override void Hooks()

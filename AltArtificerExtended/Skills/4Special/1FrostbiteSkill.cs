@@ -14,6 +14,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using ArtificerExtended.CoreModules;
+using static R2API.RecalculateStatsAPI;
 
 namespace ArtificerExtended.Skills
 {
@@ -23,12 +24,14 @@ namespace ArtificerExtended.Skills
         public static GameObject blizzardProjectilePrefab;
         public static GameObject blizzardArmorVFX;
         public static BuffDef artiIceShield;
-        public static float blizzardBuffDuration = 3;
 
+        public static float buffInterval = 1.5f;
+        public static int maxBuffStacks = 10;
+        public static float maxDuration => buffInterval * maxBuffStacks;
 
-        public override string SkillName => "Polar Rift";
+        public override string SkillName => "Polar Vortex";
 
-        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor </style>for {blizzardBuffDuration} seconds. " +
+        public override string SkillDescription => $"Cover yourself in a <style=cIsUtility>protective icy armor</style> for {maxDuration} seconds. " +
             $"Erupts once for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)}, " +
             $"</style>then another <style=cIsUtility>Freezing</style> blast " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.novaDamageCoefficient)}.</style>";
@@ -41,7 +44,7 @@ namespace ArtificerExtended.Skills
 
         public override MageElement Element => MageElement.Ice;
 
-        public override Type ActivationState => typeof(Frostbite);
+        public override Type ActivationState => typeof(PolarVortexStart);
 
         public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSpecial;
 
@@ -49,14 +52,31 @@ namespace ArtificerExtended.Skills
             (
                 baseRechargeInterval: 8,
                 interruptPriority: InterruptPriority.Skill,
-                mustKeyPress: false,
-                canceledFromSprinting: true,
-                machi
+                mustKeyPress: true,
+                canceledFromSprinting: false,
+                cancelSprintingOnActivation: false,
+                activationStateMachineName: "Body",
+                beginSkillCooldownOnSkillEnd: true,
+                fullRestockOnAssign: false
             );
 
 
         public override void Hooks()
         {
+            GetStatCoefficients += FrostArmorStats;
+        }
+
+        private void FrostArmorStats(CharacterBody sender, StatHookEventArgs args)
+        {
+            int buffCount = sender.GetBuffCount(artiIceShield);
+            if(buffCount > 0)
+            {
+                args.armorAdd += 100;
+                if (buffCount < 6)
+                    args.moveSpeedMultAdd += 0.12f * (6 - buffCount);
+                else if (buffCount > 6)
+                    args.moveSpeedReductionMultAdd += 0.25f * (buffCount - 6);
+            }
         }
 
         public override void Init(ConfigFile config)
@@ -125,13 +145,14 @@ namespace ArtificerExtended.Skills
             }
             Buffs.AddBuff(artiIceShield);
 
+            return;
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
                 orig(self);
                 int iceBuffCount = self.GetBuffCount(artiIceShield);
                 if (iceBuffCount > 0)
                 {
-                    self.armor += 150;
+                    self.armor += 100;
                     self.moveSpeed *= 1.3f;
                 }
             };

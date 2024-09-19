@@ -40,6 +40,7 @@ namespace ArtificerExtended.Skills
         public abstract SimpleSkillData SkillData { get; }
         public string[] KeywordTokens;
         public virtual bool useSteppedDef { get; set; } = false;
+        public SkillDef SkillDef;
 
         string GetElementString(MageElement type)
         {
@@ -77,50 +78,57 @@ namespace ArtificerExtended.Skills
             string s = $"ArtificerExtended: {SkillName} initializing to unlock {(UnlockDef != null ? UnlockDef.cachedName : "(null)")}!";
             //Debug.Log(s);
 
-            var skillDef = ScriptableObject.CreateInstance<SkillDef>();
+
+            SkillDef = ScriptableObject.CreateInstance<SkillDef>();
             if (useSteppedDef)
             {
-                skillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
+                SkillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
             }
 
-            RegisterEntityState(ActivationState);
-            skillDef.activationState = new SerializableEntityStateType(ActivationState);
+            if(ActivationState != null)
+            {
+                RegisterEntityState(ActivationState);
+                SkillDef.activationState = new SerializableEntityStateType(ActivationState);
+            }
 
-            skillDef.skillNameToken = Token + SkillLangTokenName + GetElementString(Element);
-            skillDef.skillName = SkillName;
-            skillDef.skillDescriptionToken = Token + SkillLangTokenName + "_DESCRIPTION";
+            SkillDef.skillNameToken = Token + SkillLangTokenName + GetElementString(Element);
+            SkillDef.skillName = SkillName;
+            SkillDef.skillDescriptionToken = Token + SkillLangTokenName + "_DESCRIPTION";
 
-            skillDef.keywordTokens = KeywordTokens;
+            SkillDef.keywordTokens = KeywordTokens;
             if(IconName != "")
-                skillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
+                SkillDef.icon = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + IconName + ".png");
 
             #region SkillData
-            skillDef.baseMaxStock = SkillData.baseMaxStock;
-            skillDef.baseRechargeInterval = SkillData.baseRechargeInterval;
-            skillDef.beginSkillCooldownOnSkillEnd = SkillData.beginSkillCooldownOnSkillEnd;
-            skillDef.canceledFromSprinting = ArtificerExtendedPlugin.autosprintLoaded ? false : SkillData.canceledFromSprinting;
-            skillDef.cancelSprintingOnActivation = SkillData.cancelSprintingOnActivation;
-            skillDef.dontAllowPastMaxStocks = SkillData.dontAllowPastMaxStocks;
-            skillDef.fullRestockOnAssign = SkillData.fullRestockOnAssign;
-            skillDef.interruptPriority = SkillData.interruptPriority;
-            skillDef.isCombatSkill = SkillData.isCombatSkill;
-            skillDef.mustKeyPress = SkillData.mustKeyPress;
-            skillDef.rechargeStock = SkillData.rechargeStock;
-            skillDef.requiredStock = SkillData.requiredStock;
-            skillDef.resetCooldownTimerOnUse = SkillData.resetCooldownTimerOnUse;
-            skillDef.stockToConsume = SkillData.stockToConsume;
-            skillDef.attackSpeedBuffsRestockSpeed = SkillData.useAttackSpeedScaling;
-            skillDef.activationStateMachineName = SkillData.activationStateMachineName;
+            SkillDef.baseMaxStock = SkillData.baseMaxStock;
+            SkillDef.baseRechargeInterval = SkillData.baseRechargeInterval;
+            SkillDef.beginSkillCooldownOnSkillEnd = SkillData.beginSkillCooldownOnSkillEnd;
+            SkillDef.canceledFromSprinting = ArtificerExtendedPlugin.autosprintLoaded ? false : SkillData.canceledFromSprinting;
+            SkillDef.cancelSprintingOnActivation = SkillData.cancelSprintingOnActivation;
+            SkillDef.dontAllowPastMaxStocks = SkillData.dontAllowPastMaxStocks;
+            SkillDef.fullRestockOnAssign = SkillData.fullRestockOnAssign;
+            SkillDef.interruptPriority = SkillData.interruptPriority;
+            SkillDef.isCombatSkill = SkillData.isCombatSkill;
+            SkillDef.mustKeyPress = SkillData.mustKeyPress;
+            SkillDef.rechargeStock = SkillData.rechargeStock;
+            SkillDef.requiredStock = SkillData.requiredStock;
+            SkillDef.resetCooldownTimerOnUse = SkillData.resetCooldownTimerOnUse;
+            SkillDef.stockToConsume = SkillData.stockToConsume;
+            SkillDef.attackSpeedBuffsRestockSpeed = SkillData.useAttackSpeedScaling;
+            SkillDef.activationStateMachineName = SkillData.activationStateMachineName;
             #endregion
 
-            ContentPacks.skillDefs.Add(skillDef);
-            Array.Resize(ref SkillSlot.variants, SkillSlot.variants.Length + 1);
-            SkillSlot.variants[SkillSlot.variants.Length - 1] = new SkillFamily.Variant
+            ContentPacks.skillDefs.Add(SkillDef);
+            if(this.SkillSlot != null)
             {
-                skillDef = skillDef,
-                unlockableDef = UnlockDef,
-                viewableNode = new ViewablesCatalog.Node(skillDef.skillNameToken, false, null)
-            };
+                Array.Resize(ref SkillSlot.variants, SkillSlot.variants.Length + 1);
+                SkillSlot.variants[SkillSlot.variants.Length - 1] = new SkillFamily.Variant
+                {
+                    skillDef = SkillDef,
+                    unlockableDef = UnlockDef,
+                    viewableNode = new ViewablesCatalog.Node(SkillDef.skillNameToken, false, null)
+                };
+            }
         }
 
         public abstract void Hooks();

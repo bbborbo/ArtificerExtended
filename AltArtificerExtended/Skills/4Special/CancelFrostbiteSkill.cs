@@ -1,0 +1,49 @@
+﻿using BepInEx.Configuration;
+using RoR2;
+using RoR2.Skills;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ArtificerExtended.Skills
+{
+    class CancelFrostbiteSkill : SkillBase<CancelFrostbiteSkill>
+    {
+        public override string SkillName => "Shed Ice Armor";
+
+        public override string SkillDescription => "Focus, and shed your ice armor early.";
+
+        public override string SkillLangTokenName => "CANCELICEARMOR";
+
+        public override UnlockableDef UnlockDef => null;
+
+        public override string IconName => "AvalancheIcon";
+
+        public override MageElement Element => MageElement.Ice;
+
+        public override Type ActivationState => null;
+
+        public override SkillFamily SkillSlot => null;
+
+        public override SimpleSkillData SkillData => new SimpleSkillData 
+        { 
+            requiredStock = 0,
+            rechargeStock = 0,
+            baseMaxStock = 1,
+            baseRechargeInterval = 0,
+            stockToConsume = 0,
+            fullRestockOnAssign = true
+        };
+
+        public override void Hooks()
+        {
+
+        }
+
+        public override void Init(ConfigFile config)
+        {
+            CreateSkill();
+            CreateLang();
+        }
+    }
+}

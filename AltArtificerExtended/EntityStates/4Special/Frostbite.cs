@@ -28,7 +28,7 @@ namespace ArtificerExtended.EntityState
         public static float novaProcCoefficient = 1f;
         public static float novaRadius = ArtificerExtendedPlugin.meleeRangeChannel;
 
-        private static float buffduration = _1FrostbiteSkill.blizzardBuffDuration;
+        private static float buffduration = 3;// _1FrostbiteSkill.blizzardBuffDuration;
         public static float baseDuration = 0.4f;
         public static float force = 1500;
         private float duration;
