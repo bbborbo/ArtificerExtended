@@ -55,6 +55,7 @@ namespace ArtificerExtended
             //On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
+            On.RoR2.CharacterMaster.OnBodyDestroyed += CharacterMaster_OnBodyDestroyed;
             OnMaxChill += FrostNovaOnMaxChill;
         }
 
@@ -65,7 +66,19 @@ namespace ArtificerExtended
             if (elements != null)
             {
                 //Debug.Log("Element counter on body start");
-                elements.GetPowers(body.skillLocator);
+                elements.OnBodyStart(body.skillLocator);
+                //elements.GetPowers(body.skillLocator);
+            }
+
+            orig(self, body);
+        }
+
+        private void CharacterMaster_OnBodyDestroyed(On.RoR2.CharacterMaster.orig_OnBodyDestroyed orig, CharacterMaster self, CharacterBody body)
+        {
+            ElementCounter elements = body.GetComponent<ElementCounter>();
+            if (elements != null)
+            {
+                elements.OnBodyEnd();
             }
 
             orig(self, body);
