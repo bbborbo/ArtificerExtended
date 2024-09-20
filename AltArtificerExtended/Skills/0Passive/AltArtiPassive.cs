@@ -54,7 +54,7 @@ namespace ArtificerExtended.Passive
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
 
-        public static Single meltAspdIncrease = 0.03f;
+        public static Single meltAspdIncrease = 0.025f;
         public static Single burnBuffDurationBase = 4f;
         public static Single burnBuffDurationStack = -0.5f;
 

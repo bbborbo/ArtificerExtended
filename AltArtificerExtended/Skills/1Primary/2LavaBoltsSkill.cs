@@ -22,7 +22,7 @@ namespace ArtificerExtended.Skills
 
         public static int maxStock = 6;
         public static int rechargeStock = 2;
-        public static float rechargeInterval = 1.8f;
+        public static float rechargeInterval = 2f;
         public static float baseDuration = 0.2f;
 
         public static float impactDamageCoefficient = 1.2f;
