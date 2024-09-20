@@ -1,6 +1,12 @@
 ﻿using BepInEx;
 using System;
+using System.Security.Permissions;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
+#pragma warning restore CS0618 // Type or member is obsolete
+[module: System.Security.UnverifiableCode]
+#pragma warning disable 
 namespace JetHack
 {
     [BepInPlugin(guid, modName, version)]
@@ -32,7 +38,7 @@ namespace JetHack
         {
             if (self.isAuthority)
             {
-                hoverStateCache = self.jumpToggledState;
+                hoverStateCache = self.jumpButtonState;
             }
             orig(self);
         }
@@ -41,7 +47,7 @@ namespace JetHack
         {
             if (self.isAuthority)
             {
-                self.jumpToggledState = hoverStateCache;
+                self.jumpButtonState = hoverStateCache;
             }
             orig(self);
         }
