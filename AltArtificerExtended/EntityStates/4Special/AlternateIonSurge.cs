@@ -10,6 +10,7 @@ using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 using ArtificerExtended.Passive;
+using JetHack;
 
 namespace ArtificerExtended.EntityState
 {
@@ -111,6 +112,10 @@ namespace ArtificerExtended.EntityState
             }*/
 
             base.OnExit();
+            if (isAuthority)
+            {
+                JetHackPlugin.hoverStateCache = true;
+            }
         }
 
         private void CharacterMotor_onHitGround(ref CharacterMotor.HitGroundInfo hitGroundInfo)

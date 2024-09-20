@@ -1,6 +1,7 @@
 ﻿using ArtificerExtended.Passive;
 using EntityStates;
 using EntityStates.Mage;
+using JetHack;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -99,6 +100,10 @@ namespace ArtificerExtended.EntityState
 				Util.PlaySound(FlyUpState.endSoundString, base.gameObject);
 			}
 			base.OnExit();
+            if (isAuthority)
+            {
+				JetHackPlugin.hoverStateCache = true;
+            }
 		}
 
 		private Vector3 flyVector = Vector3.zero;
