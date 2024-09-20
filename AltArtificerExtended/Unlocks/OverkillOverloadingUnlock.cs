@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerShockwaveUnlock : UnlockBase
+    class OverkillOverloadingUnlock : UnlockBase
     {
         float overkillAmount = 1;
 

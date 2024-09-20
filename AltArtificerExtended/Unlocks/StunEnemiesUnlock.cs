@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerLaserUnlock : UnlockBase
+    class StunEnemiesUnlock : UnlockBase
     {
         public ulong stunRequirementTotal = 100;
         public StatDef stunCounter = GetCareerStatTotal("artificerTotalEnemiesStunned");

@@ -20,7 +20,7 @@ namespace ArtificerExtended.EntityState
     {
         public static GameObject novaEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
 
-        public static float blizzardDamageCoefficient = 3f;
+        public static float blizzardDamageCoefficient = 5f;
         public static float blizzardProcCoefficient = 1f;
         public static float blizzardRadius = ArtificerExtendedPlugin.meleeRangeChannel;
 

@@ -31,7 +31,7 @@ namespace ArtificerExtended.EntityState
         public string attackSoundString = new EntityStates.Toolbot.FireSpear().fireSoundString;
 
         //generic attack stuff
-        public static float totalDamageCoefficient = ArtificerExtendedPlugin.artiNanoDamage + 10;
+        public static float totalDamageCoefficient = 20;
         public static int maxBulletCount = 10;
         public static int minBulletCount = 2;
         public static float freezeChance = 0;

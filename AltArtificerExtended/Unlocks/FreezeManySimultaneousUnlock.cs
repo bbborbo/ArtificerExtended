@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerTempDropUnlock : UnlockBase
+    class FreezeManySimultaneousUnlock : UnlockBase
     {
         public int freezeRequirementTotal = 4;
         static BuffDef AvalancheBuff;

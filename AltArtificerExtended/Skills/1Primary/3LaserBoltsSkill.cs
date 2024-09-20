@@ -25,7 +25,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "LASERS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerLaserUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StunEnemiesUnlock));
 
         public override string IconName => "LaserboltIcon";
 

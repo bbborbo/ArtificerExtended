@@ -20,7 +20,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "TEMPDROP";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerTempDropUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeManySimultaneousUnlock));
 
         public override string IconName => "AvalancheIcon";
 

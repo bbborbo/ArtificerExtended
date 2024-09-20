@@ -22,7 +22,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "SNOWBALL";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerSnowballUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeGlacialUnlock));
 
         public override string IconName => "SnowballIcon";
 

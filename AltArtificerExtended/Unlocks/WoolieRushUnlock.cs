@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerIceShardsUnlock : UnlockBase
+    class WoolieRushUnlock : UnlockBase
     {
         public static float timeRequirement = 600;
         public override bool ForceDisable => false;

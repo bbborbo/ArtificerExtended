@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerThunderUnlock : UnlockBase
+    class KillOverlordWithLightningUnlock : UnlockBase
     {
         //public override bool ForceDisable => true;
 

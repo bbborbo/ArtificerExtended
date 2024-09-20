@@ -14,17 +14,19 @@ namespace ArtificerExtended.Skills
 {
     class _1MeteorSkill : SkillBase
     {
+        public static int maxMeteors = 10;
+        public static float damageCoefficient = 2;
         //meteor
         public static GameObject meteorImpactPrefab;
 
-        public override string SkillName => "Channeled Nano-Inferno";
+        public override string SkillName => "Channeled Nano-Meteor";
 
-        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge up a storm of 1-{ChargeMeteors.maxMeteors} nano-meteors that each deal " +
-                $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeMeteors.meteorDamageCoefficient)} damage</style>.";
+        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge up a storm of 1-{maxMeteors} nano-meteors that each deal " +
+                $"<style=cIsDamage>{Tools.ConvertDecimal(damageCoefficient)} damage</style>.";
 
         public override string SkillLangTokenName => "METEORS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerMeteorUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(MeteoriteDeathUnlock));
 
         public override string IconName => "meteoricon";
 
@@ -48,6 +50,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            return;
             RegisterProjectileMeteor(config);
             CreateLang();
             CreateSkill();

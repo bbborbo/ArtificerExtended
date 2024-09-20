@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerFlameBurstUnlock : UnlockBase
+    class KillBlazingWithFireUnlock : UnlockBase
     {
         public int burnRequirementTotal = 15;
         public int burnCounter = 0;

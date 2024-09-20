@@ -126,6 +126,7 @@ namespace ArtificerExtended
             ArtificerExtended.CoreModules.Assets.CreateZapDamageType();
             Buffs.CreateBuffs();
             Projectiles.CreateLightningSwords();
+            Projectiles.CreateLavaPool();
             Effects.DoEffects();
             this.ArtiChanges();
             this.InitializeSkills();
@@ -255,6 +256,10 @@ namespace ArtificerExtended
                 "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
                 "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
 
+            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_LAVAPOOLS", $"<style=cKeywordName>Molten Pools</style>" +
+                $"<style=cSub>Creates a <style=cIsDamage>lingering pool</style> on impact with any surface, " +
+                $"which <style=cIsDamage>ignites</style> enemies and deals " +
+                $"<style=cIsDamage>{Tools.ConvertDecimal(Projectiles.napalmFireFrequency * Projectiles.napalmDamageCoefficient)}</style> TOTAL damage per second.</style>");
             LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_FROSTARMOR", $"<style=cKeywordName>Frost Armor</style>" +
                 $"<style=cSub>Gain <style=cIsHealing>+{_1FrostbiteSkill.bonusArmor} armor</style>, " +
                 $"and <style=cIsUtility>Chill</style> nearby enemies for " +
@@ -309,7 +314,7 @@ namespace ArtificerExtended
                 new SkillFamily.Variant
                 {
                     skillDef = resonanceSkillDef,
-                    unlockableDef = resonanceSkillDef.GetUnlockDef(typeof(ArtificerEnergyPassiveUnlock)),
+                    unlockableDef = resonanceSkillDef.GetUnlockDef(typeof(FullKitElementUnlock)),
                     viewableNode = new ViewablesCatalog.Node(resonanceSkillDef.skillNameToken, false, null)
                 }
             };

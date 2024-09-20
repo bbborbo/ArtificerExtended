@@ -34,7 +34,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "NAPALM";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerNapalmUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StackBurnUnlock));
 
         public override string IconName => "napalmicon";
 

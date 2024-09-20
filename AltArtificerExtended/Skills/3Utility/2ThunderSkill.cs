@@ -32,7 +32,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "THUNDERMEATBALLS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerThunderUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillOverlordWithLightningUnlock));
 
         public override string IconName => "thundericon";
 

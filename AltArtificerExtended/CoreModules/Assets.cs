@@ -11,6 +11,7 @@ using ArtificerExtended.Passive;
 using RoR2.EntityLogic;
 using static R2API.DamageAPI;
 using RoR2.Orbs;
+using ThreeEyedGames;
 
 namespace ArtificerExtended.CoreModules
 {
@@ -242,6 +243,74 @@ namespace ArtificerExtended.CoreModules
     }
     public static class Projectiles
     {
+        public static float napalmFireFrequency = 2f;
+        public static float napalmDamageCoefficient = 0.25f;
+        public static float napalmDuration = 3f;
+        public static float napalmProcCoefficient = 0.25f;
+        public static float lavaPoolSize = 3.5f;
+        public static GameObject lavaPoolPrefab;
+        internal static void CreateLavaPool()
+        {
+            lavaPoolPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("LavaPool", true);
+
+            Color napalmColor = new Color32(255, 40, 0, 255);
+            Transform pDotObjDecal = lavaPoolPrefab.transform.Find("FX/Decal");
+            Material napalmDecalMaterial = new Material(pDotObjDecal.GetComponent<Decal>().Material);
+            napalmDecalMaterial.SetColor("_Color", napalmColor);
+            pDotObjDecal.GetComponent<Decal>().Material = napalmDecalMaterial;
+
+            ProjectileDotZone pdz = lavaPoolPrefab.GetComponent<ProjectileDotZone>();
+            pdz.lifetime = napalmDuration;
+            pdz.resetFrequency = napalmFireFrequency;
+            pdz.damageCoefficient = napalmDamageCoefficient;
+            pdz.overlapProcCoefficient = napalmProcCoefficient;
+            pdz.attackerFiltering = AttackerFiltering.Default;
+            lavaPoolPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.IgniteOnHit;
+            lavaPoolPrefab.GetComponent<ProjectileController>().procCoefficient = 1f;
+
+
+            lavaPoolPrefab.transform.localScale = new Vector3(lavaPoolSize, lavaPoolSize, lavaPoolSize);
+
+            Transform fxTransform = lavaPoolPrefab.transform.Find("FX");
+            fxTransform.Find("Spittle").gameObject.SetActive(false);
+
+            GameObject FireTrail = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/FireTrail");
+            GameObject fireTrailSegmentPrefab = FireTrail?.GetComponent<DamageTrail>()?.segmentPrefab;
+            if (fireTrailSegmentPrefab)
+            {
+                GameObject fireEffect = UnityEngine.Object.Instantiate<GameObject>(fireTrailSegmentPrefab, fxTransform.transform);
+                ParticleSystem.MainModule main = fireEffect.GetComponent<ParticleSystem>().main;
+                main.duration = 8f;
+                main.gravityModifier = -0.075f;
+                ParticleSystem.MinMaxCurve startSizeX = main.startSizeX;
+                startSizeX.constantMin *= 0.6f;
+                startSizeX.constantMax *= 0.8f;
+                ParticleSystem.MinMaxCurve startSizeY = main.startSizeY;
+                startSizeY.constantMin *= 0.8f;
+                startSizeY.constantMax *= 1f;
+                ParticleSystem.MinMaxCurve startSizeZ = main.startSizeZ;
+                startSizeZ.constantMin *= 0.6f;
+                startSizeZ.constantMax *= 0.8f;
+                ParticleSystem.MinMaxCurve startLifetime = main.startLifetime;
+                startLifetime.constantMin = 0.9f;
+                startLifetime.constantMax = 1.1f;
+                fireEffect.GetComponent<DestroyOnTimer>().enabled = false;
+                fireEffect.transform.localPosition = Vector3.zero;
+                fireEffect.transform.localPosition = Vector3.zero;
+                fireEffect.transform.localScale = Vector3.one;
+                ParticleSystem.ShapeModule shape = fireEffect.GetComponent<ParticleSystem>().shape;
+                shape.shapeType = ParticleSystemShapeType.Sphere;
+                shape.scale = Vector3.one * 0.5f;
+            }
+
+            GameObject gameObject2 = fxTransform.Find("Point Light").gameObject;
+            Light component2 = gameObject2.GetComponent<Light>();
+            component2.color = new Color(1f, 1f, 0f);
+            component2.intensity = 4f;
+            component2.range = 7.5f;
+
+            ContentPacks.projectilePrefabs.Add(lavaPoolPrefab);
+        }
         internal static void CreateLightningSwords()
         {
             AltArtiPassive.lightningProjectile = new GameObject[3];

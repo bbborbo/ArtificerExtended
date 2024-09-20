@@ -12,7 +12,7 @@ using static ArtificerExtended.Passive.AltArtiPassive;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerEnergyPassiveUnlock : UnlockBase
+    class FullKitElementUnlock : UnlockBase
     {
         public override string UnlockLangTokenName => "ENERGYPASSIVE";
 

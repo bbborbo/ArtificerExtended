@@ -17,32 +17,28 @@ using System.Linq;
 
 namespace ArtificerExtended.EntityState
 {
-    // Token: 0x020009E0 RID: 2528
     public class ChargeMeteors : BaseSkillState
     {
         public GameObject muzzleflashEffectPrefab;
         public GameObject chargeEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
         public string chargeSoundString = "Play_mage_m2_charge";
-        public float baseChargeDuration = 2f;
-        public float baseWinddownDuration = 0.5f;
 
-        public float minRadius = 0;
-        public float maxRadius = 0.5f;
-
-        public static float meteorDamageCoefficient = 2f;
-        public static float procCoefficient = 0.8f;
-        public static int minMeteors = 0;
-        public static int maxMeteors = (int)Mathf.Ceil(ArtificerExtendedPlugin.artiNanoDamage / meteorDamageCoefficient);
-        public static float minMeteorRadius = 2.5f;
-        public static float maxMeteorRadius = 6f;
         public float force = 300;
 
         public static GameObject crosshairOverridePrefab;
 
-        private const float minChargeDuration = 0.2f;
+        private float minChargeDuration => _1EruptionSkill.minDuration;
+        private float maxChargeDuration => _1EruptionSkill.maxDuration;
+        private float baseWinddownDuration => _1EruptionSkill.windDownDuration;
+        private float minDamage => _1EruptionSkill.minBlastDamage;
+        private float maxDamage => _1EruptionSkill.maxBlastDamage;
+        private float minMeteorRadius => _1EruptionSkill.minBlastRadius;
+        private float maxMeteorRadius => _1EruptionSkill.maxBlastRadius;
+        private int minProjectiles => _1EruptionSkill.minClusterProjectiles;
+        private int maxProjectiles => _1EruptionSkill.maxClusterProjectiles;
+
         private float stopwatch;
         private float timer;
-        private float frequency = 0.5f; //meteors use the global nanobomb interval instead
         private float windDownDuration;
         private float chargeDuration;
         private bool hasFiredBomb;
@@ -54,6 +50,8 @@ namespace ArtificerExtended.EntityState
         private ChildLocator childLocator;
         private GameObject chargeEffectInstance;
         private GameObject defaultCrosshairPrefab;
+        public float minRadius = 0;
+        public float maxRadius = 0.5f;
         private uint soundID;
 
         private AltArtiPassive.BatchHandle handle;
@@ -81,8 +79,8 @@ namespace ArtificerExtended.EntityState
 
             this.handle = new AltArtiPassive.BatchHandle();
 
-            this.windDownDuration = this.baseWinddownDuration / this.attackSpeedStat;
-            this.chargeDuration = this.baseChargeDuration / this.attackSpeedStat;
+            this.windDownDuration = baseWinddownDuration / this.attackSpeedStat;
+            this.chargeDuration = maxChargeDuration / this.attackSpeedStat;
             this.soundID = Util.PlayAttackSpeedSound(this.chargeSoundString, base.gameObject, this.attackSpeedStat);
             base.characterBody.SetAimTimer(this.chargeDuration + this.windDownDuration + 2f);
             this.muzzleString = "MuzzleBetween";
@@ -133,15 +131,15 @@ namespace ArtificerExtended.EntityState
                 float num2 = 0f;
                 Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;
-                if (Physics.Raycast(CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
-                    out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
+                if (Util.CharacterRaycast(this.gameObject, CameraRigController.ModifyAimRayIfApplicable(aimRay, base.gameObject, out num2),
+                        out raycastHit, num + num2, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
                 {
                     targetLocation = raycastHit.point;
                     this.areaIndicatorInstance.transform.position = targetLocation;
                     this.areaIndicatorInstance.transform.up = raycastHit.normal;
                 }
 
-                this.radius = minMeteorRadius + ((maxMeteorRadius - minMeteorRadius) * GetChargeProgressSmooth());
+                this.radius = Util.Remap(this.GetChargeProgressSmooth(), 0, 1, minMeteorRadius, maxMeteorRadius);
                 this.areaIndicatorInstance.transform.localScale = new Vector3(this.radius, this.radius, this.radius);
                 this.areaIndicatorInstance.SetActive(true);
             }
@@ -151,11 +149,11 @@ namespace ArtificerExtended.EntityState
         {
             base.Update();
 
-            //base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgressSmooth(), 0f, 1f, this.minRadius, this.maxRadius), true);
+            base.characterBody.SetSpreadBloom(Util.Remap(this.GetChargeProgressSmooth(), 0, 1, this.minRadius, this.maxRadius), true);
 
-            int meteors = Mathf.RoundToInt(Util.Remap(this.GetChargeProgressSmooth(), 0f, 1f, minMeteors, maxMeteors));
+            /*int meteors = Mathf.RoundToInt(Util.Remap(this.GetChargeProgressSmooth(), 0f, 1f, minMeteors, maxMeteors));
 
-            base.characterBody.SetSpreadBloom((float)meteors/(maxMeteors * 2), true);
+            base.characterBody.SetSpreadBloom((float)meteors/(maxMeteors * 2), true);*/
 
             this.UpdateAreaIndicator();
         }
@@ -182,7 +180,7 @@ namespace ArtificerExtended.EntityState
                 }
             }
             if (!this.hasFiredBomb && (this.stopwatch >= this.chargeDuration || !IsKeyDownAuthority()) &&
-                !this.hasFiredBomb && this.stopwatch >= ChargeMeteors.minChargeDuration)
+                !this.hasFiredBomb && this.stopwatch >= minChargeDuration)
             {
                 this.FireMeteor();
             }
@@ -193,7 +191,7 @@ namespace ArtificerExtended.EntityState
             }
         }
 
-        private async void FireMeteor()
+        private void FireMeteor()
         {
             this.hasFiredBomb = true;
             base.PlayAnimation("Gesture, Additive", "FireNovaBomb", "FireNovaBomb.playbackRate", this.windDownDuration);
@@ -210,10 +208,12 @@ namespace ArtificerExtended.EntityState
             }
             if (base.isAuthority)
             {
-                Vector3 aimPos = new Vector3();
+                Vector3 aimPos = characterBody.corePosition;
+                Vector3 aimNormal = Vector3.up;
                 if (areaIndicatorInstance != null)
                 {
                     aimPos = areaIndicatorInstance.transform.position;
+                    aimNormal = areaIndicatorInstance.transform.up;
                 }
                 else
                 {
@@ -226,6 +226,7 @@ namespace ArtificerExtended.EntityState
                         out raycastHit, maxDistance + extraDistance, LayerIndex.CommonMasks.bullet, QueryTriggerInteraction.UseGlobal))
                     {
                         aimPos = raycastHit.point;
+                        aimNormal = raycastHit.normal;
                     }
                 }
 
@@ -233,32 +234,36 @@ namespace ArtificerExtended.EntityState
                 disableIndicator = true;
                 this.areaIndicatorInstance.SetActive(false);
                 float chargeProgress = this.GetChargeProgressSmooth();
-                if (ChargeMeteors.meteorEffect != null)
-                {
-                    bool crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
-                    float num = Util.Remap(chargeProgress, 0f, 1f, minMeteors, maxMeteors);
-                    for (int i = 0; i < num; i++)
-                    {
-                        EffectManager.SpawnEffect(ChargeMeteors.meteorEffect, new EffectData
-                        {
-                            origin = targetLocation,
-                            scale = this.radius
-                        }, true);
-                        BlastAttack blastAttack = new BlastAttack();
-                        blastAttack.radius = this.radius;
-                        blastAttack.procCoefficient = ChargeMeteors.procCoefficient;
-                        blastAttack.position = targetLocation;
-                        blastAttack.attacker = base.gameObject;
-                        blastAttack.crit = crit;
-                        blastAttack.baseDamage = base.characterBody.damage * meteorDamageCoefficient;
-                        blastAttack.falloffModel = BlastAttack.FalloffModel.None;
-                        blastAttack.baseForce = force;
-                        blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
-                        blastAttack.damageType = DamageType.IgniteOnHit;
-                        blastAttack.Fire();
+                bool crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
+                float damage = Util.Remap(chargeProgress, minChargeDuration / maxChargeDuration, 1, minDamage, maxDamage);
 
-                        await Task.Delay(200);
-                    }
+                EffectManager.SpawnEffect(_1EruptionSkill.meteorImpactEffectPrefab, new EffectData
+                {
+                    origin = targetLocation,
+                    scale = this.radius
+                }, true);
+                BlastAttack blastAttack = new BlastAttack();
+                blastAttack.radius = this.radius;
+                blastAttack.procCoefficient = 1;
+                blastAttack.position = targetLocation;
+                blastAttack.attacker = base.gameObject;
+                blastAttack.crit = crit;
+                blastAttack.baseDamage = base.characterBody.damage * damage;
+                blastAttack.falloffModel = BlastAttack.FalloffModel.None;
+                blastAttack.baseForce = force;
+                blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
+                blastAttack.damageType = DamageType.IgniteOnHit;
+                blastAttack.Fire();
+
+                if (aimNormal == Vector3.one)
+                    aimNormal += Vector3.forward * 0.1f;
+                int projectiles = Mathf.FloorToInt(Util.Remap(chargeProgress, minChargeDuration / maxChargeDuration, 1, minProjectiles, maxProjectiles));
+                for(int i = 0; i < projectiles; i++)
+                {
+                    Vector3 forward = Util.ApplySpread(aimNormal, 20, 70, 1, 1);
+                    ProjectileManager.instance.FireProjectile(_2LavaBoltsSkill.lavaProjectilePrefab,
+                        aimPos + (forward * 1.5f), Util.QuaternionSafeLookRotation(forward), this.outer.gameObject,
+                        _1EruptionSkill.clusterProjectileDamage, 300, crit, speedOverride: 15f);
                 }
             }
 

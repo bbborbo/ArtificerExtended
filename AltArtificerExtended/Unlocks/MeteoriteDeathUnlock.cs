@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerMeteorUnlock : UnlockBase
+    class MeteoriteDeathUnlock : UnlockBase
     {
         GameObject meteorGameObject = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/MeteorStorm");
 

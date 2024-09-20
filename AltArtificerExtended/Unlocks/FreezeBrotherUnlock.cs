@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerFrostbiteUnlock : UnlockBase
+    class FreezeBrotherUnlock : UnlockBase
     {
         public override string UnlockLangTokenName => "FROSTBITE";
         public override string UnlockName => "Absolute Zero";

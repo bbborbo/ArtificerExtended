@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerSnowballUnlock : UnlockBase
+    class FreezeGlacialUnlock : UnlockBase
     {
         public int freezeRequirementTotal = 20;
         public int freezeCounter = 0;

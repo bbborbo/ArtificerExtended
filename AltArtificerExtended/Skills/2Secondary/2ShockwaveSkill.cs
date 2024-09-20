@@ -25,7 +25,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "SHOCKWAVE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerShockwaveUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(OverkillOverloadingUnlock));
 
         public override string IconName => "shockwaveicon";
 

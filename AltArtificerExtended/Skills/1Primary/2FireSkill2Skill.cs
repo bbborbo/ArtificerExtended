@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "FIREBALLS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerFlameBurstUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillBlazingWithFireUnlock));
 
         public override string IconName => "Fireskill2icon";
 
@@ -50,7 +50,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
-
+            return;
             ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
                 "Skills Config: " + SkillName, "Minimum Damage Coefficient",
                 ChargeFireBlast.minDamageCoefficient,

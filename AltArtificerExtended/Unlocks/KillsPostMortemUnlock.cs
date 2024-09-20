@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class ArtificerColdFusionUnlock : UnlockBase
+    class KillsPostMortemUnlock : UnlockBase
     {
         public ulong killRequirementTotal = 5;
         public StatDef postmortemKillCounter = GetCareerStatTotal("artificerKillsPostMortem");
