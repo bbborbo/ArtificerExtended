@@ -406,7 +406,7 @@ namespace ArtificerExtended
                 var handle = new AltArtiPassive.BatchHandle();
                 var context = new NanoBombContext(passive, handle);
                 this.nanoBombContext[self] = context;
-                passive.SkillCast(handle);
+                passive.SkillCast(handle, (self is ChargeSolarFlare ? true : false));
             }
         }
         private void BaseChargeBombState_FixedUpdate(On.EntityStates.Mage.Weapon.BaseChargeBombState.orig_FixedUpdate orig, BaseChargeBombState self)
@@ -420,7 +420,7 @@ namespace ArtificerExtended
                 while (context.timer >= context.passive.ext_nanoBombInterval && count <= context.passive.ext_nanoBombMaxPerTick)
                 {
                     count++;
-                    context.passive.SkillCast(context.handle);
+                    context.passive.SkillCast(context.handle, (self is ChargeSolarFlare ? true : false));
                     context.timer -= context.passive.ext_nanoBombInterval;
                 }
             }

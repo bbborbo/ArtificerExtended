@@ -58,6 +58,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            return;
             ChargeNapalm.totalImpactDamageCoefficient = config.Bind<float>(
                 "Skills Config: " + SkillName, "Primary Damage Coefficient",
                 ChargeNapalm.totalImpactDamageCoefficient,
