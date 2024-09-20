@@ -46,6 +46,7 @@ namespace ArtificerExtended
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.RiskyLives.RiskyMod", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(JetHack.JetHackPlugin.guid, BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI), nameof(DamageAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin

@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtificerExtended", "AltArtificerExtended\ArtificerExtended.csproj", "{43E91932-04B1-4340-BFD3-05505E615FF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{776A855E-9E36-4826-9941-7A9A008E9152} = {776A855E-9E36-4826-9941-7A9A008E9152}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetHack", "JetHack\JetHack.csproj", "{776A855E-9E36-4826-9941-7A9A008E9152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JetHack", "JetHack\JetHack.csproj", "{776A855E-9E36-4826-9941-7A9A008E9152}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
