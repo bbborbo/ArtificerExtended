@@ -52,7 +52,10 @@ namespace ArtificerExtended.Unlocks
                 MeteorStormController msc = inflictor.GetComponent<MeteorStormController>();
                 if (msc != null)
                 {
-                    base.Grant();
+                    if(attackerBody.equipmentSlot.equipmentIndex == RoR2Content.Equipment.Meteor.equipmentIndex)
+                    {
+                        base.Grant();
+                    }
                 }
             }
         }
