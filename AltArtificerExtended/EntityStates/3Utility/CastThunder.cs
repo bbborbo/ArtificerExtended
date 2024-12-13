@@ -141,9 +141,20 @@ namespace ArtificerExtended.EntityState
 
                 Vector3 forward2 = Quaternion.AngleAxis(rotationExtra + rotationInverval * (float)i, Vector3.up) * point;
 
-                ProjectileManager.instance.FireProjectile(meatballProjectile, impactPosition, Util.QuaternionSafeLookRotation(forward2),
-                    base.gameObject, this.characterBody.damage * damagePerMeatball, meatballForce, 
-                    Util.CheckRoll(this.characterBody.crit, this.characterBody.master), DamageColorIndex.Default, null, speedOverride);
+                ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                {
+                    projectilePrefab = meatballProjectile,
+                    position = impactPosition,
+                    rotation = Util.QuaternionSafeLookRotation(forward2),
+                    owner = base.gameObject,
+                    damage = this.characterBody.damage * damagePerMeatball,
+                    force = meatballForce,
+                    crit = Util.CheckRoll(this.characterBody.crit, this.characterBody.master),
+                    damageColorIndex = DamageColorIndex.Default,
+                    target = null,
+                    speedOverride = speedOverride
+                });
+
                 await Task.Delay(delay);
             }
         }

@@ -113,15 +113,30 @@ namespace ArtificerExtended.EntityState
                         Vector3 vector = Vector3.Cross(Vector3.up, forward);
                         bool crit = Util.CheckRoll(this.critStat, base.characterBody.master);
 
-                        ProjectileManager.instance.FireProjectile(PrepWall.projectilePrefab, 
-                            this.areaIndicatorInstance.transform.position + Vector3.up, Util.QuaternionSafeLookRotation(vector), 
-                            base.gameObject, this.damageStat * PrepWall.damageCoefficient, 0f, crit, 
-                            DamageColorIndex.Default, null, -1f);
-
-                        ProjectileManager.instance.FireProjectile(PrepWall.projectilePrefab, 
-                            this.areaIndicatorInstance.transform.position + Vector3.up, Util.QuaternionSafeLookRotation(-vector), 
-                            base.gameObject, this.damageStat * PrepWall.damageCoefficient, 0f, crit, 
-                            DamageColorIndex.Default, null, -1f);
+                        ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                        {
+                            projectilePrefab = PrepWall.projectilePrefab,
+                            position = this.areaIndicatorInstance.transform.position + Vector3.up,
+                            rotation = Util.QuaternionSafeLookRotation(vector),
+                            owner = base.gameObject,
+                            damage = this.damageStat * PrepWall.damageCoefficient,
+                            force = 0f,
+                            crit = crit,
+                            damageColorIndex = DamageColorIndex.Default,
+                            target = null
+                        });
+                        ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                        {
+                            projectilePrefab = PrepWall.projectilePrefab,
+                            position = this.areaIndicatorInstance.transform.position + Vector3.up,
+                            rotation = Util.QuaternionSafeLookRotation(-vector),
+                            owner = base.gameObject,
+                            damage = this.damageStat * PrepWall.damageCoefficient,
+                            force = 0f,
+                            crit = crit,
+                            damageColorIndex = DamageColorIndex.Default,
+                            target = null
+                        });
                     }
                 }
                 else

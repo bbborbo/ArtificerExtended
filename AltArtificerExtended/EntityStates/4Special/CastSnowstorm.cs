@@ -214,12 +214,19 @@ namespace ArtificerExtended.EntityState
         public void CastBlizzard()
         {
             if (this.areaIndicatorInstance && this.shouldFireBlizzard)
-			{
-				ProjectileManager.instance.FireProjectile(CastSnowstorm.projectilePrefab, 
-                    this.areaIndicatorInstance.transform.position, this.areaIndicatorInstance.transform.rotation, 
-                    base.gameObject, this.damageStat * CastSnowstorm.blizzardDamageCoefficient, 0f, 
-                    Util.CheckRoll(this.critStat, base.characterBody.master), 
-                    DamageColorIndex.Default, null, -1f);
+            {
+                ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                {
+                    projectilePrefab = CastSnowstorm.projectilePrefab,
+                    position = this.areaIndicatorInstance.transform.position,
+                    rotation = this.areaIndicatorInstance.transform.rotation,
+                    owner = base.gameObject,
+                    damage = this.damageStat * CastSnowstorm.blizzardDamageCoefficient,
+                    force = 0f,
+                    crit = Util.CheckRoll(this.critStat, this.characterBody.master),
+                    damageColorIndex = DamageColorIndex.Default,
+                    target = null
+                });
 			}
         }
         /*

@@ -155,22 +155,49 @@ namespace ArtificerExtended.EntityState
             var fireball = _2FireSkill2Skill.outerFireball;
 
             // outer left
-            ProjectileManager.instance.FireProjectile(fireball, aimRay.origin,
-                Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * damage,
-                this.force, isCrit, DamageColorIndex.Default, null, -1f);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                projectilePrefab = fireball,
+                position = aimRay.origin,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+                owner = base.gameObject,
+                damage = this.damageStat * damage,
+                force = this.force,
+                crit = isCrit,
+                damageColorIndex = DamageColorIndex.Default,
+                target = null
+            });
             //outer right
-            ProjectileManager.instance.FireProjectile(fireball, aimRay.origin,
-                Util.QuaternionSafeLookRotation(aimRay.direction, Vector3.down), base.gameObject, this.damageStat * damage,
-                this.force, isCrit, DamageColorIndex.Default, null, -1f);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                projectilePrefab = fireball,
+                position = aimRay.origin,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.direction, Vector3.down),
+                owner = base.gameObject,
+                damage = this.damageStat * damage,
+                force = this.force,
+                crit = isCrit,
+                damageColorIndex = DamageColorIndex.Default,
+                target = null
+            });
         }
         void FireInnerFireball(Ray aimRay, float damage, bool isCrit)
         {
             var fireball = _2FireSkill2Skill.innerFireball;
 
             // inner
-            ProjectileManager.instance.FireProjectile(fireball, aimRay.origin,
-                Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * damage,
-                this.force, isCrit, DamageColorIndex.Default, null, -1f);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                projectilePrefab = fireball,
+                position = aimRay.origin,
+                rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+                owner = base.gameObject,
+                damage = this.damageStat * damage,
+                force = this.force,
+                crit = isCrit,
+                damageColorIndex = DamageColorIndex.Default,
+                target = null
+            });
         }
 
         public override void OnExit()

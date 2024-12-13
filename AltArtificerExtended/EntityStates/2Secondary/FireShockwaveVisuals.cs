@@ -56,9 +56,18 @@ namespace ArtificerExtended.EntityState
         private void FireZapCone(Ray aimRay, float bonusPitch, float bonusYaw, float projectileDamageCoeff, Vector3 direction, Vector3 origin)
         {
             Vector3 forward = Util.ApplySpread(direction, 0, 0, 1f, 1f, bonusYaw, bonusPitch - 6f);
-            ProjectileManager.instance.FireProjectile(_2ShockwaveSkill.shockwaveZapConePrefab, origin,
-                Util.QuaternionSafeLookRotation(forward), base.gameObject, this.damageStat * projectileDamageCoeff,
-                0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                projectilePrefab = _2ShockwaveSkill.shockwaveZapConePrefab,
+                position = origin,
+                rotation = Util.QuaternionSafeLookRotation(forward),
+                owner = base.gameObject,
+                damage = this.damageStat * projectileDamageCoeff,
+                force = 0f,
+                crit = Util.CheckRoll(this.critStat, base.characterBody.master),
+                damageColorIndex = DamageColorIndex.Default,
+                target = null
+            });
         }
 
         public override void FixedUpdate()
