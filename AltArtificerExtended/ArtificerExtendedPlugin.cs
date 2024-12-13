@@ -5,7 +5,6 @@ using RoR2.Skills;
 using System;
 using UnityEngine;
 using BepInEx;
-using BepInEx.Configuration;
 using EntityStates.Mage;
 using EntityStates.Mage.Weapon;
 using R2API;
@@ -19,12 +18,13 @@ using EntityStates;
 using ArtificerExtended.Components;
 using System.Runtime.CompilerServices;
 using RoR2.Projectile;
-using MonoMod.Cil;
 using RoR2.UI;
 using static RoR2.UI.CharacterSelectController;
-using Mono.Cecil.Cil;
 using ArtificerExtended.Passive;
 using ArtificerExtended.CoreModules;
+using BepInEx.Configuration;
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]

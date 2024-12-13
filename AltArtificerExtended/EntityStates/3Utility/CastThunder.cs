@@ -79,10 +79,18 @@ namespace ArtificerExtended.EntityState
                 }
 
                 Ray aimRay = base.GetAimRay();
-                ProjectileManager.instance.FireProjectile(_2ThunderSkill.magnetRollerProjectilePrefab, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction),
-                    base.gameObject, characterBody.damage * damagePerMeatball, meatballForce,
-                    Util.CheckRoll(this.characterBody.crit, this.characterBody.master), DamageColorIndex.Default);
 
+                ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                {
+                    projectilePrefab = _2ThunderSkill.magnetRollerProjectilePrefab,
+                    position = aimRay.origin,
+                    rotation = Util.QuaternionSafeLookRotation(aimRay.direction),
+                    owner = base.gameObject,
+                    damage = this.characterBody.damage * damagePerMeatball,
+                    force = meatballForce,
+                    crit = Util.CheckRoll(this.characterBody.crit, this.characterBody.master),
+                    damageColorIndex = DamageColorIndex.Default
+                });
             }
             base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
             if (VRStuff.VRInstalled)
