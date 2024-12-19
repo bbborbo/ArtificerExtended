@@ -261,9 +261,18 @@ namespace ArtificerExtended.EntityState
                 for(int i = 0; i < projectiles; i++)
                 {
                     Vector3 forward = Util.ApplySpread(aimNormal, 20, 70, 1, 1);
-                    ProjectileManager.instance.FireProjectile(_2LavaBoltsSkill.lavaProjectilePrefab,
-                        aimPos + (forward * 1.5f), Util.QuaternionSafeLookRotation(forward), this.outer.gameObject,
-                        _1EruptionSkill.clusterProjectileDamage, 300, crit, speedOverride: 15f);
+                    ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+                    {
+                        projectilePrefab = _2LavaBoltsSkill.lavaProjectilePrefab,
+                        position = aimPos + (forward * 1.5f),
+                        rotation = Util.QuaternionSafeLookRotation(forward),
+                        owner = this.outer.gameObject,
+                        damage = _1EruptionSkill.clusterProjectileDamage,
+                        force = 300,
+                        crit = crit,
+                        damageColorIndex = DamageColorIndex.Default,
+                        speedOverride = 15f
+                    });
                 }
             }
 
