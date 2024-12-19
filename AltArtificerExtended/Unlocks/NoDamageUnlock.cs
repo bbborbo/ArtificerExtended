@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class NoDamageUnlock : UnlockBase<NoDamageUnlock>
+    class NoDamageUnlock : UnlockBase
 	{
 		private HealthComponent healthComponent;
 		private bool failed;

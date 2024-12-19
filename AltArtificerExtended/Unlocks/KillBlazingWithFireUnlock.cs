@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
@@ -23,7 +24,7 @@ namespace ArtificerExtended.Unlocks
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
-        public override Sprite Sprite => GetSpriteProvider("");
+        public override Sprite Sprite => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Core/texNullIcon.png").WaitForCompletion();
 
         public override void Init(ConfigFile config)
         {

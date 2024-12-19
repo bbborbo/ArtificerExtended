@@ -13,9 +13,9 @@ namespace ArtificerExtended.Unlocks
 
         public override string UnlockLangTokenName => "OVERKILLOVERLOADING";
 
-        public override string UnlockName => "Powertrippin'";
+        public override string UnlockName => "Powertrippin\u2019";
 
-        public override string AchievementName => "Powertrippin'";
+        public override string AchievementName => "Powertrippin\u2019";
 
         public override string AchievementDesc => $"overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of it's Combined Maximum Health.";
 

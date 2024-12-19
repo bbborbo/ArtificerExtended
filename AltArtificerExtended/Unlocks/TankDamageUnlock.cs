@@ -26,7 +26,6 @@ namespace ArtificerExtended.Unlocks
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
         public override Sprite Sprite => GetSpriteProvider("ColdFusion");
-        public override bool HideUnlock => true;
 
         public override void Init(ConfigFile config)
         {
