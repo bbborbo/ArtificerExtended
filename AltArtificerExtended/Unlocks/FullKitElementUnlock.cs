@@ -20,7 +20,7 @@ namespace ArtificerExtended.Unlocks
 
         public override string AchievementName => "Elemental Intensity";
 
-        public override string AchievementDesc => "equip 4 abilities of a single element at once.";
+        public override string AchievementDesc => "win with 4 abilities of a single element equipped at once.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
@@ -33,13 +33,38 @@ namespace ArtificerExtended.Unlocks
 
         public override void OnInstall()
         {
-            On.EntityStates.Mage.MageCharacterMain.OnEnter += PowerCheck;
+            //On.EntityStates.Mage.MageCharacterMain.OnEnter += PowerCheck;
+            Run.onClientGameOverGlobal += ClearCheck;
             base.OnInstall();
+        }
+
+        private void ClearCheck(Run run, RunReport runReport)
+        {
+            if (run is null) return;
+            if (runReport is null) return;
+
+            if (!runReport.gameEnding) return;
+
+
+            if (runReport.gameEnding.isWin)
+            {
+                CharacterBody localBody = this.localUser.cachedBody;
+                if (localBody.bodyIndex == requiredBodyIndex)
+                {
+                    ElementCounter power = localBody.GetComponent<ElementCounter>();
+                    if(power != null && 
+                        (power.firePower >= Power.Extreme || power.icePower >= Power.Extreme || power.lightningPower >= Power.Extreme))
+                    {
+                        base.Grant();
+                    }
+                }
+            }
         }
 
         public override void OnUninstall()
         {
-            On.EntityStates.Mage.MageCharacterMain.OnEnter -= PowerCheck;
+            //On.EntityStates.Mage.MageCharacterMain.OnEnter -= PowerCheck;
+            Run.onClientGameOverGlobal -= ClearCheck;
             base.OnUninstall();
         }
 

@@ -1,6 +1,7 @@
 ﻿using ArtificerExtended.Components;
 using ArtificerExtended.CoreModules;
 using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
 using EntityStates.Mage;
@@ -38,7 +39,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "HEATCOLUMN";
 
-        public override UnlockableDef UnlockDef => null;
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FastHellUnlock));
 
         public override string IconName => "";
 

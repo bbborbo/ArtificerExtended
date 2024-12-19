@@ -12,11 +12,11 @@ namespace ArtificerExtended.Unlocks
     {
         public int burnRequirementTotal = 25;
 
-        public override string UnlockLangTokenName => "NAPALM";
+        public override string UnlockLangTokenName => "STACKBURN";
 
-        public override string UnlockName => "Meltdown";
+        public override string UnlockName => "The Ultimate Stonecutter";
 
-        public override string AchievementName => "Meltdown";
+        public override string AchievementName => "The Ultimate Stonecutter";
 
         public override string AchievementDesc => $"apply {burnRequirementTotal} stacks of burn to a single target.";
 

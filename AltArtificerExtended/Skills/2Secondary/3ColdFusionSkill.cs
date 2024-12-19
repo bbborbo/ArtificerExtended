@@ -1,5 +1,6 @@
 ﻿using ArtificerExtended.CoreModules;
 using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
 using R2API;
@@ -23,7 +24,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "COLDFUSION";
 
-        public override UnlockableDef UnlockDef => ScriptableObject.CreateInstance<UnlockableDef>();//GetUnlockDef(typeof(ArtificerColdFusionUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(TankDamageUnlock));
 
         public override string IconName => "FusionIcon";
 

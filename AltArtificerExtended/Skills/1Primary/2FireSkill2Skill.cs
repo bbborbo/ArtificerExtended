@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "FIREBALLS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillBlazingWithFireUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StackBurnUnlock));
 
         public override string IconName => "Fireskill2icon";
 

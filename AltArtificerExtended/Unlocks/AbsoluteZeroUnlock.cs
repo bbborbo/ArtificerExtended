@@ -8,9 +8,9 @@ using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
 {
-    class FreezeBrotherUnlock : UnlockBase
+    class AbsoluteZeroUnlock : UnlockBase
     {
-        public override string UnlockLangTokenName => "FROSTBITE";
+        public override string UnlockLangTokenName => "ABSOLUTEZERO";
         public override string UnlockName => "Absolute Zero";
         public override string AchievementName => "Absolute Zero";
         public override string AchievementDesc => "freeze and execute the King of Nothing.";

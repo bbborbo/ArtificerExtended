@@ -28,7 +28,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "ICESHARDS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(WoolieRushUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(NoDamageUnlock));
 
         public override string IconName => "IceShardsIcon";
 

@@ -10,17 +10,17 @@ namespace ArtificerExtended.Unlocks
         public static float timeRequirement = 600;
         public override bool ForceDisable => false;
 
-        public override string UnlockLangTokenName => "ICESHARDS";
+        public override string UnlockLangTokenName => "WOOLIERUSH";
 
-        public override string UnlockName => "Flawless Execution";
+        public override string UnlockName => "Lightning-Fast";
 
-        public override string AchievementName => "Flawless Execution";
+        public override string AchievementName => "Lightning-Fast";
 
-        public override string AchievementDesc => "fully charge the third teleporter before the timer reaches 10 minutes.";
+        public override string AchievementDesc => $"fully charge the third teleporter before the timer reaches {timeRequirement / 60} minutes.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
-        public override Sprite Sprite => base.GetSpriteProvider("IceShardsIcon");
+        public override Sprite Sprite => base.GetSpriteProvider("LaserboltIcon");
 
         public override void Init(ConfigFile config)
         {

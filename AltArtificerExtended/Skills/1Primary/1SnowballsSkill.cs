@@ -18,11 +18,11 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Frost Bolt";
 
         public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
-            $"Fire a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
+            $"Throw a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
 
         public override string SkillLangTokenName => "SNOWBALL";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeGlacialUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeManySimultaneousUnlock));
 
         public override string IconName => "SnowballIcon";
 

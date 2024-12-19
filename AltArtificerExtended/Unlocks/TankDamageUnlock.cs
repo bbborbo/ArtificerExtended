@@ -8,18 +8,20 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class KillsPostMortemUnlock : UnlockBase
+    class TankDamageUnlock : UnlockBase
     {
+        public int damageRequirementTotal = 2000;
+        float damageTakenCount = 0;
         public ulong killRequirementTotal = 5;
         public StatDef postmortemKillCounter = GetCareerStatTotal("artificerKillsPostMortem");
 
-        public override string UnlockLangTokenName => "COLDFUSION";
+        public override string UnlockLangTokenName => "TANKDAMAGE";
 
-        public override string UnlockName => "When Icicles Die...";
+        public override string UnlockName => "Cold Hearted";
 
-        public override string AchievementName => "When Icicles Die...";
+        public override string AchievementName => "Cold Hearted";
 
-        public override string AchievementDesc => $"kill {killRequirementTotal} enemies post-mortem.";
+        public override string AchievementDesc => $"take more than {damageRequirementTotal} points of damage without dying.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
@@ -31,16 +33,45 @@ namespace ArtificerExtended.Unlocks
             base.CreateLang();
         }
 
-        public override void OnInstall()
+        private void ResetDamageCount()
         {
-            //RoR2.GlobalEventManager.onCharacterDeathGlobal += ColdFusionKillCounter;
-            base.OnInstall();
+            damageTakenCount = 0;
+        }
+        public override void OnBodyRequirementMet()
+        {
+            base.OnBodyRequirementMet();
+            RoR2.GlobalEventManager.onServerDamageDealt += DamageCounter;
+            Run.onClientGameOverGlobal += ClearCheck;
         }
 
-        public override void OnUninstall()
+        private void ClearCheck(Run run, RunReport runReport)
         {
-            //RoR2.GlobalEventManager.onCharacterDeathGlobal -= ColdFusionKillCounter;
-            base.OnUninstall();
+            ResetDamageCount();
+        }
+
+        public override void OnBodyRequirementBroken()
+        {
+            base.OnBodyRequirementBroken();
+            RoR2.GlobalEventManager.onServerDamageDealt -= DamageCounter;
+            //ResetDamageCount();
+        }
+
+        private void DamageCounter(DamageReport damageReport)
+        {
+            if(damageReport.victimBody == localUser.cachedBody)
+            {
+                if (!damageReport.victimBody.healthComponent.alive)
+                {
+                    ResetDamageCount();
+                    return;
+                }
+
+                damageTakenCount += damageReport.damageDealt;
+                if(damageTakenCount > damageRequirementTotal)
+                {
+                    base.Grant();
+                }
+            }
         }
 
         private void ColdFusionKillCounter(DamageReport damageReport)

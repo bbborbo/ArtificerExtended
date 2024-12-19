@@ -1,5 +1,6 @@
 ﻿using ArtificerExtended.Components;
 using ArtificerExtended.EntityState;
+using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates.Mage.Weapon;
 using R2API;
@@ -44,7 +45,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "SOLARFLARE";
 
-        public override UnlockableDef UnlockDef => null;
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillBlazingWithFireUnlock));
 
         public override string IconName => "";
 

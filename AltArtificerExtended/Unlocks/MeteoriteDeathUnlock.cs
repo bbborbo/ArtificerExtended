@@ -13,9 +13,9 @@ namespace ArtificerExtended.Unlocks
 
         public override string UnlockLangTokenName => "METEOR";
 
-        public override string UnlockName => "Cloudy, With A Chance Of...";
+        public override string UnlockName => "Cloudy, With A Risk Of...";
 
-        public override string AchievementName => "Cloudy, With A Chance Of...";
+        public override string AchievementName => "Cloudy, With A Risk Of...";
 
         public override string AchievementDesc => "kill yourself with a Glowing Meteorite.";
 

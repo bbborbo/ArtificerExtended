@@ -13,17 +13,17 @@ namespace ArtificerExtended.Unlocks
         public int burnRequirementTotal = 15;
         public int burnCounter = 0;
 
-        public override string UnlockLangTokenName => "FLAMEBURST";
+        public override string UnlockLangTokenName => "KILLBLAZINGWITHFIRE";
 
-        public override string UnlockName => "To Fight Fire";
+        public override string UnlockName => "Sinners For Dinner";
 
-        public override string AchievementName => "To Fight Fire";
+        public override string AchievementName => "Sinners For Dinner";
 
         public override string AchievementDesc => $"kill {burnRequirementTotal} Blazing Elites with burn damage in a single run.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
-        public override Sprite Sprite => GetSpriteProvider("Fireskill2icon");
+        public override Sprite Sprite => GetSpriteProvider("");
 
         public override void Init(ConfigFile config)
         {

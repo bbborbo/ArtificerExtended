@@ -12,20 +12,20 @@ namespace ArtificerExtended.Unlocks
 {
     class FreezeManySimultaneousUnlock : UnlockBase
     {
-        public int freezeRequirementTotal = 4;
+        public int freezeRequirementTotal = 5;
         static BuffDef AvalancheBuff;
 
-        public override string UnlockLangTokenName => "TEMPDROP";
+        public override string UnlockLangTokenName => "FREEZEMANYSIMULTANEOUS";
 
-        public override string UnlockName => "Avalanche!";
+        public override string UnlockName => "Ice V Has Arrived";
 
-        public override string AchievementName => "Avalanche!";
+        public override string AchievementName => "Ice V Has Arrived";
 
         public override string AchievementDesc => $"have {freezeRequirementTotal} monsters frozen at once.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
-        public override Sprite Sprite => base.GetSpriteProvider("AvalancheIcon");
+        public override Sprite Sprite => base.GetSpriteProvider("SnowballIcon");
 
         public override void Init(ConfigFile config)
         {

@@ -46,7 +46,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "FROSTBITE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeBrotherUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(AbsoluteZeroUnlock));
 
         public override string IconName => "frostbitesketch1";
 

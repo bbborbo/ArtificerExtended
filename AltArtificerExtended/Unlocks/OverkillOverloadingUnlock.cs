@@ -11,11 +11,11 @@ namespace ArtificerExtended.Unlocks
     {
         float overkillAmount = 1;
 
-        public override string UnlockLangTokenName => "SHOCKWAVE";
+        public override string UnlockLangTokenName => "OVERKILLOVERLOADING";
 
-        public override string UnlockName => "Nuked!";
+        public override string UnlockName => "Powertrippin'";
 
-        public override string AchievementName => "Nuked!";
+        public override string AchievementName => "Powertrippin'";
 
         public override string AchievementDesc => $"overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of it's Combined Maximum Health.";
 

@@ -36,7 +36,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillLangTokenName => "LAVABOLTS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillBlazingWithFireUnlock));
+        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StackBurnUnlock));
 
         public override string IconName => "napalmicon";//"Fireskill2icon";//
 
