@@ -127,9 +127,17 @@ namespace ArtificerExtended.EntityState
 
         private void SummonHeatColumn(Vector3 impactPosition, int meatballCount, float meatballForce)
         {
-            ProjectileManager.instance.FireProjectile(projectilePrefab, impactPosition, Quaternion.identity,
-                base.gameObject, this.characterBody.damage, meatballForce,
-                false, DamageColorIndex.Default, null);
+            ProjectileManager.instance.FireProjectile(new FireProjectileInfo
+            {
+                projectilePrefab = projectilePrefab,
+                position = impactPosition,
+                rotation = Quaternion.identity,
+                owner = this.outer.gameObject,
+                damage = this.characterBody.damage,
+                force = meatballForce,
+                crit = false,
+                damageColorIndex = DamageColorIndex.Default
+            });
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
