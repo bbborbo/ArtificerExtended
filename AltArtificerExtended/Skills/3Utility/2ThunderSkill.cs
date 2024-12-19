@@ -28,7 +28,8 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Rolling Thunder";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Roll a <style=cIsUtility>magnetic sphere</style> that " +
-            $"periodically attracts lightning strikes for <style=cIsDamage>{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>.";
+            $"periodically attracts lightning strikes for " +
+            $"<style=cIsDamage>{totalStrikes}x{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>.";
 
         public override string SkillLangTokenName => "THUNDERMEATBALLS";
 
