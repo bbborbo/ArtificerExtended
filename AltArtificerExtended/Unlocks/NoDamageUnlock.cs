@@ -9,6 +9,7 @@ namespace ArtificerExtended.Unlocks
 {
     class NoDamageUnlock : UnlockBase
 	{
+		public static float maxHealthFraction = 0.8f;
 		private HealthComponent healthComponent;
 		private bool failed;
 		private bool characterOk;
@@ -21,7 +22,7 @@ namespace ArtificerExtended.Unlocks
 
         public override string AchievementName => "Flawless Execution";
 
-        public override string AchievementDesc => "start and finish any stage without falling below 100% health.";
+        public override string AchievementDesc => $"start and finish any stage without falling below {Tools.ConvertDecimal(maxHealthFraction)} health.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
@@ -115,7 +116,7 @@ namespace ArtificerExtended.Unlocks
 
 		private void CheckHealth()
 		{
-			if (this.healthComponent && this.healthComponent.combinedHealth < this.healthComponent.fullCombinedHealth)
+			if (this.healthComponent && this.healthComponent.combinedHealth < this.healthComponent.fullCombinedHealth * maxHealthFraction)
 			{
 				this.Fail();
 			}
