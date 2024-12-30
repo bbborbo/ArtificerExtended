@@ -10,6 +10,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtificerExtended", "AltArt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JetHack", "JetHack\JetHack.csproj", "{776A855E-9E36-4826-9941-7A9A008E9152}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderSurge", "ThunderSurge\ThunderSurge.csproj", "{7E7E997D-D8B4-4D17-AAE4-BF9B598031F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{776A855E-9E36-4826-9941-7A9A008E9152}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776A855E-9E36-4826-9941-7A9A008E9152}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776A855E-9E36-4826-9941-7A9A008E9152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E7E997D-D8B4-4D17-AAE4-BF9B598031F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E7E997D-D8B4-4D17-AAE4-BF9B598031F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E7E997D-D8B4-4D17-AAE4-BF9B598031F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E7E997D-D8B4-4D17-AAE4-BF9B598031F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

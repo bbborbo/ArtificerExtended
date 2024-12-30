@@ -253,6 +253,7 @@ namespace ArtificerExtended.EntityState
                 blastAttack.baseForce = force;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
                 blastAttack.damageType = DamageType.IgniteOnHit;
+                blastAttack.damageType.damageSource = DamageSource.Secondary;
                 blastAttack.Fire();
 
                 if (aimNormal == Vector3.one)
@@ -283,20 +284,14 @@ namespace ArtificerExtended.EntityState
             global::EntityStates.EntityState.Destroy(this.areaIndicatorInstance.gameObject);
             disableIndicator = true;
 
-            this.handle.Fire(0f, 0.5f);
         }
 
         public override void OnExit()
         {
+            this.handle.Fire(0f, 0.5f);
             if (!this.outer.destroying && !this.hasFiredBomb)
             {
                 base.PlayAnimation("Gesture, Additive", "Empty");
-
-                GameObject obj = base.outer.gameObject;
-                if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
-                {
-                    passive.SkillCast();
-                }
             }
             if (this.chargeEffectInstance)
             {
