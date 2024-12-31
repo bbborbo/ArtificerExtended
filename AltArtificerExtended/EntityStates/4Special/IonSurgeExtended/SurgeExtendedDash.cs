@@ -40,8 +40,8 @@ namespace ArtificerExtended.EntityState
         public static float grazeHitPauseDuration = ToolbotDash.hitPauseDuration;
         public static float zapRange = 13f;
         public static int zapFireCount = 3;
-        public static float baseZapAttackInterval = 0.1f;
-        public static float baseZapClearInterval = 0.5f;
+        public static float baseZapAttackInterval = 0.25f;
+        public static float baseZapClearInterval = 1f;
 
         public static float impactDamageCoefficient = 9f;
         public static float impactProcCoefficient = 1f;
@@ -57,27 +57,22 @@ namespace ArtificerExtended.EntityState
         public static float aftershockTotalWaves = 3f;
 
         public static float massThresholdForImpact = 250;
-        public static float baseWindupDuration = 0.7f; // duration to wind up before surge
+        public static float baseWindupDuration = 0.8f; // duration to wind up before surge
         public static float antiGravityDuration = 2; // duration after beginning to ignore gravity
         public static float flightDuration = 3.5f; // duration after gravity begins before surging ends
-        public static float minFlightDuration = 0.5f; // duration after gravity begins before surging ends
+        public static float minFlightDuration = 0.2f; // duration after gravity begins before surging ends
         public static float startingSurgeSpeed = 5f; // movement speed multiplier while surging
         public static float endingSurgeSpeed = 2f; // movement speed multiplier while surging
         public static float baseSurgeDrag = 0.6f; // the time in seconds it should take for the surge direction to respond to changes in aim direction
-        public static float surgeJumpFactor = 0.2f; // how much the initial direction should be adjusted if casted while grounded
-        public static float gravityStrengthOverTime = 9f;
+        public static float surgeJumpFactor = 0.3f; // how much the initial direction should be adjusted if casted while grounded
+        public static float gravityStrengthOverTime = 11f;
 
+        Rotator rotator;
         Vector3 idealDirection;
         float windupDuration;
         bool hasStartedFlight;
         bool isInFlight;
         bool isAntiGravity;
-        BullseyeSearch search = new BullseyeSearch();
-        OverlapAttack attack;
-        Rotator rotator;
-        bool inHitPause;
-        float hitPauseTimer;
-        List<HurtBox> victimsStruck = new List<HurtBox>();
         bool detonateNextFrame;
         bool isCrit;
 
@@ -85,6 +80,12 @@ namespace ArtificerExtended.EntityState
         float skillCastInterval;
         float skillCastTimer;
 
+        List<HurtBox> victimsStruck = new List<HurtBox>();
+        OverlapAttack attack;
+        bool inHitPause;
+        float hitPauseTimer;
+
+        BullseyeSearch search = new BullseyeSearch();
         List<HealthComponent> previousTargets = new List<HealthComponent>();
         float zapAttackInterval;
         float zapAttackTimer;
@@ -257,13 +258,13 @@ namespace ArtificerExtended.EntityState
                 return;
             }
 
-            this.zapClearTimer -= Time.fixedDeltaTime;
+            this.zapClearTimer -= base.GetDeltaTime();
             if (this.zapClearTimer <= 0f)
             {
                 this.ClearList();
                 this.zapClearTimer = this.zapClearInterval;
             }
-            this.zapAttackTimer -= Time.fixedDeltaTime;
+            this.zapAttackTimer -= base.GetDeltaTime();
             if (this.zapAttackTimer <= 0f)
             {
                 this.zapAttackTimer += this.zapAttackInterval;
@@ -352,11 +353,13 @@ namespace ArtificerExtended.EntityState
             return InterruptPriority.Stun;
         }
 
-        private Vector3 GetIdealVelocity()
+        private Vector3 GetIdealVelocity(bool useGravity = true)
         {
             Vector3 idealVelocity = this.idealDirection * base.characterBody.moveSpeed * 
                 Util.Remap(1 - ((base.fixedAge - windupDuration) / flightDuration), 0, 1, endingSurgeSpeed, startingSurgeSpeed);
                 //FlyUpState.speedCoefficientCurve.Evaluate(Mathf.Clamp((base.fixedAge - windupDuration) / flightDuration, 0.3f, 0.8f));
+            if (!useGravity)
+                return idealVelocity;
 
             float timeSinceAntiGravEnd = fixedAge - (windupDuration + antiGravityDuration);
             float gravityFactor = Mathf.Max(0, timeSinceAntiGravEnd) * gravityStrengthOverTime;
@@ -478,7 +481,8 @@ namespace ArtificerExtended.EntityState
         {
             if (isInFlight && !detonateNextFrame)
             {
-                base.characterMotor.velocity = GetIdealVelocity();
+                base.healthComponent.TakeDamageForce(GetIdealVelocity(false), true, false);
+                //base.characterMotor.velocity = GetIdealVelocity();
             }
             isInFlight = false;
             base.characterMotor.useGravity = true;

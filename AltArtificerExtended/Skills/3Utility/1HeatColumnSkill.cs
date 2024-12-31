@@ -24,9 +24,9 @@ namespace ArtificerExtended.Skills
         public static GameObject HeatWardPrefab;
         public static GameObject HeatWardAreaIndicator;
 
-        public static float heatWardRadius = 12f;
+        public static float heatWardRadius = 13f;
         public static float heatWardDuration = 8f;
-        public static float maxHeatRiseRate = 9f;
+        public static float maxHeatRiseRate = 11f;
         public static float igniteDuration = 1;
         public static float igniteFrequency = 0.5f;
         public static float igniteDamage = 0.75f;
