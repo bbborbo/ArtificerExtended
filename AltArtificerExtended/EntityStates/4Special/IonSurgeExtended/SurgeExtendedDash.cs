@@ -67,6 +67,10 @@ namespace ArtificerExtended.EntityState
         public static float surgeJumpFactor = 0.3f; // how much the initial direction should be adjusted if casted while grounded
         public static float gravityStrengthOverTime = 11f;
 
+        GameObject surgeTrailEffectInstanceL;
+        GameObject surgeTrailEffectInstanceR;
+
+        CharacterModel model;
         Rotator rotator;
         Vector3 idealDirection;
         float windupDuration;
@@ -103,12 +107,15 @@ namespace ArtificerExtended.EntityState
             skillCastTimer = 0;
             this.handle = new AltArtiPassive.BatchHandle();
 
+            base.characterBody.SetAimTimer(windupDuration + flightDuration + 5f);
             BeginCharging();
 
             HitBoxGroup hitBoxGroup = null;
             Transform modelTransform = base.GetModelTransform();
             if (modelTransform)
             {
+                model = modelTransform.GetComponent<CharacterModel>();
+
                 hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), 
                     (HitBoxGroup element) => element.groupName == ArtificerExtendedPlugin.ThunderSurgeHitBoxGroupName);
 
@@ -120,6 +127,7 @@ namespace ArtificerExtended.EntityState
                         rotator = mageArmature.AddComponent<Rotator>();
                 }
             }
+
             this.attack = new OverlapAttack();
             this.attack.attacker = base.gameObject;
             this.attack.inflictor = base.gameObject;
@@ -160,10 +168,41 @@ namespace ArtificerExtended.EntityState
                     return;
                 }
 
-                this.UpdateDirection();
+
+                if (base.isAuthority)
+                {
+                    if (base.characterBody)
+                    {
+                        base.characterBody.isSprinting = true;
+                    }
+                    if (!this.inHitPause)
+                    {
+                        if (base.characterDirection)
+                        {
+                            base.characterDirection.moveVector = Vector3.zero;
+                            if (base.characterMotor)
+                            {
+                                base.characterMotor.rootMotion += this.GetIdealVelocity() * base.GetDeltaTime();
+                            }
+                        }
+                        ProcessHits();
+                    }
+                    else
+                    {
+                        //hitpause
+                        base.characterMotor.velocity = Vector3.zero;
+                        this.hitPauseTimer -= base.GetDeltaTime();
+                        if (this.hitPauseTimer < 0f)
+                        {
+                            this.inHitPause = false;
+                        }
+                    }
+                }
+
                 //do flight movement and hits
                 if (isInFlight)
                 {
+                    base.characterMotor.disableAirControlUntilCollision = false;
                     if (base.fixedAge >= windupDuration + flightDuration)
                     {
                         EndFlight();
@@ -175,35 +214,7 @@ namespace ArtificerExtended.EntityState
                         AddSkillCast();
                     }
 
-                    if (base.isAuthority)
-                    {
-                        if (base.characterBody)
-                        {
-                            base.characterBody.isSprinting = true;
-                        }
-                        if (!this.inHitPause)
-                        {
-                            if (base.characterDirection)
-                            {
-                                base.characterDirection.moveVector = Vector3.zero;
-                                if (base.characterMotor && !base.characterMotor.disableAirControlUntilCollision)
-                                {
-                                    base.characterMotor.rootMotion += this.GetIdealVelocity() * base.GetDeltaTime();
-                                }
-                            }
-                            ProcessHits();
-                        }
-                        else
-                        {
-                            //hitpause
-                            base.characterMotor.velocity = Vector3.zero;
-                            this.hitPauseTimer -= base.GetDeltaTime();
-                            if (this.hitPauseTimer < 0f)
-                            {
-                                this.inHitPause = false;
-                            }
-                        }
-                    }
+                    this.UpdateDirection();
                 }
             }
             
@@ -257,6 +268,9 @@ namespace ArtificerExtended.EntityState
                 }
                 return;
             }
+
+            if (!this.isInFlight)
+                return;
 
             this.zapClearTimer -= base.GetDeltaTime();
             if (this.zapClearTimer <= 0f)
@@ -355,6 +369,11 @@ namespace ArtificerExtended.EntityState
 
         private Vector3 GetIdealVelocity(bool useGravity = true)
         {
+            if (!isInFlight)
+            {
+                return this.idealDirection * base.characterBody.moveSpeed * endingSurgeSpeed;
+            }
+
             Vector3 idealVelocity = this.idealDirection * base.characterBody.moveSpeed * 
                 Util.Remap(1 - ((base.fixedAge - windupDuration) / flightDuration), 0, 1, endingSurgeSpeed, startingSurgeSpeed);
                 //FlyUpState.speedCoefficientCurve.Evaluate(Mathf.Clamp((base.fixedAge - windupDuration) / flightDuration, 0.3f, 0.8f));
@@ -437,13 +456,27 @@ namespace ArtificerExtended.EntityState
         /// </summary>
         public void BeginFlight()
         {
+            if (hasStartedFlight)
+                return;
+            base.characterMotor.disableAirControlUntilCollision = false;
             hasStartedFlight = true;
             isInFlight = true;
             Util.PlaySound(FlyUpState.beginSoundString, base.gameObject);
             base.PlayAnimation("Gesture, Additive", "FireWall");
             base.PlayCrossfade("Body", "FlyUp", "FlyUp.playbackRate", flightDuration, 0.1f);
-            EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
-            EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+            //EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
+            //EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+
+            Transform muzzleTransformL = base.FindModelChild("MuzzleLeft");
+            if (muzzleTransformL)
+                surgeTrailEffectInstanceL = UnityEngine.Object.Instantiate<GameObject>(ArtificerExtendedPlugin.muzzleflashIonSurgeTrail, muzzleTransformL);
+            Transform muzzleTransformR = base.FindModelChild("MuzzleRight");
+            if (muzzleTransformR)
+                surgeTrailEffectInstanceR = UnityEngine.Object.Instantiate<GameObject>(ArtificerExtendedPlugin.muzzleflashIonSurgeTrail, muzzleTransformR);
+
+            characterBody.AddBuff(ArtificerExtendedPlugin.ionSurgePower);
+            if (model)
+                model.forceUpdate = true;
 
             if (base.isAuthority)
             {
@@ -479,6 +512,16 @@ namespace ArtificerExtended.EntityState
 
         public void EndFlight()
         {
+            if(characterBody.HasBuff(ArtificerExtendedPlugin.ionSurgePower))
+                characterBody.RemoveBuff(ArtificerExtendedPlugin.ionSurgePower);
+            if (model)
+                model.forceUpdate = true;
+
+            if (surgeTrailEffectInstanceL)
+                Destroy(surgeTrailEffectInstanceL);
+            if (surgeTrailEffectInstanceR)
+                Destroy(surgeTrailEffectInstanceR);
+
             if (isInFlight && !detonateNextFrame)
             {
                 base.healthComponent.TakeDamageForce(GetIdealVelocity(false), true, false);

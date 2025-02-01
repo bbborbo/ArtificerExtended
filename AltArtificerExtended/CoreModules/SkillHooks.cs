@@ -64,7 +64,6 @@ namespace ArtificerExtended
             GetStatCoefficients += MeltAttackSpeedBuff;
 
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
-            On.RoR2.BuffWard.BuffTeam += ApplyDotWard;
         }
 
         private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
@@ -104,58 +103,6 @@ namespace ArtificerExtended
                 }
             }
             orig(self, damageInfo, hitObject);
-        }
-
-        private void ApplyDotWard(On.RoR2.BuffWard.orig_BuffTeam orig, BuffWard self, IEnumerable<TeamComponent> recipients, float radiusSqr, Vector3 currentPosition)
-        {
-            if(!(self is DotWard dotWard))
-            {
-                orig(self, recipients, radiusSqr, currentPosition);
-                return;
-            }
-
-            if (!NetworkServer.active)
-            {
-                return;
-            }
-            if (dotWard.dotIndex == DotController.DotIndex.None)
-            {
-                return;
-            }
-
-            GameObject owner = dotWard.ownerObject;
-            CharacterBody body = dotWard.ownerBody;
-            Inventory inv = dotWard.ownerInventory;
-
-            foreach (TeamComponent teamComponent in recipients)
-            {
-                Vector3 vector = teamComponent.transform.position - currentPosition;
-                if (self.shape == BuffWard.BuffWardShape.VerticalTube)
-                {
-                    vector.y = 0f;
-                }
-                if (vector.sqrMagnitude <= radiusSqr)
-                {
-                    CharacterBody component = teamComponent.GetComponent<CharacterBody>();
-                    if (component && (!self.requireGrounded || !component.characterMotor || component.characterMotor.isGrounded))
-                    {
-                        InflictDotInfo inflictDotInfo = new InflictDotInfo
-                        {
-                            attackerObject = owner,
-                            victimObject = component.gameObject,
-                            totalDamage = new float?(dotWard.damageCoefficient * body.damage), 
-                            damageMultiplier = 1f,
-                            dotIndex = dotWard.dotIndex,
-                            maxStacksFromAttacker = null
-                        };
-
-                        if(inv != null)
-                            StrengthenBurnUtils.CheckDotForUpgrade(inv, ref inflictDotInfo);
-
-                        DotController.InflictDot(ref inflictDotInfo);
-                    }
-                }
-            }
         }
 
         private void MeltAttackSpeedBuff(CharacterBody sender, StatHookEventArgs args)

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using RainrotSharedUtils.Components;
 
 namespace ArtificerExtended.Skills
 {
@@ -29,7 +30,7 @@ namespace ArtificerExtended.Skills
         public static float maxHeatRiseRate = 11f;
         public static float igniteDuration = 1;
         public static float igniteFrequency = 0.5f;
-        public static float igniteDamage = 0.75f;
+        public static float igniteDamage = 1f;
 
         public override string SkillName => "Rising Flame";
 
@@ -163,7 +164,7 @@ namespace ArtificerExtended.Skills
                     buffWard.radius = heatWardRadius;
                     buffWard.buffDef = HeatWardBuff;// Addressables.LoadAssetAsync<BuffDef>("RoR2/Base/Common/bdSlow50.asset").WaitForCompletion();//HeatWardBuff;
                     buffWard.buffDuration = 0.5f;
-                    buffWard.buffTimer = 0.5f;
+                    buffWard.interval = 0.5f;
                     buffWard.expireDuration = heatWardDuration;
                     buffWard.shape = BuffWard.BuffWardShape.VerticalTube;
                     buffWard.invertTeamFilter = false;
@@ -176,12 +177,12 @@ namespace ArtificerExtended.Skills
                     {
                         dotWard.projectileController = projectileController;
                         dotWard.dotIndex = DotController.DotIndex.Burn;
-                        dotWard.damageCoefficient = 1;
+                        dotWard.damageCoefficient = igniteDamage;
 
                         dotWard.rangeIndicator = verticalWard ? encourageWardIndicator.transform : buffWard.rangeIndicator;
                         dotWard.radius = heatWardRadius;
                         dotWard.buffDuration = igniteDuration;
-                        dotWard.buffTimer = igniteFrequency;
+                        dotWard.interval = igniteFrequency;
                         dotWard.expireDuration = heatWardDuration;
                         dotWard.shape = BuffWard.BuffWardShape.VerticalTube;
                         dotWard.invertTeamFilter = true;

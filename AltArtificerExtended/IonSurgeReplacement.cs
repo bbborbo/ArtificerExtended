@@ -17,6 +17,9 @@ namespace ArtificerExtended
     partial class ArtificerExtendedPlugin
     {
         public const string ThunderSurgeHitBoxGroupName = "Charge";
+        public static Material ionSurgePowerOverlay;
+        public static BuffDef ionSurgePower;
+        public static GameObject muzzleflashIonSurgeTrail;
 
         #region replacement initialization
         public void ReplaceVanillaIonSurge(bool shouldReworkSurge)
@@ -97,8 +100,104 @@ namespace ArtificerExtended
                 }
             }
 
-            // body effects
+            // effects
+            ionSurgePower = ScriptableObject.CreateInstance<BuffDef>();
+            ionSurgePower.name = "IonSurgePower";
+            ionSurgePower.isHidden = true;
+            ionSurgePower.canStack = false;
+            ionSurgePower.isDebuff = false;
+            CoreModules.Buffs.AddBuff(ionSurgePower);
+
+            ionSurgePowerOverlay = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion());
+            ionSurgePowerOverlay.name = "matIonSurgePowerOverlay";
+            ionSurgePowerOverlay.SetColor("_TintColor", new Color32(0, 210, 255, 255));
+
+            On.RoR2.CharacterModel.UpdateOverlays += SurgeOverlay;
+
+            muzzleflashIonSurgeTrail = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/MuzzleflashMageLightningLargeWithTrail.prefab")
+                .WaitForCompletion().InstantiateClone("MuzzleflashIonSurgeTrail");
+
+            ParticleSystem[] pss = muzzleflashIonSurgeTrail.GetComponentsInChildren<ParticleSystem>();
+            foreach(ParticleSystem ps in pss)
+            {
+                Debug.Log(ps.gameObject.name);
+                ParticleSystem.MainModule main = ps.main;
+                main.duration = SurgeExtendedDash.flightDuration;
+                //main.loop = true;
+            }
+            TrailRenderer tr = muzzleflashIonSurgeTrail.GetComponentInChildren<TrailRenderer>();
+            if (tr)
+            {
+                tr.time = SurgeExtendedDash.flightDuration + 0.5f;
+            }
+
+            Transform trail = muzzleflashIonSurgeTrail.transform.Find("Trail");
+            if (trail)
+            {
+                TrailRenderer t = trail.GetComponent<TrailRenderer>();
+                t.time = SurgeExtendedDash.flightDuration + 0.5f;
+            }
+            else
+            {
+                Debug.LogError("A");
+            }
+
+            Transform matrix = muzzleflashIonSurgeTrail.transform.Find("Matrix, Mesh");
+            if (matrix)
+            {
+                ParticleSystem ps = matrix.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule main = ps.main;
+                main.duration = SurgeExtendedDash.flightDuration;
+                main.loop = true;
+            }
+            else
+            {
+                Debug.LogError("nb");
+            }
+
+            Transform light = muzzleflashIonSurgeTrail.transform.Find("Point Light");
+            if (light)
+            {
+                LightIntensityCurve lit = light.GetComponent<LightIntensityCurve>();
+                lit.timeMax = 2f;
+            }
+            else
+            {
+                Debug.LogError("c");
+            }
+
+            Transform smoke = muzzleflashIonSurgeTrail.transform.Find("Smoke");
+            if (smoke)
+            {
+                ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule main = ps.main;
+                main.duration = SurgeExtendedDash.flightDuration;
+                main.loop = true;
+            }
+            else
+            {
+                Debug.LogError("d");
+            }
             // attack prefabs
+        }
+
+        private void SurgeOverlay(On.RoR2.CharacterModel.orig_UpdateOverlays orig, CharacterModel self)
+        {
+            orig(self);
+            if (self.visibility == VisibilityLevel.Invisible || self.body == null)
+            {
+                return;
+            }
+
+            AddOverlay(ionSurgePowerOverlay, self.body.HasBuff(ionSurgePower));
+
+            void AddOverlay(Material overlayMaterial, bool condition)
+            {
+                if (self.activeOverlayCount < CharacterModel.maxOverlays && condition)
+                {
+                    self.currentOverlays[self.activeOverlayCount++] = overlayMaterial;
+                }
+            }
         }
 
         public void ModifyVanillaIonSurge(SkillDef surge)

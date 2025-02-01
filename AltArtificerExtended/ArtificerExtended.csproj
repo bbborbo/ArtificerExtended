@@ -58,6 +58,9 @@
     <Reference Include="RiskyMod">
       <HintPath>libs\RiskyMod.dll</HintPath>
     </Reference>
+    <Reference Include="RainrotSharedUtils">
+      <HintPath>libs\RainrotSharedUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

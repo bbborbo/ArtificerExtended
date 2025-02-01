@@ -40,6 +40,7 @@ namespace ArtificerExtended
     [BepInDependency(R2API.UnlockableAPI.PluginGUID)]
     [BepInDependency(R2API.DamageAPI.PluginGUID)]
 
+    [BepInDependency(RainrotSharedUtils.SharedUtilsPlugin.guid, BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency(ChillRework.ChillRework.guid, BepInDependency.DependencyFlags.HardDependency)]
 
     [BepInDependency("com.johnedwa.RTAutoSprintEx", BepInDependency.DependencyFlags.SoftDependency)]
