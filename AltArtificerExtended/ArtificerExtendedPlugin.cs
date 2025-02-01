@@ -57,7 +57,7 @@ namespace ArtificerExtended
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
 
-        public const string version = "3.7.11";
+        public const string version = "3.8.0";
         
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
