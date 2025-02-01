@@ -42,7 +42,7 @@ namespace ArtificerExtended.Passive
         private const Single nodeFireRate = 0.65f;
         private const Single nodeFireMin = -0.05f;
         private const Single nodeFireMax = 0.05f;
-        private const Int32 nodesToCreate = 16;
+        private const Int32 nodesToCreate = 24;
 
 
         #endregion
@@ -250,8 +250,6 @@ namespace ArtificerExtended.Passive
                 this.fireRadius = nodeFireRadius;
                 this.fireTime = nodeFireRate;
                 this.passive = passive;
-                this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[0], this.location);
-                this.effectInstance.SetActive(false);
             }
 
             public void AddToQueue(ProjectileData data) => this.queue.Add(data);
