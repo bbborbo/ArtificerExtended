@@ -77,18 +77,19 @@ namespace ArtificerExtended.Skills
 
             outerFireball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballOuter", true);
             outerFireball.transform.localScale = Vector3.one * scale;
-            var ps1 = outerFireball.GetComponent<ProjectileSimple>();
+            ProjectileSimple ps1 = outerFireball.GetComponent<ProjectileSimple>();
             ps1.desiredForwardSpeed = 80;
             ps1.lifetime = 0.3f;
             ps1.updateAfterFiring = true;
             ps1.oscillate = true;
             ps1.oscillateSpeed = 25f;
             ps1.oscillateMagnitude = 60f;
-            var pie1 = outerFireball.GetComponent<ProjectileImpactExplosion>();
+            ProjectileImpactExplosion pie1 = outerFireball.GetComponent<ProjectileImpactExplosion>();
             pie1.blastRadius = blastRadius;
             pie1.falloffModel = BlastAttack.FalloffModel.None;
             pie1.bonusBlastForce = Vector3.zero;
             pie1.lifetime = 0.275f;
+            pie1.projectileDamage.damageType.damageSource = DamageSource.Primary;
 
             innerFireball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballInner", true);
             innerFireball.transform.localScale = Vector3.one * scale;
@@ -101,6 +102,7 @@ namespace ArtificerExtended.Skills
             pie2.falloffModel = BlastAttack.FalloffModel.None;
             pie2.bonusBlastForce = Vector3.zero;
             pie2.lifetime = pie1.lifetime + 0.05f;
+            pie2.projectileDamage.damageType.damageSource = DamageSource.Primary;
 
             ContentPacks.projectilePrefabs.Add(outerFireball);
             ContentPacks.projectilePrefabs.Add(innerFireball);
