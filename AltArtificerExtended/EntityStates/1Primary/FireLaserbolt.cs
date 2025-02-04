@@ -161,10 +161,10 @@ namespace ArtificerExtended.EntityState
                 bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
                 //maxDistance = maxRange;
                 bulletAttack.smartCollision = true;
-                bulletAttack.damageType.damageSource = DamageSource.Primary;
+                bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
 
                 //bulletAttack.AddModdedDamageType(CoreModules.Assets.ChainLightning);
-                
+
                 bulletAttack.Fire();
             }
 

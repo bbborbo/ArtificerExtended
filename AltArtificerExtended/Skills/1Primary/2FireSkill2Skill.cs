@@ -89,7 +89,7 @@ namespace ArtificerExtended.Skills
             pie1.falloffModel = BlastAttack.FalloffModel.None;
             pie1.bonusBlastForce = Vector3.zero;
             pie1.lifetime = 0.275f;
-            pie1.projectileDamage.damageType.damageSource = DamageSource.Primary;
+            //pie1.projectileDamage.damageType.damageSource = DamageSource.Primary;
 
             innerFireball = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageFireBombProjectile").InstantiateClone("mageFireballInner", true);
             innerFireball.transform.localScale = Vector3.one * scale;
@@ -102,7 +102,7 @@ namespace ArtificerExtended.Skills
             pie2.falloffModel = BlastAttack.FalloffModel.None;
             pie2.bonusBlastForce = Vector3.zero;
             pie2.lifetime = pie1.lifetime + 0.05f;
-            pie2.projectileDamage.damageType.damageSource = DamageSource.Primary;
+            //pie2.projectileDamage.damageType.damageSource = DamageSource.Primary;
 
             ContentPacks.projectilePrefabs.Add(outerFireball);
             ContentPacks.projectilePrefabs.Add(innerFireball);
