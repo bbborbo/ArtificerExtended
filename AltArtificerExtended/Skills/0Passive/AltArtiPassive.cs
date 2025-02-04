@@ -50,7 +50,7 @@ namespace ArtificerExtended.Passive
 
         #region Public Statics
         public static Int32 lightningSwordEffectCount = 3;//3
-        public static Single lightningDamageMult = 0.4f;
+        public static Single lightningDamageMult = 0.3f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
