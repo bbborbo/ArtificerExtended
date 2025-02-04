@@ -59,9 +59,24 @@ namespace ArtificerExtended.Skills
         {
            snowballProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/MageIceBolt");
 
-            snowballProjectilePrefab.GetComponent<ProjectileSimple>().desiredForwardSpeed = 80f;
-            snowballProjectilePrefab.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
-            snowballProjectilePrefab.GetComponent<ProjectileController>().procCoefficient = 0.75f;
+            ProjectileSimple ps = snowballProjectilePrefab.GetComponent<ProjectileSimple>();
+            if (ps)
+            {
+                ps.desiredForwardSpeed = 80f;
+            }
+            ProjectileDamage pd = snowballProjectilePrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType = DamageType.Generic;
+                pd.damageType.damageType = DamageType.Generic;
+                pd.damageType.damageTypeExtended = DamageTypeExtended.Generic;
+            }
+            ProjectileController pc = snowballProjectilePrefab.GetComponent<ProjectileController>();
+            if (pc)
+            {
+                pc.procCoefficient = 0.75f;
+            }
+
             snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
         }
     }
