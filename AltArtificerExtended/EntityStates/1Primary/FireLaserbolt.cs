@@ -163,7 +163,7 @@ namespace ArtificerExtended.EntityState
                 bulletAttack.smartCollision = true;
                 bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
 
-                //bulletAttack.AddModdedDamageType(CoreModules.Assets.ChainLightning);
+                bulletAttack.AddModdedDamageType(CoreModules.Assets.ChainLightning);
 
                 bulletAttack.Fire();
             }
