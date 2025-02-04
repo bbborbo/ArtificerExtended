@@ -96,16 +96,16 @@ namespace ArtificerExtended.CoreModules
 
         private static void CreateLightningPreFire()
         {
-            AltArtiPassive.lightningPreFireEffect = new GameObject[3];
+            AltArtiPassive.lightningPreFireEffect = new GameObject[AltArtiPassive.lightningSwordEffectCount];
             for (Int32 i = 0; i < AltArtiPassive.lightningPreFireEffect.Length; i++)
             {
                 GameObject effect = CreateLightningSwordGhost(i);
                 GameObject.Destroy(effect.GetComponent<ProjectileGhostController>());
 
-                EffectComponent effectComponent = effect.AddComponent<EffectComponent>();
+                //EffectComponent effectComponent = effect.AddComponent<EffectComponent>();
                 DestroyOnTimer dot = effect.AddComponent<DestroyOnTimer>();
                 dot.duration = 15;
-                CreateEffect(effect);
+                //CreateEffect(effect);
 
                 AltArtiPassive.lightningPreFireEffect[i] = effect;
             }
@@ -313,7 +313,7 @@ namespace ArtificerExtended.CoreModules
         }
         internal static void CreateLightningSwords()
         {
-            AltArtiPassive.lightningProjectile = new GameObject[3];
+            AltArtiPassive.lightningProjectile = new GameObject[AltArtiPassive.lightningSwordEffectCount];
             for (Int32 i = 0; i < AltArtiPassive.lightningProjectile.Length; i++)
             {
                 CreateLightningSword(i);

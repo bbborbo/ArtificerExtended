@@ -42,14 +42,15 @@ namespace ArtificerExtended.Passive
         private const Single nodeFireRate = 0.65f;
         private const Single nodeFireMin = -0.05f;
         private const Single nodeFireMax = 0.05f;
-        private const Int32 nodesToCreate = 16;
+        private const Int32 nodesToCreate = 24;
 
 
         #endregion
 
 
         #region Public Statics
-        public static Single lightningDamageMult = 0.3f;
+        public static Int32 lightningSwordEffectCount = 3;//3
+        public static Single lightningDamageMult = 0.4f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
@@ -183,7 +184,7 @@ namespace ArtificerExtended.Passive
             public ProjectileData(InstancedRandom random, BatchHandle handle = null)
             {
                 this.random = random;
-                this.type = Mathf.FloorToInt(this.random.Range(0f, 2f));
+                this.type = Mathf.FloorToInt(this.random.Range(0f, AltArtiPassive.lightningSwordEffectCount - 1));
                 this.rotation = this.random.Range(0f, 360f);
                 this.localPos = this.random.InsideUnitSphere();
                 this.timerAssigned = true;
@@ -234,7 +235,7 @@ namespace ArtificerExtended.Passive
 
             public ProjectileData nextProj;
 
-            private GameObject effect;
+            private GameObject effectInstance;
 
             private readonly AltArtiPassive passive;
 
@@ -272,17 +273,17 @@ namespace ArtificerExtended.Passive
                 if (this.nextProj == null)
                 {
                     this.nextProj = this.TryGetNextProj();
+
+                    if (this.nextProj == null)
+                    {
+                        this.timer = 0f;
+                        return;
+                    }
                 }
 
-                if (this.nextProj == null)
+                if (this.effectInstance.activeSelf)
                 {
-                    this.timer = 0f;
-                    return;
-                }
-
-                if (this.effect)
-                {
-                    this.effect.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
+                    this.effectInstance.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
                 }
 
                 if (this.nextProj.isTriggered)
@@ -331,7 +332,7 @@ namespace ArtificerExtended.Passive
             private void Fire(HurtBox target)
             {
                 this.timer = 0f;
-                if (this.effect == null)
+                if (!this.effectInstance.activeSelf)
                 {
                     this.CreateEffect(this.nextProj);
                 }
@@ -345,39 +346,47 @@ namespace ArtificerExtended.Passive
                         damageColorIndex = DamageColorIndex.Default,
                         force = AltArtiPassive.lightningForce,
                         owner = this.passive.gameObject,
-                        position = this.effect.transform.position,
+                        position = this.effectInstance.transform.position,
                         procChainMask = default,
                         projectilePrefab = AltArtiPassive.lightningProjectile[this.nextProj.type],
-                        rotation = this.effect.transform.rotation,
+                        rotation = this.effectInstance.transform.rotation,
                         target = target?.gameObject
                     });
                 }
-                UnityEngine.Object.Destroy(this.effect);
+                this.effectInstance.SetActive(false);
 
                 this.nextProj = null;
             }
 
             private void CreateEffect(ProjectileData proj)
             {
-                if (this.effect != null)
+                if(this.effectInstance == null)
                 {
-                    UnityEngine.Object.Destroy(this.effect);
+                    this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[proj.type], this.location);
+                }
+                if (!this.effectInstance.activeSelf) //this.effectInstance != null)
+                {
+                    this.effectInstance.SetActive(true);
+                    //UnityEngine.Object.Destroy(this.effectInstance);
                 }
 
-                this.effect = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[proj.type], this.location);
-                EffectComponent ec = this.effect.GetComponent<EffectComponent>();
-                ec.effectData = new EffectData
+                EffectComponent ec = this.effectInstance.GetComponent<EffectComponent>();
+                if (ec)
                 {
-                    origin = this.location.position + proj.localPos
-                };
-                this.effect.transform.localScale = Vector3.one;
-                this.effect.transform.localPosition = proj.localPos;
-                this.effect.transform.localRotation = Quaternion.identity;
+                    ec.effectData = new EffectData
+                    {
+                        origin = this.location.position + proj.localPos
+                    };
+                }
+                this.effectInstance.transform.localScale = Vector3.one;
+                this.effectInstance.transform.localPosition = proj.localPos;
+                this.effectInstance.transform.localRotation = Quaternion.identity;
 
                 return;
                 EffectManager.SpawnEffect(AltArtiPassive.lightningPreFireEffect[proj.type], new EffectData
                 {
-                    origin = this.location.position + proj.localPos
+                    origin = this.location.position + proj.localPos,
+                    rootObject = location.gameObject
                 }, false);
             }
         }
