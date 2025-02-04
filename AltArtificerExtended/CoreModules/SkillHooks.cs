@@ -103,41 +103,49 @@ namespace ArtificerExtended
         {
             if (NetworkServer.active)
             {
-                CharacterBody aBody = damageReport.attackerBody;
-                if (damageReport != null && damageReport.victimBody && aBody && damageReport.victimBody.healthComponent)
+                if(damageReport != null)
                 {
-                    Power icePower = GetIcePowerLevelFromBody(aBody);
-
-                    int chillDebuffCount = damageReport.victimBody.GetBuffCount(RoR2Content.Buffs.Slow80);
-
-                    if (chillDebuffCount == 0 && (damageReport.damageInfo.damageType.damageType.HasFlag(DamageType.Freeze2s) || damageReport.damageInfo.damageType.damageType.HasFlag(DamageType.SlowOnHit)))
-                        chillDebuffCount++;
-
-                    if (chillDebuffCount > 0 && icePower > 0) //Arctic Blast
+                    CharacterBody aBody = damageReport.attackerBody;
+                    CharacterBody vBody = damageReport.victimBody;
+                    if (vBody && aBody && vBody.healthComponent)
                     {
-                        AltArtiPassive.DoNova(aBody, icePower, damageReport.victim.transform.position, chillDebuffCount);
-                    }
-                    #region old stuff
-                    /*if (damageReport.victimBody.healthComponent.isInFrozenState)
-                    {
-                        if (this.frozenBy.ContainsKey(damageReport.victim.gameObject))
+                        Power icePower = GetIcePowerLevelFromBody(aBody);
+
+                        int chillDebuffCount = vBody.GetBuffCount(RoR2Content.Buffs.Slow80);
+                        int chillLimitCount = vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
+                        int minChillForBlast = chillLimitCount > 0 ? 5 : 1;
+
+                        if (chillDebuffCount >= minChillForBlast && icePower > 0) 
                         {
-                            GameObject body = this.frozenBy[damageReport.victim.gameObject];
-                            if (AltArtiPassive.instanceLookup.ContainsKey(body))
+                            float novaChance = Mathf.Pow(chillDebuffCount / 10, 1) * 100;
+                            if (Util.CheckRoll(novaChance, damageReport.attackerMaster))
                             {
-                                AltArtiPassive passive = AltArtiPassive.instanceLookup[body];
-                                passive.DoExecute(damageReport);
+                                //Arctic Blast
+                                AltArtiPassive.DoNova(aBody, icePower, damageReport.victim.transform.position, chillDebuffCount);
                             }
                         }
-                    }
-                    else if (damageReport.damageInfo.damageType.HasFlag(DamageType.Freeze2s))
-                    {
-                        if (AltArtiPassive.instanceLookup.ContainsKey(damageReport.attacker))
+                        #region old stuff
+                        /*if (damageReport.victimBody.healthComponent.isInFrozenState)
                         {
-                            AltArtiPassive.instanceLookup[damageReport.attacker].DoExecute(damageReport);
+                            if (this.frozenBy.ContainsKey(damageReport.victim.gameObject))
+                            {
+                                GameObject body = this.frozenBy[damageReport.victim.gameObject];
+                                if (AltArtiPassive.instanceLookup.ContainsKey(body))
+                                {
+                                    AltArtiPassive passive = AltArtiPassive.instanceLookup[body];
+                                    passive.DoExecute(damageReport);
+                                }
+                            }
                         }
-                    }*/
-                    #endregion
+                        else if (damageReport.damageInfo.damageType.HasFlag(DamageType.Freeze2s))
+                        {
+                            if (AltArtiPassive.instanceLookup.ContainsKey(damageReport.attacker))
+                            {
+                                AltArtiPassive.instanceLookup[damageReport.attacker].DoExecute(damageReport);
+                            }
+                        }*/
+                        #endregion
+                    }
                 }
             }
         }
