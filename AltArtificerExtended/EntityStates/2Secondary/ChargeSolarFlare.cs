@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class ChargeSolarFlare : BaseChargeBombState
     {

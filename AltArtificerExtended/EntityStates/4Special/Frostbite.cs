@@ -14,7 +14,7 @@ using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class Frostbite : BaseSkillState
     {

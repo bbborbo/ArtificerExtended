@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using ArtificerExtended.Passive;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class IonSurgeExtendedBase : GenericCharacterMain
     {

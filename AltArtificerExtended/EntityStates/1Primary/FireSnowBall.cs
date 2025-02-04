@@ -10,7 +10,7 @@ using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class FireSnowBall : FireFireBolt, SteppedSkillDef.IStepSetter
     {

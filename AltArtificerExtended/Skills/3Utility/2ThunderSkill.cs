@@ -5,7 +5,7 @@ using RoR2.Skills;
 using BepInEx.Configuration;
 using ArtificerExtended.Unlocks;
 using UnityEngine;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
@@ -28,7 +28,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Rolling Thunder";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Roll a <style=cIsUtility>magnetic sphere</style> that " +
-            $"periodically attracts lightning strikes for " +
+            $"periodically attracts lightning for " +
             $"<style=cIsDamage>{totalStrikes}x{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>.";
 
         public override string SkillLangTokenName => "THUNDERMEATBALLS";

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class AlternateIonSurge2 : AlternateIonSurge
     {

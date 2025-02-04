@@ -11,7 +11,7 @@ using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class CastThunderOld : BaseSkillState
     {

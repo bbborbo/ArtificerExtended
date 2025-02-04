@@ -16,7 +16,7 @@ using RiskyMod.Survivors.Mage.Components;
 using static R2API.DamageAPI;
 using ArtificerExtended.Passive;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class FireIceShard : BaseSkillState, SteppedSkillDef.IStepSetter
     {

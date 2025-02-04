@@ -12,7 +12,7 @@ using ArtificerExtended.Skills;
 using R2API;
 using ArtificerExtended.Passive;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class ColdFusion : BaseSkillState
     {

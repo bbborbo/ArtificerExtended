@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     // Token: 0x020009E0 RID: 2528
     public class ChargeNapalm : BaseSkillState

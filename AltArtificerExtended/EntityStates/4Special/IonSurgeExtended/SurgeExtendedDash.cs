@@ -13,7 +13,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     /// <summary>
     /// Reworked Ion Surge

@@ -5,7 +5,7 @@ using RoR2.Skills;
 using BepInEx.Configuration;
 using ArtificerExtended.Unlocks;
 using UnityEngine;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using R2API;
 using ArtificerExtended.CoreModules;

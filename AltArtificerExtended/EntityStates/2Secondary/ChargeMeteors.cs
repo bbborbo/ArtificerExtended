@@ -15,7 +15,7 @@ using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
 using System.Linq;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class ChargeMeteors : BaseSkillState
     {

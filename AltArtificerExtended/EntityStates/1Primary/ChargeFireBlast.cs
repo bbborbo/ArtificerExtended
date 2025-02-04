@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class ChargeFireBlast : BaseSkillState
     {

@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 using ArtificerExtended.Passive;
 using JetHack;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
 
     public class AlternateIonSurge : GenericCharacterMain

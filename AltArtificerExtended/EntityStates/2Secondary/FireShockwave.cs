@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static R2API.DamageAPI;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     public class FireShockwave : BaseState
     {
@@ -161,7 +161,7 @@ namespace ArtificerExtended.EntityState
             }
         }
 
-        protected virtual EntityStates.EntityState GetNextState()
+        protected virtual EntityState GetNextState()
         {
             float remainingDuration = (CastShockwave.totalDuration - CastShockwave.baseDuration) / this.attackSpeedStat;
 

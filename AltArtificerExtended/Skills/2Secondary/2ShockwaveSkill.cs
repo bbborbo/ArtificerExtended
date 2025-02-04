@@ -5,7 +5,7 @@ using RoR2.Skills;
 using BepInEx.Configuration;
 using ArtificerExtended.Unlocks;
 using UnityEngine;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
@@ -51,6 +51,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init(ConfigFile config)
         {
+            return;
             KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
 
             RegisterEntityState(typeof(FireShockwave));

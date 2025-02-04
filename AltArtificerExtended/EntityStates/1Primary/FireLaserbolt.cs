@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static R2API.DamageAPI;
 
-namespace ArtificerExtended.EntityState
+namespace ArtificerExtended.States
 {
     class FireLaserbolts : BaseSkillState, SteppedSkillDef.IStepSetter
     {

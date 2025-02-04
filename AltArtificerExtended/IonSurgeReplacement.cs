@@ -1,5 +1,5 @@
 ﻿using ArtificerExtended.Components;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using ArtificerExtended.Skills;
 using EntityStates;
 using R2API;

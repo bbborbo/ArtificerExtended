@@ -25,7 +25,7 @@ using static ArtificerExtended.Components.ElementCounter;
 using static ChillRework.ChillRework;
 using static R2API.RecalculateStatsAPI;
 using ArtificerExtended.CoreModules;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using RoR2.Orbs;
 

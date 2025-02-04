@@ -1,6 +1,6 @@
 ﻿using ArtificerExtended.Components;
 using ArtificerExtended.CoreModules;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
