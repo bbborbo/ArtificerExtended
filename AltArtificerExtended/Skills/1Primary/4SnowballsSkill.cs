@@ -77,7 +77,11 @@ namespace ArtificerExtended.Skills
                 pc.procCoefficient = 0.75f;
             }
 
-            snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
+            ModdedDamageTypeHolderComponent mdthc = snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>();
+            if (mdthc)
+            {
+                mdthc.Add(ChillRework.ChillRework.ChillOnHit);
+            }
         }
     }
 }
