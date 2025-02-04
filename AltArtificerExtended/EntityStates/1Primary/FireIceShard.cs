@@ -225,6 +225,7 @@ namespace ArtificerExtended.EntityState
             bulletAttack.HitEffectNormal = false;
             bulletAttack.radius = bulletRadius;
             bulletAttack.maxDistance = maxRange;
+            bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
 
             if(useChill)
                 bulletAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);

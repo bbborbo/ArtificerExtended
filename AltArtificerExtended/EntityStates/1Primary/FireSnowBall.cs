@@ -27,5 +27,10 @@ namespace ArtificerExtended.EntityState
                 VRStuff.AnimateVRHand(true, "Cast");
             base.OnEnter();
         }
+        public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
+        {
+            base.ModifyProjectileInfo(ref fireProjectileInfo);
+            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo?(DamageTypeCombo.GenericPrimary);
+        }
     }
 }
