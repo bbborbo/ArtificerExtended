@@ -94,10 +94,10 @@ namespace ArtificerExtended.Skills
                 if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
                     Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
-                EffectManager.SpawnEffect(EntityState.Frostbite.novaEffectPrefab, new EffectData
+                EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
                 {
                     origin = self.transform.position,
-                    scale = EntityState.Frostbite.novaRadius
+                    scale = States.Frostbite.novaRadius
                 }, true);
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.radius = Frostbite2.novaRadius;

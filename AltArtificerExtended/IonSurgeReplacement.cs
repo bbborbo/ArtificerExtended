@@ -36,8 +36,8 @@ namespace ArtificerExtended
                 }
                 else
                 {
-                    SkillBase.RegisterEntityState(typeof(EntityState.VanillaIonSurge));
-                    surge.activationState = new SerializableEntityStateType(typeof(EntityState.VanillaIonSurge));
+                    SkillBase.RegisterEntityState(typeof(States.VanillaIonSurge));
+                    surge.activationState = new SerializableEntityStateType(typeof(States.VanillaIonSurge));
                 }
             }
 
@@ -202,14 +202,14 @@ namespace ArtificerExtended
 
         public void ModifyVanillaIonSurge(SkillDef surge)
         {
-            SkillBase.RegisterEntityState(typeof(EntityState.SurgeExtendedDash));
-            SkillBase.RegisterEntityState(typeof(EntityState.SurgeExtendedImpact));
+            SkillBase.RegisterEntityState(typeof(States.SurgeExtendedDash));
+            SkillBase.RegisterEntityState(typeof(States.SurgeExtendedImpact));
             LanguageAPI.Add(SkillBase.Token + "ALTIONSURGE_DESC",
                 $"<style=cIsDamage>Stunning</style>. Surge forward, dealing " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.grazeDamageCoefficient)} damage</style> to enemies in your path. " +
                 $"Upon impact, create an explosion for <style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.impactDamageCoefficient)} damage</style>.");
                 //"Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
-            surge.activationState = new SerializableEntityStateType(typeof(EntityState.SurgeExtendedDash));
+            surge.activationState = new SerializableEntityStateType(typeof(States.SurgeExtendedDash));
             surge.baseRechargeInterval = 9f;
             surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
             //surge.keywordTokens = new string[0];
@@ -217,14 +217,14 @@ namespace ArtificerExtended
 
         public void ModifyScepterSurge(SkillDef surge2)
         {
-            SkillBase.RegisterEntityState(typeof(EntityState.AlternateIonSurge2));
+            SkillBase.RegisterEntityState(typeof(States.AlternateIonSurge2));
 
             LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_LIGHTNING", "Antimatter Surge");
             LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_DESC",
                 "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
                 "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
 
-            surge2.activationState = new SerializableEntityStateType(typeof(EntityState.AlternateIonSurge2));
+            surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
             surge2.baseRechargeInterval = 6f;
             surge2.skillDescriptionToken = SkillBase.Token + "ALTANTISURGE_DESC";
             surge2.skillNameToken = SkillBase.Token + "ALTANTISURGE_LIGHTNING";

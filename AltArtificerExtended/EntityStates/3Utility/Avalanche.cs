@@ -115,7 +115,7 @@ namespace ArtificerExtended.States
             //Debug.Log(fallDuration);
             //Debug.Log(radius);
 
-            EffectManager.SpawnEffect(EntityState.Frostbite.novaEffectPrefab, new EffectData
+            EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
             {
                 origin = base.transform.position,
                 scale = radius

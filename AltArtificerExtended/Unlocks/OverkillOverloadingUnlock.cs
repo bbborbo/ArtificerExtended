@@ -17,7 +17,7 @@ namespace ArtificerExtended.Unlocks
 
         public override string AchievementName => "Powertrippin\u2019";
 
-        public override string AchievementDesc => $"overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of it's Combined Maximum Health.";
+        public override string AchievementDesc => $"overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of its Combined Maximum Health.";
 
         public override string PrerequisiteUnlockableIdentifier => "FreeMage";
 
