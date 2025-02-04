@@ -67,9 +67,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = snowballProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType.damageType = DamageType.Generic;
-                pd.damageType.damageTypeExtended = DamageTypeExtended.Generic;
-                pd.damageType.damageSource = DamageSource.Primary;
+                pd.damageType = DamageTypeCombo.GenericPrimary;
             }
             ProjectileController pc = snowballProjectilePrefab.GetComponent<ProjectileController>();
             if (pc)
@@ -77,7 +75,11 @@ namespace ArtificerExtended.Skills
                 pc.procCoefficient = 0.75f;
             }
 
-            snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
+            ModdedDamageTypeHolderComponent mdthc = snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>();
+            if (mdthc)
+            {
+                mdthc.Add(ChillRework.ChillRework.ChillOnHit);
+            }
         }
     }
 }
