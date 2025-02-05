@@ -21,12 +21,13 @@ namespace ArtificerExtended.Skills
         public static float shockwaveMaxRange = 20;
 
 
-        public static float baseDuration = 0.2f;
-        public static float durationMultOnHit = 1.5f;
+        public const string ThunderStrikeHitBoxGroupName = "Strike";
+        public static float baseDuration = 0.36f;
+        public static float durationMultOnHit = 1.3f;
         public static GameObject lightningOrbEffect;
         public static GameObject lightningImpactEffect;
         public static Material enterOverlayMaterial;
-        public static float speedCoefficient = 12;
+        public static float speedCoefficient = 9f;
         public static float damageCoefficient = 1;
         public static float procCoefficient = 0.25f;
         public static float delayDamageCoefficient = 9;
@@ -34,7 +35,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Thunderstrike";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning</style>. " +
-            $"Become a beam of energy, surging a short distance forward. " +
+            $"Become a beam of energy, surging forward a short distance. " +
             $"Enemies struck will attract lightning for <style=cIsDamage>{Tools.ConvertDecimal(delayDamageCoefficient)} damage</style>.";
 
         public override string SkillLangTokenName => "THUNDERDASH";
@@ -51,7 +52,7 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 5,
+                baseRechargeInterval: 6,
                 interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true
             );
@@ -69,6 +70,33 @@ namespace ArtificerExtended.Skills
 
             CreateLang();
             CreateSkill();
+
+            // hitbox setup
+            ModelLocator modelLocator = ArtificerExtendedPlugin.mageBody.GetComponent<ModelLocator>();
+            Transform modelTransform = modelLocator?.modelTransform;
+            if (modelTransform)
+            {
+                HitBoxGroup hitBoxGroup = modelTransform.gameObject.AddComponent<HitBoxGroup>();
+                hitBoxGroup.groupName = ThunderStrikeHitBoxGroupName;
+
+                ChildLocator childLocator = modelTransform.GetComponent<ChildLocator>();
+                if (childLocator)
+                {
+                    Transform rootTransform = childLocator.FindChild("Base")?.parent;
+                    if (rootTransform)
+                    {
+                        GameObject hitboxTransform = new GameObject();
+                        HitBox hitBox = hitboxTransform.AddComponent<HitBox>();
+                        hitboxTransform.transform.parent = rootTransform;
+                        hitboxTransform.layer = LayerIndex.projectile.intVal;
+                        hitboxTransform.transform.localPosition = new Vector3(0, 1.564f, 0);
+                        hitboxTransform.transform.localRotation = Quaternion.identity;
+                        hitboxTransform.transform.localScale = Vector3.one * 8f;
+
+                        hitBoxGroup.hitBoxes = new HitBox[1] { hitBox };
+                    }
+                }
+            }
         }
 
         private void RegisterProjectileShockwave()

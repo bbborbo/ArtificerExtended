@@ -16,11 +16,11 @@ namespace ArtificerExtended.States
 	class ThunderStrikeDash : BasicMeleeAttack
 	{
 		bool hasIncreasedDuration = false;
-		public float speedCoefficientOnExit;
+		public float speedCoefficientOnExit = 1;
 		private CharacterModel characterModel;
 		public float speedCoefficient => _2ThunderstrikeSkill.speedCoefficient;
 		public string endSoundString;
-		public float exitSmallHop;
+		public float exitSmallHop = 6f;
 		public float delayedDamageCoefficient => _2ThunderstrikeSkill.delayDamageCoefficient;
 		public float delayedProcCoefficient => _2ThunderstrikeSkill.delayProcCoefficient;
 		public float delay = 0.25f;
@@ -39,6 +39,10 @@ namespace ArtificerExtended.States
 		private Vector3 dashVector;
 		private int originalLayer;
 		private int currentHitCount;
+
+		GameObject surgeTrailEffectInstanceL;
+		GameObject surgeTrailEffectInstanceR;
+
 		private Vector3 dashVelocity
 		{
 			get
@@ -49,12 +53,13 @@ namespace ArtificerExtended.States
 
         public override string GetHitBoxGroupName()
         {
-			return ArtificerExtendedPlugin.ThunderSurgeHitBoxGroupName;
+			return _2ThunderstrikeSkill.ThunderStrikeHitBoxGroupName;
 
 		}
         public override void OnEnter()
 		{
-			this.ignoreAttackSpeed = true;
+			this.hitPauseDuration = 0.06f;
+			//this.ignoreAttackSpeed = true;
 			this.baseDuration = _2ThunderstrikeSkill.baseDuration;
 			base.OnEnter();
 			this.dashVector = base.inputBank.aimDirection;
@@ -90,7 +95,8 @@ namespace ArtificerExtended.States
 			{
 				this.characterModel.invisibilityCount++;
 			}
-			base.PlayCrossfade(this.enterAnimationLayerName, this.enterAnimationStateName, this.enterAnimationCrossfadeDuration);
+			base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.enterAnimationCrossfadeDuration);
+			//base.PlayCrossfade(this.enterAnimationLayerName, this.enterAnimationStateName, this.enterAnimationCrossfadeDuration);
 			base.characterDirection.forward = base.characterMotor.velocity.normalized;
 			if (NetworkServer.active)
 			{
@@ -104,10 +110,23 @@ namespace ArtificerExtended.States
 			effectData.rotation = Util.QuaternionSafeLookRotation(this.dashVector);
 			effectData.origin = origin;
 			EffectManager.SpawnEffect(MiniBlinkState.blinkPrefab, effectData, false);
+
+
+			Transform muzzleTransformL = base.FindModelChild("MuzzleLeft");
+			if (muzzleTransformL)
+				surgeTrailEffectInstanceL = UnityEngine.Object.Instantiate<GameObject>(ArtificerExtendedPlugin.muzzleflashIonSurgeTrail, muzzleTransformL);
+			Transform muzzleTransformR = base.FindModelChild("MuzzleRight");
+			if (muzzleTransformR)
+				surgeTrailEffectInstanceR = UnityEngine.Object.Instantiate<GameObject>(ArtificerExtendedPlugin.muzzleflashIonSurgeTrail, muzzleTransformR);
 		}
 
 		public override void OnExit()
 		{
+			if (surgeTrailEffectInstanceL)
+				Destroy(surgeTrailEffectInstanceL);
+			if (surgeTrailEffectInstanceR)
+				Destroy(surgeTrailEffectInstanceR);
+
 			GameObject obj = base.outer.gameObject;
 			if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
 			{
@@ -156,7 +175,17 @@ namespace ArtificerExtended.States
 			overlapAttack.damageType = DamageTypeCombo.GenericSecondary;
 		}
 
-		public override void OnMeleeHitAuthority()
+        public override void FixedUpdate()
+		{
+			if (currentHitCount > 0 && !this.hasIncreasedDuration)
+			{
+				//this.hasIncreasedDuration = true;
+				//this.duration *= _2ThunderstrikeSkill.durationMultOnHit;
+			}
+			base.FixedUpdate();
+        }
+
+        public override void OnMeleeHitAuthority()
 		{
 			base.OnMeleeHitAuthority();
 			if (!this.hasIncreasedDuration)
