@@ -68,7 +68,7 @@ namespace ArtificerExtended.Passive
         public static Single novaRadiusPerPower = 1.5f;
         public static Single novaBaseDamage = 3.8f;
 
-        public static Single targetUpdateFreq = 10f;
+        public static Single targetUpdateFreq = 5f;
         public static Single targetRange = 60f;
         public static Single targetAng = 40f;
 
@@ -284,26 +284,26 @@ namespace ArtificerExtended.Passive
                 if (this.effectInstance.activeSelf)
                 {
                     this.effectInstance.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
-                }
 
-                if (this.nextProj.isTriggered)
-                {
-                    if (this.nextProj.triggered)
+                    if (this.nextProj.isTriggered)
                     {
-                        this.nextProj.AssignTimer();
+                        if (this.nextProj.triggered)
+                        {
+                            this.nextProj.AssignTimer();
+                            this.timer += deltaT;
+                            if (this.timer >= this.nextProj.timer)
+                            {
+                                this.Fire(target);
+                            }
+                        }
+                    }
+                    else
+                    {
                         this.timer += deltaT;
-                        if (this.timer >= this.nextProj.timer)
+                        if (this.timer >= this.fireTime + this.nextProj.timer)
                         {
                             this.Fire(target);
                         }
-                    }
-                }
-                else
-                {
-                    this.timer += deltaT;
-                    if (this.timer >= this.fireTime + this.nextProj.timer)
-                    {
-                        this.Fire(target);
                     }
                 }
             }
