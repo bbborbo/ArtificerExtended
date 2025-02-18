@@ -134,8 +134,9 @@ namespace ArtificerExtended.CoreModules
                 GameObject.Destroy(effect.GetComponent<ProjectileGhostController>());
 
                 //EffectComponent effectComponent = effect.AddComponent<EffectComponent>();
-                DestroyOnTimer dot = effect.AddComponent<DestroyOnTimer>();
-                dot.duration = 15;
+                //DestroyOnTimer dot = effect.AddComponent<DestroyOnTimer>();
+                //dot.duration = 15;
+                //dot.resetAgeOnDisable = true;
                 //CreateEffect(effect);
 
                 AltArtiPassive.lightningPreFireEffect[i] = effect;
@@ -144,7 +145,7 @@ namespace ArtificerExtended.CoreModules
 
         internal static GameObject CreateLightningSwordGhost(Int32 meshInd)
         {
-            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningSwordGhost", false);
+            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningPrefireGhost" + meshInd, false);
 
             GameObject model = obj.transform.Find("mdlRock").gameObject;
             GameObject trail = obj.transform.Find("Trail").gameObject;

@@ -153,7 +153,7 @@ namespace ArtificerExtended.Passive
             {
                 foreach (ProjectileData proj in this.handledProjectiles)
                 {
-                    proj.triggered = true;
+                    proj.batchTriggered = true;
                     proj.timerMin = minDelay;
                     proj.timerMax = maxDelay;
                 }
@@ -165,8 +165,8 @@ namespace ArtificerExtended.Passive
 
         public class ProjectileData
         {
-            public Boolean isTriggered;
-            public Boolean triggered;
+            public Boolean hasBatch;
+            public Boolean batchTriggered;
             public Boolean timerAssigned;
             public Boolean radiusAssigned;
             public Single timer;
@@ -189,8 +189,8 @@ namespace ArtificerExtended.Passive
 
                 if (handle != null)
                 {
-                    this.isTriggered = true;
-                    this.triggered = false;
+                    this.hasBatch = true;
+                    this.batchTriggered = false;
                     handle.handledProjectiles.Add(this);
                     this.handle = handle;
                     this.timerAssigned = false;
@@ -222,6 +222,7 @@ namespace ArtificerExtended.Passive
 
         private class ProjectileNode
         {
+            int type = -1;
             public Transform location;
             public List<ProjectileData> queue;
             public Single fireTime;
@@ -229,7 +230,14 @@ namespace ArtificerExtended.Passive
 
             private Single timer = 0f;
 
-
+            public int GetProjType()
+            {
+                if(type >= 0)
+                {
+                    return type;
+                }
+                return 0;
+            }
 
             public ProjectileData nextProj;
 
@@ -252,8 +260,16 @@ namespace ArtificerExtended.Passive
                 this.passive = passive;
             }
 
+            /// <summary>
+            /// adds the new projectile to the end of the queue. used for projectiles with a batch handle
+            /// </summary>
+            /// <param name="data"></param>
             public void AddToQueue(ProjectileData data) => this.queue.Add(data);
 
+            /// <summary>
+            /// displaces the current next projectile into the queue. used for projectiles with no batch handle
+            /// </summary>
+            /// <param name="data"></param>
             public void AddImmediate(ProjectileData data)
             {
                 if (this.nextProj != null)
@@ -274,35 +290,37 @@ namespace ArtificerExtended.Passive
 
                     if (this.nextProj == null)
                     {
-                        this.timer = 0f;
+                        ClearPreFire();
+                        this.queue.Clear();
                         return;
                     }
                 }
 
-                if (this.effectInstance.activeSelf)
+                if (this.effectInstance)
                 {
+                    if(!this.effectInstance.activeSelf)
+                        this.effectInstance.SetActive(true);
+
                     this.effectInstance.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
                 }
 
-                if (this.nextProj.isTriggered)
+
+                if (!this.nextProj.timerAssigned)
                 {
-                    if (this.nextProj.triggered)
+                    if (this.nextProj.hasBatch)
                     {
-                        this.nextProj.AssignTimer();
-                        this.timer += deltaT;
-                        if (this.timer >= this.nextProj.timer)
+                        if (!this.nextProj.batchTriggered)
                         {
-                            this.Fire(target);
+                            return;
                         }
                     }
+                    this.nextProj.AssignTimer();
                 }
-                else
+
+                this.timer += deltaT;
+                if (this.timer >= this.fireTime + this.nextProj.timer)
                 {
-                    this.timer += deltaT;
-                    if (this.timer >= this.fireTime + this.nextProj.timer)
-                    {
-                        this.Fire(target);
-                    }
+                    this.Fire(target);
                 }
             }
 
@@ -323,18 +341,15 @@ namespace ArtificerExtended.Passive
                     this.CreateEffect(temp);
                 }
 
-
                 return temp;
             }
 
+            /// <summary>
+            /// disable the pre-fire effect and fire the projectile
+            /// </summary>
+            /// <param name="target"></param>
             private void Fire(HurtBox target)
             {
-                this.timer = 0f;
-                if (!this.effectInstance.activeSelf)
-                {
-                    this.CreateEffect(this.nextProj);
-                }
-
                 if (this.passive.isAuthority)
                 {
                     ProjectileManager.instance.FireProjectile(new FireProjectileInfo
@@ -346,39 +361,59 @@ namespace ArtificerExtended.Passive
                         owner = this.passive.gameObject,
                         position = this.effectInstance.transform.position,
                         procChainMask = default,
-                        projectilePrefab = AltArtiPassive.lightningProjectile[this.nextProj.type],
+                        projectilePrefab = AltArtiPassive.lightningProjectile[this.GetProjType()],
                         rotation = this.effectInstance.transform.rotation,
                         target = target?.gameObject
                     });
                 }
-                this.effectInstance.SetActive(false);
+
+                ClearPreFire();
 
                 this.nextProj = null;
+                //this.nextProj = this.TryGetNextProj();
             }
 
+            private void ClearPreFire()
+            {
+                this.timer = 0f;
+
+                if (this.effectInstance)
+                    this.effectInstance.SetActive(false);
+            }
+
+            /// <summary>
+            /// enables the pre-fire effect. this is used whenever a new "next projectile" is assigned
+            /// </summary>
+            /// <param name="proj"></param>
             private void CreateEffect(ProjectileData proj)
             {
+                //assign projectile type to this node if not set
+                if (this.type == -1)
+                    this.type = proj.type;
+
+                //instantiate effect if null
                 if(this.effectInstance == null)
                 {
-                    this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[proj.type], this.location);
+                    this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[this.GetProjType()], this.location);
                 }
+                //enable effect if inactive
                 if (!this.effectInstance.activeSelf) //this.effectInstance != null)
                 {
                     this.effectInstance.SetActive(true);
                     //UnityEngine.Object.Destroy(this.effectInstance);
                 }
-
-                EffectComponent ec = this.effectInstance.GetComponent<EffectComponent>();
-                if (ec)
-                {
-                    ec.effectData = new EffectData
-                    {
-                        origin = this.location.position + proj.localPos
-                    };
-                }
                 this.effectInstance.transform.localScale = Vector3.one;
                 this.effectInstance.transform.localPosition = proj.localPos;
                 this.effectInstance.transform.localRotation = Quaternion.identity;
+
+                //EffectComponent ec = this.effectInstance.GetComponent<EffectComponent>();
+                //if (ec)
+                //{
+                //    ec.effectData = new EffectData
+                //    {
+                //        origin = this.location.position + proj.localPos
+                //    };
+                //}
 
                 return;
                 EffectManager.SpawnEffect(AltArtiPassive.lightningPreFireEffect[proj.type], new EffectData
@@ -505,12 +540,14 @@ namespace ArtificerExtended.Passive
 
         private void AddProjectileToRandomNode(ProjectileData proj, Boolean immediate)
         {
+            //creates a list of projectile counts for each node, plus 5 if a projectile is already queued up for weighting
             var counts = new List<Int32>();
             for (Int32 i = 0; i < this.projNodes.Count; i++)
             {
                 counts.Add(this.projNodes[i].queue.Count + (this.projNodes[i].nextProj != null ? 5 : 0));
             }
 
+            //create a list of the node indices with the lowest projectile counts
             Int32 min = counts.Min();
             var minInds = new List<Int32>();
             for (Int32 i = 0; i < counts.Count; i++)
@@ -521,20 +558,20 @@ namespace ArtificerExtended.Passive
                 }
             }
 
+            //choose a final random index out of the ones selected
             Int32 finalIndex = 0;
-
             if (minInds.Count > 1)
             {
-                finalIndex = Mathf.FloorToInt(this.random.Range(0, minInds.Count));
+                finalIndex = minInds[Mathf.FloorToInt(this.random.Range(0, minInds.Count))];
             }
 
             if (immediate)
             {
-                this.projNodes[minInds[finalIndex]].AddImmediate(proj);
+                this.projNodes[finalIndex].AddImmediate(proj);
             }
             else
             {
-                this.projNodes[minInds[finalIndex]].AddToQueue(proj);
+                this.projNodes[finalIndex].AddToQueue(proj);
             }
         }
         #endregion
