@@ -171,8 +171,11 @@ namespace ArtificerExtended
 
                         if (chillDebuffCount >= minChillForBlast && icePower > 0) 
                         {
-                            float novaChance = Mathf.Pow(chillDebuffCount / 10, 1) * 100;
-                            if (Util.CheckRoll(novaChance, damageReport.attackerMaster))
+                            float chillFraction = (float)chillDebuffCount / chillStacksMax;
+                            float chillFractionInverse = 1 - chillFraction;
+                            float procChanceFractionInverse = Mathf.Pow(chillFractionInverse, 2);
+                            float procChanceFraction = 1 - procChanceFractionInverse;
+                            if (Util.CheckRoll(procChanceFraction * 100, damageReport.attackerMaster))
                             {
                                 //Arctic Blast
                                 AltArtiPassive.DoNova(aBody, icePower, damageReport.victim.transform.position, chillDebuffCount);
