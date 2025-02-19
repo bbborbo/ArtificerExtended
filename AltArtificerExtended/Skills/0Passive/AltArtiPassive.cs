@@ -234,7 +234,7 @@ namespace ArtificerExtended.Passive
 
             public int GetProjType()
             {
-                if(type >= 0)
+                if (type >= 0)
                 {
                     return type;
                 }
@@ -300,28 +300,29 @@ namespace ArtificerExtended.Passive
 
                 if (this.effectInstance)
                 {
-                    if(!this.effectInstance.activeSelf)
+                    if (!this.effectInstance.activeSelf)
                         this.effectInstance.SetActive(true);
 
                     this.effectInstance.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
 
 
-                if (!this.nextProj.timerAssigned)
-                {
-                    if (this.nextProj.hasBatch)
+                    if (!this.nextProj.timerAssigned)
                     {
-                        if (!this.nextProj.batchTriggered)
+                        if (this.nextProj.hasBatch)
                         {
-                            return;
+                            if (!this.nextProj.batchTriggered)
+                            {
+                                return;
+                            }
                         }
+                        this.nextProj.AssignTimer();
                     }
-                    this.nextProj.AssignTimer();
-                }
 
-                this.timer += deltaT;
-                if (this.timer >= this.fireTime + this.nextProj.timer)
-                {
-                    this.Fire(target);
+                    this.timer += deltaT;
+                    if (this.timer >= this.fireTime + this.nextProj.timer)
+                    {
+                        this.Fire(target);
+                    }
                 }
             }
 
@@ -393,7 +394,7 @@ namespace ArtificerExtended.Passive
                     this.type = proj.type;
 
                 //instantiate effect if null
-                if(this.effectInstance == null)
+                if (this.effectInstance == null)
                 {
                     this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[this.GetProjType()], this.location);
                 }
@@ -436,7 +437,7 @@ namespace ArtificerExtended.Passive
                 return;
             }
             this.DoLightning(elementPower.lightningPower, handle);
-            if(isFire)
+            if (isFire)
                 this.DoFire(elementPower.firePower);
         }
 
@@ -624,5 +625,6 @@ namespace ArtificerExtended.Passive
             base.OnExit();
         }
         #endregion
+        }
     }
-}
+
