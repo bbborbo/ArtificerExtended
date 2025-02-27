@@ -353,6 +353,11 @@ namespace ArtificerExtended.CoreModules
             ModdedDamageTypeHolderComponent mdtyhc = proj.AddComponent<ModdedDamageTypeHolderComponent>();
             mdtyhc.Add(Assets.ChainLightning);
 
+            ParticleSystem FUCKYOU = proj.GetComponentInChildren<ParticleSystem>();
+            if(FUCKYOU != null)
+            {
+                UnityEngine.Object.Destroy(FUCKYOU.gameObject);
+            }
 
             proj.AddComponent<Components.SoundOnAwake>().sound = "Play_item_proc_dagger_spawn";
 
