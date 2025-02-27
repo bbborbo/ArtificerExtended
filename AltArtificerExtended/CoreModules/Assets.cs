@@ -130,7 +130,7 @@ namespace ArtificerExtended.CoreModules
             AltArtiPassive.lightningPreFireEffect = new GameObject[AltArtiPassive.lightningSwordEffectCount];
             for (Int32 i = 0; i < AltArtiPassive.lightningPreFireEffect.Length; i++)
             {
-                GameObject effect = CreateLightningSwordGhost(i);
+                GameObject effect = CreateLightningSwordGhost(i, true);
                 GameObject.Destroy(effect.GetComponent<ProjectileGhostController>());
 
                 //EffectComponent effectComponent = effect.AddComponent<EffectComponent>();
@@ -143,9 +143,9 @@ namespace ArtificerExtended.CoreModules
             }
         }
 
-        internal static GameObject CreateLightningSwordGhost(Int32 meshInd)
+        internal static GameObject CreateLightningSwordGhost(Int32 meshInd, bool isPreFire = false)
         {
-            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningPrefireGhost" + meshInd, false);
+            GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningBolt" + (isPreFire ? "Prefire" : "ProjectileGhost") + meshInd, false);
 
             GameObject model = obj.transform.Find("mdlRock").gameObject;
             GameObject trail = obj.transform.Find("Trail").gameObject;
@@ -287,7 +287,7 @@ namespace ArtificerExtended.CoreModules
         private static void CreateLightningSword(Int32 meshInd)
         {
             GameObject ghost = Effects.CreateLightningSwordGhost(meshInd);
-            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
+            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningBoltProjectile" + meshInd.ToString(), false);
 
             UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
             netID.localPlayerAuthority = true;
