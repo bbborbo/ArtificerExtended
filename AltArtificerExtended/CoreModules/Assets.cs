@@ -287,7 +287,7 @@ namespace ArtificerExtended.CoreModules
         private static void CreateLightningSword(Int32 meshInd)
         {
             GameObject ghost = Effects.CreateLightningSwordGhost(meshInd);
-            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningBoltProjectile" + meshInd.ToString(), false);
+            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningBoltProjectile" + meshInd.ToString(), true);
 
             UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
             netID.localPlayerAuthority = true;
