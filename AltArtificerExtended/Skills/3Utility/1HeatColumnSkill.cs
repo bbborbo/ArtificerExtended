@@ -133,9 +133,10 @@ namespace ArtificerExtended.Skills
             MeshRenderer mr2 = encourageWardIndicator.GetComponentInChildren<MeshRenderer>();
             mr2.material = encourageWardMaterial;
 
-            HeatWardPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "EncourageWardPrefab", true);
+            HeatWardPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "HeatWardPrefab", true);
             if (HeatWardPrefab)
             {
+                ContentPacks.projectilePrefabs.Add(HeatWardPrefab);
                 HeatWardPrefab.transform.rotation = Quaternion.identity;
 
                 ProjectileController projectileController = HeatWardPrefab.GetComponent<ProjectileController>();

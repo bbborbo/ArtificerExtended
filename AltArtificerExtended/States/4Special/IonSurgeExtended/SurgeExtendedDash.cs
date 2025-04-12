@@ -57,7 +57,7 @@ namespace ArtificerExtended.States
         public static float aftershockTotalWaves = 3f;
 
         public static float massThresholdForImpact = 250;
-        public static float baseWindupDuration = 0.8f; // duration to wind up before surge
+        public static float baseWindupDuration = 0.6f; // duration to wind up before surge
         public static float antiGravityDuration = 2; // duration after beginning to ignore gravity
         public static float flightDuration = 3.5f; // duration after gravity begins before surging ends
         public static float minFlightDuration = 0.2f; // duration after gravity begins before surging ends
