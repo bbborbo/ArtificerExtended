@@ -21,7 +21,7 @@ using RoR2.Projectile;
 using RoR2.UI;
 using static RoR2.UI.CharacterSelectController;
 using ArtificerExtended.Passive;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 using BepInEx.Configuration;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
@@ -59,10 +59,12 @@ namespace ArtificerExtended
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
         public const string version = "4.0.0";
-        
+        public static ArtificerExtendedPlugin instance;
+
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
-        public static string iconsPath = "Assets/AESkillIcons/";
-        public static string TokenName = "ARTIFICEREXTENDED_";
+        public const string iconsPath = "Assets/AESkillIcons/";
+        public const string DEVELOPER_PREFIX = "AE_";
+        public const string achievementIdentifier = "_ACHIEVEMENT_NAME";
 
         public static bool isScepterLoaded = Tools.isLoaded("com.DestroyedClone.AncientScepter");
         public static bool autosprintLoaded = Tools.isLoaded("com.johnedwa.RTAutoSprintEx");
@@ -71,10 +73,8 @@ namespace ArtificerExtended
 
         #region Config
         internal static ConfigFile CustomConfigFile { get; set; }
-        public static ConfigEntry<bool> AllowBrokenSFX { get; set; }
         public static ConfigEntry<bool> RecolorMeteor { get; set; }
-        public static ConfigEntry<bool> SurgeRework { get; set; }
-        public static ConfigEntry<bool> ReducedEffectsSurgeRework { get; set; }
+        public static bool ShouldReworkIonSurge { get; set; }
         #endregion
 
         public static GameObject mageObject;
@@ -96,12 +96,21 @@ namespace ArtificerExtended
 
         void Awake()
         {
+            instance = this;
+
+            Modules.Config.Init();
+            InitializeConfig();
+            Log.Init(Logger);
+
+            Modules.Language.Init();
+
             mageObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
             mageObject.AddComponent<ElementCounter>();
             mageBody = mageObject.GetComponent<CharacterBody>();
             mageSkillLocator = mageObject.GetComponent<SkillLocator>();
             if (mageObject && mageBody && mageSkillLocator)
             {
+                Modules.Skills.characterSkillLocators.Add("MageBody", mageSkillLocator);
                 Debug.Log("ARTIFICEREXTENDED setup succeeded!");
             }
 
@@ -112,13 +121,10 @@ namespace ArtificerExtended
             mageUtility = mageSkillLocator.utility.skillFamily;
             mageSpecial = mageSkillLocator.special.skillFamily;
 
-            InitializeConfig();
-            this.InitializeUnlocks();
-
             Debug.Log("ArtificerExtended setup succeeded!");
 
             CreateMagePassives(magePassiveFamily);
-            if (SurgeRework.Value)
+            if (ShouldReworkIonSurge)
             {
                 DoSurgeReworkAssetSetup();
             }
@@ -130,23 +136,69 @@ namespace ArtificerExtended
                 artiUtilCooldown = 8f;
             }
 
+            Modules.CommonAssets.Init();
             AddHooks();
-            ArtificerExtended.CoreModules.Assets.CreateZapDamageType();
-            Buffs.CreateBuffs();
-            Projectiles.CreateLightningSwords();
-            Projectiles.CreateLavaPool();
-            Effects.DoEffects();
             this.ArtiChanges();
-            this.InitializeSkills();
-            if (isScepterLoaded)
-            {
-                this.InitializeScepterSkills();
-            }
+            InitializeContent();
             On.RoR2.CharacterMaster.OnBodyStart += AddAEBodyFX;
 
             new ContentPacks().Initialize();
             VRStuff.SetupVR();
         }
+        private void InitializeContent()
+        {
+            Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();
+
+            BeginInitializing<SkillBase>(allTypes, "SwanSongSkills.txt");
+        }
+
+        #region content initialization
+        private void BeginInitializing<T>(Type[] allTypes, string fileName = "") where T : SharedBase
+        {
+            Type baseType = typeof(T);
+            //base types must be a base and not abstract
+            if (!baseType.IsAbstract)
+            {
+                Log.Error(Log.Combine() + "Incorrect BaseType: " + baseType.Name);
+                return;
+            }
+
+            IEnumerable<Type> objTypesOfBaseType = allTypes.Where(type => !type.IsAbstract && type.IsSubclassOf(baseType));
+
+            if (objTypesOfBaseType.Count() <= 0)
+                return;
+
+            Log.Debug(Log.Combine(baseType.Name) + "Initializing");
+
+            foreach (var objType in objTypesOfBaseType)
+            {
+                string s = Log.Combine(baseType.Name, objType.Name);
+                Log.Debug(s);
+                T obj = (T)System.Activator.CreateInstance(objType);
+                if (ValidateBaseType(obj as SharedBase))
+                {
+                    Log.Debug(s + "Validated");
+                    InitializeBaseType(obj as SharedBase);
+                    Log.Debug(s + "Initialized");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(fileName))
+                Modules.Language.TryPrintOutput(fileName);
+        }
+
+        bool ValidateBaseType(SharedBase obj)
+        {
+            bool enabled = obj.isEnabled;
+            if (obj.lockEnabled)
+                return enabled;
+            return obj.Bind(enabled, "Should This Content Be Enabled");
+        }
+        void InitializeBaseType(SharedBase obj)
+        {
+            obj.Init();
+        }
+        #endregion
 
         private GenericSkill CreateMagePassiveSlot(GameObject body, SkillLocator skillLocator)
         {
@@ -163,7 +215,7 @@ namespace ArtificerExtended
             passiveSkill._skillFamily = passiveFamily;
             (passiveSkill.skillFamily as ScriptableObject).name = "MageBodyPassive";
 
-            ContentPacks.skillFamilies.Add(passiveFamily);
+            Content.AddSkillFamily(passiveFamily);
 
             skillLocator.passiveSkill.enabled = false;
             foreach (var machine in body.GetComponents<EntityStateMachine>())
@@ -263,39 +315,13 @@ namespace ArtificerExtended
                 "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
                 "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
                 "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
-
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_LAVAPOOLS", $"<style=cKeywordName>Molten Pools</style>" +
-                $"<style=cSub>Creates a <style=cIsDamage>lingering pool</style> on impact with any surface, " +
-                $"which <style=cIsDamage>ignites</style> enemies and deals " +
-                $"<style=cIsDamage>{Tools.ConvertDecimal(Projectiles.napalmFireFrequency * Projectiles.napalmDamageCoefficient)}</style> TOTAL damage per second.</style>");
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_FROSTARMOR", $"<style=cKeywordName>Frost Armor</style>" +
-                $"<style=cSub>Gain <style=cIsHealing>+{_1FrostbiteSkill.bonusArmor} armor</style>, " +
-                $"and <style=cIsUtility>Chill</style> nearby enemies for " +
-                $"<style=cIsDamage>{_1FrostbiteSkill.icicleCount}x{Tools.ConvertDecimal(_1FrostbiteSkill.icicleDamage)} damage</style>. " +
-                $"\nWhile armored, move " +
-                $"<style=cIsUtility>up to +{Tools.ConvertDecimal(_1FrostbiteSkill.movementIncreasePerBuff * (_1FrostbiteSkill.buffsForZeroMovementIncrease - 1))} faster</style>, " +
-                $"gradually decaying to " +
-                $"<style=cIsUtility>-{Tools.ConvertDecimal(_1FrostbiteSkill.movementDecreasePerBuff * (10 - _1FrostbiteSkill.buffsForZeroMovementIncrease))} slower</style>. " +
-                $"\nFrost Armor disables hovering, but prevents fall damage.</style>");
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_MELT", $"<style=cKeywordName>Incinerate</style>" +
-                $"<style=cSub><style=cIsUtility>On FIRE SKILL Cast:</style> Gain a buff that " +
-                $"increases your <style=cIsDamage>attack speed</style> on all skills " +
-                $"by <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.meltAspdIncrease)}</style> per stack.");
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", $"<style=cKeywordName>Arctic Blast</style>" +
-                $"<style=cSub><style=cIsUtility>Applying 10 stacks</style> of Chill or <style=cIsUtility>killing Chilled enemies</style> " +
-                $"causes an <style=cIsUtility>Arctic Blast,</style> " +
-                $"<style=cIsUtility>Chilling</style> nearby enemies " +
-                $"for <style=cIsDamage>{Tools.ConvertDecimal(AltArtiPassive.novaBaseDamage)} damage</style> " +
-                $"and <style=cIsUtility>Freezing</style> the target.</style>");
-            LanguageAPI.Add("ARTIFICEREXTENDED_KEYWORD_BOLTS", $"<style=cKeywordName>Lightning Bolts</style>" +
-                $"<style=cSub><style=cIsUtility>On ANY Cast:</style> Summon spears of energy that <style=cIsUtility>seek out enemies in front of you</style> " +
-                $"for <style=cIsDamage>2x{Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult)} damage.</style>");
             #endregion
 
+            Sprite altPassiveIcon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
             resonanceSkillDef.skillNameToken = "MAGE_PASSIVE_ENERGY_NAME";
             resonanceSkillDef.skillDescriptionToken = "MAGE_PASSIVE_ENERGY_DESC";
-            resonanceSkillDef.icon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
+            resonanceSkillDef.icon = altPassiveIcon;
             resonanceSkillDef.canceledFromSprinting = false;
             resonanceSkillDef.cancelSprintingOnActivation = false;
             resonanceSkillDef.stateMachineDefaults = new PassiveSkillDef.StateMachineDefaults[1]
@@ -309,7 +335,7 @@ namespace ArtificerExtended
                     defaultMainState = new SerializableEntityStateType( typeof( Idle ) )
                 },
             };
-            resonanceSkillDef.keywordTokens = new string[3] { "ARTIFICEREXTENDED_KEYWORD_MELT", "ARTIFICEREXTENDED_KEYWORD_ARCTICBLAST", "ARTIFICEREXTENDED_KEYWORD_BOLTS" };
+            resonanceSkillDef.keywordTokens = new string[3] { CommonAssets.meltKeywordToken, CommonAssets.arcticBlastKeywordToken, CommonAssets.lightningBoltKeywordToken };
 
             passiveFamily.variants = new SkillFamily.Variant[2]
             {
@@ -322,19 +348,19 @@ namespace ArtificerExtended
                 new SkillFamily.Variant
                 {
                     skillDef = resonanceSkillDef,
-                    unlockableDef = resonanceSkillDef.GetUnlockDef(typeof(FullKitElementUnlock)),
+                    unlockableDef = UnlockBase.CreateUnlockDef(typeof(FullKitElementUnlock),  altPassiveIcon),
                     viewableNode = new ViewablesCatalog.Node(resonanceSkillDef.skillNameToken, false, null)
                 }
             };
             //
-            ContentPacks.skillDefs.Add(hoverSkillDef);
-            ContentPacks.skillDefs.Add(resonanceSkillDef);
+            Content.AddSkillDef(hoverSkillDef);
+            Content.AddSkillDef(resonanceSkillDef);
         }
         private void ReplaceSkillDefs(On.RoR2.Skills.SkillCatalog.orig_Init orig)
         {
             orig();
 
-            ReplaceVanillaIonSurge(SurgeRework.Value);
+            ReplaceVanillaIonSurge(ShouldReworkIonSurge);
         }
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
@@ -346,25 +372,8 @@ namespace ArtificerExtended
 
         private void InitializeConfig()
         {
-            CustomConfigFile = new ConfigFile(Paths.ConfigPath + "\\ArtificerExtended.cfg", true);
-
-            AllowBrokenSFX = CustomConfigFile.Bind<bool>(
-                "Cosmetic",
-                "Allow Broken SFX",
-                false,
-                "Some SFX (the snapfreeze cast sound, specifically) create an unstoppable droning/ringing sound. \n" +
-                "They are disabled by default, but if you would like to have SFX and dont mind the bug, then you may enable them."
-                );
-
-            SurgeRework = CustomConfigFile.Bind<bool>(
-                "Ion Surge", "Enable Rework",
-                true,
+            ShouldReworkIonSurge = ConfigManager.DualBind<bool>("(A0) ArtificerExtended : Ion Surge", "Enable Ion Surge Rework", true,
                 "Determines whether Ion Surge gets reworked. Note that vanilla Ion Surge is INCOMPATIBLE with ALL alt-passives. Use at your own risk.");
-
-            ReducedEffectsSurgeRework = CustomConfigFile.Bind<bool>(
-                "Ion Surge", "Reduce Effects",
-                false,
-                "Setting to TRUE will remove reworked Ion Surge's blink effect, for users who have trouble with the ability's flashing.");
         }
 
         private void ArtiChanges()
@@ -392,103 +401,10 @@ namespace ArtificerExtended
             }
         }
 
-        #region Init
-        public static Dictionary<UnlockBase, UnlockableDef> UnlockBaseDictionary = new Dictionary<UnlockBase, UnlockableDef>();
-        private void InitializeUnlocks()
-        {
-            var UnlockTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(UnlockBase)));
-            var baseMethod = typeof(UnlockableAPI).GetMethod("AddUnlockable", new Type[] { typeof(bool) });
-
-            Debug.Log("ARTIFICEREXTENDED Initializing unlocks!:");
-
-            foreach (Type unlockType in UnlockTypes)
-            {
-                UnlockBase unlock = (UnlockBase)System.Activator.CreateInstance(unlockType);
-                Debug.Log(unlockType);
-
-                if (!unlock.HideUnlock)
-                {
-                    unlock.Init(CustomConfigFile);
-
-                    UnlockableDef unlockableDef = (UnlockableDef)baseMethod.MakeGenericMethod(new Type[] { unlockType }).Invoke(null, new object[] { true });
-
-                    bool forceUnlock = unlock.ForceDisable;
-
-                    if (!forceUnlock)
-                    {
-                        forceUnlock = CustomConfigFile.Bind<bool>("Config: UNLOCKS", "Force Unlock Achievement: " + unlock.UnlockName,
-                        false, $"Force this achievement to unlock: {unlock.UnlockName}?").Value;
-                    }
-
-                    if (!forceUnlock)
-                        UnlockBaseDictionary.Add(unlock, unlockableDef);
-                    else
-                        UnlockBaseDictionary.Add(unlock, ScriptableObject.CreateInstance<UnlockableDef>());
-                }
-            }
-        }
 
         public static List<Type> entityStates = new List<Type>();
         public static List<SkillBase> Skills = new List<SkillBase>();
-        public static List<ScepterSkillBase> ScepterSkills = new List<ScepterSkillBase>();
         public static Dictionary<SkillBase, bool> SkillStatusDictionary = new Dictionary<SkillBase, bool>();
-
-        private void InitializeSkills()
-        {
-            var SkillTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(SkillBase)));
-
-            foreach (var skillType in SkillTypes)
-            {
-                SkillBase skill = (SkillBase)System.Activator.CreateInstance(skillType);
-
-                if (ValidateSkill(skill))
-                { 
-                    skill.Init(CustomConfigFile);
-                }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        private void InitializeScepterSkills()
-        {
-            var SkillTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(ScepterSkillBase)));
-
-            foreach (var skillType in SkillTypes)
-            {
-                ScepterSkillBase skill = (ScepterSkillBase)System.Activator.CreateInstance(skillType);
-
-                if (ValidateScepterSkill(skill))
-                {
-                    skill.Init(CustomConfigFile);
-                }
-            }
-        }
-
-        bool ValidateSkill(SkillBase item)
-        {
-            var forceUnlock = true;
-
-            if (forceUnlock)
-            {
-                Skills.Add(item);
-            }
-            SkillStatusDictionary.Add(item, forceUnlock);
-
-            return forceUnlock;
-        }
-
-        bool ValidateScepterSkill(ScepterSkillBase item)
-        {
-            var forceUnlock = isScepterLoaded;
-
-            if (forceUnlock)
-            {
-                ScepterSkills.Add(item);
-            }
-
-            return forceUnlock;
-        }
-        #endregion
 
         public static SkillDef CloneSkillDef(SkillDef oldDef)
         {
@@ -529,7 +445,7 @@ namespace ArtificerExtended
         {
             UpdateSingleTemporaryVisualEffect(ref blizzardArmorTempEffect, 
                 _1FrostbiteSkill.blizzardArmorVFX, body.radius * 0.5f, 
-                body.GetBuffCount(_1FrostbiteSkill.artiIceShield) + body.GetBuffCount(FrostbiteSkill2.artiIceShield), "");
+                body.GetBuffCount(_1FrostbiteSkill.artiIceShield), "");
         }
 
         private void UpdateSingleTemporaryVisualEffect(ref TemporaryVisualEffect tempEffect, GameObject obj, float effectRadius, int count, string childLocatorOverride = "")

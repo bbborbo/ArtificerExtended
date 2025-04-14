@@ -7,26 +7,15 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(OverkillOverloadingUnlock), nameof(OverkillOverloadingUnlock), "FreeMage", 5, null)]
     class OverkillOverloadingUnlock : UnlockBase
     {
-        float overkillAmount = 1;
+        static float overkillAmount = 1;
+        public override string TOKEN_IDENTIFIER => nameof(OverkillOverloadingUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "OVERKILLOVERLOADING";
+        public override string AchievementName => "Artificer: Powertrippin\u2019";
 
-        public override string UnlockName => "Powertrippin\u2019";
-
-        public override string AchievementName => "Powertrippin\u2019";
-
-        public override string AchievementDesc => $"overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of its Combined Maximum Health.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("shockwaveicon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of its total maximum health.";
 
         public override void OnInstall()
         {

@@ -76,24 +76,5 @@ namespace ArtificerExtended.Passive
 
             base.OnUnassigned(skillSlot);
         }
-
-        internal UnlockableDef GetUnlockDef(Type type)
-        {
-            UnlockableDef u = null;
-
-            foreach (KeyValuePair<UnlockBase, UnlockableDef> keyValuePair in ArtificerExtendedPlugin.UnlockBaseDictionary)
-            {
-                string key = keyValuePair.Key.ToString();
-                UnlockableDef value = keyValuePair.Value;
-                if (key == type.ToString())
-                {
-                    u = value;
-                    //Debug.Log($"Found an Unlock ID Match {value} for {type.Name}! ");
-                    break;
-                }
-            }
-
-            return u;
-        }
     }
 }

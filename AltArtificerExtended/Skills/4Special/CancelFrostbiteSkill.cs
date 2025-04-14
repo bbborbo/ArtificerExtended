@@ -5,6 +5,7 @@ using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace ArtificerExtended.Skills
 {
@@ -14,41 +15,36 @@ namespace ArtificerExtended.Skills
 
         public override string SkillDescription => "Focus, and shed your ice armor early.";
 
-        public override string SkillLangTokenName => "CANCELICEARMOR";
-
-        public override UnlockableDef UnlockDef => null;
-
-        public override string IconName => "AvalancheIcon";
+        public override string TOKEN_IDENTIFIER => "CANCELICEARMOR";
 
         public override MageElement Element => MageElement.Ice;
 
         public override Type ActivationState => typeof(Idle);
-
-        public override SkillFamily SkillSlot => null;
 
         public override SimpleSkillData SkillData => new SimpleSkillData 
         { 
             requiredStock = 0,
             rechargeStock = 0,
             baseMaxStock = 0,
-            baseRechargeInterval = 0,
             stockToConsume = 0,
             fullRestockOnAssign = true,
-            interruptPriority = InterruptPriority.Any,
             mustKeyPress = true,
-            isCombatSkill = true,
-            activationStateMachineName = "Body"
+            isCombatSkill = true
         };
+        public override Sprite Icon => LoadSpriteFromBundle("AvalancheIcon");
+        public override SkillSlot SkillSlot => SkillSlot.None;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 8;
+        public override string ActivationStateMachineName => "Body";
+        public override void Init()
+        {
+            base.Init();
+        }
 
         public override void Hooks()
         {
 
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            CreateSkill();
-            CreateLang();
         }
     }
 }

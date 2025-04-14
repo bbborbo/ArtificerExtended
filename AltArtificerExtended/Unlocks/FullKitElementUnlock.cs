@@ -12,24 +12,14 @@ using static ArtificerExtended.Passive.AltArtiPassive;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(FullKitElementUnlock), nameof(FullKitElementUnlock), "FreeMage", 5, null)]
     class FullKitElementUnlock : UnlockBase
     {
-        public override string UnlockLangTokenName => "ENERGYPASSIVE";
+        public override string TOKEN_IDENTIFIER => nameof(FullKitElementUnlock).ToUpperInvariant();
 
-        public override string UnlockName => "Elemental Intensity";
+        public override string AchievementName => "Artificer: Elemental Intensity";
 
-        public override string AchievementName => "Elemental Intensity";
-
-        public override string AchievementDesc => "win with 4 abilities of a single element equipped at once.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("ElementalIntensity");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, win with 4 abilities of a single element equipped at once.";
 
         public override void OnInstall()
         {

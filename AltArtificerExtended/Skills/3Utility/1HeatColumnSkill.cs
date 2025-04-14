@@ -1,5 +1,5 @@
 ﻿using ArtificerExtended.Components;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
@@ -38,25 +38,31 @@ namespace ArtificerExtended.Skills
             $"<style=cIsDamage>igniting</style> enemies inside for <style=cIsDamage>{Tools.ConvertDecimal(igniteDamage / igniteFrequency)} damage per second</style>. " +
             $"Allies inside the column <style=cIsUtility>rise into the air</style> while holding the Jump key.";
 
-        public override string SkillLangTokenName => "HEATCOLUMN";
+        public override string TOKEN_IDENTIFIER => "HEATCOLUMN";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FastHellUnlock));
-
-        public override string IconName => "";
+        public override Type RequiredUnlock => (typeof(FastHellUnlock));
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(CastHeatColumn);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseMaxStock: 1,
-                baseRechargeInterval: 16f,
-                interruptPriority: InterruptPriority.Skill,
                 canceledFromSprinting: true
             );
+        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override SkillSlot SkillSlot => SkillSlot.Utility;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 16f;
+        public override void Init()
+        {
+            KeywordTokens = new string[] { "KEYWORD_IGNITE" };
+            CreateRisingHeatBuff();
+            CreateHeatWardPrefab();
+            base.Init();
+        }
 
         public override void Hooks()
         {
@@ -86,27 +92,13 @@ namespace ArtificerExtended.Skills
             }
         }
 
-        public override void Init(ConfigFile config)
-        {
-            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
-            CreateSkill();
-            CreateLang();
-            Hooks();
-            CreateRisingHeatBuff();
-            CreateHeatWardPrefab();
-        }
-
         private void CreateRisingHeatBuff()
         {
-            HeatWardBuff = ScriptableObject.CreateInstance<BuffDef>();
-
-            HeatWardBuff.name = "RisingHeatBuff";
-            HeatWardBuff.canStack = false;
-            HeatWardBuff.isDebuff = false;
-            HeatWardBuff.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
-            HeatWardBuff.buffColor = Color.yellow;
-
-            Buffs.AddBuff(HeatWardBuff);
+            HeatWardBuff = Content.CreateAndAddBuff(
+                "bdRisingHeatLift",
+                ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png"),
+                Color.yellow,
+                false, false);
         }
 
         private void CreateHeatWardPrefab()
@@ -136,7 +128,7 @@ namespace ArtificerExtended.Skills
             HeatWardPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "HeatWardPrefab", true);
             if (HeatWardPrefab)
             {
-                ContentPacks.projectilePrefabs.Add(HeatWardPrefab);
+                Content.AddProjectilePrefab(HeatWardPrefab);
                 HeatWardPrefab.transform.rotation = Quaternion.identity;
 
                 ProjectileController projectileController = HeatWardPrefab.GetComponent<ProjectileController>();

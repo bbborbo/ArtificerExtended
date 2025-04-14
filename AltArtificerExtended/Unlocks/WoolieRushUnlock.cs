@@ -5,27 +5,15 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(WoolieRushUnlock), nameof(WoolieRushUnlock), "FreeMage", 5, null)]
     class WoolieRushUnlock : UnlockBase
     {
         public static float timeRequirement = 600;
-        public override bool ForceDisable => false;
+        public override string TOKEN_IDENTIFIER => nameof(TankDamageUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "WOOLIERUSH";
+        public override string AchievementName => "Artificer: Lightning-Fast";
 
-        public override string UnlockName => "Lightning-Fast";
-
-        public override string AchievementName => "Lightning-Fast";
-
-        public override string AchievementDesc => $"fully charge the third teleporter before the timer reaches {timeRequirement / 60} minutes.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => base.GetSpriteProvider("LaserboltIcon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, fully charge the third teleporter before the timer reaches {timeRequirement / 60} minutes.";
 
         public override void OnInstall()
         {

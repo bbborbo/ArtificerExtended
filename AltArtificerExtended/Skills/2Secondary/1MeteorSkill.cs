@@ -8,7 +8,7 @@ using UnityEngine;
 using ArtificerExtended.States;
 using R2API;
 using R2API.Utils;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Skills
 {
@@ -24,36 +24,37 @@ namespace ArtificerExtended.Skills
         public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge up a storm of 1-{maxMeteors} nano-meteors that each deal " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(damageCoefficient)} damage</style>.";
 
-        public override string SkillLangTokenName => "METEORS";
+        public override string TOKEN_IDENTIFIER => "METEORS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(MeteoriteDeathUnlock));
+        public override Type RequiredUnlock => (typeof(MeteoriteDeathUnlock));
 
-        public override string IconName => "meteoricon";
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(ChargeMeteors);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 5,
                 beginSkillCooldownOnSkillEnd: true,
                 mustKeyPress: true
             );
+        public override Sprite Icon => LoadSpriteFromBundle("meteoricon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 5;
+        public override void Init()
+        {
+            return;
+            //RegisterProjectileMeteor(config);
+            KeywordTokens = new string[] { "KEYWORD_IGNITE" };
+            base.Init();
+        }
 
 
         public override void Hooks()
         {
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            return;
-            RegisterProjectileMeteor(config);
-            CreateLang();
-            CreateSkill();
         }
         private void RegisterProjectileMeteor(ConfigFile config)
         {
@@ -90,7 +91,7 @@ namespace ArtificerExtended.Skills
                 Tools.GetParticle(meteorImpactPrefab, "Flash Lines, Fire", napalmColor);
                 Tools.GetParticle(meteorImpactPrefab, "Fire", napalmColor);
             }
-            Effects.CreateEffect(meteorImpactPrefab);
+            Content.CreateAndAddEffectDef(meteorImpactPrefab);
         }
     }
 }

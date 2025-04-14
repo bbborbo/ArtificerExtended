@@ -13,15 +13,17 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 using static R2API.RecalculateStatsAPI;
 using UnityEngine.AddressableAssets;
 using static R2API.DamageAPI;
+using RoR2.Achievements;
 
 namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {
+        public static string frostArmorKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_FROSTARMOR";
         public static int bonusArmor = 100;
         public static int icicleCount = 3;
         public static float icicleDamage = 0.35f;
@@ -44,29 +46,70 @@ namespace ArtificerExtended.Skills
             $"cover yourself in <style=cIsUtility>Frost Armor</style> for up to {maxDuration} seconds. " +
             $"Press again to cancel.";
 
-        public override string SkillLangTokenName => "FROSTBITE";
+        public override string TOKEN_IDENTIFIER => "FROSTBITE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(AbsoluteZeroUnlock));
-
-        public override string IconName => "frostbitesketch1";
+        public override Type RequiredUnlock => (typeof(AbsoluteZeroUnlock));
 
         public override MageElement Element => MageElement.Ice;
 
         public override Type ActivationState => typeof(PolarVortexStart);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSpecial;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 8,
-                interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true,
                 canceledFromSprinting: false,
                 cancelSprintingOnActivation: false,
-                activationStateMachineName: "Body",
                 beginSkillCooldownOnSkillEnd: true,
                 fullRestockOnAssign: false
             );
+        public override Sprite Icon => LoadSpriteFromBundle("frostbitesketch1");
+        public override SkillSlot SkillSlot => SkillSlot.Special;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 8;
+        public override string ActivationStateMachineName => "Body";
+
+        public override string ScepterSkillName => "Cryostasis"; 
+        public override string ScepterSkillDesc => "+100 armor, +3 frost crystals."; 
+        public override void Init()
+        {
+            LanguageAPI.Add(frostArmorKeywordToken, $"<style=cKeywordName>Frost Armor</style>" +
+                $"<style=cSub>Gain <style=cIsHealing>+{bonusArmor} armor</style>, " +
+                $"and <style=cIsUtility>Chill</style> nearby enemies for " +
+                $"<style=cIsDamage>{icicleCount}x{Tools.ConvertDecimal(icicleDamage)} damage</style>. " +
+                $"\nWhile armored, move " +
+                $"<style=cIsUtility>up to +{Tools.ConvertDecimal(movementIncreasePerBuff * (buffsForZeroMovementIncrease - 1))} faster</style>, " +
+                $"gradually decaying to " +
+                $"<style=cIsUtility>-{Tools.ConvertDecimal(movementDecreasePerBuff * (10 - buffsForZeroMovementIncrease))} slower</style>. " +
+                $"\nFrost Armor disables hovering, but prevents fall damage.</style>");
+
+            //  Frostbite.blizzardDamageCoefficient = config.Bind<float>(
+            //   "Skills Config: " + SkillName, "Primary Damage Coefficient",
+            //   Frostbite.blizzardDamageCoefficient,
+            //   "Determines the damage coefficient of the nova created when Frostbite is cast."
+            //   ).Value;
+            //  Frostbite.blizzardRadius = config.Bind<float>(
+            //   "Skills Config: " + SkillName, "Primary Blast Radius",
+            //   Frostbite.blizzardRadius,
+            //   "Determines the radius of the nova created when Frostbite is cast."
+            //   ).Value;
+            //  
+            //  Frostbite.novaDamageCoefficient = config.Bind<float>(
+            //  "Skills Config: " + SkillName, "Secondary Damage Coefficient",
+            //  Frostbite.novaDamageCoefficient,
+            //  "Determines the damage coefficient of the nova created after the Frostbite buff expires."
+            //  ).Value;
+            //  Frostbite.novaRadius = config.Bind<float>(
+            //  "Skills Config: " + SkillName, "Secondary Blast Radius",
+            //  Frostbite.novaRadius,
+            //  "Determines the radius of the nova created after the Frostbite buff expires."
+            //  ).Value;
+            KeywordTokens = new string[3] { "KEYWORD_AGILE", ChillRework.ChillRework.chillKeywordToken, frostArmorKeywordToken };
+            RegisterBuffWhiteout();
+            RegisterArmorEffects();
+            CreateIcicleProjectile();
+            base.Init();
+        }
 
 
         public override void Hooks()
@@ -85,40 +128,6 @@ namespace ArtificerExtended.Skills
                 else if (buffCount > buffsForZeroMovementIncrease)
                     args.moveSpeedReductionMultAdd += 0.15f * (buffCount - buffsForZeroMovementIncrease);
             }
-        }
-
-        public override void Init(ConfigFile config)
-        {
-        
-            Frostbite.blizzardDamageCoefficient = config.Bind<float>(
-             "Skills Config: " + SkillName, "Primary Damage Coefficient",
-             Frostbite.blizzardDamageCoefficient,
-             "Determines the damage coefficient of the nova created when Frostbite is cast."
-             ).Value;
-            Frostbite.blizzardRadius = config.Bind<float>(
-             "Skills Config: " + SkillName, "Primary Blast Radius",
-             Frostbite.blizzardRadius,
-             "Determines the radius of the nova created when Frostbite is cast."
-             ).Value;
-
-            Frostbite.novaDamageCoefficient = config.Bind<float>(
-            "Skills Config: " + SkillName, "Secondary Damage Coefficient",
-            Frostbite.novaDamageCoefficient,
-            "Determines the damage coefficient of the nova created after the Frostbite buff expires."
-            ).Value;
-            Frostbite.novaRadius = config.Bind<float>(
-            "Skills Config: " + SkillName, "Secondary Blast Radius",
-            Frostbite.novaRadius,
-            "Determines the radius of the nova created after the Frostbite buff expires."
-            ).Value;
-            KeywordTokens = new string[3] { "KEYWORD_AGILE", ChillRework.ChillRework.chillKeywordToken, "ARTIFICEREXTENDED_KEYWORD_FROSTARMOR" };
-            RegisterBuffWhiteout();
-            RegisterArmorEffects();
-            CreateIcicleProjectile();
-
-            Hooks();
-            CreateLang();
-            CreateSkill();
         }
 
         private void CreateIcicleProjectile()
@@ -185,42 +194,16 @@ namespace ArtificerExtended.Skills
 
         public void RegisterBuffWhiteout()
         {
-            artiIceShield = ScriptableObject.CreateInstance<BuffDef>();
-            {
-                artiIceShield.name = "artiIceShield";
-                artiIceShield.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
-                artiIceShield.canStack = true;
-                artiIceShield.isDebuff = false;
-            }
-            Buffs.AddBuff(artiIceShield);
-
-            return;
-            On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
-            {
-                orig(self);
-                int iceBuffCount = self.GetBuffCount(artiIceShield);
-                if (iceBuffCount > 0)
-                {
-                    self.armor += 100;
-                    self.moveSpeed *= 1.3f;
-                }
-            };
-            On.RoR2.CharacterBody.RemoveBuff_BuffIndex += (On.RoR2.CharacterBody.orig_RemoveBuff_BuffIndex orig, CharacterBody self, BuffIndex buffType) =>
-            {
-                if (buffType == artiIceShield.buffIndex)
-                {
-                    CastNova(self);
-                }
-                orig(self, buffType);
-            };
+            artiIceShield = Content.CreateAndAddBuff("bdArtiIceShield",
+                ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png"),
+                Color.white,
+                true, false);
         }
 
         public void CastNova(CharacterBody self)
         {
             if (NetworkServer.active)
             {
-                if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                    Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
                 EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
                 {

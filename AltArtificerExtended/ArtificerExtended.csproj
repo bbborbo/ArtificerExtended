@@ -13,6 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Skills\4Special\FrostbiteSkill2.cs" />
+    <Compile Remove="States\4Special\Frostbite2.cs" />
+    <Compile Remove="Unlocks\ArtificerExtendedSkinUnlock.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -37,6 +43,9 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="Skills\4Special\FrostbiteSkill2.cs" />
+    <None Include="States\4Special\Frostbite2.cs" />
+    <None Include="Unlocks\ArtificerExtendedSkinUnlock.cs" />
   </ItemGroup>
 
   <ItemGroup> 

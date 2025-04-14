@@ -8,29 +8,18 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(TankDamageUnlock), nameof(TankDamageUnlock), "FreeMage", 5, null)]
     class TankDamageUnlock : UnlockBase
     {
-        public int damageRequirementTotal = 2000;
+        public static int damageRequirementTotal = 2000;
         float damageTakenCount = 0;
         public ulong killRequirementTotal = 5;
         public StatDef postmortemKillCounter = GetCareerStatTotal("artificerKillsPostMortem");
+        public override string TOKEN_IDENTIFIER => nameof(TankDamageUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "TANKDAMAGE";
+        public override string AchievementName => "Artificer: Cold Hearted";
 
-        public override string UnlockName => "Cold Hearted";
-
-        public override string AchievementName => "Cold Hearted";
-
-        public override string AchievementDesc => $"take more than {damageRequirementTotal} points of damage without dying.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("FusionIcon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, take more than {damageRequirementTotal} points of damage in a single life.";
 
         private void ResetDamageCount()
         {

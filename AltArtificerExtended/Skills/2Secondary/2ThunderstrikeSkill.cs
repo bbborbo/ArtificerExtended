@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.States;
+﻿using ArtificerExtended.Modules;
+using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
@@ -38,38 +39,31 @@ namespace ArtificerExtended.Skills
             $"Become a beam of energy, surging forward a short distance. " +
             $"Enemies struck will attract lightning for <style=cIsDamage>{Tools.ConvertDecimal(delayDamageCoefficient)} damage</style>.";
 
-        public override string SkillLangTokenName => "THUNDERDASH";
+        public override string TOKEN_IDENTIFIER => "THUNDERDASH";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(OverkillOverloadingUnlock));
+        public override Type RequiredUnlock => (typeof(OverkillOverloadingUnlock));
 
-        public override string IconName => "shockwaveicon";
 
         public override MageElement Element => MageElement.Lightning;
 
         public override Type ActivationState => typeof(ThunderStrikeDash);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 6,
-                interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true
             );
-
-        public override void Hooks()
-        {
-        }
-
-        public override void Init(ConfigFile config)
+        public override Sprite Icon => LoadSpriteFromBundle("shockwaveicon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 6;
+        public override void Init()
         {
             KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
 
             lightningOrbEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LightningStrikeOnHit/SimpleLightningStrikeOrbEffect.prefab").WaitForCompletion();
             lightningImpactEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LightningStrikeOnHit/SimpleLightningStrikeImpact.prefab").WaitForCompletion();
-
-            CreateLang();
-            CreateSkill();
+            base.Init();
 
             // hitbox setup
             ModelLocator modelLocator = ArtificerExtendedPlugin.mageBody.GetComponent<ModelLocator>();
@@ -99,28 +93,8 @@ namespace ArtificerExtended.Skills
             }
         }
 
-        private void RegisterProjectileShockwave()
+        public override void Hooks()
         {
-            shockwaveZapConePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LoaderZapCone").InstantiateClone("shockwaveZapCone", true);
-
-            ProjectileProximityBeamController ppbc = shockwaveZapConePrefab.GetComponent<ProjectileProximityBeamController>();
-            ppbc.attackRange = shockwaveMaxRange - 5;
-            ppbc.maxAngleFilter = shockwaveMaxAngleFilter;
-            ppbc.damageCoefficient = 0; // 10;
-            ppbc.procCoefficient = 1;
-            ppbc.attackInterval = 0.15f;
-
-            ShakeEmitter shake = shockwaveZapConePrefab.AddComponent<ShakeEmitter>();
-            shake.radius = 80; //40
-            shake.duration = 0.3f; //0.2f
-            shake.shakeOnEnable = false;
-            shake.shakeOnStart = true;
-            shake.amplitudeTimeDecay = true;
-            shake.scaleShakeRadiusWithLocalScale = false;
-
-            shockwaveZapConePrefab.GetComponent<DestroyOnTimer>().duration = 2f;
-
-            ContentPacks.projectilePrefabs.Add(shockwaveZapConePrefab);
         }
     }
 }

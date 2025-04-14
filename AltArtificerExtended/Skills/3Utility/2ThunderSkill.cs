@@ -10,6 +10,7 @@ using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
 using UnityEngine.AddressableAssets;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Skills
 {
@@ -31,56 +32,36 @@ namespace ArtificerExtended.Skills
             $"periodically attracts lightning for " +
             $"<style=cIsDamage>{totalStrikes}x{Tools.ConvertDecimal(CastThunder.damagePerMeatball)} damage</style>.";
 
-        public override string SkillLangTokenName => "THUNDERMEATBALLS";
+        public override string TOKEN_IDENTIFIER => "THUNDERMEATBALLS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(UgornsMusicUnlock));
-
-        public override string IconName => "thundericon";
+        public override Type RequiredUnlock => (typeof(UgornsMusicUnlock));
 
         public override MageElement Element => MageElement.Lightning;
 
         public override Type ActivationState => typeof(CastThunder);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageUtility;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
                 baseMaxStock: 1,
-                baseRechargeInterval: ArtificerExtendedPlugin.artiUtilCooldown,
-                interruptPriority: InterruptPriority.Skill,
                 canceledFromSprinting: true
-
-                /*Thunder.baseMaxStock = 2;
-                Thunder.baseRechargeInterval = 5f;
-                Thunder.beginSkillCooldownOnSkillEnd = snapfreeze.beginSkillCooldownOnSkillEnd;
-                Thunder.canceledFromSprinting = snapfreeze.canceledFromSprinting;
-                Thunder.fullRestockOnAssign = snapfreeze.fullRestockOnAssign;
-                Thunder.interruptPriority = snapfreeze.interruptPriority;
-                Thunder.isBullets = snapfreeze.isBullets;
-                Thunder.isCombatSkill = snapfreeze.isCombatSkill;
-                Thunder.mustKeyPress = snapfreeze.mustKeyPress;
-                Thunder.noSprint = snapfreeze.noSprint;
-                Thunder.rechargeStock = 1;
-                Thunder.requiredStock = 1;
-                Thunder.shootDelay = snapfreeze.shootDelay;
-                Thunder.stockToConsume = 1;
-                Thunder.keywordTokens = new string[1];
-                Thunder.keywordTokens[0] = "KEYWORD_STUNNING";*/
             );
-
-
-        public override void Hooks()
-        {
-        }
-
-        public override void Init(ConfigFile config)
+        public override Sprite Icon => LoadSpriteFromBundle("thundericon");
+        public override SkillSlot SkillSlot => SkillSlot.Utility;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => ArtificerExtendedPlugin.artiUtilCooldown;
+        public override void Init()
         {
             KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
 
             RegisterProjectileThunder();
             RegisterMagnetRoller();
-            CreateLang();
-            CreateSkill();
+            base.Init();
+        }
+
+
+        public override void Hooks()
+        {
         }
 
         private void RegisterMagnetRoller()
@@ -169,9 +150,8 @@ namespace ArtificerExtended.Skills
             float scale = 0.2f;
             projectilePrefabThunder.transform.localScale = new Vector3(scale, scale, scale);
 
-            ContentPacks.projectilePrefabs.Add(projectilePrefabThunder);
-            EffectDef newEffect = new EffectDef(impactEffect);
-            ContentPacks.effectDefs.Add(newEffect);
+            Content.AddProjectilePrefab(projectilePrefabThunder);
+            Content.CreateAndAddEffectDef(impactEffect);
         }
     }
 }

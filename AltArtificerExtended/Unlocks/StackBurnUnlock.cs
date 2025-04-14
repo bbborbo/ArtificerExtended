@@ -8,27 +8,15 @@ using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(StackBurnUnlock), nameof(StackBurnUnlock), "FreeMage", 5, null)]
     class StackBurnUnlock : UnlockBase
     {
-        public int burnRequirementTotal = 25;
+        public static int burnRequirementTotal = 25;
+        public override string TOKEN_IDENTIFIER => nameof(StackBurnUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "STACKBURN";
+        public override string AchievementName => "Artificer: The Ultimate Stonecutter";
 
-        public override string UnlockName => "The Ultimate Stonecutter";
-
-        public override string AchievementName => "The Ultimate Stonecutter";
-
-        public override string AchievementDesc => $"apply {burnRequirementTotal} stacks of burn to a single target.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("napalmicon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
-
+        public override string AchievementDesc => $"As Artificer, apply {burnRequirementTotal} stacks of burn to a single target.";
         public override void OnInstall()
         {
             On.RoR2.GlobalEventManager.OnHitEnemy += CountBurn;

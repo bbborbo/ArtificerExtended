@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended
 {
@@ -36,7 +37,7 @@ namespace ArtificerExtended
                 }
                 else
                 {
-                    SkillBase.RegisterEntityState(typeof(States.VanillaIonSurge));
+                    Content.AddEntityState(typeof(States.VanillaIonSurge));
                     surge.activationState = new SerializableEntityStateType(typeof(States.VanillaIonSurge));
                 }
             }
@@ -101,12 +102,8 @@ namespace ArtificerExtended
             }
 
             // effects
-            ionSurgePower = ScriptableObject.CreateInstance<BuffDef>();
-            ionSurgePower.name = "IonSurgePower";
+            ionSurgePower = Content.CreateAndAddBuff("bdIonSurgePower", null, Color.black, false, false);
             ionSurgePower.isHidden = true;
-            ionSurgePower.canStack = false;
-            ionSurgePower.isDebuff = false;
-            CoreModules.Buffs.AddBuff(ionSurgePower);
 
             ionSurgePowerOverlay = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/VoidSurvivor/matVoidSurvivorCorruptOverlay.mat").WaitForCompletion());
             ionSurgePowerOverlay.name = "matIonSurgePowerOverlay";
@@ -202,32 +199,31 @@ namespace ArtificerExtended
 
         public void ModifyVanillaIonSurge(SkillDef surge)
         {
-            SkillBase.RegisterEntityState(typeof(States.SurgeExtendedDash));
-            SkillBase.RegisterEntityState(typeof(States.SurgeExtendedImpact));
-            LanguageAPI.Add(SkillBase.Token + "ALTIONSURGE_DESC",
+            Content.AddEntityState(typeof(States.SurgeExtendedDash));
+            Content.AddEntityState(typeof(States.SurgeExtendedImpact));
+            LanguageAPI.Add("MAGE_SPECIAL_LIGHTNING_DESC",
                 $"<style=cIsDamage>Stunning</style>. Surge forward, dealing " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.grazeDamageCoefficient)} damage</style> to enemies in your path. " +
                 $"Upon impact, create an explosion for <style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.impactDamageCoefficient)} damage</style>.");
                 //"Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
             surge.activationState = new SerializableEntityStateType(typeof(States.SurgeExtendedDash));
             surge.baseRechargeInterval = 9f;
-            surge.skillDescriptionToken = SkillBase.Token + "ALTIONSURGE_DESC";
             //surge.keywordTokens = new string[0];
         }
 
         public void ModifyScepterSurge(SkillDef surge2)
         {
-            SkillBase.RegisterEntityState(typeof(States.AlternateIonSurge2));
+            Content.AddEntityState(typeof(States.AlternateIonSurge2));
 
-            LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_LIGHTNING", "Antimatter Surge");
-            LanguageAPI.Add(SkillBase.Token + "ALTANTISURGE_DESC",
+            LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_NAME", "Antimatter Surge");
+            LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_DESC",
                 "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
                 "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
 
             surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
             surge2.baseRechargeInterval = 6f;
-            surge2.skillDescriptionToken = SkillBase.Token + "ALTANTISURGE_DESC";
-            surge2.skillNameToken = SkillBase.Token + "ALTANTISURGE_LIGHTNING";
+            surge2.skillDescriptionToken = "MAGE_ANTISURGE_LIGHTNING_DESC";
+            surge2.skillNameToken = "MAGE_ANTISURGE_LIGHTNING_NAME";
             surge2.keywordTokens = new string[0];
         }
     }

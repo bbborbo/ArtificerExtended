@@ -9,27 +9,16 @@ using UnityEngine.Networking;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(KillBlazingWithFireUnlock), nameof(KillBlazingWithFireUnlock), "FreeMage", 5, null)]
     class KillBlazingWithFireUnlock : UnlockBase
     {
-        public int burnRequirementTotal = 15;
+        public static int burnRequirementTotal = 15;
         public int burnCounter = 0;
+        public override string TOKEN_IDENTIFIER => nameof(KillBlazingWithFireUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "KILLBLAZINGWITHFIRE";
+        public override string AchievementName => "Artificer: Sinners For Dinner";
 
-        public override string UnlockName => "Sinners For Dinner";
-
-        public override string AchievementName => "Sinners For Dinner";
-
-        public override string AchievementDesc => $"kill {burnRequirementTotal} Blazing Elites with burn damage in a single run.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Core/texNullIcon.png").WaitForCompletion();
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, kill {burnRequirementTotal} Blazing Elites with burn damage in a single run.";
 
         public override void OnInstall()
         {

@@ -1,7 +1,10 @@
-﻿using BepInEx.Configuration;
+﻿using ArtificerExtended.Modules;
+using Assets.RoR2.Scripts.Platform;
+using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.Achievements;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,89 +13,120 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class FreezeManySimultaneousUnlock : UnlockBase
+    [RegisterAchievement(nameof(FreezeManySimultaneousUnlock), nameof(FreezeManySimultaneousUnlock), "FreeMage", 5, null)]
+    class FreezeManySimultaneousUnlock : UnlockBase<FreezeManySimultaneousUnlock>
     {
-        public int freezeRequirementTotal = 5;
-        static BuffDef AvalancheBuff;
-
-        public override string UnlockLangTokenName => "FREEZEMANYSIMULTANEOUS";
-
-        public override string UnlockName => "Ice V Has Arrived";
-
-        public override string AchievementName => "Ice V Has Arrived";
-
-        public override string AchievementDesc => $"have {freezeRequirementTotal} monsters frozen at once.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => base.GetSpriteProvider("SnowballIcon");
-
-        public override void Init(ConfigFile config)
+        private class FreezeManySimultaneousServerAchievement : BaseServerAchievement
         {
-            base.CreateLang();
-        }
+            Dictionary<SetStateOnHurt, float> avalancheUnlockTrackers;
 
-        private static void CreateBuff(On.RoR2.BuffCatalog.orig_Init orig)
-        {
-            orig();
-            AvalancheBuff = RoR2Content.Buffs.OnFire;
-
-            BuffDef buff = ScriptableObject.CreateInstance<BuffDef>();
+            CharacterBody trackedBody;
+            public override void OnInstall()
             {
-                buff.name = "avalancheUnlockTracker";
-                buff.iconSprite = RoR2.LegacyResourcesAPI.Load<Sprite>("textures/bufficons/texBuffGenericShield");
-                buff.buffColor = Color.red;
-                buff.canStack = true;
-                buff.isDebuff = false;
+                base.OnInstall();
+                avalancheUnlockTrackers = new Dictionary<SetStateOnHurt, float>();
+                RoR2Application.onFixedUpdate += SetTrackedBody;
+                On.RoR2.SetStateOnHurt.SetFrozenInternal += AddFreezeTracker;
             }
 
-            //AvalancheBuff = buff;
-            //Main.buffDefs.Add(buff);
-            //Buffs.RegisterBuff(buff);
-        }
-
-        private void AddFreezeCounter(On.RoR2.SetStateOnHurt.orig_OnTakeDamageServer orig, SetStateOnHurt self, DamageReport damageReport)
-        {
-            if (damageReport != null && self.targetStateMachine && self.spawnedOverNetwork)
+            private void AddFreezeTracker(On.RoR2.SetStateOnHurt.orig_SetFrozenInternal orig, SetStateOnHurt self, float duration)
             {
-                DamageInfo damageInfo = damageReport.damageInfo;
+                orig(self, duration);
 
-                if (damageReport.attackerBodyIndex == LookUpRequiredBodyIndex())
+                CharacterBody body;
+                if (self.TryGetComponent<CharacterBody>(out body) && body.healthComponent)
                 {
-                    HealthComponent hc = self.targetStateMachine?.commonComponents.healthComponent;
-                    bool isFrozenAlready = false;
-                    if (hc != null)
-                        isFrozenAlready = hc.isInFrozenState;
-
-                    if (damageInfo.procCoefficient > 0 && self.canBeFrozen && !isFrozenAlready && (damageInfo.damageType & DamageType.Freeze2s) != DamageType.Generic && damageReport.attackerBody != null)
+                    GameObject lastAttacker = body.healthComponent.lastHitAttacker;
+                    CharacterBody attackerBody;
+                    if(lastAttacker.TryGetComponent<CharacterBody>(out attackerBody) && attackerBody == trackedBody)
                     {
-                        Debug.Log(damageReport.attackerBody.name);
-                        damageReport.attackerBody.AddTimedBuffAuthority(RoR2Content.Buffs.OnFire.buffIndex, 2 * damageInfo.procCoefficient);
+                        int progress = 1;
+                        bool shouldGrant = false;
+                        foreach(KeyValuePair<SetStateOnHurt, float> avalancheUnlockTracker in avalancheUnlockTrackers)
+                        {
+                            if (avalancheUnlockTracker.Key == null)
+                                continue;
+                            if (Time.time > avalancheUnlockTracker.Value)
+                                continue;
 
-                        int buffCount = damageReport.attackerBody.GetBuffCount(RoR2Content.Buffs.OnFire);
-                        if (buffCount >= freezeRequirementTotal)
+                            progress++;
+                            if(progress >= FreezeManySimultaneousUnlock.freezeRequirementTotal)
+                            {
+                                shouldGrant = true;
+                                break;
+                            }
+                        }
+
+                        if (shouldGrant)
                         {
                             base.Grant();
+                            base.ServerTryToCompleteActivity();
+                        }
+                        else
+                        {
+                            if (avalancheUnlockTrackers.ContainsKey(self))
+                            {
+                                avalancheUnlockTrackers[self] = Time.time + duration;
+                            }
+                            else
+                            {
+                                avalancheUnlockTrackers.Add(self, Time.time + duration);
+                            }
                         }
                     }
                 }
             }
-            orig(self, damageReport);
+
+            private void SetTrackedBody()
+            {
+                trackedBody = base.GetCurrentBody();
+            }
+
+            public override void OnUninstall()
+            {
+                base.OnUninstall();
+                RoR2Application.onFixedUpdate -= SetTrackedBody;
+                On.RoR2.SetStateOnHurt.SetFrozenInternal += AddFreezeTracker;
+            }
+        }
+
+        public override string AchievementName => "Artificer: Ice V Has Arrived";
+
+        public override string AchievementDesc => $"As Artificer, have {freezeRequirementTotal} monsters frozen at once.";
+
+        public override string TOKEN_IDENTIFIER => nameof(FreezeManySimultaneousUnlock).ToUpperInvariant();
+
+        public static int freezeRequirementTotal = 5;
+
+        public override void TryToCompleteActivity()
+        {
+            bool flag = base.localUser.id == LocalUserManager.GetFirstLocalUser().id;
+            if (this.shouldGrant && flag)
+            {
+                BaseActivitySelector baseActivitySelector = new BaseActivitySelector();
+                baseActivitySelector.activityAchievementID = nameof(FreezeManySimultaneousUnlock);
+                PlatformSystems.activityManager.TryToCompleteActivity(baseActivitySelector, true, true);
+            }
+        }
+
+        public override void OnBodyRequirementMet()
+        {
+            base.OnBodyRequirementMet();
+            base.SetServerTracked(true);
+        }
+        public override void OnBodyRequirementBroken()
+        {
+            base.OnBodyRequirementBroken();
+            base.SetServerTracked(false);
         }
 
         public override void OnInstall()
         {
-            On.RoR2.BuffCatalog.Init += CreateBuff;
-            On.RoR2.SetStateOnHurt.OnTakeDamageServer += AddFreezeCounter;
-
             base.OnInstall();
         }
 
         public override void OnUninstall()
         {
-            On.RoR2.BuffCatalog.Init -= CreateBuff;
-            On.RoR2.SetStateOnHurt.OnTakeDamageServer -= AddFreezeCounter;
-
             base.OnUninstall();
         }
     }

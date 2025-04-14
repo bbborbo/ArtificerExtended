@@ -1,11 +1,14 @@
 ﻿using ArtificerExtended;
+using ArtificerExtended.Modules;
 using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.Achievements;
 using RoR2.Stats;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
@@ -20,61 +23,47 @@ namespace ArtificerExtended.Unlocks
             instance = this as T;
         }
     }
-    public abstract class UnlockBase : ModdedUnlockable
+    public abstract class UnlockBase : BaseAchievement
     {
-        public static string Token = ArtificerExtendedPlugin.TokenName + "UNLOCK_";
-        public abstract string UnlockLangTokenName { get; }
-        public abstract string UnlockName { get; }
+        public static UnlockableDef CreateUnlockDef(Type RequiredUnlock, Sprite icon)
+        {
+            string name = RequiredUnlock.Name;
+            string nameUpper = name.ToUpperInvariant();
+            UnlockableDef unlockDef = Content.CreateAndAddUnlockbleDef(name, name, icon);
+
+            string nameToken = "ACHIEVEMENT_" + nameUpper + "_NAME";
+            string descToken = "ACHIEVEMENT_" + nameUpper + "_DESCRIPTION";
+            LanguageAPI.Add(nameToken, RequiredUnlock.GetPropertyValue<string>(nameof(UnlockBase.AchievementName)));
+            LanguageAPI.Add(descToken, RequiredUnlock.GetPropertyValue<string>(nameof(UnlockBase.AchievementDesc)));
+            unlockDef.getHowToUnlockString = (() => RoR2.Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
+                            {
+                                RoR2.Language.GetString(nameToken),
+                                RoR2.Language.GetString(descToken)
+                            }));
+            unlockDef.getUnlockedString = (() => RoR2.Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
+                            {
+                                RoR2.Language.GetString(nameToken),
+                                RoR2.Language.GetString(descToken)
+                            }));             
+            
+            //RequiredUnlock.InvokeMethod(nameof(AddLang));
+            //MethodInfo baseMethod = typeof(UnlockBase).GetMethod(nameof(UnlockBase.AddLang));
+            //baseMethod.Invoke(RequiredUnlock, new object[] { });
+            //baseMethod.MakeGenericMethod(new Type[] { RequiredUnlock }).Invoke(null, new object[] { });
+
+            return unlockDef;
+        }
+        public abstract string TOKEN_IDENTIFIER { get; }
         public abstract string AchievementName { get; }
         public abstract string AchievementDesc { get; }
-
-        public virtual bool ForceDisable => false;
-        public override string AchievementIdentifier => Token + UnlockLangTokenName + "_ACHIEVEMENT_ID";
-
-        public override string UnlockableIdentifier => Token + UnlockLangTokenName + "_REWARD_ID";
-
-        public override string AchievementNameToken => Token + UnlockLangTokenName + "_ACHIEVEMENT_NAME";
-
-        public override string AchievementDescToken => Token + UnlockLangTokenName + "_ACHIEVEMENT_DESC";
-
-        public override string UnlockableNameToken => Token + UnlockLangTokenName + "_UNLOCKABLE_NAME";
-        public virtual bool HideUnlock => false;
-
-        internal Sprite GetSpriteProvider(string iconName)
+        public void AddLang()
         {
-            return ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + iconName + ".png");
+            LanguageAPI.Add("ACHIEVEMENT_" + TOKEN_IDENTIFIER + "_NAME", AchievementName);
+            LanguageAPI.Add("ACHIEVEMENT_" + TOKEN_IDENTIFIER + "_DESCRIPTION", AchievementDesc);
         }
-
         public override BodyIndex LookUpRequiredBodyIndex()
         {
             return BodyCatalog.FindBodyIndex("MageBody");
-        }
-
-        public override Func<string> GetHowToUnlock
-        {
-            get => () => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-                            {
-                                Language.GetString(AchievementNameToken),
-                                Language.GetString(AchievementDescToken)
-                            });
-        }
-
-        public override Func<string> GetUnlocked
-        {
-            get => () => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-                            {
-                                Language.GetString(AchievementNameToken),
-                                Language.GetString(AchievementDescToken)
-                            });
-        }
-
-        public abstract void Init(ConfigFile config);
-
-        protected void CreateLang()
-        {
-            LanguageAPI.Add(AchievementNameToken, "Artificer: " + AchievementName);
-            LanguageAPI.Add(AchievementDescToken, "As Artificer, " + AchievementDesc);
-            LanguageAPI.Add(UnlockableNameToken, "Artificer: " + UnlockName);
         }
 
         public static StatDef GetCareerStatTotal(string name)

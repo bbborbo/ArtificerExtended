@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    class NoDamageUnlock : UnlockBase
+	[RegisterAchievement(nameof(NoDamageUnlock), nameof(NoDamageUnlock), "FreeMage", 5, null)]
+	class NoDamageUnlock : UnlockBase
 	{
 		public static float maxHealthFraction = 0.8f;
 		private HealthComponent healthComponent;
@@ -15,23 +16,11 @@ namespace ArtificerExtended.Unlocks
 		private bool characterOk;
 		private ToggleAction healthCheck;
 		private ToggleAction teleporterCheck;
+		public override string TOKEN_IDENTIFIER => nameof(NoDamageUnlock).ToUpperInvariant();
 
-		public override string UnlockLangTokenName => "NODAMAGEUNLOCK";
+		public override string AchievementName => "Artificer: Flawless Execution";
 
-        public override string UnlockName => "Flawless Execution";
-
-        public override string AchievementName => "Flawless Execution";
-
-        public override string AchievementDesc => $"start and finish any stage without falling below {Tools.ConvertDecimal(maxHealthFraction)} health.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("IceShardsIcon");
-
-        public override void Init(ConfigFile config)
-        {
-			CreateLang();
-        }
+		public override string AchievementDesc => $"As Artificer, start and finish any stage without falling below {Tools.ConvertDecimal(maxHealthFraction)} health.";
 
 		private void SubscribeHealthCheck()
 		{

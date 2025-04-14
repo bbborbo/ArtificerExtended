@@ -1,6 +1,7 @@
 ﻿using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
+using EntityStates;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
@@ -16,43 +17,41 @@ namespace ArtificerExtended.Skills
     {
         public static GameObject snowballProjectilePrefab;
         public override string SkillName => "Frost Bolt";
+        public override string TOKEN_IDENTIFIER => "SNOWBALL";
 
         public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
             $"Throw a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
 
-        public override string SkillLangTokenName => "SNOWBALL";
-
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(FreezeManySimultaneousUnlock));
-
-        public override string IconName => "SnowballIcon";
+        public override Sprite Icon => LoadSpriteFromBundle("SnowballIcon");
 
         public override MageElement Element => MageElement.Ice;
 
         public override Type ActivationState => typeof(FireSnowBall);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
+        public override SkillSlot SkillSlot => SkillSlot.Primary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            baseRechargeInterval: 0.5f,
             mustKeyPress: false,
             stockToConsume: 1,
             requiredStock: 1,
             useAttackSpeedScaling: true
         );
-        public override bool useSteppedDef { get; set; } = true;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Any;
 
+        public override Type BaseSkillDef => typeof(SteppedSkillDef);
 
-        public override void Hooks()
-        {
-        }
+        public override float BaseCooldown => 0.5f;
+        public override Type RequiredUnlock => typeof(FreezeManySimultaneousUnlock);
 
-        public override void Init(ConfigFile config)
+        public override void Init()
         {
             KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
             FixSnowballProjectile();
-            CreateLang();
-            CreateSkill();
+            base.Init();
+        }
+        public override void Hooks()
+        {
         }
 
         private void FixSnowballProjectile()

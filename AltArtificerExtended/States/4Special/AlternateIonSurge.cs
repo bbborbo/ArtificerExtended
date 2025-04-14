@@ -229,8 +229,8 @@ namespace ArtificerExtended.States
 
         private void CreateBlinkEffect(Vector3 origin)
         {
-            if (ArtificerExtendedPlugin.ReducedEffectsSurgeRework.Value == true)
-                return;
+            //if (ArtificerExtendedPlugin.ReducedEffectsSurgeRework.Value == true)
+            //    return;
             var data = new EffectData
             {
                 rotation = Util.QuaternionSafeLookRotation(this.flyVector),

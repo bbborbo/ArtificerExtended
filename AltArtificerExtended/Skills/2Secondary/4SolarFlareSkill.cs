@@ -2,6 +2,7 @@
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
+using EntityStates;
 using EntityStates.Mage.Weapon;
 using R2API;
 using RoR2;
@@ -43,36 +44,34 @@ namespace ArtificerExtended.Skills
             $"Dissipates after <style=cIsUtility>{tornadoLifetime}</style> seconds " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(blastDamage)} damage</style>.";
 
-        public override string SkillLangTokenName => "SOLARFLARE";
+        public override string TOKEN_IDENTIFIER => "SOLARFLARE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(KillBlazingWithFireUnlock));
-
-        public override string IconName => "";
+        public override Type RequiredUnlock => (typeof(KillBlazingWithFireUnlock));
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(ChargeSolarFlare);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 8,
                 beginSkillCooldownOnSkillEnd: true,
                 mustKeyPress: true
             );
+        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 8;
+        public override void Init()
+        {
+            CreateTornadoProjectile();
+            KeywordTokens = new string[] { "KEYWORD_IGNITE" };
+            base.Init();
+        }
 
         public override void Hooks()
         {
 
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            CreateSkill();
-            CreateLang();
-
-            CreateTornadoProjectile();
         }
 
         private void CreateTornadoProjectile()

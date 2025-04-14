@@ -47,8 +47,8 @@ namespace ArtificerExtended.States
             this.cachedCrosshairPrefab = base.characterBody._defaultCrosshairPrefab;
             base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", this.duration);
 
-            if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
+            //if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
+            //    Util.PlaySound(PrepWall.prepWallSoundString, base.gameObject);
             this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteor.areaIndicatorPrefab);
             this.UpdateAreaIndicator();
 

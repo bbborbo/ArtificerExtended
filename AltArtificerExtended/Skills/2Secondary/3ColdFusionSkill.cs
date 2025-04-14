@@ -1,4 +1,4 @@
-﻿using ArtificerExtended.CoreModules;
+﻿using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
@@ -22,58 +22,56 @@ namespace ArtificerExtended.Skills
             $"for <style=cIsDamage>{ColdFusion.minBulletCount}-{ColdFusion.maxBulletCount}x" +
             $"{Tools.ConvertDecimal(ColdFusion.totalDamageCoefficient / ColdFusion.maxBulletCount)} damage.</style>";
 
-        public override string SkillLangTokenName => "COLDFUSION";
+        public override string TOKEN_IDENTIFIER => "COLDFUSION";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(TankDamageUnlock));
+        public override Type RequiredUnlock => (typeof(TankDamageUnlock));
 
-        public override string IconName => "FusionIcon";
 
         public override MageElement Element => MageElement.Ice;
 
         public override Type ActivationState => typeof(ColdFusion);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 5,
-                interruptPriority: InterruptPriority.Skill,
                 beginSkillCooldownOnSkillEnd: true
             );
+        public override Sprite Icon => LoadSpriteFromBundle("FusionIcon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 5;
+        public override void Init()
+        {
+            return;
+            //ColdFusion.maxRange = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Max Range",
+            //    ColdFusion.maxRange,
+            //    "Determines the maximum range Cold Fusion has. Damage Falloff still applies."
+            //    ).Value;
+            //ColdFusion.totalDamageCoefficient = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Damage Coefficient",
+            //    ColdFusion.totalDamageCoefficient,
+            //    "Determines the TOTAL damage coefficient Cold Fusion has. Damage Falloff still applies."
+            //    ).Value;
+            //ColdFusion.minBulletCount = config.Bind<int>(
+            //    "Skills Config: " + SkillName, "Spear Count",
+            //    ColdFusion.minBulletCount,
+            //    "Determines the amount of spears/bullets Cold Fusion has."
+            //    ).Value;
+            //ColdFusion.freezeChance = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Freeze Chance",
+            //    ColdFusion.freezeChance,
+            //    "Determines the chance per spear/bullet has to freeze on hit."
+            //    ).Value;
+            //KeywordTokens = new string[2] { ChillRework.ChillRework.chillKeywordToken, "KEYWORD_FREEZING" };
+            //
+            //CreateFusionTracer();
+            base.Init();
+        }
 
         public override void Hooks()
         {
 
-        }
-
-        public override void Init(ConfigFile config)
-        {
-
-            ColdFusion.maxRange = config.Bind<float>(
-                "Skills Config: " + SkillName, "Max Range",
-                ColdFusion.maxRange,
-                "Determines the maximum range Cold Fusion has. Damage Falloff still applies."
-                ).Value;
-            ColdFusion.totalDamageCoefficient = config.Bind<float>(
-                "Skills Config: " + SkillName, "Damage Coefficient",
-                ColdFusion.totalDamageCoefficient,
-                "Determines the TOTAL damage coefficient Cold Fusion has. Damage Falloff still applies."
-                ).Value;
-            ColdFusion.minBulletCount = config.Bind<int>(
-                "Skills Config: " + SkillName, "Spear Count",
-                ColdFusion.minBulletCount,
-                "Determines the amount of spears/bullets Cold Fusion has."
-                ).Value;
-            ColdFusion.freezeChance = config.Bind<float>(
-                "Skills Config: " + SkillName, "Freeze Chance",
-                ColdFusion.freezeChance,
-                "Determines the chance per spear/bullet has to freeze on hit."
-                ).Value;
-            KeywordTokens = new string[2] { ChillRework.ChillRework.chillKeywordToken, "KEYWORD_FREEZING" };
-
-            CreateFusionTracer();
-            CreateLang();
-            CreateSkill();
         }
 
         private void CreateFusionTracer()
@@ -86,7 +84,7 @@ namespace ArtificerExtended.Skills
             shotgunAttributes.vfxPriority = VFXAttributes.VFXPriority.Medium;
             shotgunAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            Effects.CreateEffect(fusionTracer);
+            Content.CreateAndAddEffectDef(fusionTracer);
         }
     }
 }

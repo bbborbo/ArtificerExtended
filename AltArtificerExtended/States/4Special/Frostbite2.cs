@@ -35,8 +35,8 @@ namespace ArtificerExtended.States
             base.OnEnter();
             this.duration = Frostbite.baseDuration / this.attackSpeedStat;
 
-            if(ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                Util.PlaySound(beginSoundString, base.gameObject);
+            //if(ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
+            //    Util.PlaySound(beginSoundString, base.gameObject);
             base.PlayAnimation("Gesture, Additive", "PrepFlamethrower", "Flamethrower.playbackRate", this.duration);
         }
 

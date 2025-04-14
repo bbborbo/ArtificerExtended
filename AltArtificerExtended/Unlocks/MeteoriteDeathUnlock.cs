@@ -7,26 +7,16 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(MeteoriteDeathUnlock), nameof(MeteoriteDeathUnlock), "FreeMage", 5, null)]
     class MeteoriteDeathUnlock : UnlockBase
     {
         GameObject meteorGameObject = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/MeteorStorm");
 
-        public override string UnlockLangTokenName => "METEOR";
+        public override string TOKEN_IDENTIFIER => nameof(MeteoriteDeathUnlock).ToUpperInvariant();
 
-        public override string UnlockName => "Cloudy, With A Risk Of...";
+        public override string AchievementName => "Artificer: Cloudy, With A Risk Of...";
 
-        public override string AchievementName => "Cloudy, With A Risk Of...";
-
-        public override string AchievementDesc => "kill yourself with a Glowing Meteorite.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("meteoricon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, kill yourself with a meteor strike.";
 
         public override void OnInstall()
         {

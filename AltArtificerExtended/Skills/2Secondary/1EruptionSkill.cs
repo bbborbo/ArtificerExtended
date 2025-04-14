@@ -1,6 +1,8 @@
-﻿using ArtificerExtended.States;
+﻿using ArtificerExtended.Modules;
+using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
+using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -31,35 +33,33 @@ namespace ArtificerExtended.Skills
             $"plus <style=cIsDamage>{minClusterProjectiles}-{maxClusterProjectiles} molten pools</style> " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(clusterProjectileDamage)} damage</style>.";
 
-        public override string SkillLangTokenName => "ERUPTIONEXTENDED";
+        public override string TOKEN_IDENTIFIER => "ERUPTIONEXTENDED";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(MeteoriteDeathUnlock));
-
-        public override string IconName => "meteoricon";
+        public override Type RequiredUnlock => (typeof(MeteoriteDeathUnlock));
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(ChargeMeteors);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 5,
                 beginSkillCooldownOnSkillEnd: true,
                 mustKeyPress: true
             );
+        public override Sprite Icon => LoadSpriteFromBundle("meteoricon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 5;
+        public override void Init()
+        {
+            KeywordTokens = new string[2] { CommonAssets.lavaPoolKeywordToken, "KEYWORD_IGNITE" };
+            base.Init();
+        }
 
         public override void Hooks()
         {
 
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            KeywordTokens = new string[2] { "KEYWORD_IGNITE", "ARTIFICEREXTENDED_KEYWORD_LAVAPOOLS" };
-            CreateSkill();
-            CreateLang();
         }
     }
 }

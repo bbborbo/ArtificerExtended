@@ -8,8 +8,14 @@ using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(FastHellUnlock), nameof(FastHellUnlock), "FreeMage", 5, null)]
     class FastHellUnlock : UnlockBase
     {
+        public override string TOKEN_IDENTIFIER => nameof(FastHellUnlock).ToUpperInvariant();
+
+        public override string AchievementName => "Artificer: God, It\u2019s Pretty Hot Down Here";
+
+        public override string AchievementDesc => $"As Artificer, leave the Abyssal Depths or Helminth Hatchery within {timeInMinutes} minutes of entering.";
         private static readonly string[] requiredScenes = new string[]
         {
             "dampcavesimple",
@@ -18,23 +24,6 @@ namespace ArtificerExtended.Unlocks
         public static float timeInMinutes = 3f;
         private bool stageOk = false;
         private float stageEnterTime;
-
-        public override string UnlockLangTokenName => "FASTHELL";
-
-        public override string UnlockName => "God, It\u2019s Pretty Hot Down Here";
-
-        public override string AchievementName => "God, It\u2019s Pretty Hot Down Here";
-
-        public override string AchievementDesc => $"Leave the Abyssal Depths or Helminth Hatchery within {timeInMinutes} of entering.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Core/texNullIcon.png").WaitForCompletion();
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
         public override void OnBodyRequirementMet()
         {
             base.OnBodyRequirementMet();

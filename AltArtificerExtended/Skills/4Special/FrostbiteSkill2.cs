@@ -1,4 +1,4 @@
-﻿using ArtificerExtended.CoreModules;
+﻿using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static ArtificerExtended.Skills.SkillBase;
 
 namespace ArtificerExtended.Skills
 {
@@ -35,11 +36,8 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 6,
-                interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: false,
                 canceledFromSprinting: true,
-                activationStateMachineName: "Body",
                 beginSkillCooldownOnSkillEnd: true
             );
 
@@ -49,16 +47,12 @@ namespace ArtificerExtended.Skills
 
         public void RegisterBuffWhiteout()
         {
-            artiIceShield = ScriptableObject.CreateInstance<BuffDef>();
-            {
-                artiIceShield.name = "artiIceShield2";
-                artiIceShield.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
-                artiIceShield.canStack = true;
-                artiIceShield.isDebuff = false;
-                artiIceShield.buffColor = Color.magenta;
-            }
-            Buffs.AddBuff(artiIceShield);
+            artiIceShield = Content.CreateAndAddBuff("bdArtiIceShield2",
+                ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png"),
+                Color.white,
+                true, false);
 
+            return;
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
                 orig(self);
@@ -91,8 +85,6 @@ namespace ArtificerExtended.Skills
         {
             if (NetworkServer.active)
             {
-                if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                    Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
                 EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
                 {

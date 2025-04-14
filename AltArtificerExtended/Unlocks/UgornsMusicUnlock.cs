@@ -8,26 +8,15 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
+    [RegisterAchievement(nameof(UgornsMusicUnlock), nameof(UgornsMusicUnlock), "FreeMage", 5, null)]
     class UgornsMusicUnlock : UnlockBase
     {
         //public override bool ForceDisable => true;
+        public override string TOKEN_IDENTIFIER => nameof(UgornsMusicUnlock).ToUpperInvariant();
 
-        public override string UnlockLangTokenName => "UGORNSMUSIC";
+        public override string AchievementName => "Artificer: Ugorn\u2019s Music";
 
-        public override string UnlockName => "Ugorn\u2019s Music";
-
-        public override string AchievementName => "Ugorn\u2019s Music";
-
-        public override string AchievementDesc => "(with at least one Lightning ability equipped) obtain a Charged Perforator and Royal Capacitor, OR become an aspect of lightning.";
-
-        public override string PrerequisiteUnlockableIdentifier => "FreeMage";
-
-        public override Sprite Sprite => GetSpriteProvider("thundericon");
-
-        public override void Init(ConfigFile config)
-        {
-            base.CreateLang();
-        }
+        public override string AchievementDesc => $"As Artificer, (with at least one Lightning ability equipped) obtain a Charged Perforator and Royal Capacitor, OR become an aspect of lightning.";
 
         #region implementation
         private Inventory currentInventory;

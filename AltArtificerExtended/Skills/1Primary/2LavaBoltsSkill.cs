@@ -1,7 +1,8 @@
-﻿using ArtificerExtended.CoreModules;
+﻿using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
+using EntityStates;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -34,38 +35,36 @@ namespace ArtificerExtended.Skills
             $"<style=cIsDamage>molten pools</style> on impact. " +
             $"Hold up to {maxStock}.";
 
-        public override string SkillLangTokenName => "LAVABOLTS";
+        public override string TOKEN_IDENTIFIER => "LAVABOLTS";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StackBurnUnlock));
-
-        public override string IconName => "napalmicon";//"Fireskill2icon";//
+        public override Type RequiredUnlock => typeof(StackBurnUnlock);
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(FireLavaBolt);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData 
         { 
             baseMaxStock = maxStock,
-            baseRechargeInterval = rechargeInterval,
             rechargeStock = rechargeStock,
             useAttackSpeedScaling = true
         };
 
+        public override Sprite Icon => LoadSpriteFromBundle("napalmicon");
+        public override SkillSlot SkillSlot => SkillSlot.Primary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Any;
+        public override Type BaseSkillDef => typeof(SteppedSkillDef);
+        public override float BaseCooldown => rechargeInterval;
+        public override void Init()
+        {
+            KeywordTokens = new string[] { CommonAssets.lavaPoolKeywordToken, "KEYWORD_IGNITE" };
+            CreateLavaProjectile();
+            base.Init();
+        }
+
         public override void Hooks()
         {
 
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            KeywordTokens = new string[2] { "KEYWORD_IGNITE", "ARTIFICEREXTENDED_KEYWORD_LAVAPOOLS" };
-            CreateSkill();
-            CreateLang();
-
-            CreateLavaProjectile();
         }
 
         private void CreateLavaProjectile()
@@ -86,11 +85,11 @@ namespace ArtificerExtended.Skills
             Tools.GetParticle(lavaImpactEffect, "Ring, Mesh", Color.yellow);
 
             ProjectileImpactExplosion pieNapalm = lavaProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
-            if (pieNapalm && Projectiles.lavaPoolPrefab != null)
+            if (pieNapalm && CommonAssets.lavaPoolPrefab != null)
             {
-                pieNapalm.childrenProjectilePrefab = Projectiles.lavaPoolPrefab;
+                pieNapalm.childrenProjectilePrefab = CommonAssets.lavaPoolPrefab;
                 pieNapalm.impactEffect = lavaImpactEffect;
-                pieNapalm.blastRadius = Projectiles.lavaPoolSize;
+                pieNapalm.blastRadius = CommonAssets.lavaPoolSize;
                 //projectilePrefabNapalm.GetComponent<ProjectileImpactExplosion>().destroyOnEnemy = true;
                 pieNapalm.blastProcCoefficient = impactProcCoefficient;
                 pieNapalm.bonusBlastForce = new Vector3(0, 500, 0);
@@ -102,8 +101,8 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = lavaProjectilePrefab.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.IgniteOnHit;
 
-            Effects.CreateEffect(lavaImpactEffect);
-            ContentPacks.projectilePrefabs.Add(lavaProjectilePrefab);
+            Content.CreateAndAddEffectDef(lavaImpactEffect);
+            Content.AddProjectilePrefab(lavaProjectilePrefab);
         }
     }
 }

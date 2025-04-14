@@ -24,7 +24,7 @@ using static ArtificerExtended.Passive.AltArtiPassive;
 using static ArtificerExtended.Components.ElementCounter;
 using static ChillRework.ChillRework;
 using static R2API.RecalculateStatsAPI;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using RoR2.Projectile;
 using RoR2.Orbs;
@@ -68,11 +68,11 @@ namespace ArtificerExtended
 
         private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
         {
-            if (damageInfo.HasModdedDamageType(CoreModules.Assets.ChainLightning))
+            if (damageInfo.HasModdedDamageType(CommonAssets.ChainLightningDamageType))
             {
                 LightningOrb lightningOrb2 = new LightningOrb();
                 lightningOrb2.origin = damageInfo.position;
-                lightningOrb2.damageValue = damageInfo.damage * CoreModules.Assets.zapDamageFraction;
+                lightningOrb2.damageValue = damageInfo.damage * CommonAssets.chainLightningZapDamageFraction;
                 lightningOrb2.isCrit = damageInfo.crit;
                 lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
                 lightningOrb2.attacker = damageInfo.attacker;
@@ -91,10 +91,10 @@ namespace ArtificerExtended
                 }
 
                 lightningOrb2.procChainMask = damageInfo.procChainMask;
-                lightningOrb2.procCoefficient = 0.2f;
+                lightningOrb2.procCoefficient = CommonAssets.chainLightningZapDamageCoefficient;
                 lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
                 lightningOrb2.damageColorIndex = DamageColorIndex.Default;
-                lightningOrb2.range = CoreModules.Assets.zapDistance;
+                lightningOrb2.range = CommonAssets.chainLightningZapDistance;
                 HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
                 if (hurtBox2)
                 {
@@ -107,7 +107,7 @@ namespace ArtificerExtended
 
         private void MeltAttackSpeedBuff(CharacterBody sender, StatHookEventArgs args)
         {
-            int meltBuffCount = sender.GetBuffCount(Buffs.meltBuff);
+            int meltBuffCount = sender.GetBuffCount(CommonAssets.meltBuff);
             if(meltBuffCount > 0)
             {
                 args.baseAttackSpeedAdd += AltArtiPassive.meltAspdIncrease * meltBuffCount;

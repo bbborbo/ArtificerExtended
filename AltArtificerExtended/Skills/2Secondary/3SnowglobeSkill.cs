@@ -1,7 +1,9 @@
 ﻿using ArtificerExtended.Components;
+using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
+using EntityStates;
 using R2API;
 using RoR2;
 using RoR2.Projectile;
@@ -42,39 +44,37 @@ namespace ArtificerExtended.Skills
             $"leaving behind a <style=cIsUtility>Chilling</style> area that lasts until replaced. " +
             $"Hold up to {maxSnowglobeBase}.";
 
-        public override string SkillLangTokenName => "SNOWGLOBE";
+        public override string TOKEN_IDENTIFIER => "SNOWGLOBE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(TankDamageUnlock));
-
-        public override string IconName => "";
+        public override Type RequiredUnlock => (typeof(TankDamageUnlock));
 
         public override MageElement Element => MageElement.Ice;
 
         public override Type ActivationState => typeof(AimSnowglobe);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            baseRechargeInterval: 8,
             baseMaxStock: maxSnowglobeBase,
             beginSkillCooldownOnSkillEnd: true
         );
-
-        public override void Hooks()
+        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 5;
+        public override void Init()
         {
-
-        }
-
-        public override void Init(ConfigFile config)
-        {
+            KeywordTokens = new string[] { ChillRework.ChillRework.chillKeywordToken };
             GetSnowglobeSlotLimit += GetMaxSnowglobes;
             snowglobeDeployableSlot = DeployableAPI.RegisterDeployableSlot(GetSnowglobeSlotLimit);
             CreateSnowglobeProjectile();
             CreateBombProjectile();
+            base.Init();
+        }
 
-            CreateLang();
-            CreateSkill();
+        public override void Hooks()
+        {
+
         }
 
         private void CreateSnowglobeProjectile()
@@ -82,7 +82,7 @@ namespace ArtificerExtended.Skills
             snowglobeProjectilePrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "HeatWardPrefab", true);
             if (snowglobeProjectilePrefab)
             {
-                ContentPacks.projectilePrefabs.Add(snowglobeProjectilePrefab);
+                Content.AddProjectilePrefab(snowglobeProjectilePrefab);
                 snowglobeProjectilePrefab.transform.rotation = Quaternion.identity;
 
                 Deployable deployableComponent = snowglobeProjectilePrefab.AddComponent<Deployable>();
@@ -162,7 +162,7 @@ namespace ArtificerExtended.Skills
                 bombController.ghostPrefab = ghostPrefab;//Assets.CreateProjectileGhostPrefab("HenryBombGhost");
 
             bombController.startSound = "";
-            ContentPacks.projectilePrefabs.Add(snowglobeDeployProjectilePrefab);
+            Content.AddProjectilePrefab(snowglobeDeployProjectilePrefab);
         }
     }
 }

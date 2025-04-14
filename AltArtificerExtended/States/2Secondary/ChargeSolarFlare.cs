@@ -1,4 +1,5 @@
 ﻿using ArtificerExtended.Skills;
+using EntityStates;
 using EntityStates.Mage.Weapon;
 using System;
 using System.Collections.Generic;

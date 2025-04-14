@@ -10,7 +10,7 @@ using RoR2.Projectile;
 using ThreeEyedGames;
 using R2API;
 using R2API.Utils;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Skills
 {
@@ -32,61 +32,57 @@ namespace ArtificerExtended.Skills
             $"for <style=cIsDamage>{napalmMaxProjectiles}x{Tools.ConvertDecimal(napalmBurnDPS)} damage per second</style>. " +
             $"Charging focuses the cone of fire.";
 
-        public override string SkillLangTokenName => "NAPALM";
+        public override string TOKEN_IDENTIFIER => "NAPALM";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(StackBurnUnlock));
-
-        public override string IconName => "napalmicon";
+        public override Type RequiredUnlock => (typeof(StackBurnUnlock));
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(ChargeNapalm);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 8,
-                interruptPriority: InterruptPriority.Skill,
                 beginSkillCooldownOnSkillEnd: true
             );
+        public override Sprite Icon => LoadSpriteFromBundle("napalmicon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 8;
+        public override void Init()
+        {
+            return;
+            //ChargeNapalm.totalImpactDamageCoefficient = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Primary Damage Coefficient",
+            //    ChargeNapalm.totalImpactDamageCoefficient,
+            //    "Determines the total damage dealt by each Napalm impact. This is divided by six, for each projectile."
+            //    ).Value;
+            //ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Secondary Damage Coefficient",
+            //    ChargeNapalm.napalmBurnDamageCoefficient,
+            //    "Determines the damage per tick of napalm, expressed as a fraction of the Primary damage coefficient. " +
+            //    "Ex - if the Primary damage coefficient is 0.7, and the Secondary damage coefficient is 0.5, " +
+            //    "then each tick of damage will have a coefficient of 0.35."
+            //    ).Value;
+            //ChargeNapalm.projectileHSpeed = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Projectile Speed",
+            //    ChargeNapalm.projectileHSpeed,
+            //    "Determines the speed of napalm projectiles."
+            //    ).Value;
+            //napalmDotFireFrequency = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "DOT frequency",
+            //    napalmDotFireFrequency,
+            //    "Determines the amount of times each Napalm pool ticks each second."
+            //    ).Value;
+
+            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
+            RegisterProjectileNapalm();
+            base.Init();
+        }
 
 
         public override void Hooks()
         {
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            return;
-            ChargeNapalm.totalImpactDamageCoefficient = config.Bind<float>(
-                "Skills Config: " + SkillName, "Primary Damage Coefficient",
-                ChargeNapalm.totalImpactDamageCoefficient,
-                "Determines the total damage dealt by each Napalm impact. This is divided by six, for each projectile."
-                ).Value;
-            ChargeNapalm.napalmBurnDamageCoefficient = config.Bind<float>(
-                "Skills Config: " + SkillName, "Secondary Damage Coefficient",
-                ChargeNapalm.napalmBurnDamageCoefficient,
-                "Determines the damage per tick of napalm, expressed as a fraction of the Primary damage coefficient. " +
-                "Ex - if the Primary damage coefficient is 0.7, and the Secondary damage coefficient is 0.5, " +
-                "then each tick of damage will have a coefficient of 0.35."
-                ).Value;
-            ChargeNapalm.projectileHSpeed = config.Bind<float>(
-                "Skills Config: " + SkillName, "Projectile Speed",
-                ChargeNapalm.projectileHSpeed,
-                "Determines the speed of napalm projectiles."
-                ).Value;
-            napalmDotFireFrequency = config.Bind<float>(
-                "Skills Config: " + SkillName, "DOT frequency",
-                napalmDotFireFrequency,
-                "Determines the amount of times each Napalm pool ticks each second."
-                ).Value;
-
-            KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
-
-            CreateSkill();
-            CreateLang();
-            RegisterProjectileNapalm();
         }
         private void RegisterProjectileNapalm()
         {
@@ -169,9 +165,9 @@ namespace ArtificerExtended.Skills
             component2.intensity = 4f;
             component2.range = 7.5f;
 
-            Effects.CreateEffect(projectileNapalmImpact);
-            ContentPacks.projectilePrefabs.Add(projectilePrefabNapalm);
-            ContentPacks.projectilePrefabs.Add(acidPrefabNapalm);
+            Content.CreateAndAddEffectDef(projectileNapalmImpact);
+            Content.AddProjectilePrefab(projectilePrefabNapalm);
+            Content.AddProjectilePrefab(acidPrefabNapalm);
         }
     }
 }

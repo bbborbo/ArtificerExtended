@@ -14,7 +14,7 @@ using UnityEngine.Networking;
 using ArtificerExtended.Components;
 using static ArtificerExtended.Components.ElementCounter;
 using ArtificerExtended.Helpers;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Passive
 {
@@ -469,7 +469,7 @@ namespace ArtificerExtended.Passive
             {
                 for (Int32 i = 0; i < (Int32)power; i++)
                 {
-                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+                    base.characterBody.AddTimedBuff(CommonAssets.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
                 }
 
                 //base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));

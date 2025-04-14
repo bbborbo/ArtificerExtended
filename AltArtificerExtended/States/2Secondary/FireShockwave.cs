@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.Skills;
+﻿using ArtificerExtended.Modules;
+using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Treebot.Weapon;
 using RoR2;
@@ -99,7 +100,7 @@ namespace ArtificerExtended.States
                             procCoefficient = this.CalculateProcCoefficient()
                             //, damageType = DamageType.Stun1s
                         };
-                        damageInfo.AddModdedDamageType(CoreModules.Assets.ChainLightning);
+                        damageInfo.AddModdedDamageType(CommonAssets.ChainLightningDamageType);
 
                         AddDebuff(body);
                         hurtBox.healthComponent.TakeDamageForce(a * (num * num2), true, true);
