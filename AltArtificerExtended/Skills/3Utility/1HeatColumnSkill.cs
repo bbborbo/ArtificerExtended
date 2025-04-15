@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
         public static GameObject HeatWardAreaIndicator;
 
         public static float heatWardRadius = 13f;
-        public static float heatWardDuration = 6f;
+        public static float heatWardDuration = 8f;
         public static float maxHeatRiseRate = 10f;
         public static float igniteDuration = 1;
         public static float igniteFrequency = 0.5f;
@@ -36,7 +36,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillDescription => $"Create a column of heat, " +
             $"<style=cIsDamage>igniting</style> enemies inside for <style=cIsDamage>{Tools.ConvertDecimal(igniteDamage / igniteFrequency)} damage per second</style>. " +
-            $"Allies inside the column <style=cIsUtility>rise into the air</style> while holding the Jump key.";
+            $"Allies inside the column <style=cIsUtility>rise into the air</style> while holding the Jump input.";
 
         public override string TOKEN_IDENTIFIER => "HEATCOLUMN";
 
@@ -55,7 +55,7 @@ namespace ArtificerExtended.Skills
         public override SkillSlot SkillSlot => SkillSlot.Utility;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
-        public override float BaseCooldown => 14f;
+        public override float BaseCooldown => 16f;
         public override void Init()
         {
             KeywordTokens = new string[] { "KEYWORD_IGNITE" };
