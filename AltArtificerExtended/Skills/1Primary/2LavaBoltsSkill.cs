@@ -17,7 +17,7 @@ namespace ArtificerExtended.Skills
 {
     class _2LavaBoltsSkill : SkillBase<_2LavaBoltsSkill>
     {
-        public static GameObject lavaProjectilePrefab;
+        public static GameObject lavaProjectilePrefab => CommonAssets.lavaProjectilePrefab;
         public static GameObject lavaGhostPrefab;
         public static GameObject lavaImpactEffect;
 
@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
         public static float rechargeInterval = 2f;
         public static float baseDuration = 0.2f;
 
-        public static float impactDamageCoefficient = 1.2f;
+        public static float impactDamageCoefficient = 1.8f;
         public static float impactProcCoefficient = 1.0f;
         public override string SkillName => "Lava Bolts";
 
@@ -58,7 +58,7 @@ namespace ArtificerExtended.Skills
         public override void Init()
         {
             KeywordTokens = new string[] { CommonAssets.lavaPoolKeywordToken, "KEYWORD_IGNITE" };
-            CreateLavaProjectile();
+            //CreateLavaProjectile();
             base.Init();
         }
 
@@ -69,7 +69,7 @@ namespace ArtificerExtended.Skills
 
         private void CreateLavaProjectile()
         {
-            lavaProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("LavaProjectile", true);
+            //lavaProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("LavaProjectile", true);
 
             Color napalmColor = new Color32(255, 40, 0, 255);
 

@@ -49,6 +49,7 @@ namespace ArtificerExtended.Modules
             AddAAPassiveBuffs();
 
             CreateLavaPool();
+            CreateLavaProjectile();
             CreateLightningPreFire();
             CreateLightningSwords();
             AddAAKeywords();
@@ -252,8 +253,42 @@ namespace ArtificerExtended.Modules
         public static float napalmDamageCoefficient = 0.25f;
         public static float napalmDuration = 3f;
         public static float napalmProcCoefficient = 0.25f;
-        public static float lavaPoolSize = 3.5f;
+        public static float lavaPoolSize = 3;
         public static GameObject lavaPoolPrefab;
+        public static GameObject lavaProjectilePrefab;
+        internal static void CreateLavaProjectile()
+        {
+            lavaProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("MageLavaProjectile", true);
+            GameObject lavaPoolGhostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Drones/PaladinRocketGhost.prefab").WaitForCompletion().InstantiateClone("MageLavaProjectileGhost", false);
+
+            Color napalmColor = new Color32(255, 40, 0, 255);
+            GameObject lavaImpactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/BeetleSpitExplosion").InstantiateClone("NapalmSpitExplosion", false);
+            Tools.GetParticle(lavaImpactEffect, "Bugs", Color.clear);
+            Tools.GetParticle(lavaImpactEffect, "Flames", napalmColor);
+            Tools.GetParticle(lavaImpactEffect, "Flash", Color.yellow);
+            Tools.GetParticle(lavaImpactEffect, "Distortion", napalmColor);
+            Tools.GetParticle(lavaImpactEffect, "Ring, Mesh", Color.yellow);
+
+            ProjectileImpactExplosion pieNapalm = lavaProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
+            if (pieNapalm && lavaPoolPrefab != null)
+            {
+                pieNapalm.childrenProjectilePrefab = lavaPoolPrefab;
+                pieNapalm.impactEffect = lavaImpactEffect;
+                pieNapalm.blastRadius = CommonAssets.lavaPoolSize;
+                //projectilePrefabNapalm.GetComponent<ProjectileImpactExplosion>().destroyOnEnemy = true;
+                pieNapalm.blastProcCoefficient = 1;
+                pieNapalm.bonusBlastForce = new Vector3(0, 500, 0);
+            }
+
+            ProjectileController pc = lavaProjectilePrefab.GetComponent<ProjectileController>();
+            pc.ghostPrefab = lavaPoolGhostPrefab;
+
+            ProjectileDamage pd = lavaProjectilePrefab.GetComponent<ProjectileDamage>();
+            pd.damageType = DamageType.IgniteOnHit;
+
+            Content.CreateAndAddEffectDef(lavaImpactEffect);
+            Content.AddProjectilePrefab(lavaProjectilePrefab);
+        }
         internal static void CreateLavaPool()
         {
             LanguageAPI.Add(lavaPoolKeywordToken, $"<style=cKeywordName>Molten Pools</style>" +
@@ -261,63 +296,95 @@ namespace ArtificerExtended.Modules
                 $"which <style=cIsDamage>ignites</style> enemies and deals " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(CommonAssets.napalmFireFrequency * CommonAssets.napalmDamageCoefficient)}</style> TOTAL damage per second.</style>");
 
-            lavaPoolPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("LavaPool", true);
+            //lavaPoolPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("LavaPool", true);
+            string path = "RoR2/Base/Beetle/BeetleQueenAcid.prefab";//"RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
+            lavaPoolPrefab = Addressables.LoadAssetAsync<GameObject>(path).WaitForCompletion().InstantiateClone("MageLavaPool", true);
 
-            Color napalmColor = new Color32(255, 40, 0, 255);
-            Transform pDotObjDecal = lavaPoolPrefab.transform.Find("FX/Decal");
-            Material napalmDecalMaterial = new Material(pDotObjDecal.GetComponent<Decal>().Material);
-            napalmDecalMaterial.SetColor("_Color", napalmColor);
-            pDotObjDecal.GetComponent<Decal>().Material = napalmDecalMaterial;
-
-            ProjectileDotZone pdz = lavaPoolPrefab.GetComponent<ProjectileDotZone>();
-            pdz.lifetime = napalmDuration;
-            pdz.resetFrequency = napalmFireFrequency;
-            pdz.damageCoefficient = napalmDamageCoefficient;
-            pdz.overlapProcCoefficient = napalmProcCoefficient;
-            pdz.attackerFiltering = AttackerFiltering.Default;
-            lavaPoolPrefab.GetComponent<ProjectileDamage>().damageType = DamageType.IgniteOnHit;
-            lavaPoolPrefab.GetComponent<ProjectileController>().procCoefficient = 1f;
+            string path2 = "RoR2/Base/Beetle/BeetleQueenAcidGhost.prefab";//"RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
+            GameObject lavaPoolGhostPrefab = Addressables.LoadAssetAsync<GameObject>(path2).WaitForCompletion().InstantiateClone("MageLavaPoolGhost", false);
 
 
             lavaPoolPrefab.transform.localScale = new Vector3(lavaPoolSize, lavaPoolSize, lavaPoolSize);
 
-            Transform fxTransform = lavaPoolPrefab.transform.Find("FX");
-            fxTransform.Find("Spittle").gameObject.SetActive(false);
-
-            GameObject FireTrail = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/FireTrail");
-            GameObject fireTrailSegmentPrefab = FireTrail?.GetComponent<DamageTrail>()?.segmentPrefab;
-            if (fireTrailSegmentPrefab)
+            ProjectileDotZone pdz = lavaPoolPrefab.GetComponent<ProjectileDotZone>();
+            if (pdz)
             {
-                GameObject fireEffect = UnityEngine.Object.Instantiate<GameObject>(fireTrailSegmentPrefab, fxTransform.transform);
-                ParticleSystem.MainModule main = fireEffect.GetComponent<ParticleSystem>().main;
-                main.duration = 8f;
-                main.gravityModifier = -0.075f;
-                ParticleSystem.MinMaxCurve startSizeX = main.startSizeX;
-                startSizeX.constantMin *= 0.6f;
-                startSizeX.constantMax *= 0.8f;
-                ParticleSystem.MinMaxCurve startSizeY = main.startSizeY;
-                startSizeY.constantMin *= 0.8f;
-                startSizeY.constantMax *= 1f;
-                ParticleSystem.MinMaxCurve startSizeZ = main.startSizeZ;
-                startSizeZ.constantMin *= 0.6f;
-                startSizeZ.constantMax *= 0.8f;
-                ParticleSystem.MinMaxCurve startLifetime = main.startLifetime;
-                startLifetime.constantMin = 0.9f;
-                startLifetime.constantMax = 1.1f;
-                fireEffect.GetComponent<DestroyOnTimer>().enabled = false;
-                fireEffect.transform.localPosition = Vector3.zero;
-                fireEffect.transform.localPosition = Vector3.zero;
-                fireEffect.transform.localScale = Vector3.one;
-                ParticleSystem.ShapeModule shape = fireEffect.GetComponent<ParticleSystem>().shape;
-                shape.shapeType = ParticleSystemShapeType.Sphere;
-                shape.scale = Vector3.one * 0.5f;
+                pdz.lifetime = napalmDuration;
+                pdz.resetFrequency = napalmFireFrequency;
+                pdz.damageCoefficient = napalmDamageCoefficient;
+                pdz.overlapProcCoefficient = napalmProcCoefficient;
+                pdz.attackerFiltering = AttackerFiltering.Default;
             }
 
-            GameObject gameObject2 = fxTransform.Find("Point Light").gameObject;
-            Light component2 = gameObject2.GetComponent<Light>();
-            component2.color = new Color(1f, 1f, 0f);
-            component2.intensity = 4f;
-            component2.range = 7.5f;
+            ProjectileDamage pd = lavaPoolPrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType = DamageType.IgniteOnHit;
+            }
+            ProjectileController pc = lavaPoolPrefab.GetComponent<ProjectileController>();
+            if (pc)
+            {
+                pc.procCoefficient = 1;
+                pc.ghostPrefab = lavaPoolGhostPrefab;
+            }
+
+
+            Color napalmColor = new Color32(255, 100, 50, 255);
+
+            Transform fxTransform = lavaPoolGhostPrefab.transform.Find("FX");
+            if (fxTransform)
+            {
+                fxTransform.transform.localScale = Vector3.one * lavaPoolSize;
+                fxTransform.Find("Spittle").gameObject.SetActive(false);
+
+                Decal decal = fxTransform.GetComponentInChildren<Decal>();
+                if (decal)
+                {
+                    decal.transform.localScale = Vector3.one * lavaPoolSize;
+                    Material newMat = new Material(decal.Material);
+                    newMat.name = "matMageLavaPoolDecal";
+                    newMat.SetColor("_TintColor", napalmColor);
+                    newMat.SetColor("_Color", napalmColor);
+                    newMat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/DLC2/Scorchling/texRampScorchling.png").WaitForCompletion());
+                    decal.Material = newMat;
+                }
+
+                GameObject FireTrail = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/FireTrail");
+                GameObject fireTrailSegmentPrefab = FireTrail?.GetComponent<DamageTrail>()?.segmentPrefab;
+                if (fireTrailSegmentPrefab)
+                {
+                    GameObject fireEffect = UnityEngine.Object.Instantiate<GameObject>(fireTrailSegmentPrefab, fxTransform.transform);
+                    ParticleSystem ps = fireEffect.GetComponent<ParticleSystem>();
+                    ParticleSystem.MainModule main = ps.main;
+                    main.duration = 8f;
+                    main.gravityModifier = -0.075f;
+                    ParticleSystem.MinMaxCurve startSizeX = main.startSizeX;
+                    startSizeX.constantMin *= 0.6f;
+                    startSizeX.constantMax *= 0.8f;
+                    ParticleSystem.MinMaxCurve startSizeY = main.startSizeY;
+                    startSizeY.constantMin *= 0.8f;
+                    startSizeY.constantMax *= 1f;
+                    ParticleSystem.MinMaxCurve startSizeZ = main.startSizeZ;
+                    startSizeZ.constantMin *= 0.6f;
+                    startSizeZ.constantMax *= 0.8f;
+                    ParticleSystem.MinMaxCurve startLifetime = main.startLifetime;
+                    startLifetime.constantMin = 0.9f;
+                    startLifetime.constantMax = 1.1f;
+                    fireEffect.GetComponent<DestroyOnTimer>().enabled = false;
+                    fireEffect.transform.localPosition = Vector3.zero;
+                    fireEffect.transform.localPosition = Vector3.zero;
+                    fireEffect.transform.localScale = Vector3.one;
+                    ParticleSystem.ShapeModule shape = fireEffect.GetComponent<ParticleSystem>().shape;
+                    shape.shapeType = ParticleSystemShapeType.Sphere;
+                    shape.scale = Vector3.one * 0.5f;
+                }
+
+                GameObject gameObject2 = fxTransform.Find("Point Light").gameObject;
+                Light component2 = gameObject2.GetComponent<Light>();
+                component2.color = new Color(1f, 1f, 0f);
+                component2.intensity = 4f;
+                component2.range = 7.5f;
+            }
 
             Content.AddProjectilePrefab(lavaPoolPrefab);
         }

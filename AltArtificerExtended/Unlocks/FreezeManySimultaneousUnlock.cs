@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace ArtificerExtended.Unlocks
 {
-    [RegisterAchievement(nameof(FreezeManySimultaneousUnlock), nameof(FreezeManySimultaneousUnlock), "FreeMage", 5, null)]
+    [RegisterAchievement(nameof(FreezeManySimultaneousUnlock), nameof(FreezeManySimultaneousUnlock), "FreeMage", 5, typeof(FreezeManySimultaneousServerAchievement))]
     class FreezeManySimultaneousUnlock : UnlockBase<FreezeManySimultaneousUnlock>
     {
         private class FreezeManySimultaneousServerAchievement : BaseServerAchievement
@@ -34,20 +34,25 @@ namespace ArtificerExtended.Unlocks
                 orig(self, duration);
 
                 CharacterBody body;
-                if (self.TryGetComponent<CharacterBody>(out body) && body.healthComponent)
+                if (self.TryGetComponent<CharacterBody>(out body))
                 {
-                    GameObject lastAttacker = body.healthComponent.lastHitAttacker;
+                    GameObject lastAttacker = body.healthComponent?.lastHitAttacker;
                     CharacterBody attackerBody;
-                    if(lastAttacker.TryGetComponent<CharacterBody>(out attackerBody) && attackerBody == trackedBody)
+                    if(lastAttacker && lastAttacker.TryGetComponent<CharacterBody>(out attackerBody))
                     {
+                        if (attackerBody != trackedBody)
+                            return;
+
                         int progress = 1;
                         bool shouldGrant = false;
+                        //List<SetStateOnHurt> expiredKeys = new List<SetStateOnHurt>();
                         foreach(KeyValuePair<SetStateOnHurt, float> avalancheUnlockTracker in avalancheUnlockTrackers)
                         {
-                            if (avalancheUnlockTracker.Key == null)
+                            if (avalancheUnlockTracker.Key == null || Time.time > avalancheUnlockTracker.Value)
+                            {
+                                //expiredKeys.Add(avalancheUnlockTracker.Key);
                                 continue;
-                            if (Time.time > avalancheUnlockTracker.Value)
-                                continue;
+                            }
 
                             progress++;
                             if(progress >= FreezeManySimultaneousUnlock.freezeRequirementTotal)

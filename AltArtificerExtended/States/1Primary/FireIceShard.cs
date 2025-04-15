@@ -25,15 +25,15 @@ namespace ArtificerExtended.States
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
         public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage + 1.4f;
         public static float procCoefficientPoint = 0.5f;
-        public static float procCoefficientSpread = 0.5f;
+        public static float procCoefficientSpread = 0.7f;
         public static float procCoefficientBuckshot = 0.7f;
         public static float bulletRadius = 0.15f;
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount;
         public static int bulletCountPoint = 1;
-        public static int bulletCountSpread = 2;
-        public static int bulletCountBuckshot = 3;
+        public static int bulletCountSpread = 1;
+        public static int bulletCountBuckshot = 2;
 
         public float baseDuration = 0.3f;
         private float duration;
@@ -43,7 +43,7 @@ namespace ArtificerExtended.States
         public string attackSoundString2 = "Play_mage_shift_wall_build";
 
         public static float recoilAmplitude = 3.25f;
-        public static float spreadAmplitude = 1.2f;
+        public static float spreadAmplitude = 1f;
         public static float spreadBloomValue = 0.3f;
         public static float spreadShotFraction = 0.4f;
 
@@ -196,7 +196,7 @@ namespace ArtificerExtended.States
                     procCoefficientSpread, BulletAttack.FalloffModel.DefaultBullet, crit, true).Fire();
 
                 //buckshot
-                CreateIceShardSpread(aimRay, baseSpread * 0.5f, baseSpread, 
+                CreateIceShardSpread(aimRay, baseSpread * spreadShotFraction, baseSpread, 
                     (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0), 
                     procCoefficientBuckshot, BulletAttack.FalloffModel.Buckshot, crit, false).Fire();
             }

@@ -3,6 +3,7 @@ using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
+using R2API;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -15,7 +16,7 @@ namespace ArtificerExtended.Skills
 {
     class _1EruptionSkill : SkillBase<_1EruptionSkill>
     {
-        public static GameObject meteorImpactEffectPrefab => Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/Items/MeteorAttackOnHighDamage/RunicMeteorStrikeImpact.prefab").WaitForCompletion();
+        public static GameObject meteorImpactEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/Items/MeteorAttackOnHighDamage/RunicMeteorStrikeImpact.prefab").WaitForCompletion();
         public static float minDuration = 0.2f;
         public static float maxDuration = 2f;
         public static float windDownDuration = 0.5f;
@@ -54,7 +55,68 @@ namespace ArtificerExtended.Skills
         public override void Init()
         {
             KeywordTokens = new string[2] { CommonAssets.lavaPoolKeywordToken, "KEYWORD_IGNITE" };
+            CreateMeteorImpactEffect();
             base.Init();
+        }
+
+        private void CreateMeteorImpactEffect()
+        {
+            meteorImpactEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Meteor/MeteorStrikeImpact.prefab").WaitForCompletion().InstantiateClone("MageEruptionImpact", false);
+            float newScale = 2f;
+            meteorImpactEffectPrefab.transform.localScale = Vector3.one * newScale;
+            Light light = meteorImpactEffectPrefab.GetComponentInChildren<Light>();
+            if (light)
+            {
+                light.color = new Color32(255, 96, 102, 255);
+            }
+
+            ParticleSystemRenderer[] psrs = meteorImpactEffectPrefab.GetComponentsInChildren<ParticleSystemRenderer>();
+            for (int i = 0; i < psrs.Length; i++)
+            {
+                ParticleSystemRenderer psr = psrs[i];
+                string name = psr.gameObject.name;
+                Color32 color = Color.white;
+                Texture remapTex = null;
+                bool disableVertexColor = false;
+                string matName = "";
+                switch (name)
+                {
+                    case "Flash":
+                    case "Sparks":
+                        matName = "matEruptionTracerBright";
+                        disableVertexColor = true;
+                        color = new Color32(199, 39, 0, 213);
+                        break;
+                    case "Flash Lines, Fire":
+                    case "Fire":
+                        matName = "matEruptionFire";
+                        remapTex = Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampMagmaWorm.png").WaitForCompletion();
+                        color = new Color32(134, 51, 45, 255);
+                        disableVertexColor = true;
+                        break;
+                    default:
+                        continue;
+                }
+
+                if (matName != "")
+                {
+                    Material mat = UnityEngine.Object.Instantiate(psr.material);
+                    psr.material = mat;
+                    mat.name = matName;
+                    mat.SetColor("_TintColor", color);
+                    if(remapTex != null)
+                    {
+                        mat.SetTexture("_RemapTex", remapTex);
+                    }
+                    if (disableVertexColor)
+                    {
+                        mat.DisableKeyword("VERTEXCOLOR");
+                        mat.SetFloat("_VertexColorOn", 0);
+                    }
+                }
+            }
+
+            Content.CreateAndAddEffectDef(meteorImpactEffectPrefab);
         }
 
         public override void Hooks()

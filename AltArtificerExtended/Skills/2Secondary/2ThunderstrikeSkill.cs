@@ -37,7 +37,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning</style>. " +
             $"Become a beam of energy, surging forward a short distance. " +
-            $"Enemies struck will attract lightning for <style=cIsDamage>{Tools.ConvertDecimal(delayDamageCoefficient)} damage</style>.";
+            $"Enemies struck will attract lightning for <style=cIsDamage>{Tools.ConvertDecimal(damageCoefficient + delayDamageCoefficient)} damage</style>.";
 
         public override string TOKEN_IDENTIFIER => "THUNDERDASH";
 

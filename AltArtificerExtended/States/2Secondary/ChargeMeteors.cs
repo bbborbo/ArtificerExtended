@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
 using System.Linq;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.States
 {
@@ -264,7 +265,7 @@ namespace ArtificerExtended.States
                     Vector3 forward = Util.ApplySpread(aimNormal, 20, 70, 1, 1);
                     ProjectileManager.instance.FireProjectile(new FireProjectileInfo
                     {
-                        projectilePrefab = _2LavaBoltsSkill.lavaProjectilePrefab,
+                        projectilePrefab = CommonAssets.lavaProjectilePrefab,
                         position = aimPos + (forward * 1.5f),
                         rotation = Util.QuaternionSafeLookRotation(forward),
                         owner = this.outer.gameObject,

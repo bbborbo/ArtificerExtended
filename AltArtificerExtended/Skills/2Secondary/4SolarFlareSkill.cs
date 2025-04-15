@@ -29,12 +29,12 @@ namespace ArtificerExtended.Skills
         public static float returnDelay = 1.5f;
         public static float returnTransitionDelay = 0.5f;
 
-        public static float tornadoHitFrequency = 4;
-        public static float tornadoDPS = 1.5f;
+        public static float tornadoHitFrequency = 3;
+        public static float tornadoDPS = 2f;
         public static float tornadoLifetime = 8;
-        public static float tornadoProcCoefficient = 0.5f;
+        public static float tornadoProcCoefficient = 0.7f;
         public static float tornadoRadius = 8;
-        public static float blastDamage = 5;
+        public static float blastDamage = 8;
         public static float blastProcCoefficient = 1;
         public static float blastRadius = 14;
         public override string SkillName => "Solar Flare";
