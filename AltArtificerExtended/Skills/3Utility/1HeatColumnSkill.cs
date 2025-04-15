@@ -26,8 +26,8 @@ namespace ArtificerExtended.Skills
         public static GameObject HeatWardAreaIndicator;
 
         public static float heatWardRadius = 13f;
-        public static float heatWardDuration = 8f;
-        public static float maxHeatRiseRate = 11f;
+        public static float heatWardDuration = 6f;
+        public static float maxHeatRiseRate = 10f;
         public static float igniteDuration = 1;
         public static float igniteFrequency = 0.5f;
         public static float igniteDamage = 1f;
@@ -55,7 +55,7 @@ namespace ArtificerExtended.Skills
         public override SkillSlot SkillSlot => SkillSlot.Utility;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
-        public override float BaseCooldown => 16f;
+        public override float BaseCooldown => 14f;
         public override void Init()
         {
             KeywordTokens = new string[] { "KEYWORD_IGNITE" };
