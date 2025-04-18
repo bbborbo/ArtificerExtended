@@ -9,6 +9,7 @@ using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ThreeEyedGames;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -115,6 +116,38 @@ namespace ArtificerExtended.Skills
                     }
                 }
             }
+
+            GameObject guh = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleGuardGroundSlam.prefab").WaitForCompletion();
+            GameObject gah = GameObject.Instantiate(guh);
+            Decal decal = gah.GetComponentInChildren<Decal>();// decalTransform.GetComponent<Decal>();
+
+            //Decal decal = decalTransform.GetComponent<Decal>();
+            if (decal)
+            {
+                Transform decalTransform = decal.transform;// gah.transform.Find("Decal");
+                decalTransform.parent = meteorImpactEffectPrefab.transform;
+                decalTransform.localPosition = Vector3.zero;
+
+                Material decalMaterial = new Material(decal.Material/*Addressables.LoadAssetAsync<Material>("RoR2/Base/Beetle/matBeetleGuardSlamDecal.mat").WaitForCompletion()*/);
+                decalMaterial.SetColor("_Color", new Color32(205, 74, 0, 143)); //
+                decalMaterial.SetTexture("_MaskTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/CrippleWard/texLunarWardImpactMask.png").WaitForCompletion());
+                decalMaterial.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampCloth.jpg").WaitForCompletion());
+
+                decal.Material = decalMaterial;
+
+                AnimateShaderAlpha asa = decalTransform.GetComponent<AnimateShaderAlpha>();
+                if (asa)
+                {
+                    asa.timeMax = 2;
+                }
+                //decal.Fade = 0.5f;
+                //decal.RenderMode = Decal.DecalRenderMode.Deferred;
+                //decal.DrawAlbedo = true;
+                //decal.DrawNormalAndGloss = true;
+                //decal.UseLightProbes = true;
+                //decal.HighQualityBlending = false;
+            }
+            GameObject.Destroy(gah);
 
             Content.CreateAndAddEffectDef(meteorImpactEffectPrefab);
         }

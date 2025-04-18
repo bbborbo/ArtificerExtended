@@ -1,4 +1,5 @@
 ﻿using ArtificerExtended.Components;
+using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
@@ -13,12 +14,14 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using static ArtificerExtended.Modules.Language.Styling;
 
 namespace ArtificerExtended.Skills
 {
     class _4SolarFlareSkill : SkillBase<_4SolarFlareSkill>
     {
         public static GameObject projectilePrefab;
+        public static GameObject missileProjectilePrefab;
 
         public static float minChargeDuration = 0.2f;
         public static float maxChargeDuration = 2f;
@@ -31,20 +34,24 @@ namespace ArtificerExtended.Skills
 
         public static float tornadoHitFrequency = 3;
         public static float tornadoDPS = 2f;
-        public static float tornadoLifetime = 8;
+        public static float tornadoLifetime = 7;
         public static float tornadoProcCoefficient = 0.7f;
         public static float tornadoRadius = 8;
         public static float blastDamage = 8;
         public static float blastProcCoefficient = 1;
         public static float blastRadius = 14;
+        public static float missileDamageCoefficient = 0.8f;
+        public static float missileProcCoefficient = 0.5f;
+        public static float missileFireInterval = 0.67f;
         public override string SkillName => "Solar Flare";
 
-        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Send out a <style=cIsDamage>roaming</style> solar flare that deals " +
+        public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. " +
+            $"<style=cIsDamage>Ignite</style>. Send out a <style=cIsDamage>movement tracking</style> solar flare that deals " +
             $"<style=cIsDamage>{Tools.ConvertDecimal(tornadoDPS)}</style> damage over time. " +
             $"Dissipates after <style=cIsUtility>{tornadoLifetime}</style> seconds " +
             $"for <style=cIsDamage>{Tools.ConvertDecimal(blastDamage)} damage</style>.";
 
-        public override string TOKEN_IDENTIFIER => "SOLARFLARE";
+        public override string TOKEN_IDENTIFIER => "STAR";
 
         public override Type RequiredUnlock => (typeof(KillBlazingWithFireUnlock));
 
@@ -64,9 +71,26 @@ namespace ArtificerExtended.Skills
         public override float BaseCooldown => 8;
         public override void Init()
         {
+            string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTSTAR";
+            CommonAssets.AddResonantKeyword(resonantKeywordToken, SkillName,
+                $"If only <style=cIsDamage>Fire</style> skills are equipped, periodically fires additional fire missiles for {DamageValueText(missileDamageCoefficient)}.");
+            CreateMissileProjectile();
             CreateTornadoProjectile();
-            KeywordTokens = new string[] { "KEYWORD_IGNITE" };
+            KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_IGNITE" };
             base.Init();
+        }
+
+        private void CreateMissileProjectile()
+        {
+            missileProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/MissileProjectile.prefab").WaitForCompletion().InstantiateClone("MageMassEjectionMissile", true);
+            ProjectileDamage pd = missileProjectilePrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType.damageType = DamageType.IgniteOnHit;
+                pd.damageType.damageSource = DamageSource.NoneSpecified;
+            }
+            
+            Content.AddProjectilePrefab(missileProjectilePrefab);
         }
 
         public override void Hooks()
@@ -128,24 +152,53 @@ namespace ArtificerExtended.Skills
                 {
                     GameObject.Destroy(shakeEmitter);
                 }
+
+                GameObject warbannerWard = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/WardOnLevel/WarbannerWard.prefab").WaitForCompletion();
+                GameObject gah = GameObject.Instantiate(warbannerWard);
+
+                MeshRenderer[] mrs = gah.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer meshRenderer in mrs)
+                {
+                    if (meshRenderer.gameObject.name == "IndicatorSphere")
+                    {
+                        meshRenderer.material = CommonAssets.matMageFlameAura;
+                        meshRenderer.transform.parent = ghostPrefab.transform;
+                        meshRenderer.transform.localScale = Vector3.one * tornadoRadius * 2;
+                        break;
+                    }
+                }
+                GameObject.Destroy(gah);
+            }
+
+
+            ProjectileDamage pd = projectilePrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType = DamageType.IgniteOnHit;
             }
 
             ProjectileController pc = projectilePrefab.GetComponent<ProjectileController>();
-            if (pc && ghostPrefab)
+            if (pc)
             {
-                pc.ghostPrefab = ghostPrefab;
+                if (ghostPrefab)
+                {
+                    pc.ghostPrefab = ghostPrefab;
+                }
+
+                SolarFlareMissileComponent missileComponent = projectilePrefab.AddComponent<SolarFlareMissileComponent>();
+                missileComponent.pc = pc;
+                missileComponent.fireMissileBaseInterval = missileFireInterval;
+                missileComponent.fireMissileDamageCoefficient = missileDamageCoefficient;
+                missileComponent.fireMissileProcCoefficient = missileProcCoefficient;
+                missileComponent.missilePrefab = missileProjectilePrefab;
+                if (pd)
+                    missileComponent.pd = pd;
             }
 
             ProjectileSimple simple = projectilePrefab.GetComponent<ProjectileSimple>();
             if (simple)
             {
                 simple.lifetime = tornadoLifetime + 1;
-            }
-
-            ProjectileDamage pd = projectilePrefab.GetComponent<ProjectileDamage>();
-            if (pd)
-            {
-                pd.damageType = DamageType.IgniteOnHit;
             }
 
             ProjectileFuse fuse = projectilePrefab.GetComponent<ProjectileFuse>();

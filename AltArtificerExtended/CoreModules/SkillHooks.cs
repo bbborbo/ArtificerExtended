@@ -163,7 +163,7 @@ namespace ArtificerExtended
                     CharacterBody vBody = damageReport.victimBody;
                     if (vBody && aBody && vBody.healthComponent)
                     {
-                        Power icePower = GetIcePowerLevelFromBody(aBody);
+                        Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
 
                         int chillDebuffCount = vBody.GetBuffCount(RoR2Content.Buffs.Slow80);
                         int chillLimitCount = vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
@@ -241,7 +241,7 @@ namespace ArtificerExtended
         {
             if(aBody != null)
             {
-                Power icePower = GetIcePowerLevelFromBody(aBody);
+                Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
                 if (icePower > Power.None) //Arctic Blast
                 {
                     AltArtiPassive.DoNova(aBody, icePower, vBody.corePosition);

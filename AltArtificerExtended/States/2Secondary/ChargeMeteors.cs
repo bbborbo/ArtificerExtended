@@ -128,7 +128,7 @@ namespace ArtificerExtended.States
             {
                 this.areaIndicatorInstance.SetActive(true);
 
-                float num = 1000f;
+                float num = 100f;
                 float num2 = 0f;
                 Ray aimRay = (!VRStuff.VRInstalled) ? base.GetAimRay() : VRStuff.GetVRHandAimRay(false);
                 RaycastHit raycastHit;

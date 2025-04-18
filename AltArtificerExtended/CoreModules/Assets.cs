@@ -43,16 +43,30 @@ namespace ArtificerExtended.Modules
         public static string iconsPath = "Assets/Textures/Icons/";
         public static string eliteMaterialsPath = "Assets/Textures/Materials/Elite/";
 
+        public static void AddResonantKeyword(string keywordToken, string resonantAbilityName, string resonantDesc)
+        {
+            LanguageAPI.Add(keywordToken, $"<style=cKeywordName>Resonance: {resonantAbilityName}</style>" +
+                $"<style=cSub>{resonantDesc}</style>");
+        }
         public static void Init()
         {
             CreateZapDamageType();
             AddAAPassiveBuffs();
+            AddAAKeywords();
 
             CreateLavaPool();
             CreateLavaProjectile();
             CreateLightningPreFire();
             CreateLightningSwords();
-            AddAAKeywords();
+            CreateFlameAuraMaterial();
+        }
+
+        public static Material matMageFlameAura;
+        private static void CreateFlameAuraMaterial()
+        {
+            matMageFlameAura = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerSphereIndicator2.mat").WaitForCompletion());
+            matMageFlameAura.name = "matMageFlameAura";
+            matMageFlameAura.SetColor("_TintColor", new Color32(146, 73, 0, 201)/*(150, 110, 0, 191)*/);
         }
         #region nebula passive
         public static void CreateNebulaOrbitals()
@@ -272,6 +286,7 @@ namespace ArtificerExtended.Modules
             ProjectileImpactExplosion pieNapalm = lavaProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pieNapalm && lavaPoolPrefab != null)
             {
+                pieNapalm.blastDamageCoefficient = 1;
                 pieNapalm.childrenProjectilePrefab = lavaPoolPrefab;
                 pieNapalm.impactEffect = lavaImpactEffect;
                 pieNapalm.blastRadius = CommonAssets.lavaPoolSize;

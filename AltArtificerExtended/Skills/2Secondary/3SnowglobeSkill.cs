@@ -1,5 +1,6 @@
 ﻿using ArtificerExtended.Components;
 using ArtificerExtended.Modules;
+using ArtificerExtended.Passive;
 using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
@@ -59,12 +60,16 @@ namespace ArtificerExtended.Skills
         );
         public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
-        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Any;
         public override Type BaseSkillDef => typeof(SkillDef);
         public override float BaseCooldown => 5;
         public override void Init()
         {
-            KeywordTokens = new string[] { ChillRework.ChillRework.chillKeywordToken };
+            string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTSNOWGLOBE";
+            CommonAssets.AddResonantKeyword(resonantKeywordToken, SkillName,
+                $"Max of {maxSnowglobeBase} <style=cIsUtility>Chilling</style> areas. " +
+                $"If only <style=cIsDamage>Ice</style> skills are equipped, <style=cIsUtility>increase max to {maxSnowglobeUpgrade}</style>.");
+            KeywordTokens = new string[] { resonantKeywordToken, ChillRework.ChillRework.chillKeywordToken };
             GetSnowglobeSlotLimit += GetMaxSnowglobes;
             snowglobeDeployableSlot = DeployableAPI.RegisterDeployableSlot(GetSnowglobeSlotLimit);
             CreateSnowglobeProjectile();
@@ -127,6 +132,12 @@ namespace ArtificerExtended.Skills
 
         private int GetMaxSnowglobes(CharacterMaster self, int deployableCountMultiplier)
         {
+            GameObject body = self.GetBodyObject();
+            if (body)
+            {
+                if ((int)ElementCounter.GetPowerLevelFromBody(body, MageElement.Ice) >= 4)
+                    return maxSnowglobeUpgrade;
+            }
             return maxSnowglobeBase /*+ Mathf.CeilToInt(self.inventory.GetItemCount(RoR2Content.Items.SecondarySkillMagazine) * maxSnowglobeUpgrade)*/;
         }
 

@@ -11,7 +11,7 @@ namespace ArtificerExtended.Unlocks
     [RegisterAchievement(nameof(TankDamageUnlock), nameof(TankDamageUnlock), "FreeMage", 5, null)]
     class TankDamageUnlock : UnlockBase
     {
-        public static int damageRequirementTotal = 2000;
+        public static int damageRequirementTotal = 5000;
         float damageTakenCount = 0;
         public ulong killRequirementTotal = 5;
         public StatDef postmortemKillCounter = GetCareerStatTotal("artificerKillsPostMortem");

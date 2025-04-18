@@ -1,4 +1,5 @@
-﻿using ArtificerExtended.Passive;
+﻿using ArtificerExtended.Components;
+using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
@@ -131,6 +132,12 @@ namespace ArtificerExtended.States
 			if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
 			{
 				passive.SkillCast();
+			}
+			if((int)ElementCounter.GetPowerLevelFromBody(obj, MageElement.Lightning, passive) >= 4)
+            {
+				int targetsStruckCount = Mathf.Min(currentHitCount, _2ThunderstrikeSkill.resonantCdrMax);
+				GenericSkill secondary = this.skillLocator.secondary;
+				secondary.RunRecharge(targetsStruckCount * _2ThunderstrikeSkill.resonantCdr);
 			}
 
 			if (this.characterModel)

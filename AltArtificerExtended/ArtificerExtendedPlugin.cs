@@ -314,7 +314,7 @@ namespace ArtificerExtended
             LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
                 "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
                 "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
-                "\n- <style=cIsUtility>Lightning Bolts</style> are created for each <style=cIsDamage>LIGHTNING</style> skill.");
+                "\n- <style=cIsUtility>Lightning Bolts</style> increase in number for each <style=cIsDamage>LIGHTNING</style> skill.");
             #endregion
 
             Sprite altPassiveIcon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");

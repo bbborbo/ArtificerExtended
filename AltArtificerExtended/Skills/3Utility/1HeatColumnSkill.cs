@@ -123,7 +123,7 @@ namespace ArtificerExtended.Skills
             //encourageWardMaterial.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLightningYellowOffset.png").WaitForCompletion());
 
             MeshRenderer mr2 = encourageWardIndicator.GetComponentInChildren<MeshRenderer>();
-            mr2.material = encourageWardMaterial;
+            mr2.material = CommonAssets.matMageFlameAura;
 
             HeatWardPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "HeatWardPrefab", true);
             if (HeatWardPrefab)
