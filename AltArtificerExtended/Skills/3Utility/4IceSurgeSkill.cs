@@ -1,4 +1,5 @@
-﻿using EntityStates;
+﻿using ArtificerExtended.States;
+using EntityStates;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -11,16 +12,20 @@ namespace ArtificerExtended.Skills
 {
     class _4IceSurgeSkill : SkillBase<_4IceSurgeSkill>
     {
-        public static float damageCoefficient = 1.2f;
+        public static float blastDamageCoefficient = 3.5f;
+        public static float wallDamageCoefficient = 1.2f;
+        public static float baseDurationHorizontal = 1f;
+        public static float baseDurationVertical = 1.5f;
 
         public override string TOKEN_IDENTIFIER => "ICESURGE";
         public override string SkillName => "Cryoburst";
 
-        public override string SkillDescription => $"Freezing. Cause a glacial burst beneath you for {DamageValueText(damageCoefficient)}, launching you into the air.";
+        public override string SkillDescription => $"Freezing. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
 
         public override Sprite Icon => null;
 
-        public override Type ActivationState => typeof(Idle);
+        public override Type ActivationState => typeof(FrostSurgeState);
+        public override string ActivationStateMachineName => "Body";
 
         public override Type BaseSkillDef => typeof(SkillDef);
 
