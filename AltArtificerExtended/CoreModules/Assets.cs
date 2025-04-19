@@ -46,7 +46,7 @@ namespace ArtificerExtended.Modules
 
         public static void AddResonantKeyword(string keywordToken, string resonantAbilityName, string resonantDesc)
         {
-            LanguageAPI.Add(keywordToken, $" < style=cKeywordName>Resonance: {resonantAbilityName}</style>" +
+            LanguageAPI.Add(keywordToken, $"<style=cKeywordName>Resonance: {resonantAbilityName}</style>" +
                 $"<style=cSub>{resonantDesc}</style>");
         }
         public static void Init()
