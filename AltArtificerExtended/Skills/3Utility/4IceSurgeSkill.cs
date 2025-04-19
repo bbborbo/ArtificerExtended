@@ -14,7 +14,7 @@ namespace ArtificerExtended.Skills
         public static float damageCoefficient = 1.2f;
 
         public override string TOKEN_IDENTIFIER => "ICESURGE";
-        public override string SkillName => "Ice Surge";
+        public override string SkillName => "Cryoburst";
 
         public override string SkillDescription => $"Freezing. Cause a glacial burst beneath you for {DamageValueText(damageCoefficient)}, launching you into the air.";
 

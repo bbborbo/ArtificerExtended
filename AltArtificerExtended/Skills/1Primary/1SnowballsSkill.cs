@@ -16,11 +16,11 @@ namespace ArtificerExtended.Skills
     class _1SnowballsSkill : SkillBase
     {
         public static GameObject snowballProjectilePrefab;
-        public override string SkillName => "Frost Bolt";
+        public override string SkillName => "Cryo Bolt";
         public override string TOKEN_IDENTIFIER => "SNOWBALL";
 
         public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
-            $"Throw a snowball for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
+            $"Fire a bolt for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
 
         public override Sprite Icon => LoadSpriteFromBundle("SnowballIcon");
 

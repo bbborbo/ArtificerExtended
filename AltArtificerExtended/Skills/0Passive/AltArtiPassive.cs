@@ -57,7 +57,7 @@ namespace ArtificerExtended.Passive
 
         public static Single meltAspdIncrease = 0.025f;
         public static Single burnBuffDurationBase = 4f;
-        public static Single burnBuffDurationStack = -0.5f;
+        public static Single burnBuffDurationStack = -0.7f;
 
         public static Single slowProcChance = 1f;
         public static Single freezeProcCount = 3f;
@@ -487,13 +487,15 @@ namespace ArtificerExtended.Passive
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
                 delay.maxTimer += UnityEngine.Random.Range(-0.1f, 0.1f);
                 delay.position = position;
-                delay.baseDamage = attacker.damage * (1 + 0.5f * (int)icePowerToUse);
-                delay.procCoefficient = 0.3f + (0.1f * (int)icePowerToUse);
+                delay.baseDamage = attacker.damage * novaBaseDamage;// attacker.damage * (1 + 0.5f * (int)icePowerToUse);
+                delay.procCoefficient = 0.8f - (0.1f * (int)icePowerToUse);//0.5f;//
                 delay.attacker = attacker.gameObject;
                 delay.radius = radius;
                 delay.damageType = DamageType.Generic;
                 delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blast.GetComponent<TeamFilter>().teamIndex = attacker.teamComponent.teamIndex;
+
+                //NetworkServer.Spawn(blast);
             }
         }
 

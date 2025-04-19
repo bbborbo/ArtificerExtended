@@ -72,8 +72,8 @@ namespace ArtificerExtended.Skills
         public override void Init()
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTSTAR";
-            CommonAssets.AddResonantKeyword(resonantKeywordToken, SkillName,
-                $"If only <style=cIsDamage>Fire</style> skills are equipped, periodically fires additional fire missiles for {DamageValueText(missileDamageCoefficient)}.");
+            CommonAssets.AddResonantKeyword(resonantKeywordToken, "Coronal Mass Ejection",
+                $"If only <style=cIsDamage>Fire</style> abilities are equipped, periodically fires additional fire missiles for {DamageValueText(missileDamageCoefficient)}.");
             CreateMissileProjectile();
             CreateTornadoProjectile();
             KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_IGNITE" };

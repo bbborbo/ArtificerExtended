@@ -311,16 +311,16 @@ namespace ArtificerExtended
                 "- Selecting <style=cIsDamage>FIRE</style> skills increases the intensity of <style=cIsUtility>Incinerate.</style>" +
                 "\n- Selecting <style=cIsDamage>ICE</style> skills increases the power of <style=cIsUtility>Arctic Blasts.</style>" +
                 "\n- Selecting <style=cIsDamage>LIGHTNING</style> skills creates additional <style=cIsUtility>Lightning Bolts.</style>");*/
-            LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
-                "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
-                "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
-                "\n- <style=cIsUtility>Lightning Bolts</style> increase in number for each <style=cIsDamage>LIGHTNING</style> skill.");
+            //LanguageAPI.Add("MAGE_PASSIVE_ENERGY_DESC",
+            //    "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
+            //    "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
+            //    "\n- <style=cIsUtility>Lightning Bolts</style> increase in number for each <style=cIsDamage>LIGHTNING</style> skill.");
             #endregion
 
             Sprite altPassiveIcon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
             resonanceSkillDef.skillNameToken = "MAGE_PASSIVE_ENERGY_NAME";
-            resonanceSkillDef.skillDescriptionToken = "MAGE_PASSIVE_ENERGY_DESC";
+            resonanceSkillDef.skillDescriptionToken = CommonAssets.magePassiveDescToken;
             resonanceSkillDef.icon = altPassiveIcon;
             resonanceSkillDef.canceledFromSprinting = false;
             resonanceSkillDef.cancelSprintingOnActivation = false;

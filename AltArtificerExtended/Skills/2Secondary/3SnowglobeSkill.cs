@@ -38,11 +38,11 @@ namespace ArtificerExtended.Skills
         public static int chillStacksPerSnowglobe = 3;
         public static float projectileBaseSpeed = 120f;
 
-        public override string SkillName => "Snowglobe";
+        public override string SkillName => "Stasis Field";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. " +
-            $"Aim an explosive icicle for <style=cIsDamage>{Tools.ConvertDecimal(impactDamageCoefficient)}</style> damage, " +
-            $"leaving behind a <style=cIsUtility>Chilling</style> area that lasts until replaced. " +
+            $"Aim a supercooled projectile for <style=cIsDamage>{Tools.ConvertDecimal(impactDamageCoefficient)}</style> damage, " +
+            $"leaving behind a <style=cIsUtility>Chilling</style> stasis field that lasts until replaced. " +
             $"Hold up to {maxSnowglobeBase}.";
 
         public override string TOKEN_IDENTIFIER => "SNOWGLOBE";
@@ -66,9 +66,9 @@ namespace ArtificerExtended.Skills
         public override void Init()
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTSNOWGLOBE";
-            CommonAssets.AddResonantKeyword(resonantKeywordToken, SkillName,
-                $"Max of {maxSnowglobeBase} <style=cIsUtility>Chilling</style> areas. " +
-                $"If only <style=cIsDamage>Ice</style> skills are equipped, <style=cIsUtility>increase max to {maxSnowglobeUpgrade}</style>.");
+            CommonAssets.AddResonantKeyword(resonantKeywordToken, "Sustained Stasis",
+                $"Max of {maxSnowglobeBase} stasis fields. " +
+                $"If only <style=cIsDamage>Ice</style> abilities are equipped, <style=cIsUtility>increase max to {maxSnowglobeUpgrade}</style>.");
             KeywordTokens = new string[] { resonantKeywordToken, ChillRework.ChillRework.chillKeywordToken };
             GetSnowglobeSlotLimit += GetMaxSnowglobes;
             snowglobeDeployableSlot = DeployableAPI.RegisterDeployableSlot(GetSnowglobeSlotLimit);

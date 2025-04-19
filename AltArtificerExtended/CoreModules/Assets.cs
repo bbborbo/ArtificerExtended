@@ -19,6 +19,7 @@ using RoR2.ExpansionManagement;
 using ArtificerExtended.Passive;
 using static R2API.DamageAPI;
 using RoR2.EntityLogic;
+using static ArtificerExtended.Modules.Language.Styling;
 
 namespace ArtificerExtended.Modules
 {
@@ -45,7 +46,7 @@ namespace ArtificerExtended.Modules
 
         public static void AddResonantKeyword(string keywordToken, string resonantAbilityName, string resonantDesc)
         {
-            LanguageAPI.Add(keywordToken, $"<style=cKeywordName>Resonance: {resonantAbilityName}</style>" +
+            LanguageAPI.Add(keywordToken, $" < style=cKeywordName>Resonance: {resonantAbilityName}</style>" +
                 $"<style=cSub>{resonantDesc}</style>");
         }
         public static void Init()
@@ -231,9 +232,10 @@ namespace ArtificerExtended.Modules
 
         #region EnergeticResonance
         public static BuffDef meltBuff;
-        public static string meltKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_MELT";
-        public static string arcticBlastKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_ARCTICBLAST";
-        public static string lightningBoltKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_BOLTS";
+        public static string meltKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTMELT";
+        public static string arcticBlastKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTARCTICBLAST";
+        public static string lightningBoltKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTBOLTS";
+        public static string magePassiveDescToken = "MAGE_PASSIVE_ENERGY_DESC";
 
         static void AddAAPassiveBuffs()
         {
@@ -245,6 +247,32 @@ namespace ArtificerExtended.Modules
         }
         private static void AddAAKeywords()
         {
+            LanguageAPI.Add(magePassiveDescToken,
+                $"- {DamageColor("FIRE Resonance")} increases {UtilityColor("Incinerate")} intensity.\n" +
+                $"- {DamageColor("ICE Resonance")} increases {UtilityColor("Arctic Blast")} range.\n" +
+                $"- {DamageColor("LIGHTNING Resonance")} increases {UtilityColor("Lightning Bolts")} fired.");
+
+            AddResonantKeyword(meltKeywordToken, "Incinerate",
+                $"On {UtilityColor("FIRE SKILL Cast")}, gain 1 stack of {UtilityColor("Incinerate")} " +
+                $"for each {DamageColor("Fire")} ability equipped. " +
+                $"{UtilityColor("Incinerate")} increases {DamageColor("attack speed")} on ALL skills " +
+                $"by {DamageColor(Tools.ConvertDecimal(AltArtiPassive.meltAspdIncrease))} per stack.");
+            AddResonantKeyword(arcticBlastKeywordToken, "Arctic Blast",
+                $"On {UtilityColor($"applying {ChillRework.ChillRework.chillStacksMax} stacks of Chill")} or {UtilityColor("killing Chilled enemies")}, " +
+                $"cause a {UtilityColor("Chilling")} blast that extends {UtilityColor(AltArtiPassive.novaRadiusPerPower.ToString() + "m")} " +
+                $"for each {DamageColor("Ice")} ability equipped. " +
+                $"{UtilityColor("Arctic Blasts")} deal {DamageValueText(AltArtiPassive.novaBaseDamage)} to nearby enemies.");
+            AddResonantKeyword(lightningBoltKeywordToken, "Lightning Bolts",
+                $"On {UtilityColor("ANY SKILL Cast")}, fire a spear of energy " +
+                $"for each {DamageColor("Lightning")} ability equipped. " +
+                $"Each {UtilityColor("Lightning Bolt")} seeks out enemies in front of you " +
+                $"for {DamageColor("2x" + Tools.ConvertDecimal(AltArtiPassive.lightningDamageMult) + " damage")}.");
+
+            return;
+            LanguageAPI.Add(magePassiveDescToken,
+                "- <style=cIsUtility>Incinerate</style> increases in intensity for each <style=cIsDamage>FIRE</style> skill." +
+                "\n- <style=cIsUtility>Arctic Blasts</style> increase in radius for each <style=cIsDamage>ICE</style> skill." +
+                "\n- <style=cIsUtility>Lightning Bolts</style> increase in number for each <style=cIsDamage>LIGHTNING</style> skill.");
             LanguageAPI.Add(meltKeywordToken, $"<style=cKeywordName>Incinerate</style>" +
                 $"<style=cSub><style=cIsUtility>On FIRE SKILL Cast:</style> Gain a buff that " +
                 $"increases your <style=cIsDamage>attack speed</style> on all skills " +

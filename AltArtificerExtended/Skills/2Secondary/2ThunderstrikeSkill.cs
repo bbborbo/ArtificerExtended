@@ -35,7 +35,7 @@ namespace ArtificerExtended.Skills
         public static float delayProcCoefficient = 1;
         public static float resonantCdr = 0.5f;
         public static int resonantCdrMax = 12;
-        public override string SkillName => "Thunderstrike";
+        public override string SkillName => "Pulse Strike";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. <style=cIsDamage>Stunning</style>. " +
             $"Become a beam of energy, surging forward a short distance. " +
@@ -61,9 +61,9 @@ namespace ArtificerExtended.Skills
         public override float BaseCooldown => 6;
         public override void Init()
         {
-            string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTTHUNDERSTRIKE";
-            CommonAssets.AddResonantKeyword(resonantKeywordToken, SkillName,
-                $"If only <style=cIsDamage>Lightning</style> skills are equipped, reduces cooldown by <style=cIsUtility>{resonantCdr} seconds</style> for each enemy struck (up to <style=cIsUtility>{resonantCdrMax}</style> times).");
+            string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTTHUNDERDASH";
+            CommonAssets.AddResonantKeyword(resonantKeywordToken, "Pulse Conduit",
+                $"If only <style=cIsDamage>Lightning</style> abilities are equipped, reduces cooldown by <style=cIsUtility>{resonantCdr} seconds</style> for each enemy struck (up to <style=cIsUtility>{resonantCdrMax}</style> times).");
             KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_STUNNING" };
 
             lightningOrbEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LightningStrikeOnHit/SimpleLightningStrikeOrbEffect.prefab").WaitForCompletion();

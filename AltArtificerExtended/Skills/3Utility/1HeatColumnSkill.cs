@@ -32,7 +32,7 @@ namespace ArtificerExtended.Skills
         public static float igniteFrequency = 0.5f;
         public static float igniteDamage = 1f;
 
-        public override string SkillName => "Rising Flame";
+        public override string SkillName => "Convection Current";
 
         public override string SkillDescription => $"Create a column of heat, " +
             $"<style=cIsDamage>igniting</style> enemies inside for <style=cIsDamage>{Tools.ConvertDecimal(igniteDamage / igniteFrequency)} damage per second</style>. " +
