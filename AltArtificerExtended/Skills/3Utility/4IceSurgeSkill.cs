@@ -40,7 +40,7 @@ namespace ArtificerExtended.Skills
             baseMaxStock: 1,
             rechargeStock: 1,
             beginSkillCooldownOnSkillEnd: true,
-            forceSprintingDuringState: true,
+            forceSprintingDuringState: false,
             isCombatSkill: false,
             mustKeyPress: true
         );
