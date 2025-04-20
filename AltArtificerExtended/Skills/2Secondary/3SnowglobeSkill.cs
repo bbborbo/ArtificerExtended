@@ -205,7 +205,11 @@ namespace ArtificerExtended.Skills
             SphereCollider collider = snowglobeProjectilePrefab.GetComponent<SphereCollider>();
             if (collider)
                 GameObject.Destroy(collider);
-
+            ProjectileDamage pd = snowglobeDeployProjectilePrefab.GetComponent<ProjectileDamage>();
+            if (pd)
+            {
+                pd.damageType.damageType = DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary);
+            }
             ProjectileImpactExplosion pie = snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pie)
             {

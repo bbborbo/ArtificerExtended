@@ -29,7 +29,6 @@ namespace ArtificerExtended.States
         }
         public override void ModifyProjectile(ref FireProjectileInfo fireProjectileInfo)
         {
-            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo?(new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary));
             base.ModifyProjectile(ref fireProjectileInfo);
         }
         public override void OnExit()
