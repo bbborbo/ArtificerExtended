@@ -57,7 +57,7 @@ namespace ArtificerExtended.Passive
 
         public static Single meltAspdIncrease = 0.025f;
         public static Single burnBuffDurationBase = 4f;
-        public static Single burnBuffDurationStack = -0.7f;
+        public static Single burnBuffDurationStack = -0.6f;
 
         public static Single slowProcChance = 1f;
         public static Single freezeProcCount = 3f;
