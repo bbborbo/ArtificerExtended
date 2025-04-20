@@ -39,15 +39,21 @@ namespace ArtificerExtended.Components
                 {
                     shouldFireMissiles = true;
                     ownerBody = pc.owner.GetComponent<CharacterBody>();
-                    if (ownerBody)
-                    {
-                        fireMissileInterval = fireMissileBaseInterval / ownerBody.attackSpeed;
-                        fireMissileTimer = fireMissileInterval;
-                    }
+                    ResetMissileTimer();
                     if (pd == null)
                         pd = this.GetComponent<ProjectileDamage>();
                 }
             }
+        }
+        void ResetMissileTimer()
+        {
+            fireMissileTimer += fireMissileBaseInterval / GetAttackSpeed();
+        }
+        float GetAttackSpeed()
+        {
+            if (!ownerBody)
+                return 1;
+            return ownerBody.attackSpeed;
         }
         void FixedUpdate()
         {
@@ -59,12 +65,12 @@ namespace ArtificerExtended.Components
             int missilesToFire = 0;
             while(fireMissileTimer <= 0)
             {
-                fireMissileTimer += fireMissileInterval;
+                ResetMissileTimer();
                 missilesToFire++;
             }
             FireSolarFlareMissile(missilesToFire);
 
-            fireMissileTimer -= Time.fixedDeltaTime;
+            fireMissileTimer -= Time.fixedDeltaTime * GetAttackSpeed();
         }
         public void FireSolarFlareMissile(int count)
         {
