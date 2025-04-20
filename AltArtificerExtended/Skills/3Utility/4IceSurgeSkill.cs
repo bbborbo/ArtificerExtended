@@ -20,7 +20,7 @@ namespace ArtificerExtended.Skills
         public override string TOKEN_IDENTIFIER => "ICESURGE";
         public override string SkillName => "Cryoburst";
 
-        public override string SkillDescription => $"Agile. Freezing. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
+        public override string SkillDescription => $"{UtilityColor("Agile")}. {UtilityColor("Freezing")}. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
 
         public override Sprite Icon => null;
 
