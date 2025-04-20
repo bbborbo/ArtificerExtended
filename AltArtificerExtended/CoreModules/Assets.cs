@@ -68,6 +68,8 @@ namespace ArtificerExtended.Modules
             matMageFlameAura = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/WardOnLevel/matWarbannerSphereIndicator2.mat").WaitForCompletion());
             matMageFlameAura.name = "matMageFlameAura";
             matMageFlameAura.SetColor("_TintColor", new Color32(146, 73, 0, 201)/*(150, 110, 0, 191)*/);
+            matMageFlameAura.SetFloat("_RimPower", 2);
+            matMageFlameAura.SetFloat("_RimStrength", 0.58f);
         }
         #region nebula passive
         public static void CreateNebulaOrbitals()
