@@ -18,6 +18,7 @@ using static R2API.RecalculateStatsAPI;
 using UnityEngine.AddressableAssets;
 using static R2API.DamageAPI;
 using RoR2.Achievements;
+using static ArtificerExtended.Modules.Language.Styling;
 
 namespace ArtificerExtended.Skills
 {
@@ -77,11 +78,12 @@ namespace ArtificerExtended.Skills
                 $"<style=cSub>Gain <style=cIsHealing>+{bonusArmor} armor</style>, " +
                 $"and <style=cIsUtility>Chill</style> nearby enemies for " +
                 $"<style=cIsDamage>{icicleCount}x{Tools.ConvertDecimal(icicleDamage)} damage</style>. " +
+                $"When ending, creates a second {UtilityColor("Chilling")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
                 $"\nWhile armored, move " +
                 $"<style=cIsUtility>up to +{Tools.ConvertDecimal(movementIncreasePerBuff * (buffsForZeroMovementIncrease - 1))} faster</style>, " +
                 $"gradually decaying to " +
                 $"<style=cIsUtility>-{Tools.ConvertDecimal(movementDecreasePerBuff * (10 - buffsForZeroMovementIncrease))} slower</style>. " +
-                $"\nFrost Armor disables hovering, but prevents fall damage.</style>");
+                $"\n{UtilityColor("Frost Armor")} disables hovering, but {UtilityColor("prevents fall damage")}.</style>");
 
             //  Frostbite.blizzardDamageCoefficient = config.Bind<float>(
             //   "Skills Config: " + SkillName, "Primary Damage Coefficient",
