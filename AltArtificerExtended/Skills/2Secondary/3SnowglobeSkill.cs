@@ -208,7 +208,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = snowglobeDeployProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType.damageType = DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary);
+                pd.damageType.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary);
             }
             ProjectileImpactExplosion pie = snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pie)
