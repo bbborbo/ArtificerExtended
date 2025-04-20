@@ -20,7 +20,7 @@ namespace ArtificerExtended.Skills
         public override string TOKEN_IDENTIFIER => "ICESURGE";
         public override string SkillName => "Cryoburst";
 
-        public override string SkillDescription => $"Freezing. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
+        public override string SkillDescription => $"Agile. Freezing. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
 
         public override Sprite Icon => null;
 
@@ -41,12 +41,18 @@ namespace ArtificerExtended.Skills
             rechargeStock: 1,
             beginSkillCooldownOnSkillEnd: true,
             forceSprintingDuringState: false,
+            cancelSprintingOnActivation: false,
             isCombatSkill: false,
             mustKeyPress: true
         );
 
         public override MageElement Element => MageElement.Ice;
 
+        public override void Init()
+        {
+            KeywordTokens = new string[] { "KEYWORD_AGILE", "KEYWORD_FREEZING" };
+            base.Init();
+        }
         public override void Hooks()
         {
             
