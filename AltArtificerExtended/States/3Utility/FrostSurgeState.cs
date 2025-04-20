@@ -44,7 +44,7 @@ namespace ArtificerExtended.States
 				passive.SkillCast();
 			}
 
-			bool flyUp = this.inputBank.moveVector.sqrMagnitude < 0.1f;
+			bool flyUp = this.inputBank.moveVector.sqrMagnitude < 0.1f || this.inputBank.jump.down;
 			if (flyUp)
 			{
 				this.flyVector = Vector3.up; //Vector3.Normalize(base.characterDirection.forward + Vector3.up / 1.15f) * 0.8f;
