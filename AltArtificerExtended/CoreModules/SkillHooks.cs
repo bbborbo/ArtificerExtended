@@ -139,19 +139,6 @@ namespace ArtificerExtended
         }
 
         #region IceStuff + FireStuff
-        private struct FreezeInfo
-        {
-            public GameObject frozenBy;
-            public Vector3 frozenAt;
-
-            public FreezeInfo(GameObject frozenBy, Vector3 frozenAt)
-            {
-                this.frozenAt = frozenAt;
-                this.frozenBy = frozenBy;
-            }
-        }
-
-        private readonly Dictionary<GameObject, GameObject> frozenBy = new Dictionary<GameObject, GameObject>();
 
         private void GlobalEventManager_OnCharacterDeath(DamageReport damageReport)
         {
@@ -208,10 +195,6 @@ namespace ArtificerExtended
         }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, RoR2.HealthComponent self, RoR2.DamageInfo damageInfo)
         {
-            if (damageInfo.damageType.damageType.HasFlag(DamageType.Freeze2s))
-            {
-                this.frozenBy[self.gameObject] = damageInfo.attacker;
-            }
             orig(self, damageInfo);
             /*if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
             {
@@ -413,7 +396,7 @@ namespace ArtificerExtended
                 while (context.timer >= context.passive.ext_nanoBombInterval && count <= context.passive.ext_nanoBombMaxPerTick)
                 {
                     count++;
-                    context.passive.SkillCast(context.handle);
+                    context.passive.SkillCast(context.handle, (self is ChargeSolarFlare ? true : false));
                     context.timer -= context.passive.ext_nanoBombInterval;
                 }
 

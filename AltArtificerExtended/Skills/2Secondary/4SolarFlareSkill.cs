@@ -164,6 +164,12 @@ namespace ArtificerExtended.Skills
                         meshRenderer.material = CommonAssets.matMageFlameAura;
                         meshRenderer.transform.parent = ghostPrefab.transform;
                         meshRenderer.transform.localScale = Vector3.one * tornadoRadius * 2;
+                        meshRenderer.transform.localPosition = Vector3.zero;
+
+                        Material[] sm = meshRenderer.sharedMaterials;
+                        Array.Resize(ref sm, 2);
+                        sm[1] = Addressables.LoadAssetAsync<Material>("RoR2/DLC1/GameModes/InfiniteTowerRun/InfiniteTowerAssets/matITSafeWardAreaIndicator2.mat").WaitForCompletion();
+                        meshRenderer.sharedMaterials = sm;
                         break;
                     }
                 }

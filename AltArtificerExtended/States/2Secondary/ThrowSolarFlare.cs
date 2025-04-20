@@ -26,6 +26,8 @@ namespace ArtificerExtended.States
                 (_4SolarFlareSkill.minChargeDuration / _4SolarFlareSkill.maxChargeDuration), 1f, 
                 _4SolarFlareSkill.minSendSpeed, _4SolarFlareSkill.maxSendSpeed);
             projectileInfo.useSpeedOverride = true;
+            projectileInfo.damageTypeOverride = new DamageTypeCombo?(new DamageTypeCombo(DamageType.IgniteOnHit, DamageTypeExtended.Generic, DamageSource.Secondary));
+            base.ModifyProjectile(ref projectileInfo);
         }
     }
 }

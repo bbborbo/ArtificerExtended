@@ -1,5 +1,8 @@
 ﻿using ArtificerExtended.Skills;
 using EntityStates;
+using EntityStates.Mage.Weapon;
+using RoR2;
+using RoR2.Projectile;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +25,20 @@ namespace ArtificerExtended.States
             base.arcVisualizerPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BasicThrowableVisualizer.prefab").WaitForCompletion();
             base.endpointVisualizerPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/TreebotMortarAreaIndicator.prefab").WaitForCompletion();
             base.OnEnter();
+            base.PlayAnimation("Gesture, Additive", PrepWall.PrepWallStateHash, PrepWall.PrepWallParamHash, this.minimumDuration);
+        }
+        public override void ModifyProjectile(ref FireProjectileInfo fireProjectileInfo)
+        {
+            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo?(new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary));
+            base.ModifyProjectile(ref fireProjectileInfo);
+        }
+        public override void OnExit()
+        {
+            base.PlayAnimation("Gesture, Additive", BaseThrowBombState.FireNovaBombStateHash, BaseThrowBombState.FireNovaBombParamHash, this.minimumDuration);
+            EffectManager.SimpleMuzzleFlash(_3SnowglobeSkill.muzzleflashEffectPrefab, base.gameObject, "MuzzleLeft", false);
+            EffectManager.SimpleMuzzleFlash(_3SnowglobeSkill.muzzleflashEffectPrefab, base.gameObject, "MuzzleRight", false);
+            //this.PlayAnimation("Gesture, Additive", PrepWall.FireWallStateHash);
+            base.OnExit();
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

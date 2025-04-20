@@ -6,6 +6,7 @@ using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
 using R2API;
+using Rewired.ComponentControls.Effects;
 using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
@@ -23,15 +24,16 @@ namespace ArtificerExtended.Skills
         public DeployableAPI.GetDeployableSameSlotLimit GetSnowglobeSlotLimit;
         public static DeployableSlot snowglobeDeployableSlot;
 
+        public static GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
         public static GameObject snowglobeDeployProjectilePrefab;
         public static GameObject snowglobeProjectilePrefab;
 
         public static int maxSnowglobeBase = 2;
         public static int maxSnowglobeUpgrade = 3;
-        public static float impactDamageCoefficient = 10f;
+        public static float impactDamageCoefficient = 7f;
         public static float impactProcCoefficient = 1f;
         public static float impactBlastRadius = 14f;
-        public static float snowWardRadius = 14f;
+        public static float snowWardRadius = 10f;
         public static float damageCoefficientPerSecond = 0.5f;
         public static float procCoefficientPerTick = 1f;
         public static float damageTicksPerSecond = 0.5f;
@@ -56,7 +58,8 @@ namespace ArtificerExtended.Skills
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
             baseMaxStock: maxSnowglobeBase,
-            beginSkillCooldownOnSkillEnd: true
+            beginSkillCooldownOnSkillEnd: true,
+            canceledFromSprinting: true
         );
         public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
@@ -84,7 +87,7 @@ namespace ArtificerExtended.Skills
 
         private void CreateSnowglobeProjectile()
         {
-            snowglobeProjectilePrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "HeatWardPrefab", true);
+            snowglobeProjectilePrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMineAltDetonated.prefab").WaitForCompletion(), "MageSnowglobePrefab", true);
             if (snowglobeProjectilePrefab)
             {
                 Content.AddProjectilePrefab(snowglobeProjectilePrefab);
@@ -109,6 +112,56 @@ namespace ArtificerExtended.Skills
                 if (areaIndicator)
                 {
                     //GameObject.Destroy(areaIndicator);
+                    Transform sphere = areaIndicator.transform.Find("Sphere");
+                    if (sphere)
+                    {
+                        MeshRenderer meshRenderer = sphere.GetComponent<MeshRenderer>();
+                        if (meshRenderer)
+                        {
+                            Material bgMat = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/GameModes/InfiniteTowerRun/InfiniteTowerAssets/matITSafeWardAreaIndicator2.mat").WaitForCompletion());
+                            bgMat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLunarInfection.png").WaitForCompletion());
+                            meshRenderer.sharedMaterials[1] = bgMat;
+                            //Material[] sm = meshRenderer.sharedMaterials;
+                            //Array.Resize(ref sm, 1);
+                            //meshRenderer.sharedMaterials = sm;
+
+                            Material mat = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/EliteIce/matAffixWhiteSphereExplosion.mat").WaitForCompletion());
+                            //mat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLunarInfection.png").WaitForCompletion());
+                            mat.SetColor("_TintColor", new Color32(81,255,160,75));
+                            meshRenderer.material = mat;
+                        }
+                        RotateAroundAxis rax = sphere.GetComponent<RotateAroundAxis>();
+                        if (rax)
+                        {
+                            rax.reverse = true;
+                            rax.slowRotationSpeed = 5;
+                        }
+                    }
+
+                    Light pointLight = areaIndicator.GetComponentInChildren<Light>();
+                    if (pointLight)
+                    {
+                        pointLight.intensity = 12;
+                        pointLight.range = snowWardRadius * 2;
+                        pointLight.color = new Color32(89, 186, 255, 255);
+                    }
+                    Transform chargeIn = areaIndicator.transform.Find("ChargeIn");
+                    if (chargeIn)
+                    {
+                        ParticleSystemRenderer psr = chargeIn.GetComponent<ParticleSystemRenderer>();
+                        psr.material = Addressables.LoadAssetAsync<Material>("RoR2/Base/Commando/matCommandoShotgunTracerCore.mat").WaitForCompletion();
+                    }
+
+                    Transform softGlow = areaIndicator.transform.Find("SoftGlow");
+                    if (softGlow)
+                    {
+                        GameObject.Destroy(softGlow.gameObject);
+                    }
+                    Transform core = areaIndicator.transform.Find("Core");
+                    if (core)
+                    {
+                        GameObject.Destroy(core.gameObject);
+                    }
                 }
 
                 //encourageWardIndicator.transform.parent = HeatWardPrefab.transform;
@@ -148,6 +201,11 @@ namespace ArtificerExtended.Skills
 
             //remove their ProjectileImpactExplosion component and start from default values
             //UnityEngine.Object.Destroy(snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>());
+
+            SphereCollider collider = snowglobeProjectilePrefab.GetComponent<SphereCollider>();
+            if (collider)
+                GameObject.Destroy(collider);
+
             ProjectileImpactExplosion pie = snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pie)
             {
