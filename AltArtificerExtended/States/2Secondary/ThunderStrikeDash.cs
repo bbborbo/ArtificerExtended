@@ -19,6 +19,7 @@ namespace ArtificerExtended.States
 		bool hasIncreasedDuration = false;
 		public float speedCoefficientOnExit = 1;
 		private CharacterModel characterModel;
+		float invulDuration = 0.1f;
 		public float speedCoefficient => _2ThunderstrikeSkill.speedCoefficient;
 		public string endSoundString;
 		public float exitSmallHop = 6f;
@@ -137,7 +138,7 @@ namespace ArtificerExtended.States
             {
 				int targetsStruckCount = Mathf.Min(currentHitCount, _2ThunderstrikeSkill.resonantCdrMax);
 				GenericSkill secondary = this.skillLocator.secondary;
-				secondary.RunRecharge(targetsStruckCount * _2ThunderstrikeSkill.resonantCdr);
+				secondary.RunRecharge(_2ThunderstrikeSkill.resonantCdrFirst + _2ThunderstrikeSkill.resonantCdr * (targetsStruckCount - 1));
 			}
 
 			if (this.characterModel)
@@ -195,6 +196,8 @@ namespace ArtificerExtended.States
         public override void OnMeleeHitAuthority()
 		{
 			base.OnMeleeHitAuthority();
+			characterBody.AddTimedBuffAuthority(RoR2Content.Buffs.HiddenInvincibility.buffIndex, invulDuration);
+
 			if (!this.hasIncreasedDuration)
 			{
 				this.hasIncreasedDuration = true;

@@ -33,8 +33,9 @@ namespace ArtificerExtended.Skills
         public static float procCoefficient = 0.25f;
         public static float delayDamageCoefficient = 9;
         public static float delayProcCoefficient = 1;
+        public static float resonantCdrFirst = 1f;
         public static float resonantCdr = 0.5f;
-        public static int resonantCdrMax = 12;
+        public static int resonantCdrMax = 9;
         public override string SkillName => "Pulse Strike";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. <style=cIsDamage>Stunning</style>. " +
@@ -63,7 +64,8 @@ namespace ArtificerExtended.Skills
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTTHUNDERDASH";
             CommonAssets.AddResonantKeyword(resonantKeywordToken, "Pulse Conduit",
-                $"If only <style=cIsDamage>Lightning</style> abilities are equipped, reduces cooldown by <style=cIsUtility>{resonantCdr} seconds</style> for each enemy struck (up to <style=cIsUtility>{resonantCdrMax}</style> times).");
+                $"If only <style=cIsDamage>Lightning</style> abilities are equipped, striking an enemy reduces {SkillName} cooldown by style=cIsUtility>{resonantCdrFirst} seconds</style>" +
+                $"plus <style=cIsUtility>{resonantCdr} seconds</style> for every additional enemy (up to <style=cIsUtility>{resonantCdrMax}</style> times).");
             KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_STUNNING" };
 
             lightningOrbEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LightningStrikeOnHit/SimpleLightningStrikeOrbEffect.prefab").WaitForCompletion();
@@ -90,7 +92,7 @@ namespace ArtificerExtended.Skills
                         hitboxTransform.layer = LayerIndex.projectile.intVal;
                         hitboxTransform.transform.localPosition = new Vector3(0, 1.564f, 0);
                         hitboxTransform.transform.localRotation = Quaternion.identity;
-                        hitboxTransform.transform.localScale = Vector3.one * 8f;
+                        hitboxTransform.transform.localScale = Vector3.one * 10f;
 
                         hitBoxGroup.hitBoxes = new HitBox[1] { hitBox };
                     }
