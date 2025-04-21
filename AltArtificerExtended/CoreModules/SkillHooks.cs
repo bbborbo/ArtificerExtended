@@ -222,9 +222,9 @@ namespace ArtificerExtended
 
         private void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
         {
-            if(aBody != null)
+            if (aBody != null && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out AltArtiPassive passive))
             {
-                Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
+                Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
                 if (icePower > Power.None) //Arctic Blast
                 {
                     AltArtiPassive.DoNova(aBody, icePower, vBody.corePosition);
