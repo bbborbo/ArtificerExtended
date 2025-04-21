@@ -43,7 +43,7 @@ namespace ArtificerExtended.States
         public static float baseZapAttackInterval = 0.25f;
         public static float baseZapClearInterval = 1f;
 
-        public static float impactDamageCoefficient = 9f;
+        public static float impactDamageCoefficient = 12f;
         public static float impactProcCoefficient = 1f;
         public static float impactRadius = 21f;
         public static float impactBlastForce = 1250f;

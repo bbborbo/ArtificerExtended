@@ -201,13 +201,13 @@ namespace ArtificerExtended
         {
             Content.AddEntityState(typeof(States.SurgeExtendedDash));
             Content.AddEntityState(typeof(States.SurgeExtendedImpact));
-            LanguageAPI.Add("MAGE_SPECIAL_LIGHTNING_DESC",
+            LanguageAPI.Add("MAGE_SPECIAL_LIGHTNING_DESCRIPTION",
                 $"<style=cIsDamage>Stunning</style>. Surge forward, dealing " +
                 $"<style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.grazeDamageCoefficient)} damage</style> to enemies in your path. " +
                 $"Upon impact, create an explosion for <style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.impactDamageCoefficient)} damage</style>.");
                 //"Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
             surge.activationState = new SerializableEntityStateType(typeof(States.SurgeExtendedDash));
-            surge.baseRechargeInterval = 9f;
+            surge.baseRechargeInterval = 8f;
             //surge.keywordTokens = new string[0];
         }
 
