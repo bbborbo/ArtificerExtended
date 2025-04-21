@@ -18,8 +18,8 @@ namespace ArtificerExtended.Skills
     {
         public static int totalStrikes = 8;
         public static float delayBetweenStrikes = 0.5f;
-        public static float rollerVelocity = 11f;
-        public static float thunderBlastRadius = 6f;
+        public static float rollerVelocity = 12f;
+        public static float thunderBlastRadius = 8f;
 
         //thunder
         public static GameObject magnetRollerProjectilePrefab;

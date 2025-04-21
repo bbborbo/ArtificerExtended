@@ -221,7 +221,7 @@ namespace ArtificerExtended
                 "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
 
             surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
-            surge2.baseRechargeInterval = 6f;
+            surge2.baseRechargeInterval = 8f;
             surge2.skillDescriptionToken = "MAGE_ANTISURGE_LIGHTNING_DESC";
             surge2.skillNameToken = "MAGE_ANTISURGE_LIGHTNING_NAME";
             surge2.keywordTokens = new string[0];

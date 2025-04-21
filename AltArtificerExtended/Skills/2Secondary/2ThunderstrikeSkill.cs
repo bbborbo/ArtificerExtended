@@ -35,7 +35,7 @@ namespace ArtificerExtended.Skills
         public static float delayProcCoefficient = 1;
         public static float resonantCdrFirst = 1f;
         public static float resonantCdr = 0.5f;
-        public static int resonantCdrMax = 9;
+        public static int resonantCdrMax = 15;
         public override string SkillName => "Pulse Strike";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. <style=cIsDamage>Stunning</style>. " +
@@ -59,7 +59,7 @@ namespace ArtificerExtended.Skills
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
-        public override float BaseCooldown => 6;
+        public override float BaseCooldown => 8;
         public override void Init()
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTTHUNDERDASH";
