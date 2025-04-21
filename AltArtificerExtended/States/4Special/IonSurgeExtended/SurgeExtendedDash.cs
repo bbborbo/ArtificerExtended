@@ -60,7 +60,7 @@ namespace ArtificerExtended.States
         public static float baseWindupDuration = 0.6f; // duration to wind up before surge
         public static float antiGravityDuration = 2; // duration after beginning to ignore gravity
         public static float flightDuration = 3.5f; // duration after gravity begins before surging ends
-        public static float minFlightDuration = 0.2f; // duration after gravity begins before surging ends
+        public static float minFlightDuration = 0.15f; // duration after gravity begins before surging ends
         public static float startingSurgeSpeed = 5f; // movement speed multiplier while surging
         public static float endingSurgeSpeed = 2f; // movement speed multiplier while surging
         public static float baseSurgeDrag = 0.6f; // the time in seconds it should take for the surge direction to respond to changes in aim direction
@@ -392,6 +392,8 @@ namespace ArtificerExtended.States
         }
         public void OnSurgeImpact()
         {
+            if (fixedAge <= minFlightDuration)
+                return;
             EndFlight();
             this.outer.SetNextState(new SurgeExtendedImpact
             {
