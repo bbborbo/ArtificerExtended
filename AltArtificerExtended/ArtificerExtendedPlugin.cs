@@ -268,6 +268,17 @@ namespace ArtificerExtended
                     });
                 }
             };
+            //On.RoR2.UI.LoadoutPanelController.Row.FromSkillSlot += (orig, owner, bodyIndex, slotIndex, slot) => 
+            //{
+            //    LoadoutPanelController.Row row = (LoadoutPanelController.Row)orig(owner, bodyIndex, slotIndex, slot);
+            //    if ((slot.skillFamily as ScriptableObject).name.Contains("Passive"))
+            //    {
+            //        Transform label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
+            //        if (label)
+            //            label.GetComponent<LanguageTextMeshController>().token = "Misc";
+            //    }
+            //    return row;
+            //};
             IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) => 
             {
                 ILCursor c = new ILCursor(il);
@@ -278,7 +289,11 @@ namespace ArtificerExtended
 
                 if (b)
                 {
-                    c.EmitDelegate<System.Func<LoadoutPanelController.Row, LoadoutPanelController.Row>>((row) => {
+                    c.Emit(OpCodes.Ldarg_0);
+                    c.EmitDelegate<System.Func<LoadoutPanelController, LoadoutPanelController.Row, LoadoutPanelController.Row>>((self, row) => {
+                        if(self.currentDisplayData.bodyIndex != BodyCatalog.FindBodyIndex("MageBody"))
+                            return row;
+
                         var label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
                         if (label && label.GetComponent<LanguageTextMeshController>().token == "LOADOUT_SKILL_MISC")
                         {
