@@ -215,6 +215,10 @@ namespace ArtificerExtended
             passiveSkill._skillFamily = passiveFamily;
             (passiveSkill.skillFamily as ScriptableObject).name = "MageBodyPassive";
 
+            //List<GenericSkill> allSkills = skillLocator.allSkills.ToList();
+            //allSkills.Insert(0, passiveSkill);
+            //skillLocator.allSkills = allSkills.ToArray();
+
             Content.AddSkillFamily(passiveFamily);
 
             skillLocator.passiveSkill.enabled = false;
@@ -226,64 +230,72 @@ namespace ArtificerExtended
                 }
             }
 
-            On.RoR2.UI.LoadoutPanelController.Row.FromSkillSlot += (orig, owner, bodyI, slotI, slot) => {
-                LoadoutPanelController.Row row = (LoadoutPanelController.Row)orig(owner, bodyI, slotI, slot);
-                if ((slot.skillFamily as ScriptableObject).name.Contains("Passive"))
-                {
-                    Transform label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
-                    if (label)
-                        label.GetComponent<LanguageTextMeshController>().token = "Misc";
-                }
-                return row;
-            };
-            IL.RoR2.UI.CharacterSelectController.BuildSkillStripDisplayData += (il) => {
+            //fake it til ya make it
+            IL.RoR2.UI.CharacterSelectController.RebuildLocal += (il) =>
+            {
                 ILCursor c = new ILCursor(il);
-                int skillIndex = -1;
-                int defIndex = -1;
-                var label = c.DefineLabel();
-                if (c.TryGotoNext(x => x.MatchLdloc(out skillIndex), 
-                    x => x.MatchLdfld(typeof(GenericSkill).GetField("hideInCharacterSelect")), 
-                    x => x.MatchBrtrue(out label)) && skillIndex != (-1) 
-                    && c.TryGotoNext(MoveType.After, 
-                    x => x.MatchLdfld(typeof(SkillFamily.Variant).GetField("skillDef")), 
-                    x => x.MatchStloc(out defIndex)))
+
+                int bodyInfoLoc = -1;
+                int listLoc = -1;
+                bool b = c.TryGotoNext(MoveType.After,
+                    x => x.MatchLdloca(out bodyInfoLoc),
+                    x => x.MatchLdloc(out listLoc),
+                    x => x.MatchCallOrCallvirt<CharacterSelectController>(nameof(CharacterSelectController.BuildSkillStripDisplayData))
+                    );
+                if (b)
                 {
-                    c.Emit(OpCodes.Ldloc, defIndex);
-                    c.EmitDelegate<System.Func<SkillDef, bool>>((def) => def == passiveFamily.variants[0].skillDef);
-                    c.Emit(OpCodes.Brtrue, label);
-                    if (c.TryGotoNext(x => x.MatchCallOrCallvirt(typeof(List<StripDisplayData>).GetMethod("Add"))))
+                    c.Emit(OpCodes.Ldloc, bodyInfoLoc);
+                    c.Emit(OpCodes.Ldloc, listLoc);
+                    c.EmitDelegate<Action<CharacterSelectController.BodyInfo, List<CharacterSelectController.StripDisplayData>>>((bodyInfo, list) =>
                     {
-                        c.Remove();
-                        c.Emit(OpCodes.Ldloc, skillIndex);
-                        c.EmitDelegate<System.Action<List<StripDisplayData>, StripDisplayData, GenericSkill>>((list, disp, skill) => {
-                            if ((skill.skillFamily as ScriptableObject).name == "MageBodyPassive")
+                        if (bodyInfo.bodyIndex != BodyCatalog.FindBodyIndex("MageBody"))
+                            return;
+                        //List<CharacterSelectController.StripDisplayData> newList = new List<CharacterSelectController.StripDisplayData>();
+                        //newList.AddRange(list);
+                        int count = list.Count;
+                        int n = 0;
+                        for(int i = 0; i < count; i++)// CharacterSelectController.StripDisplayData data in list)
+                        {
+                            CharacterSelectController.StripDisplayData data = list[i];
+                            if(String.IsNullOrWhiteSpace(data.actionName))
                             {
-                                list.Insert(0, disp);
+                                list.RemoveAt(i);
+                                list.Insert(n, data);
+                                n++;
                             }
-                            else
-                            {
-                                list.Add(disp);
-                            }
-                        });
-                    }
+                        }
+                        //list = newList;
+                    });
                 }
             };
-            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) => {
+            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) => 
+            {
                 ILCursor c = new ILCursor(il);
-                if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt(typeof(LoadoutPanelController.Row).GetMethod(nameof(LoadoutPanelController.Row.FromSkillSlot), (System.Reflection.BindingFlags)(-1)))))
+                bool b = c.TryGotoNext(
+                    MoveType.After, 
+                    x => x.MatchCallOrCallvirt<LoadoutPanelController.Row>(nameof(LoadoutPanelController.Row.FromSkillSlot))
+                    );
+
+                if (b)
                 {
-                    c.EmitDelegate<System.Func<LoadoutPanelController.Row, LoadoutPanelController.Row>>((orig) => {
-                        var label = orig.rowPanelTransform.Find("SlotLabel") ?? orig.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
-                        if (label && label.GetComponent<LanguageTextMeshController>().token == "Misc")
+                    c.EmitDelegate<System.Func<LoadoutPanelController.Row, LoadoutPanelController.Row>>((row) => {
+                        var label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
+                        if (label && label.GetComponent<LanguageTextMeshController>().token == "LOADOUT_SKILL_MISC")
                         {
-                            orig.rowPanelTransform.SetSiblingIndex(0);
+                            row.rowPanelTransform.SetSiblingIndex(0);
                         }
-                        return orig;
+                        return row;
                     });
                 }
             };
             return passiveSkill;
         }
+
+        private void CharacterSelectController_BuildSkillStripDisplayData(On.RoR2.UI.CharacterSelectController.orig_BuildSkillStripDisplayData orig, CharacterSelectController self, Loadout loadout, ValueType bodyInfo, object dest)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreateMagePassives(SkillFamily passiveFamily)
         {
             PassiveSkillDef hoverSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
