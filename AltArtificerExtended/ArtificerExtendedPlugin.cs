@@ -220,7 +220,6 @@ namespace ArtificerExtended
             (passiveSkill.skillFamily as ScriptableObject).name = "MageBodyPassive";
 
             LanguageAPI.Add("MAGE_LOADOUT_PASSIVE", "Passive");
-            ContentPacks.skillFamilies.Add(passiveFamily);
 
             Content.AddSkillFamily(passiveFamily);
 
@@ -233,69 +232,6 @@ namespace ArtificerExtended
                 }
             }
 
-            return passiveSkill;
-            //fake it til ya make it
-            IL.RoR2.UI.CharacterSelectController.RebuildLocal += (il) =>
-            {
-                ILCursor c = new ILCursor(il);
-
-                int bodyInfoLoc = -1;
-                int listLoc = -1;
-                bool b = c.TryGotoNext(MoveType.After,
-                    x => x.MatchLdloca(out bodyInfoLoc),
-                    x => x.MatchLdloc(out listLoc),
-                    x => x.MatchCallOrCallvirt<CharacterSelectController>(nameof(CharacterSelectController.BuildSkillStripDisplayData))
-                    );
-                if (b)
-                {
-                    c.Emit(OpCodes.Ldloc, bodyInfoLoc);
-                    c.Emit(OpCodes.Ldloc, listLoc);
-                    c.EmitDelegate<Action<CharacterSelectController.BodyInfo, List<CharacterSelectController.StripDisplayData>>>((bodyInfo, list) =>
-                    {
-                        if (bodyInfo.bodyIndex != BodyCatalog.FindBodyIndex("MageBody"))
-                            return;
-                        //List<CharacterSelectController.StripDisplayData> newList = new List<CharacterSelectController.StripDisplayData>();
-                        //newList.AddRange(list);
-                        int count = list.Count;
-                        int n = 0;
-                        for(int i = 0; i < count; i++)// CharacterSelectController.StripDisplayData data in list)
-                        {
-                            CharacterSelectController.StripDisplayData data = list[i];
-                            if(String.IsNullOrWhiteSpace(data.actionName))
-                            {
-                                list.RemoveAt(i);
-                                list.Insert(n, data);
-                                n++;
-                            }
-                        }
-                        //list = newList;
-                    });
-                }
-            };
-            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) =>
-            {
-                ILCursor c = new ILCursor(il);
-                bool b = c.TryGotoNext(
-                    MoveType.After,
-                    x => x.MatchCallOrCallvirt<LoadoutPanelController.Row>(nameof(LoadoutPanelController.Row.FromSkillSlot))
-                    );
-
-                if (b)
-                {
-                    c.Emit(OpCodes.Ldarg_0);
-                    c.EmitDelegate<System.Func<LoadoutPanelController, LoadoutPanelController.Row, LoadoutPanelController.Row>>((self, row) => {
-                        //if (self.currentDisplayData.bodyIndex != BodyCatalog.FindBodyIndex("MageBody"))
-                        //    return row;
-
-                        var label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
-                        if (label && label.GetComponent<LanguageTextMeshController>().token == "LOADOUT_SKILL_MISC")
-                        {
-                            row.rowPanelTransform.SetSiblingIndex(0);
-                        }
-                        return row;
-                    });
-                }
-            };
             return passiveSkill;
         }
 
