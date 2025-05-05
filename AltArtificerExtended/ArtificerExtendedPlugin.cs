@@ -39,6 +39,7 @@ namespace ArtificerExtended
     [BepInDependency(R2API.PrefabAPI.PluginGUID)]
     [BepInDependency(R2API.UnlockableAPI.PluginGUID)]
     [BepInDependency(R2API.DamageAPI.PluginGUID)]
+    [BepInDependency(R2API.SkillsAPI.PluginGUID)]
 
     [BepInDependency(ChillRework.ChillRework.guid, BepInDependency.DependencyFlags.HardDependency)]
 
@@ -57,7 +58,7 @@ namespace ArtificerExtended
         public const string guid = "com.Borbo.ArtificerExtended";
         public const string modName = "ArtificerExtended";
 
-        public const string version = "3.8.6";
+        public const string version = "3.8.8";
         
         public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
         public static string iconsPath = "Assets/AESkillIcons/";
@@ -156,8 +157,12 @@ namespace ArtificerExtended
 
             GenericSkill passiveSkill = body.gameObject.AddComponent<GenericSkill>();
             passiveSkill._skillFamily = passiveFamily;
+            passiveSkill.SetOrderPriority(-1);
+            passiveSkill.SetLoadoutTitleTokenOverride("MAGE_LOADOUT_PASSIVE");
+            passiveSkill._skillFamily = passiveFamily;
             (passiveSkill.skillFamily as ScriptableObject).name = "MageBodyPassive";
 
+            LanguageAPI.Add("MAGE_LOADOUT_PASSIVE", "Passive");
             ContentPacks.skillFamilies.Add(passiveFamily);
 
             skillLocator.passiveSkill.enabled = false;
@@ -169,6 +174,7 @@ namespace ArtificerExtended
                 }
             }
 
+            return passiveSkill;
             //fake it til ya make it
             IL.RoR2.UI.CharacterSelectController.RebuildLocal += (il) =>
             {
@@ -207,17 +213,21 @@ namespace ArtificerExtended
                     });
                 }
             };
-            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) => 
+            IL.RoR2.UI.LoadoutPanelController.Rebuild += (il) =>
             {
                 ILCursor c = new ILCursor(il);
                 bool b = c.TryGotoNext(
-                    MoveType.After, 
+                    MoveType.After,
                     x => x.MatchCallOrCallvirt<LoadoutPanelController.Row>(nameof(LoadoutPanelController.Row.FromSkillSlot))
                     );
 
                 if (b)
                 {
-                    c.EmitDelegate<System.Func<LoadoutPanelController.Row, LoadoutPanelController.Row>>((row) => {
+                    c.Emit(OpCodes.Ldarg_0);
+                    c.EmitDelegate<System.Func<LoadoutPanelController, LoadoutPanelController.Row, LoadoutPanelController.Row>>((self, row) => {
+                        //if (self.currentDisplayData.bodyIndex != BodyCatalog.FindBodyIndex("MageBody"))
+                        //    return row;
+
                         var label = row.rowPanelTransform.Find("SlotLabel") ?? row.rowPanelTransform.Find("LabelContainer").Find("SlotLabel");
                         if (label && label.GetComponent<LanguageTextMeshController>().token == "LOADOUT_SKILL_MISC")
                         {

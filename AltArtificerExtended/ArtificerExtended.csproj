@@ -24,6 +24,7 @@
     </PackageReference>
     <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
     <PackageReference Include="R2API" Version="5.0.5" />
+    <PackageReference Include="R2API.Skills" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
