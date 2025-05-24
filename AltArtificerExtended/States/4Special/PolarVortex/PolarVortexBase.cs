@@ -51,9 +51,12 @@ namespace ArtificerExtended.States
             base.OnExit();
             if (!continuing)
             {
-                //clear buffs
-                while (characterBody.HasBuff(_1FrostbiteSkill.artiIceShield))
-                    characterBody.RemoveBuff(_1FrostbiteSkill.artiIceShield);
+                if (NetworkServer.active)
+                {
+                    //clear buffs
+                    while (characterBody.HasBuff(_1FrostbiteSkill.artiIceShield))
+                        characterBody.RemoveBuff(_1FrostbiteSkill.artiIceShield);
+                }
 
                 //clear spiral projectiles
 
