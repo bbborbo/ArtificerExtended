@@ -144,7 +144,7 @@ namespace ArtificerExtended
             On.RoR2.CharacterMaster.OnBodyStart += AddAEBodyFX;
 
             new ContentPacks().Initialize();
-            VRStuff.SetupVR();
+            //VRStuff.SetupVR();
         }
         private void InitializeContent()
         {
