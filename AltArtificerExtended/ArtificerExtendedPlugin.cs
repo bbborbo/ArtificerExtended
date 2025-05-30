@@ -67,6 +67,7 @@ namespace ArtificerExtended
         public const string DEVELOPER_PREFIX = "AE_";
         public const string achievementIdentifier = "_ACHIEVEMENT_NAME";
 
+        public static bool isJethackLoaded = Tools.isLoaded("JetHack.JetHackPlugin.guid");
         public static bool isScepterLoaded = Tools.isLoaded("com.DestroyedClone.AncientScepter");
         public static bool autosprintLoaded = Tools.isLoaded("com.johnedwa.RTAutoSprintEx");
         public static bool is2r4rLoaded = Tools.isLoaded("com.HouseOfFruits.RiskierRain");

@@ -67,7 +67,7 @@ namespace ArtificerExtended.States
             }
         }
 
-        protected void StopSkills()
+        protected void StopHover()
         {
             if (base.isAuthority)
             {
@@ -113,7 +113,7 @@ namespace ArtificerExtended.States
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Frozen;
+            return InterruptPriority.Stun;
         }
     }
 }

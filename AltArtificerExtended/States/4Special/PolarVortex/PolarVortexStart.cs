@@ -22,7 +22,7 @@ namespace ArtificerExtended.States
             base.OnEnter();
             // determine duration
             duration = (exiting ? baseDurationExit : baseDurationEnter) / this.attackSpeedStat;
-            base.StopSkills();
+            base.StopHover();
 
             GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))

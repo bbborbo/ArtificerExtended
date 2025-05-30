@@ -6,6 +6,7 @@ using JetHack;
 using RoR2;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -67,10 +68,16 @@ namespace ArtificerExtended.States
         public override void OnExit()
         {
             base.OnExit();
-            if (isAuthority)
+            if (isAuthority && ArtificerExtendedPlugin.isJethackLoaded)
             {
-                JetHackPlugin.hoverStateCache = true;
+                SetHoverStateCache();
             }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private static void SetHoverStateCache()
+        {
+            JetHackPlugin.hoverStateCache = true;
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

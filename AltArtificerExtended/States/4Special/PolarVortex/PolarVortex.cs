@@ -107,6 +107,8 @@ namespace ArtificerExtended.States
             {
                 Destroy(orbitProjectileManager);
             }
+            if (!continuing)
+                InflictSnow();
         }
         protected override void SetNextState()
         {

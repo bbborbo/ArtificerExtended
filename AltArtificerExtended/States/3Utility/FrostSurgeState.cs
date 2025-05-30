@@ -8,6 +8,7 @@ using RoR2;
 using RoR2.Projectile;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -136,13 +137,19 @@ namespace ArtificerExtended.States
 				Util.PlaySound(FlyUpState.endSoundString, base.gameObject);
 			}
 			base.OnExit();
-			if (isAuthority)
-			{
-				JetHackPlugin.hoverStateCache = true;
-			}
-		}
+			if (isAuthority && ArtificerExtendedPlugin.isJethackLoaded)
+            {
+                SetHoverStateCache();
+            }
+        }
 
-		public override void FixedUpdate()
+		[MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+		private static void SetHoverStateCache()
+        {
+            JetHackPlugin.hoverStateCache = true;
+        }
+
+        public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			bool flag = base.fixedAge >= duration && base.isAuthority;

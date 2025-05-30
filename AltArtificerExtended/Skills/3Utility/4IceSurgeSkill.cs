@@ -33,7 +33,7 @@ namespace ArtificerExtended.Skills
 
         public override float BaseCooldown => 8f;
 
-        public override InterruptPriority InterruptPriority => InterruptPriority.Any;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Stun;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         ( 
