@@ -441,13 +441,13 @@ namespace ArtificerExtended.Passive
                 this.DoFire(elementPower.firePower);
         }
 
-        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = ChillRework.ChillRework.chillStacksMax)
+        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = 6/*ChillRework.ChillRework.chillStacksMax*/)
         {
             if (attacker == null || currentPower == Power.None || strength == 0)
                 return;
 
             float radiusByPower = (1 * (int)currentPower);
-            float radiusByBuffs = Util.Remap((float)strength, 0, ChillRework.ChillRework.chillStacksMax, novaMinRadius, novaMaxRadius);
+            float radiusByBuffs = Util.Remap((float)strength, 0, 6/*ChillRework.ChillRework.chillStacksMax*/, novaMinRadius, novaMaxRadius);
             CreateIceBlast(attacker, currentPower, position, radiusByPower + radiusByBuffs);
         }
         #endregion
@@ -480,7 +480,7 @@ namespace ArtificerExtended.Passive
         {
             if (NetworkServer.active)
             {
-                ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
+                //ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
 
                 GameObject blast = UnityEngine.Object.Instantiate<GameObject>(ChillRework.ChillRework.iceExplosion, position, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
@@ -491,7 +491,7 @@ namespace ArtificerExtended.Passive
                 delay.procCoefficient = 0.8f - (0.1f * (int)icePowerToUse);//0.5f;//
                 delay.attacker = attacker.gameObject;
                 delay.radius = radius;
-                delay.damageType = DamageType.Generic;
+                delay.damageType = DamageType.Frost;
                 delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blast.GetComponent<TeamFilter>().teamIndex = attacker.teamComponent.teamIndex;
 

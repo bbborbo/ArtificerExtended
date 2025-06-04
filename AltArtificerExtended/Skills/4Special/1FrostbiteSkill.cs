@@ -78,7 +78,7 @@ namespace ArtificerExtended.Skills
                 $"<style=cSub>Gain <style=cIsHealing>+{bonusArmor} armor</style>, " +
                 $"and <style=cIsUtility>Frost</style> nearby enemies for " +
                 $"<style=cIsDamage>{icicleCount}x{Tools.ConvertDecimal(icicleDamage)} damage</style>. " +
-                $"When ending, creates a second {UtilityColor("Frosting")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
+                $"When ending, creates a second {UtilityColor("Frost")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
                 $"\nWhile armored, move " +
                 $"<style=cIsUtility>up to +{Tools.ConvertDecimal(movementIncreasePerBuff * (buffsForZeroMovementIncrease - 1))} faster</style>, " +
                 $"gradually decaying to " +

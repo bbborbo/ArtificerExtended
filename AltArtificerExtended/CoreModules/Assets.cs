@@ -260,8 +260,8 @@ namespace ArtificerExtended.Modules
                 $"{UtilityColor("Incinerate")} increases {DamageColor("attack speed")} on ALL skills " +
                 $"by {DamageColor(Tools.ConvertDecimal(AltArtiPassive.meltAspdIncrease))} per stack.");
             AddResonantKeyword(arcticBlastKeywordToken, "Arctic Blast",
-                $"On {UtilityColor($"applying {ChillRework.ChillRework.chillStacksMax} stacks of Chill")} or {UtilityColor("killing Chilled enemies")}, " +
-                $"cause a {UtilityColor("Chilling")} blast that extends {UtilityColor(AltArtiPassive.novaRadiusPerPower.ToString() + "m")} " +
+                $"On {UtilityColor($"Freezing")} or {UtilityColor("killing Frosted enemies")}, " +
+                $"cause a {UtilityColor("Frost")} blast that extends {UtilityColor(AltArtiPassive.novaRadiusPerPower.ToString() + "m")} " +
                 $"for each {DamageColor("Ice")} ability equipped. " +
                 $"{UtilityColor("Arctic Blasts")} deal {DamageValueText(AltArtiPassive.novaBaseDamage)} to nearby enemies.");
             AddResonantKeyword(lightningBoltKeywordToken, "Lightning Bolts",

@@ -60,10 +60,27 @@ namespace ArtificerExtended
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             On.RoR2.CharacterMaster.OnBodyDestroyed += CharacterMaster_OnBodyDestroyed;
+            IL.RoR2.GlobalEventManager.ProcessHitEnemy += MaxFrostHook;
             OnMaxChill += FrostNovaOnMaxChill;
             GetStatCoefficients += MeltAttackSpeedBuff;
+            On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
 
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
+        }
+
+        private void FrostNovaOnFreeze(On.EntityStates.FrozenState.orig_OnEnter orig, EntityStates.FrozenState self)
+        {
+            if (NetworkServer.active)
+            {
+                CharacterBody attackerBody = null;
+                GameObject lastHitAttacker = self.healthComponent.lastHitAttacker;
+                if (lastHitAttacker)
+                    attackerBody = lastHitAttacker.GetComponent<CharacterBody>();
+
+                FrostNovaOnMaxChill(attackerBody, self.characterBody);
+            }
+
+            orig(self);
         }
 
         private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
@@ -152,9 +169,11 @@ namespace ArtificerExtended
                     {
                         Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
 
-                        int chillDebuffCount = vBody.GetBuffCount(RoR2Content.Buffs.Slow80);
+                        int chillDebuffCount = vBody.GetBuffCount(DLC2Content.Buffs.Frost);
+                        if(vBody.healthComponent.isInFrozenState)
+                            chillDebuffCount = Mathf.Min(chillDebuffCount + 3, 5);
                         int chillLimitCount = vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
-                        int minChillForBlast = chillLimitCount > 0 ? 5 : 1;
+                        int minChillForBlast = chillLimitCount > 0 ? 3 : 1;
 
                         if (chillDebuffCount >= minChillForBlast && icePower > 0) 
                         {
@@ -220,10 +239,40 @@ namespace ArtificerExtended
             }*/
         }
 
-        private void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
+        private void MaxFrostHook(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            Debug.Log("jsdfbsjdbfjsd");
+            bool b = c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt<DamageTypeCombo>(nameof(DamageTypeCombo.IsChefFrostDamage)))
+                && c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt<SetStateOnHurt>(nameof(SetStateOnHurt.SetFrozen)));
+            if (b)
+            {
+                Debug.Log("ae");
+                c.Emit(OpCodes.Ldloc, 0); //attackerBody
+                c.Emit(OpCodes.Ldloc, 1); //victimBody
+                c.EmitDelegate<Action<CharacterBody, CharacterBody>>((attackerBody, victimBody) =>
+                {
+                    Debug.Log("X3");
+                    if (NetworkServer.active)
+                    {
+                        FrostNovaOnMaxChill(attackerBody, victimBody);
+                    }
+                });
+            }
+            else
+            {
+                Debug.Log("Gah");
+            }
+        }
+
+        private static void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
         {
             if (aBody != null && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out AltArtiPassive passive))
             {
+                Debug.Log("wawa");
                 Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
                 if (icePower > Power.None) //Arctic Blast
                 {

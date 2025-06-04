@@ -44,7 +44,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. " +
             $"Aim a supercooled projectile for <style=cIsDamage>{Tools.ConvertDecimal(impactDamageCoefficient)}</style> damage, " +
-            $"leaving behind a <style=cIsUtility>Frosting</style> stasis field that lasts until replaced. " +
+            $"leaving behind a stasis field that <style=cIsUtility>Frosts</style> until replaced. " +
             $"Hold up to {maxSnowglobeBase}.";
 
         public override string TOKEN_IDENTIFIER => "SNOWGLOBE";
