@@ -60,7 +60,7 @@ namespace ArtificerExtended
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             On.RoR2.CharacterMaster.OnBodyDestroyed += CharacterMaster_OnBodyDestroyed;
-            IL.RoR2.GlobalEventManager.ProcessHitEnemy += MaxFrostHook;
+            //IL.RoR2.GlobalEventManager.ProcessHitEnemy += MaxFrostHook;
             OnMaxChill += FrostNovaOnMaxChill;
             GetStatCoefficients += MeltAttackSpeedBuff;
             On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
@@ -243,19 +243,16 @@ namespace ArtificerExtended
         {
             ILCursor c = new ILCursor(il);
 
-            Debug.Log("jsdfbsjdbfjsd");
             bool b = c.TryGotoNext(MoveType.After,
                 x => x.MatchCallOrCallvirt<DamageTypeCombo>(nameof(DamageTypeCombo.IsChefFrostDamage)))
                 && c.TryGotoNext(MoveType.After,
                 x => x.MatchCallOrCallvirt<SetStateOnHurt>(nameof(SetStateOnHurt.SetFrozen)));
             if (b)
             {
-                Debug.Log("ae");
                 c.Emit(OpCodes.Ldloc, 0); //attackerBody
                 c.Emit(OpCodes.Ldloc, 1); //victimBody
                 c.EmitDelegate<Action<CharacterBody, CharacterBody>>((attackerBody, victimBody) =>
                 {
-                    Debug.Log("X3");
                     if (NetworkServer.active)
                     {
                         FrostNovaOnMaxChill(attackerBody, victimBody);
@@ -264,7 +261,6 @@ namespace ArtificerExtended
             }
             else
             {
-                Debug.Log("Gah");
             }
         }
 
@@ -272,7 +268,6 @@ namespace ArtificerExtended
         {
             if (aBody != null && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out AltArtiPassive passive))
             {
-                Debug.Log("wawa");
                 Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
                 if (icePower > Power.None) //Arctic Blast
                 {
