@@ -82,8 +82,7 @@ namespace ArtificerExtended.States
 				blastAttack.baseForce = FlyUpState.blastAttackForce;
 				blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
 				blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-				//blastAttack.damageType = DamageType.Freeze2s;
-				blastAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+				blastAttack.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
 				blastAttack.Fire();
 				EffectManager.SimpleEffect(this.iceExplosionEffectPrefab, base.transform.position + Vector3.up, Util.QuaternionSafeLookRotation(Vector3.forward), true);
 
