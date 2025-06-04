@@ -186,22 +186,22 @@ namespace ArtificerExtended.States
                 bool crit = Util.CheckRoll(this.critStat, base.characterBody.master);
 
                 //point
-                CreateIceShardSpread(aimRay, 0, 0, 
+                CreateIceShardSpread(100, aimRay, 0, 0, 
                     (uint)((FireIceShard.bulletCountPoint > 0) ? FireIceShard.bulletCountPoint : 1), 
                     procCoefficientPoint, BulletAttack.FalloffModel.None, crit, true).Fire();
 
                 //spread
-                CreateIceShardSpread(aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
+                CreateIceShardSpread(20, aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
                     (uint)((FireIceShard.bulletCountSpread > 0) ? FireIceShard.bulletCountSpread : 0), 
                     procCoefficientSpread, BulletAttack.FalloffModel.DefaultBullet, crit, true).Fire();
 
                 //buckshot
-                CreateIceShardSpread(aimRay, baseSpread * spreadShotFraction, baseSpread, 
+                CreateIceShardSpread(50, aimRay, baseSpread * spreadShotFraction, baseSpread, 
                     (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0), 
                     procCoefficientBuckshot, BulletAttack.FalloffModel.Buckshot, crit, false).Fire();
             }
         }
-        internal BulletAttack CreateIceShardSpread(Ray aimRay, float minSpread, float maxSpread, 
+        internal BulletAttack CreateIceShardSpread(float frostChance, Ray aimRay, float minSpread, float maxSpread, 
             uint bulletsPerSpread, float procCoefficient, BulletAttack.FalloffModel falloffModel, bool isCrit, bool useChill = true)
         {
             BulletAttack bulletAttack = new BulletAttack();
@@ -226,9 +226,8 @@ namespace ArtificerExtended.States
             bulletAttack.radius = bulletRadius;
             bulletAttack.maxDistance = maxRange;
             bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
-
-            if(useChill)
-                bulletAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
+            if (Util.CheckRoll(frostChance, characterBody.master))
+                bulletAttack.damageType.damageType = DamageType.Frost;
 
             return bulletAttack;
         }

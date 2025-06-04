@@ -42,7 +42,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillName => "Polar Vortex";
 
-        public override string SkillDescription => $"<style=cIsUtility>Agile</style>. <style=cIsUtility>Chilling</style>. " +
+        public override string SkillDescription => $"<style=cIsUtility>Agile</style>. <style=cIsUtility>Frost</style>. " +
             $"Create a blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)} damage</style>, then " +
             $"cover yourself in <style=cIsUtility>Frost Armor</style> for up to {maxDuration} seconds. " +
             $"Press again to cancel.";
@@ -76,9 +76,9 @@ namespace ArtificerExtended.Skills
         {
             LanguageAPI.Add(frostArmorKeywordToken, $"<style=cKeywordName>Frost Armor</style>" +
                 $"<style=cSub>Gain <style=cIsHealing>+{bonusArmor} armor</style>, " +
-                $"and <style=cIsUtility>Chill</style> nearby enemies for " +
+                $"and <style=cIsUtility>Frost</style> nearby enemies for " +
                 $"<style=cIsDamage>{icicleCount}x{Tools.ConvertDecimal(icicleDamage)} damage</style>. " +
-                $"When ending, creates a second {UtilityColor("Chilling")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
+                $"When ending, creates a second {UtilityColor("Frosting")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
                 $"\nWhile armored, move " +
                 $"<style=cIsUtility>up to +{Tools.ConvertDecimal(movementIncreasePerBuff * (buffsForZeroMovementIncrease - 1))} faster</style>, " +
                 $"gradually decaying to " +
@@ -106,7 +106,7 @@ namespace ArtificerExtended.Skills
             //  Frostbite.novaRadius,
             //  "Determines the radius of the nova created after the Frostbite buff expires."
             //  ).Value;
-            KeywordTokens = new string[3] { "KEYWORD_AGILE", ChillRework.ChillRework.chillKeywordToken, frostArmorKeywordToken };
+            KeywordTokens = new string[3] { "KEYWORD_AGILE", "KEYWORD_FROST", frostArmorKeywordToken };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
             CreateIcicleProjectile();
@@ -166,9 +166,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = icicleProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType = DamageTypeCombo.Generic;
-
-                icicleProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>().Add(ChillRework.ChillRework.ChillOnHit);
+                pd.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
             }
             UnseenHandHealingProjectile uhhp = icicleProjectilePrefab.GetComponent<UnseenHandHealingProjectile>();
             if(uhhp)

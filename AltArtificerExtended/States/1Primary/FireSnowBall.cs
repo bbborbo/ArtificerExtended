@@ -30,7 +30,7 @@ namespace ArtificerExtended.States
         public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
         {
             base.ModifyProjectileInfo(ref fireProjectileInfo);
-            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo?(DamageTypeCombo.GenericPrimary);
+            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Primary);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ArtificerExtended.Skills
 
 
         float totalShards = FireIceShard.bulletCountBuckshot + FireIceShard.bulletCountPoint + FireIceShard.bulletCountSpread;
-        public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. Fire a blast of ice shards for " +
+        public override string SkillDescription => $"<style=cIsUtility>Frost</style>. Fire a blast of ice shards for " +
             $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(FireIceShard.damageCoefficient / totalShards)} damage</style> total. " +
             $"Hold up to 4.";
 
@@ -59,7 +59,7 @@ namespace ArtificerExtended.Skills
             //    "Determines the max damage coefficient per Ice Shards pellet. Damage falloff still applies."
             //    ).Value * totalShards;
 
-            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
+            KeywordTokens = new string[1] { "KEYWORD_FROST" };
             CreateTracerEffects();
             base.Init();
         }

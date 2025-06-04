@@ -19,7 +19,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Cryo Bolt";
         public override string TOKEN_IDENTIFIER => "SNOWBALL";
 
-        public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
+        public override string SkillDescription => $"<style=cIsUtility>Frost</style>. " +
             $"Fire a bolt for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
 
         public override Sprite Icon => LoadSpriteFromBundle("frostbolt");
@@ -46,7 +46,7 @@ namespace ArtificerExtended.Skills
 
         public override void Init()
         {
-            KeywordTokens = new string[1] { ChillRework.ChillRework.chillKeywordToken };
+            KeywordTokens = new string[1] { "KEYWORD_FROST" };
             FixSnowballProjectile();
             base.Init();
         }
@@ -64,16 +64,13 @@ namespace ArtificerExtended.Skills
                 ps.desiredForwardSpeed = 80f;
             }
             ProjectileDamage pd = snowballProjectilePrefab.GetComponent<ProjectileDamage>();
-            if (pd)
-            {
-                pd.damageType = DamageTypeCombo.GenericPrimary;
-            }
             ProjectileController pc = snowballProjectilePrefab.GetComponent<ProjectileController>();
             if (pc)
             {
                 pc.procCoefficient = 0.75f;
             }
 
+            return;
             ModdedDamageTypeHolderComponent mdthc = snowballProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>();
             if (mdthc)
             {

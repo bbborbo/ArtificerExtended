@@ -37,14 +37,14 @@ namespace ArtificerExtended.Skills
         public static float damageCoefficientPerSecond = 0.5f;
         public static float procCoefficientPerTick = 1f;
         public static float damageTicksPerSecond = 0.5f;
-        public static int chillStacksPerSnowglobe = 3;
+        public static int chillStacksPerSnowglobe = 2;
         public static float projectileBaseSpeed = 120f;
 
         public override string SkillName => "Stasis Field";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. " +
             $"Aim a supercooled projectile for <style=cIsDamage>{Tools.ConvertDecimal(impactDamageCoefficient)}</style> damage, " +
-            $"leaving behind a <style=cIsUtility>Chilling</style> stasis field that lasts until replaced. " +
+            $"leaving behind a <style=cIsUtility>Frosting</style> stasis field that lasts until replaced. " +
             $"Hold up to {maxSnowglobeBase}.";
 
         public override string TOKEN_IDENTIFIER => "SNOWGLOBE";
@@ -72,7 +72,7 @@ namespace ArtificerExtended.Skills
             CommonAssets.AddResonantKeyword(resonantKeywordToken, "Sustained Stasis",
                 $"Max of {maxSnowglobeBase} stasis fields. " +
                 $"If only <style=cIsDamage>Ice</style> abilities are equipped, <style=cIsUtility>increase max to {maxSnowglobeUpgrade}</style>.");
-            KeywordTokens = new string[] { resonantKeywordToken, ChillRework.ChillRework.chillKeywordToken };
+            KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_FROST" };
             GetSnowglobeSlotLimit += GetMaxSnowglobes;
             snowglobeDeployableSlot = DeployableAPI.RegisterDeployableSlot(GetSnowglobeSlotLimit);
             CreateSnowglobeProjectile();
@@ -172,7 +172,7 @@ namespace ArtificerExtended.Skills
                 {
                     //buffWard.rangeIndicator = verticalWard ? encourageWardIndicator.transform : buffWard.rangeIndicator;
                     buffWard.radius = snowWardRadius;
-                    buffWard.buffDef = Addressables.LoadAssetAsync<BuffDef>("RoR2/Base/Common/bdSlow80.asset").WaitForCompletion();//HeatWardBuff;
+                    buffWard.buffDef = Addressables.LoadAssetAsync<BuffDef>("7f3ccdb51063fc0439ba0f7bd64c4679").WaitForCompletion();//bdfrost.asset;
                     buffWard.buffDuration = damageTicksPerSecond * chillStacksPerSnowglobe;
                     buffWard.interval = damageTicksPerSecond;
                     buffWard.expireDuration = 9999;
@@ -208,7 +208,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = snowglobeDeployProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary);
+                pd.damageType.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Secondary);
             }
             ProjectileImpactExplosion pie = snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pie)
@@ -217,11 +217,6 @@ namespace ArtificerExtended.Skills
                 pie.blastProcCoefficient = impactProcCoefficient;
                 pie.childrenCount = 0;
                 pie.falloffModel = BlastAttack.FalloffModel.SweetSpot;
-            }
-            ModdedDamageTypeHolderComponent mdthc = snowglobeDeployProjectilePrefab.AddComponent<ModdedDamageTypeHolderComponent>();
-            if (mdthc)
-            {
-                mdthc.Add(ChillRework.ChillRework.ChillOnHit);
             }
 
             ProjectileController bombController = snowglobeDeployProjectilePrefab.GetComponent<ProjectileController>();
