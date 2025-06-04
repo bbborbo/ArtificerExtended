@@ -31,22 +31,41 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Skills\1Primary\2FireSkill2Skill.cs" />
+    <Compile Remove="Skills\2Secondary\1MeteorSkill.cs" />
+    <Compile Remove="Skills\2Secondary\2ShockwaveSkill.cs" />
+    <Compile Remove="Skills\2Secondary\3ColdFusionSkill.cs" />
+    <Compile Remove="Skills\2Secondary\4NapalmSkill.cs" />
+    <Compile Remove="Skills\3Utility\3AvalancheSkill.cs" />
     <Compile Remove="Skills\4Special\FrostbiteSkill2.cs" />
+    <Compile Remove="States\1Primary\ChargeFireBlast.cs" />
+    <Compile Remove="States\2Secondary\CastShockwave.cs" />
+    <Compile Remove="States\2Secondary\ChargeNapalm.cs" />
+    <Compile Remove="States\2Secondary\ColdFusion.cs" />
+    <Compile Remove="States\2Secondary\FireShockwave.cs" />
+    <Compile Remove="States\2Secondary\FireShockwaveVisuals.cs" />
     <Compile Remove="States\4Special\Frostbite2.cs" />
     <Compile Remove="Unlocks\ArtificerExtendedSkinUnlock.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="artiskillicons" />
-    <None Remove="Properties\artiskillicons" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\artiskillicons" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="Skills\1Primary\2FireSkill2Skill.cs" />
+    <None Include="Skills\2Secondary\1MeteorSkill.cs" />
+    <None Include="Skills\2Secondary\2ShockwaveSkill.cs" />
+    <None Include="Skills\2Secondary\3ColdFusionSkill.cs" />
+    <None Include="Skills\2Secondary\4NapalmSkill.cs" />
+    <None Include="Skills\3Utility\3AvalancheSkill.cs" />
+    <None Include="States\1Primary\ChargeFireBlast.cs" />
+    <None Include="States\2Secondary\CastShockwave.cs" />
+    <None Include="States\2Secondary\ChargeNapalm.cs" />
+    <None Include="States\2Secondary\ColdFusion.cs" />
+    <None Include="States\2Secondary\FireShockwave.cs" />
+    <None Include="States\2Secondary\FireShockwaveVisuals.cs" />
   </ItemGroup>
 
   <ItemGroup> 

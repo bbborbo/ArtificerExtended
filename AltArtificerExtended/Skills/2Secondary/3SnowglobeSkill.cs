@@ -61,7 +61,7 @@ namespace ArtificerExtended.Skills
             beginSkillCooldownOnSkillEnd: true,
             canceledFromSprinting: true
         );
-        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override Sprite Icon => LoadSpriteFromBundle("stasisfield");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Any;
         public override Type BaseSkillDef => typeof(SkillDef);

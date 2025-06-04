@@ -17,8 +17,8 @@ namespace ArtificerExtended.States
 {
 	public class FrostSurgeState : GenericCharacterMain
 	{
-		public static float blastDamageCoefficient => _4IceSurgeSkill.blastDamageCoefficient;
-		public static float wallDamageCoefficient => _4IceSurgeSkill.wallDamageCoefficient;
+		public static float blastDamageCoefficient => _3IceSurgeSkill.blastDamageCoefficient;
+		public static float wallDamageCoefficient => _3IceSurgeSkill.wallDamageCoefficient;
 		bool crit = false;
 
 		private Vector3 flyVector = Vector3.zero;
@@ -49,12 +49,12 @@ namespace ArtificerExtended.States
 			if (flyUp)
 			{
 				this.flyVector = Vector3.up; //Vector3.Normalize(base.characterDirection.forward + Vector3.up / 1.15f) * 0.8f;
-				this.duration = _4IceSurgeSkill.baseDurationVertical;
+				this.duration = _3IceSurgeSkill.baseDurationVertical;
 			}
 			else
 			{
 				this.flyVector = Vector3.Normalize(base.characterDirection.forward + Vector3.up / 2f) * 0.8f;
-				this.duration = _4IceSurgeSkill.baseDurationHorizontal;
+				this.duration = _3IceSurgeSkill.baseDurationHorizontal;
 			}
 			crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
 			Util.PlaySound(FlyUpState.beginSoundString, base.gameObject);

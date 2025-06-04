@@ -10,7 +10,7 @@ using static ArtificerExtended.Modules.Language.Styling;
 
 namespace ArtificerExtended.Skills
 {
-    class _4IceSurgeSkill : SkillBase<_4IceSurgeSkill>
+    class _3IceSurgeSkill : SkillBase<_3IceSurgeSkill>
     {
         public static float blastDamageCoefficient = 3.5f;
         public static float wallDamageCoefficient = 1.2f;
@@ -22,7 +22,7 @@ namespace ArtificerExtended.Skills
 
         public override string SkillDescription => $"{UtilityColor("Agile")}. {UtilityColor("Freezing")}. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
 
-        public override Sprite Icon => null;
+        public override Sprite Icon => LoadSpriteFromBundle("cryoburstAE");
 
         public override Type ActivationState => typeof(FrostSurgeState);
         public override string ActivationStateMachineName => "Body";

@@ -160,6 +160,7 @@ namespace ArtificerExtended.Skills
             Content.AddEntityState(ActivationState);
             SkillDef.activationState = new SerializableEntityStateType(ActivationState);
 
+            SkillDef.SetName(SkillDef, BASE_TOKEN.ToLowerInvariant());
             SkillDef.skillNameToken = BASE_TOKEN + "_NAME";
             SkillDef.skillName = SkillName;
             SkillDef.skillDescriptionToken = BASE_TOKEN + "_DESCRIPTION";
@@ -303,7 +304,7 @@ namespace ArtificerExtended.Skills
         {
             public SimpleSkillData(int baseMaxStock = 1, bool beginSkillCooldownOnSkillEnd = false,
                 bool canceledFromSprinting = false, bool cancelSprintingOnActivation = true, bool forceSprintingDuringState = false,
-                bool dontAllowPastMaxStocks = true, bool fullRestockOnAssign = true, 
+                bool dontAllowPastMaxStocks = false, bool fullRestockOnAssign = true, 
                 bool isCombatSkill = true, bool mustKeyPress = false, int rechargeStock = 1,
                 int requiredStock = 1, bool resetCooldownTimerOnUse = false, int stockToConsume = 1,
                 bool useAttackSpeedScaling = false)

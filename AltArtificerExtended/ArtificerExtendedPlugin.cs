@@ -62,8 +62,8 @@ namespace ArtificerExtended
         public const string version = "4.0.0";
         public static ArtificerExtendedPlugin instance;
 
-        public static AssetBundle iconBundle = Tools.LoadAssetBundle(Properties.Resources.artiskillicons);
-        public const string iconsPath = "Assets/AESkillIcons/";
+        public static AssetBundle iconBundle => Tools.mainAssetBundle;
+        public const string iconsPath = "Assets/Icons/";
         public const string DEVELOPER_PREFIX = "AE_";
         public const string achievementIdentifier = "_ACHIEVEMENT_NAME";
 
@@ -274,7 +274,7 @@ namespace ArtificerExtended
             //    "\n- <style=cIsUtility>Lightning Bolts</style> increase in number for each <style=cIsDamage>LIGHTNING</style> skill.");
             #endregion
 
-            Sprite altPassiveIcon = iconBundle.LoadAsset<Sprite>(iconsPath + "ElementalIntensity.png");
+            Sprite altPassiveIcon = iconBundle.LoadAsset<Sprite>(iconsPath + "passiveilyborbo.png");
             PassiveSkillDef resonanceSkillDef = ScriptableObject.CreateInstance<PassiveSkillDef>();
             resonanceSkillDef.skillNameToken = "MAGE_PASSIVE_ENERGY_NAME";
             resonanceSkillDef.skillDescriptionToken = CommonAssets.magePassiveDescToken;

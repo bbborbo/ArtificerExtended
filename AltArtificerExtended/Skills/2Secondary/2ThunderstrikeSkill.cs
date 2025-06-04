@@ -55,7 +55,7 @@ namespace ArtificerExtended.Skills
             (
                 mustKeyPress: true
             );
-        public override Sprite Icon => LoadSpriteFromBundle("shockwaveicon");
+        public override Sprite Icon => LoadSpriteFromBundle("pulsestrikeAE2");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);

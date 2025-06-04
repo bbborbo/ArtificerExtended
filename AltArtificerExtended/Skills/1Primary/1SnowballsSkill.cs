@@ -22,7 +22,7 @@ namespace ArtificerExtended.Skills
         public override string SkillDescription => $"<style=cIsUtility>Chilling</style>. " +
             $"Fire a bolt for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style>.";
 
-        public override Sprite Icon => LoadSpriteFromBundle("SnowballIcon");
+        public override Sprite Icon => LoadSpriteFromBundle("frostbolt");
 
         public override MageElement Element => MageElement.Ice;
 

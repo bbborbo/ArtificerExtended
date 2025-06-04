@@ -25,9 +25,13 @@ namespace ArtificerExtended.Unlocks
     }
     public abstract class UnlockBase : BaseAchievement
     {
+        public static Dictionary<string, UnlockableDef> allUnlockDefs = new Dictionary<string, UnlockableDef>();
         public static UnlockableDef CreateUnlockDef(Type RequiredUnlock, Sprite icon)
         {
             string name = RequiredUnlock.Name;
+            if (allUnlockDefs.ContainsKey(name))
+                return allUnlockDefs[name];
+
             string nameUpper = name.ToUpperInvariant();
             UnlockableDef unlockDef = Content.CreateAndAddUnlockbleDef(name, name, icon);
 
@@ -44,12 +48,13 @@ namespace ArtificerExtended.Unlocks
                             {
                                 RoR2.Language.GetString(nameToken),
                                 RoR2.Language.GetString(descToken)
-                            }));             
-            
+                            }));
+
             //RequiredUnlock.InvokeMethod(nameof(AddLang));
             //MethodInfo baseMethod = typeof(UnlockBase).GetMethod(nameof(UnlockBase.AddLang));
             //baseMethod.Invoke(RequiredUnlock, new object[] { });
             //baseMethod.MakeGenericMethod(new Type[] { RequiredUnlock }).Invoke(null, new object[] { });
+            allUnlockDefs[name] = unlockDef;
 
             return unlockDef;
         }

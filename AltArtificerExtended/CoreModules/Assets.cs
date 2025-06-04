@@ -302,11 +302,11 @@ namespace ArtificerExtended.Modules
         public static GameObject lavaProjectilePrefab;
         internal static void CreateLavaProjectile()
         {
-            lavaProjectilePrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenspit").InstantiateClone("MageLavaProjectile", true);
+            lavaProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("862783bd9da988641bbcdc1606415b09").WaitForCompletion().InstantiateClone("MageLavaProjectile", true); //beetlequeenspit.prefab
             GameObject lavaPoolGhostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Drones/PaladinRocketGhost.prefab").WaitForCompletion().InstantiateClone("MageLavaProjectileGhost", false);
 
             Color napalmColor = new Color32(255, 40, 0, 255);
-            GameObject lavaImpactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/BeetleSpitExplosion").InstantiateClone("NapalmSpitExplosion", false);
+            GameObject lavaImpactEffect = Addressables.LoadAssetAsync<GameObject>("e184c0c8bc862ff40b9fd07db0b8e98c").WaitForCompletion().InstantiateClone("NapalmSpitExplosion", false); //beetlespitexplosion
             Tools.GetParticle(lavaImpactEffect, "Bugs", Color.clear);
             Tools.GetParticle(lavaImpactEffect, "Flames", napalmColor);
             Tools.GetParticle(lavaImpactEffect, "Flash", Color.yellow);
@@ -342,10 +342,10 @@ namespace ArtificerExtended.Modules
                 $"<style=cIsDamage>{Tools.ConvertDecimal(CommonAssets.napalmFireFrequency * CommonAssets.napalmDamageCoefficient)}</style> TOTAL damage per second.</style>");
 
             //lavaPoolPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/projectiles/beetlequeenacid").InstantiateClone("LavaPool", true);
-            string path = "RoR2/Base/Beetle/BeetleQueenAcid.prefab";//"RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
+            string path = "21516298ba7220c41bc56ab2e0215f92";//beetlequeenacid; "RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
             lavaPoolPrefab = Addressables.LoadAssetAsync<GameObject>(path).WaitForCompletion().InstantiateClone("MageLavaPool", true);
 
-            string path2 = "RoR2/Base/Beetle/BeetleQueenAcidGhost.prefab";//"RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
+            string path2 = "ee66af398b28cda46b311d0be4f9ca0a";//beetlequeenacidghost; "RoR2/DLC1/Molotov/MolotovProjectileDotZone.prefab";//
             GameObject lavaPoolGhostPrefab = Addressables.LoadAssetAsync<GameObject>(path2).WaitForCompletion().InstantiateClone("MageLavaPoolGhost", false);
 
 
@@ -469,7 +469,8 @@ namespace ArtificerExtended.Modules
                 case 0:
                     model.transform.localScale = new Vector3(0.5f, 0.5f, 1.5f);
 
-                    mesh = GameObject.Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/PickupModels/PickupTriTip").transform.Find("mdlTriTip").GetComponent<MeshFilter>().sharedMesh);
+                    //pickuptritip.prefab
+                    mesh = GameObject.Instantiate<Mesh>(Addressables.LoadAssetAsync<GameObject>("a931fe3391939d84383a030b3098d78b").WaitForCompletion().transform.Find("mdlTriTip").GetComponent<MeshFilter>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;
@@ -489,7 +490,8 @@ namespace ArtificerExtended.Modules
 
                 case 1:
                     model.transform.localScale = new Vector3(1f, 1f, 1f);
-                    mesh = GameObject.Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/MercBody").transform.Find("ModelBase/mdlMerc/MercSwordMesh").GetComponent<SkinnedMeshRenderer>().sharedMesh);
+                    //mercbody.prefab
+                    mesh = GameObject.Instantiate<Mesh>(Addressables.LoadAssetAsync<GameObject>("c9898f15e54a0194dbd2ab62ad507bd4").WaitForCompletion().transform.Find("ModelBase/mdlMerc/MercSwordMesh").GetComponent<SkinnedMeshRenderer>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;
@@ -510,7 +512,7 @@ namespace ArtificerExtended.Modules
                 case 2:
                     model.transform.localScale = new Vector3(0.06f, 0.06f, 0.15f);
                     model.transform.eulerAngles = new Vector3(0f, 180f, 0f);
-                    mesh = GameObject.Instantiate<Mesh>(RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterBodies/TitanGoldBody").transform.Find("ModelBase/mdlTitan/TitanArmature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/hand.r/RightFist/Sword").GetComponent<MeshFilter>().sharedMesh);
+                    mesh = GameObject.Instantiate<Mesh>(Addressables.LoadAssetAsync<GameObject>("41f30d571bf74fd4ab6e76601054e7ca").WaitForCompletion().transform.Find("ModelBase/mdlTitan/TitanArmature/ROOT/base/stomach/chest/upper_arm.r/lower_arm.r/hand.r/RightFist/Sword").GetComponent<MeshFilter>().sharedMesh);
                     model.GetComponent<MeshFilter>().sharedMesh = mesh;
                     baseUV = new Vector2(0.5f, 0.5f);
                     uvs = mesh.uv;

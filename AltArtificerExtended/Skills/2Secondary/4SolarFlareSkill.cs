@@ -64,7 +64,7 @@ namespace ArtificerExtended.Skills
                 beginSkillCooldownOnSkillEnd: true,
                 mustKeyPress: true
             );
-        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override Sprite Icon => LoadSpriteFromBundle("solarflareAE");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);

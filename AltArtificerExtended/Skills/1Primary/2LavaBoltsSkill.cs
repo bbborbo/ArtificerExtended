@@ -50,7 +50,7 @@ namespace ArtificerExtended.Skills
             useAttackSpeedScaling = true
         };
 
-        public override Sprite Icon => LoadSpriteFromBundle("napalmicon");
+        public override Sprite Icon => LoadSpriteFromBundle("LavaBoltIcon");
         public override SkillSlot SkillSlot => SkillSlot.Primary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Any;
         public override Type BaseSkillDef => typeof(SteppedSkillDef);
@@ -77,7 +77,7 @@ namespace ArtificerExtended.Skills
             lavaGhostPrefab = ghostPrefab.InstantiateClone("NapalmSpitGhost", false);
             Tools.GetParticle(lavaGhostPrefab, "SpitCore", napalmColor);
 
-            lavaImpactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/BeetleSpitExplosion").InstantiateClone("NapalmSpitExplosion", false);
+            lavaImpactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("e184c0c8bc862ff40b9fd07db0b8e98c").InstantiateClone("NapalmSpitExplosion", false); //beetlespitexplosion
             Tools.GetParticle(lavaImpactEffect, "Bugs", Color.clear);
             Tools.GetParticle(lavaImpactEffect, "Flames", napalmColor);
             Tools.GetParticle(lavaImpactEffect, "Flash", Color.yellow);

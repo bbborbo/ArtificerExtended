@@ -48,7 +48,7 @@ namespace ArtificerExtended.Skills
                 beginSkillCooldownOnSkillEnd: true,
                 mustKeyPress: true
             );
-        public override Sprite Icon => LoadSpriteFromBundle("meteoricon");
+        public override Sprite Icon => LoadSpriteFromBundle("eruptionAE");
         public override SkillSlot SkillSlot => SkillSlot.Secondary;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
@@ -117,7 +117,7 @@ namespace ArtificerExtended.Skills
                 }
             }
 
-            GameObject guh = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Beetle/BeetleGuardGroundSlam.prefab").WaitForCompletion();
+            GameObject guh = Addressables.LoadAssetAsync<GameObject>("d9cbb9db8a4992e49b933ab13eea4f9c").WaitForCompletion(); //beetleguardgroundslam.prefab
             GameObject gah = GameObject.Instantiate(guh);
             Decal decal = gah.GetComponentInChildren<Decal>();// decalTransform.GetComponent<Decal>();
 

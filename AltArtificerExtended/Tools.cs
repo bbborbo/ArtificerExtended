@@ -1,8 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
-using RoR2;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 
@@ -16,10 +16,37 @@ namespace ArtificerExtended
         /// </summary>
         /// <param name="resourceBytes">The bytes returned by Properties.Resources.ASSETNAME</param>
         /// <returns>The loaded bundle</returns>
-        public static AssetBundle LoadAssetBundle(Byte[] resourceBytes)
+        internal static Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
+
+        internal static AssetBundle LoadAssetBundle(string bundleName)
         {
-            if (resourceBytes == null) throw new ArgumentNullException(nameof(resourceBytes));
-            return AssetBundle.LoadFromMemory(resourceBytes);
+            if (loadedBundles.ContainsKey(bundleName))
+            {
+                return loadedBundles[bundleName];
+            }
+
+            AssetBundle assetBundle = null;
+            assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(ArtificerExtendedPlugin.instance.Info.Location), bundleName));
+
+            loadedBundles[bundleName] = assetBundle;
+
+            return assetBundle;
+
+        }
+
+        private static AssetBundle _mainAssetBundle;
+        public static AssetBundle mainAssetBundle
+        {
+            get
+            {
+                if (_mainAssetBundle == null)
+                    _mainAssetBundle = LoadAssetBundle("artiextended");
+                return _mainAssetBundle;
+            }
+            set
+            {
+                _mainAssetBundle = value;
+            }
         }
 
         /// <summary>

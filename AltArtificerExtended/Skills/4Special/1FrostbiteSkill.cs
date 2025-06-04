@@ -112,6 +112,11 @@ namespace ArtificerExtended.Skills
             CreateIcicleProjectile();
             base.Init();
         }
+        public override SkillDef ModifyScepterSkill(SkillDef scepterSkillDef)
+        {
+            scepterSkillDef.icon = LoadSpriteFromBundle("frostbitesketch1-2");
+            return scepterSkillDef;
+        }
 
 
         public override void Hooks()

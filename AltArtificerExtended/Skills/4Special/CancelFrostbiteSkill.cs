@@ -31,7 +31,7 @@ namespace ArtificerExtended.Skills
             mustKeyPress = true,
             isCombatSkill = true
         };
-        public override Sprite Icon => LoadSpriteFromBundle("AvalancheIcon");
+        public override Sprite Icon => LoadSpriteFromBundle("polarvortexreactivationAE");
         public override SkillSlot SkillSlot => SkillSlot.None;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);

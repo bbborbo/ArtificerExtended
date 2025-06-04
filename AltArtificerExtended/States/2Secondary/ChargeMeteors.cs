@@ -60,7 +60,7 @@ namespace ArtificerExtended.States
         public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
         public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
-        public static GameObject meteorEffect = _1MeteorSkill.meteorImpactPrefab;
+        public static GameObject meteorEffect = _1EruptionSkill.meteorImpactEffectPrefab;
 
         private float radius;
         private GameObject areaIndicatorInstance;

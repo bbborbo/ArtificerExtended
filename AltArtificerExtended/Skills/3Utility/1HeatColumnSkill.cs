@@ -51,7 +51,7 @@ namespace ArtificerExtended.Skills
                 baseMaxStock: 1,
                 canceledFromSprinting: true
             );
-        public override Sprite Icon => null;// LoadSpriteFromBundle("meteoricon");
+        public override Sprite Icon => LoadSpriteFromBundle("risingflameAE");
         public override SkillSlot SkillSlot => SkillSlot.Utility;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
