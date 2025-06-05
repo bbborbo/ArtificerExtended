@@ -88,18 +88,18 @@ namespace ArtificerExtended.States
 
         public void InflictSnow()
         {
-            EffectManager.SpawnEffect(Frostbite.novaEffectPrefab, new EffectData
+            EffectManager.SpawnEffect(_1FrostbiteSkill.novaEffectPrefab, new EffectData
             {
                 origin = base.transform.position,
-                scale = Frostbite.blizzardRadius
+                scale = _1FrostbiteSkill.blizzardRadius
             }, true);
             BlastAttack blastAttack = new BlastAttack();
-            blastAttack.radius = Frostbite.blizzardRadius;
-            blastAttack.procCoefficient = Frostbite.blizzardProcCoefficient;
+            blastAttack.radius = _1FrostbiteSkill.blizzardRadius;
+            blastAttack.procCoefficient = _1FrostbiteSkill.blizzardProcCoefficient;
             blastAttack.position = base.transform.position;
             blastAttack.attacker = base.gameObject;
             blastAttack.crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
-            blastAttack.baseDamage = base.characterBody.damage * Frostbite.blizzardDamageCoefficient;
+            blastAttack.baseDamage = base.characterBody.damage * _1FrostbiteSkill.blizzardDamageCoefficient;
             blastAttack.falloffModel = BlastAttack.FalloffModel.None;
             blastAttack.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
             blastAttack.baseForce = 1500;

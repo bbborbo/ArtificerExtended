@@ -44,7 +44,14 @@
     <Compile Remove="States\2Secondary\ColdFusion.cs" />
     <Compile Remove="States\2Secondary\FireShockwave.cs" />
     <Compile Remove="States\2Secondary\FireShockwaveVisuals.cs" />
+    <Compile Remove="States\3Utility\Avalanche.cs" />
+    <Compile Remove="States\4Special\AlternateIonSurge.cs" />
+    <Compile Remove="States\4Special\AlternateIonSurge2.cs" />
+    <Compile Remove="States\4Special\Frostbite.cs" />
     <Compile Remove="States\4Special\Frostbite2.cs" />
+    <Compile Remove="States\4Special\IonSurgeExtended\IonSurgeExtendedBase.cs" />
+    <Compile Remove="States\4Special\IonSurgeExtended\IonSurgeExtendedDown.cs" />
+    <Compile Remove="States\4Special\IonSurgeExtended\IonSurgeExtendedUp.cs" />
     <Compile Remove="Unlocks\ArtificerExtendedSkinUnlock.cs" />
   </ItemGroup>
 
@@ -66,6 +73,13 @@
     <None Include="States\2Secondary\ColdFusion.cs" />
     <None Include="States\2Secondary\FireShockwave.cs" />
     <None Include="States\2Secondary\FireShockwaveVisuals.cs" />
+    <None Include="States\3Utility\Avalanche.cs" />
+    <None Include="States\4Special\AlternateIonSurge.cs" />
+    <None Include="States\4Special\AlternateIonSurge2.cs" />
+    <None Include="States\4Special\Frostbite.cs" />
+    <None Include="States\4Special\IonSurgeExtended\IonSurgeExtendedBase.cs" />
+    <None Include="States\4Special\IonSurgeExtended\IonSurgeExtendedDown.cs" />
+    <None Include="States\4Special\IonSurgeExtended\IonSurgeExtendedUp.cs" />
   </ItemGroup>
 
   <ItemGroup> 
@@ -80,9 +94,6 @@
     </Reference>
     <Reference Include="VRAPI">
       <HintPath>libs\VRAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="ChillRework">
-      <HintPath>libs\ChillRework.dll</HintPath>
     </Reference>
     <Reference Include="RiskyMod">
       <HintPath>libs\RiskyMod.dll</HintPath>

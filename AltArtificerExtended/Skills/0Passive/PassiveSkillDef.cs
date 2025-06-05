@@ -42,7 +42,6 @@ namespace ArtificerExtended.Passive
                             SerializableEntityStateType state = def.mainState;
                             mach.SetNextState(EntityStateCatalog.InstantiateState(ref state));
                         }
-
                         break;
                     }
                 }

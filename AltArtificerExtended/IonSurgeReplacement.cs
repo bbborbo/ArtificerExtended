@@ -213,18 +213,19 @@ namespace ArtificerExtended
 
         public void ModifyScepterSurge(SkillDef surge2)
         {
-            Content.AddEntityState(typeof(States.AlternateIonSurge2));
-
-            LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_NAME", "Antimatter Surge");
-            LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_DESC",
-                "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
-                "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
-
-            surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
-            surge2.baseRechargeInterval = 8f;
-            surge2.skillDescriptionToken = "MAGE_ANTISURGE_LIGHTNING_DESC";
-            surge2.skillNameToken = "MAGE_ANTISURGE_LIGHTNING_NAME";
-            surge2.keywordTokens = new string[0];
+            Debug.LogError("Scepter Surge Shit Not Available!!!!!!! Report to Borbo Immediatelly!!!!!!!!!!");
+            //Content.AddEntityState(typeof(States.AlternateIonSurge2));
+            //
+            //LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_NAME", "Antimatter Surge");
+            //LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_DESC",
+            //    "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
+            //    "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
+            //
+            //surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
+            //surge2.baseRechargeInterval = 8f;
+            //surge2.skillDescriptionToken = "MAGE_ANTISURGE_LIGHTNING_DESC";
+            //surge2.skillNameToken = "MAGE_ANTISURGE_LIGHTNING_NAME";
+            //surge2.keywordTokens = new string[0];
         }
     }
 }

@@ -15,6 +15,7 @@ using ArtificerExtended.Components;
 using static ArtificerExtended.Components.ElementCounter;
 using ArtificerExtended.Helpers;
 using ArtificerExtended.Modules;
+using static RainrotSharedUtils.Frost.FrostUtilsModule;
 
 namespace ArtificerExtended.Passive
 {
@@ -482,7 +483,7 @@ namespace ArtificerExtended.Passive
             {
                 //ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
 
-                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(ChillRework.ChillRework.iceExplosion, position, Quaternion.identity);
+                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(iceExplosion, position, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
                 delay.maxTimer += UnityEngine.Random.Range(-0.1f, 0.1f);

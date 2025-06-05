@@ -42,7 +42,6 @@ namespace ArtificerExtended
     [BepInDependency(R2API.SkillsAPI.PluginGUID)]
 
     [BepInDependency(RainrotSharedUtils.SharedUtilsPlugin.guid, BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency(ChillRework.ChillRework.guid, BepInDependency.DependencyFlags.HardDependency)]
 
     [BepInDependency("xyz.yekoc.PassiveAgression", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("prodzpod.MinerSkillReturns", BepInDependency.DependencyFlags.SoftDependency)]

@@ -24,6 +24,16 @@ namespace ArtificerExtended.Skills
 {
     class _1FrostbiteSkill : SkillBase
     {
+        public static GameObject novaEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/AffixWhiteExplosion");
+
+        public static float blizzardDamageCoefficient = 5f;
+        public static float blizzardProcCoefficient = 1f;
+        public static float blizzardRadius = ArtificerExtendedPlugin.meleeRangeChannel;
+
+        public static float novaDamageCoefficient = 5f;
+        public static float novaProcCoefficient = 1f;
+        public static float novaRadius = ArtificerExtendedPlugin.meleeRangeChannel;
+
         public static string frostArmorKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_FROSTARMOR";
         public static int bonusArmor = 100;
         public static int icicleCount = 3;
@@ -43,7 +53,7 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Polar Vortex";
 
         public override string SkillDescription => $"<style=cIsUtility>Agile</style>. <style=cIsUtility>Frost</style>. " +
-            $"Create a blast for <style=cIsDamage>{Tools.ConvertDecimal(Frostbite.blizzardDamageCoefficient)} damage</style>, then " +
+            $"Create a blast for <style=cIsDamage>{Tools.ConvertDecimal(blizzardDamageCoefficient)} damage</style>, then " +
             $"cover yourself in <style=cIsUtility>Frost Armor</style> for up to {maxDuration} seconds. " +
             $"Press again to cancel.";
 
@@ -78,7 +88,7 @@ namespace ArtificerExtended.Skills
                 $"<style=cSub>Gain <style=cIsHealing>+{bonusArmor} armor</style>, " +
                 $"and <style=cIsUtility>Frost</style> nearby enemies for " +
                 $"<style=cIsDamage>{icicleCount}x{Tools.ConvertDecimal(icicleDamage)} damage</style>. " +
-                $"When ending, creates a second {UtilityColor("Frost")} blast for {DamageValueText(Frostbite.blizzardDamageCoefficient)}." +
+                $"When ending, creates a second {UtilityColor("Frost")} blast for {DamageValueText(blizzardDamageCoefficient)}." +
                 $"\nWhile armored, move " +
                 $"<style=cIsUtility>up to +{Tools.ConvertDecimal(movementIncreasePerBuff * (buffsForZeroMovementIncrease - 1))} faster</style>, " +
                 $"gradually decaying to " +
@@ -210,18 +220,18 @@ namespace ArtificerExtended.Skills
             if (NetworkServer.active)
             {
 
-                EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
+                EffectManager.SpawnEffect(novaEffectPrefab, new EffectData
                 {
                     origin = self.transform.position,
-                    scale = States.Frostbite.novaRadius
+                    scale = novaRadius
                 }, true);
                 BlastAttack blastAttack = new BlastAttack();
-                blastAttack.radius = Frostbite.novaRadius;
-                blastAttack.procCoefficient = Frostbite.novaProcCoefficient;
+                blastAttack.radius = novaRadius;
+                blastAttack.procCoefficient = novaProcCoefficient;
                 blastAttack.position = self.transform.position;
                 blastAttack.attacker = self.gameObject;
                 blastAttack.crit = Util.CheckRoll(self.crit, self.master);
-                blastAttack.baseDamage = self.damage * Frostbite.novaDamageCoefficient;
+                blastAttack.baseDamage = self.damage * novaDamageCoefficient;
                 blastAttack.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blastAttack.baseForce = 0;
                 blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);

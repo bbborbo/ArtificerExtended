@@ -22,12 +22,13 @@ using ArtificerExtended;
 using ArtificerExtended.Components;
 using static ArtificerExtended.Passive.AltArtiPassive;
 using static ArtificerExtended.Components.ElementCounter;
-using static ChillRework.ChillRework;
+using static RainrotSharedUtils.Frost.FrostUtilsModule;
 using static R2API.RecalculateStatsAPI;
 using ArtificerExtended.Modules;
 using ArtificerExtended.States;
 using RoR2.Projectile;
 using RoR2.Orbs;
+using EntityStates;
 
 namespace ArtificerExtended
 {
@@ -61,11 +62,27 @@ namespace ArtificerExtended
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             On.RoR2.CharacterMaster.OnBodyDestroyed += CharacterMaster_OnBodyDestroyed;
             //IL.RoR2.GlobalEventManager.ProcessHitEnemy += MaxFrostHook;
-            OnMaxChill += FrostNovaOnMaxChill;
+            //OnMaxChill += FrostNovaOnMaxChill;
             GetStatCoefficients += MeltAttackSpeedBuff;
             On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
+            On.RoR2.SetStateOnHurt.SetFrozenInternal += FixSetFrozen;
 
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
+        }
+
+        private void FixSetFrozen(On.RoR2.SetStateOnHurt.orig_SetFrozenInternal orig, SetStateOnHurt self, float duration)
+        {
+            if (self.targetStateMachine)
+            {
+                FrozenState frozenState = new FrozenState();
+                frozenState.freezeDuration = duration;
+                self.targetStateMachine.SetInterruptState(frozenState, InterruptPriority.Frozen);
+            }
+            EntityStateMachine[] array = self.idleStateMachine;
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].SetNextStateToMain();
+            }
         }
 
         private void FrostNovaOnFreeze(On.EntityStates.FrozenState.orig_OnEnter orig, EntityStates.FrozenState self)
@@ -172,7 +189,7 @@ namespace ArtificerExtended
                         int chillDebuffCount = vBody.GetBuffCount(DLC2Content.Buffs.Frost);
                         if(vBody.healthComponent.isInFrozenState)
                             chillDebuffCount = Mathf.Min(chillDebuffCount + 3, 5);
-                        int chillLimitCount = vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
+                        int chillLimitCount = 0;// vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
                         int minChillForBlast = chillLimitCount > 0 ? 3 : 1;
 
                         if (chillDebuffCount >= minChillForBlast && icePower > 0) 

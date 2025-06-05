@@ -102,8 +102,6 @@ namespace ArtificerExtended.States
             blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
             blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
 
-            blastAttack.AddModdedDamageType(ChillRework.ChillRework.ChillOnHit);
-
             blastAttack.Fire();
         }
     }
