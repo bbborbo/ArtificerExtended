@@ -5,10 +5,11 @@ using RoR2.Skills;
 using BepInEx.Configuration;
 using ArtificerExtended.Unlocks;
 using UnityEngine;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Skills
 {
@@ -21,44 +22,42 @@ namespace ArtificerExtended.Skills
         public override string SkillName => "Shockwave";
 
         public override string SkillDescription => $"<style=cIsDamage>Stunning.</style> Burst forward, producing a powerful shockwave " +
-            $"in front of you for <style=cIsDamage>{Tools.ConvertDecimal(FireShockwave.damage)} damage.</style>";
+            $"that chains lightning for <style=cIsDamage>2x{Tools.ConvertDecimal(FireShockwave.damage)} damage.</style>";
 
-        public override string SkillLangTokenName => "SHOCKWAVE";
+        public override string TOKEN_IDENTIFIER => "SHOCKWAVE";
 
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerShockwaveUnlock));
-
-        public override string IconName => "shockwaveicon";
+        public override Type RequiredUnlock => (typeof(OverkillOverloadingUnlock));
 
         public override MageElement Element => MageElement.Lightning;
 
         public override Type ActivationState => typeof(CastShockwave);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.mageSecondary;
-
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 5,
-                interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: true
             );
+        public override Sprite Icon => LoadSpriteFromBundle("shockwaveicon");
+        public override SkillSlot SkillSlot => SkillSlot.Secondary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
+        public override Type BaseSkillDef => typeof(SkillDef);
+        public override float BaseCooldown => 5;
+        public override void Init()
+        {
+            return;
+            //KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
+            //
+            //RegisterEntityState(typeof(FireShockwave));
+            //RegisterEntityState(typeof(FireShockwaveVisuals));
+            //
+            //RegisterProjectileShockwave();
+            base.Init();
+        }
 
 
         //public override string[] KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
 
         public override void Hooks()
         {
-        }
-
-        public override void Init(ConfigFile config)
-        {
-            KeywordTokens = new string[1] { "KEYWORD_STUNNING" };
-
-            RegisterEntityState(typeof(FireShockwave));
-            RegisterEntityState(typeof(FireShockwaveVisuals));
-
-            RegisterProjectileShockwave();
-            CreateLang();
-            CreateSkill();
         }
 
         private void RegisterProjectileShockwave()
@@ -82,7 +81,7 @@ namespace ArtificerExtended.Skills
 
             shockwaveZapConePrefab.GetComponent<DestroyOnTimer>().duration = 2f;
 
-            ContentPacks.projectilePrefabs.Add(shockwaveZapConePrefab);
+            Content.AddProjectilePrefab(shockwaveZapConePrefab);
         }
     }
 }

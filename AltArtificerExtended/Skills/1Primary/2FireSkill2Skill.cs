@@ -5,10 +5,11 @@ using RoR2.Skills;
 using BepInEx.Configuration;
 using ArtificerExtended.Unlocks;
 using UnityEngine;
-using ArtificerExtended.EntityState;
+using ArtificerExtended.States;
 using RoR2.Projectile;
 using R2API;
 using R2API.Utils;
+using ArtificerExtended.Modules;
 
 namespace ArtificerExtended.Skills
 {
@@ -18,56 +19,55 @@ namespace ArtificerExtended.Skills
         public static GameObject outerFireball;
         public static GameObject innerFireball;
 
-        public override string SkillName => "Flame Burst";
+        public override string SkillName => "Lava Bolts";
 
-        public override string SkillDescription => $"Ignite. Charge a spread of 3 fireballs for " +
-            $"<style=cIsDamage>{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +
-            $"damage each</style> that converge on a point in front of you.";
+        public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Charge a spread of fireballs for " +
+            $"<style=cIsDamage>3x{Tools.ConvertDecimal(ChargeFireBlast.minDamageCoefficient)}-{Tools.ConvertDecimal(ChargeFireBlast.maxDamageCoefficient)} " +
+            $"damage</style> that converge on a point in front of you.";
 
-        public override string SkillLangTokenName => "FIREBALLS";
-
-        public override UnlockableDef UnlockDef => GetUnlockDef(typeof(ArtificerFlameBurstUnlock));
-
-        public override string IconName => "Fireskill2icon";
+        public override string TOKEN_IDENTIFIER => "FIREBALLS";
+        public override Type RequiredUnlock => typeof(StackBurnUnlock);
 
         public override MageElement Element => MageElement.Fire;
 
         public override Type ActivationState => typeof(ChargeFireBlast);
 
-        public override SkillFamily SkillSlot => ArtificerExtendedPlugin.magePrimary;
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 2,
                 beginSkillCooldownOnSkillEnd: true,
                 useAttackSpeedScaling: true
             );
+
+        public override Sprite Icon => LoadSpriteFromBundle("Fireskill2icon");
+        public override SkillSlot SkillSlot => SkillSlot.Primary;
+        public override InterruptPriority InterruptPriority => InterruptPriority.Any;
+        public override Type BaseSkillDef => typeof(SteppedSkillDef);
+        public override float BaseCooldown => 2;
 
         public override void Hooks()
         {
 
         }
-
-        public override void Init(ConfigFile config)
+        public override void Init()
         {
-
-            ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
-                "Skills Config: " + SkillName, "Minimum Damage Coefficient",
-                ChargeFireBlast.minDamageCoefficient,
-                "Determines the minimum damage of Fire Blast."
-                ).Value;
-            ChargeFireBlast.maxDamageCoefficient = config.Bind<float>(
-                "Skills Config: " + SkillName, "Max Damage Coefficient",
-                ChargeFireBlast.maxDamageCoefficient,
-                "Determines the max damage of Fire Blast. "
-                ).Value;
+            return;
+            //ChargeFireBlast.minDamageCoefficient = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Minimum Damage Coefficient",
+            //    ChargeFireBlast.minDamageCoefficient,
+            //    "Determines the minimum damage of Fire Blast."
+            //    ).Value;
+            //ChargeFireBlast.maxDamageCoefficient = config.Bind<float>(
+            //    "Skills Config: " + SkillName, "Max Damage Coefficient",
+            //    ChargeFireBlast.maxDamageCoefficient,
+            //    "Determines the max damage of Fire Blast. "
+            //    ).Value;
 
 
             KeywordTokens = new string[1] { "KEYWORD_IGNITE" };
 
             CreateProjectiles();
-            CreateLang();
-            CreateSkill();
+            base.Init();
         }
 
         private void CreateProjectiles()
@@ -104,8 +104,8 @@ namespace ArtificerExtended.Skills
             pie2.lifetime = pie1.lifetime + 0.05f;
             //pie2.projectileDamage.damageType.damageSource = DamageSource.Primary;
 
-            ContentPacks.projectilePrefabs.Add(outerFireball);
-            ContentPacks.projectilePrefabs.Add(innerFireball);
+            Content.AddProjectilePrefab(outerFireball);
+            Content.AddProjectilePrefab(innerFireball);
         }
     }
 }

@@ -14,7 +14,8 @@ using UnityEngine.Networking;
 using ArtificerExtended.Components;
 using static ArtificerExtended.Components.ElementCounter;
 using ArtificerExtended.Helpers;
-using ArtificerExtended.CoreModules;
+using ArtificerExtended.Modules;
+using static RainrotSharedUtils.Frost.FrostUtilsModule;
 
 namespace ArtificerExtended.Passive
 {
@@ -49,24 +50,26 @@ namespace ArtificerExtended.Passive
 
 
         #region Public Statics
-        public static Int32 lightningSwordEffectCount = 3;//3
-        public static Single lightningDamageMult = 0.4f;
+        public static Int32 lightningSwordEffectCount = 1;//3
+        public static Single lightningDamageMult = 0.3f;
         public static Single lightningBlastDamageMult = 1f;
         public static Single lightningForce = 100f;
         public static Single lightningProcCoef = 0.2f;
 
-        public static Single burnDamageMult = 0.075f;
-        public static Single burnBuffDuration = 2f;
+        public static Single meltAspdIncrease = 0.025f;
+        public static Single burnBuffDurationBase = 4f;
+        public static Single burnBuffDurationStack = -0.6f;
 
         public static Single slowProcChance = 1f;
         public static Single freezeProcCount = 3f;
         public static Single chillProcDuration = 8f;
 
-        public const int novaDebuffThreshold = 10;
         public static Single novaMaxRadius = 8f;
         public static Single novaMinRadius = 3f;
+        public static Single novaRadiusPerPower = 1.5f;
+        public static Single novaBaseDamage = 3.8f;
 
-        public static Single targetUpdateFreq = 10f;
+        public static Single targetUpdateFreq = 5f;
         public static Single targetRange = 60f;
         public static Single targetAng = 40f;
 
@@ -232,7 +235,7 @@ namespace ArtificerExtended.Passive
 
             public int GetProjType()
             {
-                if(type >= 0)
+                if (type >= 0)
                 {
                     return type;
                 }
@@ -298,29 +301,29 @@ namespace ArtificerExtended.Passive
 
                 if (this.effectInstance)
                 {
-                    if(!this.effectInstance.activeSelf)
+                    if (!this.effectInstance.activeSelf)
                         this.effectInstance.SetActive(true);
 
                     this.effectInstance.transform.rotation = Quaternion.AngleAxis(this.nextProj.rotation, direction) * Util.QuaternionSafeLookRotation(direction);
-                }
 
 
-                if (!this.nextProj.timerAssigned)
-                {
-                    if (this.nextProj.hasBatch)
+                    if (!this.nextProj.timerAssigned)
                     {
-                        if (!this.nextProj.batchTriggered)
+                        if (this.nextProj.hasBatch)
                         {
-                            return;
+                            if (!this.nextProj.batchTriggered)
+                            {
+                                return;
+                            }
                         }
+                        this.nextProj.AssignTimer();
                     }
-                    this.nextProj.AssignTimer();
-                }
 
-                this.timer += deltaT;
-                if (this.timer >= this.fireTime + this.nextProj.timer)
-                {
-                    this.Fire(target);
+                    this.timer += deltaT;
+                    if (this.timer >= this.fireTime + this.nextProj.timer)
+                    {
+                        this.Fire(target);
+                    }
                 }
             }
 
@@ -392,7 +395,7 @@ namespace ArtificerExtended.Passive
                     this.type = proj.type;
 
                 //instantiate effect if null
-                if(this.effectInstance == null)
+                if (this.effectInstance == null)
                 {
                     this.effectInstance = UnityEngine.Object.Instantiate(AltArtiPassive.lightningPreFireEffect[this.GetProjType()], this.location);
                 }
@@ -427,7 +430,7 @@ namespace ArtificerExtended.Passive
 
 
         #region External Methods
-        public void SkillCast(BatchHandle handle = null)
+        public void SkillCast(BatchHandle handle = null, bool isFire = false)
         {
             if (elementPower == null)
             {
@@ -435,17 +438,17 @@ namespace ArtificerExtended.Passive
                 return;
             }
             this.DoLightning(elementPower.lightningPower, handle);
-            this.DoFire(elementPower.firePower);
-            this.DoIce(elementPower.icePower);
+            if (isFire)
+                this.DoFire(elementPower.firePower);
         }
 
-        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = ChillRework.ChillRework.chillStacksMax)
+        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = 6/*ChillRework.ChillRework.chillStacksMax*/)
         {
             if (attacker == null || currentPower == Power.None || strength == 0)
                 return;
 
-            float radiusByPower = 1 + (1 * (int)currentPower);
-            float radiusByBuffs = Util.Remap((float)strength, 0, ChillRework.ChillRework.chillStacksMax, novaMinRadius, novaMaxRadius);
+            float radiusByPower = (1 * (int)currentPower);
+            float radiusByBuffs = Util.Remap((float)strength, 0, 6/*ChillRework.ChillRework.chillStacksMax*/, novaMinRadius, novaMaxRadius);
             CreateIceBlast(attacker, currentPower, position, radiusByPower + radiusByBuffs);
         }
         #endregion
@@ -467,37 +470,33 @@ namespace ArtificerExtended.Passive
             {
                 for (Int32 i = 0; i < (Int32)power; i++)
                 {
-                    base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDuration + 0.1f * i);
+                    base.characterBody.AddTimedBuff(CommonAssets.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
                 }
-            }
-        }
 
-        private void DoIce(Power power)
-        {
-            /*if (NetworkServer.active)
-            {
-                BuffIndex ice = Main.chillBuff.buffIndex;
-                for (Int32 i = 0; i < (Int32)power; i++)
-                {
-                    //base.characterBody.AddTimedBuff(ice, iceBuffDuration);
-                }
-            }*/
+                //base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+            }
         }
 
         public static void CreateIceBlast(CharacterBody attacker, Power icePowerToUse, Vector3 position, Single radius)
         {
             if (NetworkServer.active)
             {
-                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(ChillRework.ChillRework.iceExplosion, position, Quaternion.identity);
+                //ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
+
+                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(iceExplosion, position, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
                 delay.maxTimer += UnityEngine.Random.Range(-0.1f, 0.1f);
                 delay.position = position;
-                delay.baseDamage = attacker.damage * (1 + 0.5f * (int)icePowerToUse);
-                delay.procCoefficient = 0.3f + (0.1f * (int)icePowerToUse);
+                delay.baseDamage = attacker.damage * novaBaseDamage;// attacker.damage * (1 + 0.5f * (int)icePowerToUse);
+                delay.procCoefficient = 0.8f - (0.1f * (int)icePowerToUse);//0.5f;//
                 delay.attacker = attacker.gameObject;
                 delay.radius = radius;
+                delay.damageType = DamageType.Frost;
+                delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blast.GetComponent<TeamFilter>().teamIndex = attacker.teamComponent.teamIndex;
+
+                //NetworkServer.Spawn(blast);
             }
         }
 
@@ -629,5 +628,6 @@ namespace ArtificerExtended.Passive
             base.OnExit();
         }
         #endregion
+        }
     }
-}
+

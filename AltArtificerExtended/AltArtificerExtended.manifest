@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2999645626
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: itmightbebad
+      Dependencies: {}
+    Info_1:
+      Name: borboitemicons
+      Dependencies: {}
+    Info_2:
+      Name: missilereworkassets
+      Dependencies: {}
+    Info_3:
+      Name: artiextended
+      Dependencies: {}

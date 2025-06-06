@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 680780405
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c89cd4f5e931497f205c6be0635ed968
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c90fc19e2679e5295d10bd00f33cb4c3
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Icons/IceShardsIcon.png
+- Assets/Icons/eruptionAE.png
+- Assets/Icons/cryoburstAE.png
+- Assets/Icons/frostbolt.png
+- Assets/Icons/stasisfield.png
+- Assets/Icons/frostbitesketch1.png
+- Assets/Icons/passiveilyborbo.png
+- Assets/Icons/LaserboltIcon.png
+- Assets/Icons/solarflareAE.png
+- Assets/Icons/risingflameAE.png
+- Assets/Icons/polarvortexreactivationAE.png
+- Assets/Icons/pulsestrikeAE2.png
+- Assets/Icons/frostbitesketch1-2.png
+- Assets/Icons/LavaBoltIcon.png
+- Assets/Icons/thundericon.png
+Dependencies: []

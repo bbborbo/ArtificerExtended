@@ -22,8 +22,13 @@ using ArtificerExtended;
 using ArtificerExtended.Components;
 using static ArtificerExtended.Passive.AltArtiPassive;
 using static ArtificerExtended.Components.ElementCounter;
-using static ChillRework.ChillRework;
-using ArtificerExtended.CoreModules;
+using static RainrotSharedUtils.Frost.FrostUtilsModule;
+using static R2API.RecalculateStatsAPI;
+using ArtificerExtended.Modules;
+using ArtificerExtended.States;
+using RoR2.Projectile;
+using RoR2.Orbs;
+using EntityStates;
 
 namespace ArtificerExtended
 {
@@ -50,15 +55,98 @@ namespace ArtificerExtended
             On.EntityStates.Mage.Weapon.Flamethrower.OnEnter += this.Flamethrower_OnEnter;
             On.EntityStates.Mage.Weapon.Flamethrower.FixedUpdate += this.Flamethrower_FixedUpdate;
             On.EntityStates.Mage.Weapon.Flamethrower.OnExit += this.Flamethrower_OnExit;
-            On.RoR2.HealthComponent.TakeDamageProcess += this.HealthComponent_TakeDamage;
+            On.RoR2.HealthComponent.TakeDamage += this.HealthComponent_TakeDamage;
             GlobalEventManager.onCharacterDeathGlobal += this.GlobalEventManager_OnCharacterDeath;
             //On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             //On.RoR2.CharacterBody.AddBuff_BuffIndex += CharacterBody_AddBuff_BuffIndex;
             On.RoR2.CharacterMaster.OnBodyStart += CharacterMaster_OnBodyStart;
             On.RoR2.CharacterMaster.OnBodyDestroyed += CharacterMaster_OnBodyDestroyed;
-            OnMaxChill += FrostNovaOnMaxChill;
+            //IL.RoR2.GlobalEventManager.ProcessHitEnemy += MaxFrostHook;
+            //OnMaxChill += FrostNovaOnMaxChill;
+            GetStatCoefficients += MeltAttackSpeedBuff;
+            On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
+            On.RoR2.SetStateOnHurt.SetFrozenInternal += FixSetFrozen;
+
+            On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
         }
 
+        private void FixSetFrozen(On.RoR2.SetStateOnHurt.orig_SetFrozenInternal orig, SetStateOnHurt self, float duration)
+        {
+            if (self.targetStateMachine)
+            {
+                FrozenState frozenState = new FrozenState();
+                frozenState.freezeDuration = duration;
+                self.targetStateMachine.SetInterruptState(frozenState, InterruptPriority.Frozen);
+            }
+            EntityStateMachine[] array = self.idleStateMachine;
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].SetNextStateToMain();
+            }
+        }
+
+        private void FrostNovaOnFreeze(On.EntityStates.FrozenState.orig_OnEnter orig, EntityStates.FrozenState self)
+        {
+            if (NetworkServer.active)
+            {
+                CharacterBody attackerBody = null;
+                GameObject lastHitAttacker = self.healthComponent.lastHitAttacker;
+                if (lastHitAttacker)
+                    attackerBody = lastHitAttacker.GetComponent<CharacterBody>();
+
+                FrostNovaOnMaxChill(attackerBody, self.characterBody);
+            }
+
+            orig(self);
+        }
+
+        private static void ChainLightningHook(On.RoR2.GlobalEventManager.orig_OnHitAll orig, GlobalEventManager self, DamageInfo damageInfo, GameObject hitObject)
+        {
+            if (damageInfo.HasModdedDamageType(CommonAssets.ChainLightningDamageType))
+            {
+                LightningOrb lightningOrb2 = new LightningOrb();
+                lightningOrb2.origin = damageInfo.position;
+                lightningOrb2.damageValue = damageInfo.damage * CommonAssets.chainLightningZapDamageFraction;
+                lightningOrb2.isCrit = damageInfo.crit;
+                lightningOrb2.teamIndex = TeamComponent.GetObjectTeam(damageInfo.attacker);
+                lightningOrb2.attacker = damageInfo.attacker;
+
+                lightningOrb2.bouncesRemaining = 0; //will connect to one new target, no bounce
+                lightningOrb2.canBounceOnSameTarget = false;
+                lightningOrb2.bouncedObjects = new List<HealthComponent>();
+                HurtBox victim = hitObject.GetComponent<HurtBox>();
+                if (victim && victim.healthComponent)
+                    lightningOrb2.bouncedObjects.Add(victim.healthComponent);
+                else
+                {
+                    HealthComponent victimHealthComponent = hitObject.GetComponent<HealthComponent>();
+                    if (victimHealthComponent)
+                        lightningOrb2.bouncedObjects.Add(victimHealthComponent);
+                }
+
+                lightningOrb2.procChainMask = damageInfo.procChainMask;
+                lightningOrb2.procCoefficient = CommonAssets.chainLightningZapDamageCoefficient;
+                lightningOrb2.lightningType = LightningOrb.LightningType.Ukulele;
+                lightningOrb2.damageColorIndex = DamageColorIndex.Default;
+                lightningOrb2.range = CommonAssets.chainLightningZapDistance;
+                HurtBox hurtBox2 = lightningOrb2.PickNextTarget(damageInfo.position);
+                if (hurtBox2)
+                {
+                    lightningOrb2.target = hurtBox2;
+                    OrbManager.instance.AddOrb(lightningOrb2);
+                }
+            }
+            orig(self, damageInfo, hitObject);
+        }
+
+        private void MeltAttackSpeedBuff(CharacterBody sender, StatHookEventArgs args)
+        {
+            int meltBuffCount = sender.GetBuffCount(CommonAssets.meltBuff);
+            if(meltBuffCount > 0)
+            {
+                args.baseAttackSpeedAdd += AltArtiPassive.meltAspdIncrease * meltBuffCount;
+            }
+        }
 
         private void CharacterMaster_OnBodyStart(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
@@ -85,19 +173,6 @@ namespace ArtificerExtended
         }
 
         #region IceStuff + FireStuff
-        private struct FreezeInfo
-        {
-            public GameObject frozenBy;
-            public Vector3 frozenAt;
-
-            public FreezeInfo(GameObject frozenBy, Vector3 frozenAt)
-            {
-                this.frozenAt = frozenAt;
-                this.frozenBy = frozenBy;
-            }
-        }
-
-        private readonly Dictionary<GameObject, GameObject> frozenBy = new Dictionary<GameObject, GameObject>();
 
         private void GlobalEventManager_OnCharacterDeath(DamageReport damageReport)
         {
@@ -109,11 +184,13 @@ namespace ArtificerExtended
                     CharacterBody vBody = damageReport.victimBody;
                     if (vBody && aBody && vBody.healthComponent)
                     {
-                        Power icePower = GetIcePowerLevelFromBody(aBody);
+                        Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
 
-                        int chillDebuffCount = vBody.GetBuffCount(RoR2Content.Buffs.Slow80);
-                        int chillLimitCount = vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
-                        int minChillForBlast = chillLimitCount > 0 ? 5 : 1;
+                        int chillDebuffCount = vBody.GetBuffCount(DLC2Content.Buffs.Frost);
+                        if(vBody.healthComponent.isInFrozenState)
+                            chillDebuffCount = Mathf.Min(chillDebuffCount + 3, 5);
+                        int chillLimitCount = 0;// vBody.GetBuffCount(ChillRework.ChillRework.ChillLimitBuff);
+                        int minChillForBlast = chillLimitCount > 0 ? 3 : 1;
 
                         if (chillDebuffCount >= minChillForBlast && icePower > 0) 
                         {
@@ -152,14 +229,10 @@ namespace ArtificerExtended
                 }
             }
         }
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, RoR2.HealthComponent self, RoR2.DamageInfo damageInfo)
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, RoR2.HealthComponent self, RoR2.DamageInfo damageInfo)
         {
-            if (damageInfo.damageType.damageType.HasFlag(DamageType.Freeze2s))
-            {
-                this.frozenBy[self.gameObject] = damageInfo.attacker;
-            }
             orig(self, damageInfo);
-            if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
+            /*if (damageInfo.dotIndex == Buffs.burnDot || damageInfo.dotIndex == Buffs.strongBurnDot)
             {
                 if (damageInfo.attacker)
                 {
@@ -180,14 +253,39 @@ namespace ArtificerExtended
                         }
                     }
                 }
+            }*/
+        }
+
+        private void MaxFrostHook(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            bool b = c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt<DamageTypeCombo>(nameof(DamageTypeCombo.IsChefFrostDamage)))
+                && c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt<SetStateOnHurt>(nameof(SetStateOnHurt.SetFrozen)));
+            if (b)
+            {
+                c.Emit(OpCodes.Ldloc, 0); //attackerBody
+                c.Emit(OpCodes.Ldloc, 1); //victimBody
+                c.EmitDelegate<Action<CharacterBody, CharacterBody>>((attackerBody, victimBody) =>
+                {
+                    if (NetworkServer.active)
+                    {
+                        FrostNovaOnMaxChill(attackerBody, victimBody);
+                    }
+                });
+            }
+            else
+            {
             }
         }
 
-        private void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
+        private static void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
         {
-            if(aBody != null)
+            if (aBody != null && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out AltArtiPassive passive))
             {
-                Power icePower = GetIcePowerLevelFromBody(aBody);
+                Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
                 if (icePower > Power.None) //Arctic Blast
                 {
                     AltArtiPassive.DoNova(aBody, icePower, vBody.corePosition);
@@ -217,7 +315,7 @@ namespace ArtificerExtended
             {
                 AltArtiPassive passive = AltArtiPassive.instanceLookup[obj];
                 var context = new FlamethrowerContext(passive);
-                passive.SkillCast();
+                passive.SkillCast(isFire: true);
                 this.flamethrowerContext[self] = context;
             }
         }
@@ -231,7 +329,7 @@ namespace ArtificerExtended
                 Int32 count = 0;
                 while (context.timer >= context.passive.ext_flamethrowerInterval && count <= context.passive.ext_flamethrowerMaxPerTick)
                 {
-                    context.passive.SkillCast();
+                    context.passive.SkillCast(isFire: true);
                     count++;
                     context.timer -= context.passive.ext_flamethrowerInterval;
                 }
@@ -243,7 +341,7 @@ namespace ArtificerExtended
             if (this.flamethrowerContext.ContainsKey(self))
             {
                 FlamethrowerContext context = this.flamethrowerContext[self];
-                context.passive.SkillCast();
+                context.passive.SkillCast(isFire: true);
                 _ = this.flamethrowerContext.Remove(self);
             }
         }
@@ -310,7 +408,7 @@ namespace ArtificerExtended
                 var handle = new AltArtiPassive.BatchHandle();
                 var context = new NanoBombContext(passive, handle);
                 this.nanoBombContext[self] = context;
-                passive.SkillCast(handle);
+                passive.SkillCast(handle, (self is ChargeSolarFlare ? true : false));
             }
         }
         private void BaseChargeBombState_FixedUpdate(On.EntityStates.Mage.Weapon.BaseChargeBombState.orig_FixedUpdate orig, BaseChargeBombState self)
@@ -324,7 +422,7 @@ namespace ArtificerExtended
                 while (context.timer >= context.passive.ext_nanoBombInterval && count <= context.passive.ext_nanoBombMaxPerTick)
                 {
                     count++;
-                    context.passive.SkillCast(context.handle);
+                    context.passive.SkillCast(context.handle, (self is ChargeSolarFlare ? true : false));
                     context.timer -= context.passive.ext_nanoBombInterval;
                 }
             }
@@ -359,7 +457,7 @@ namespace ArtificerExtended
                 while (context.timer >= context.passive.ext_nanoBombInterval && count <= context.passive.ext_nanoBombMaxPerTick)
                 {
                     count++;
-                    context.passive.SkillCast(context.handle);
+                    context.passive.SkillCast(context.handle, (self is ChargeSolarFlare ? true : false));
                     context.timer -= context.passive.ext_nanoBombInterval;
                 }
 
@@ -375,7 +473,7 @@ namespace ArtificerExtended
             GameObject obj = self.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out AltArtiPassive passive))
             {
-                passive.SkillCast();
+                passive.SkillCast(isFire: !(self is FireLightningBolt) && !(self is FireSnowBall));
             }
         }
         #endregion

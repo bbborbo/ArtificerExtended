@@ -100,7 +100,17 @@ namespace ArtificerExtended.Components
         }
 
         #region static methods
-        public static Power GetIcePowerLevelFromBody(CharacterBody body, ElementCounter powerComponent = null)
+
+        public static Power GetPowerLevelFromBody(GameObject body, MageElement element, AltArtiPassive altArtiPassive)
+        {
+            ElementCounter elementCounter = null;
+            if(altArtiPassive != null)
+            {
+                elementCounter = altArtiPassive.elementPower;
+            }
+            return GetPowerLevelFromBody(body, element, elementCounter);
+        }
+        public static Power GetPowerLevelFromBody(GameObject body, MageElement element, ElementCounter powerComponent = null)
         {
             Power power = Power.None;
 
@@ -111,84 +121,44 @@ namespace ArtificerExtended.Components
                 powerComponent = GetPowerComponentFromBody(body);
             }
 
-            bool useAspect = true;
             if (powerComponent != null)
             {
-                power = powerComponent.icePower;
-                useAspect = powerComponent.useIceAspect;
-            }
+                bool useAspect = false;
+                switch (element)
+                {
+                    case MageElement.Fire:
+                        power = powerComponent.firePower;
+                        useAspect = powerComponent.useFireAspect;
+                        break;
+                    case MageElement.Lightning:
+                        power = powerComponent.lightningPower;
+                        useAspect = powerComponent.useLightningAspect;
+                        break;
+                    case MageElement.Ice:
+                        power = powerComponent.icePower;
+                        useAspect = powerComponent.useIceAspect;
+                        break;
+                }
+                if (useAspect == true && power < Power.Unfathomable)
+                {
 
-            return GetPowerLevelFromBody(body, power, useAspect);
-        }
-
-        public static Power GetFirePowerLevelFromBody(CharacterBody body, ElementCounter powerComponent = null)
-        {
-            Power power = Power.None;
-
-            if (body == null)
-                return power;
-            if (powerComponent == null)
-            {
-                powerComponent = GetPowerComponentFromBody(body);
-            }
-
-            bool useAspect = true;
-            if (powerComponent != null)
-            {
-                power = powerComponent.firePower;
-                useAspect = powerComponent.useFireAspect;
-            }
-
-            return GetPowerLevelFromBody(body, power, useAspect);
-        }
-
-        public static Power GetLightningPowerLevelFromBody(CharacterBody body, ElementCounter powerComponent = null)
-        {
-            Power power = Power.None;
-
-            if (body == null)
-                return power;
-            if (powerComponent == null)
-            {
-                powerComponent = GetPowerComponentFromBody(body);
-            }
-
-            bool useAspect = true;
-            if (powerComponent != null)
-            {
-                power = powerComponent.lightningPower;
-                useAspect = powerComponent.useLightningAspect;
-            }
-
-            return GetPowerLevelFromBody(body, power, useAspect);
-        }
-
-        public static Power GetPowerLevelFromBody(CharacterBody body, Power skillPower, bool useAspect = false)
-        {
-            Power power = Power.None;
-            if (AltArtiPassive.instanceLookup.ContainsKey(body.gameObject))
-            {
-                power = skillPower;
-            }
-            if (useAspect == true && power < Power.Unfathomable)
-            {
-
+                }
             }
 
             return power;
         }
 
-        public static ElementCounter GetPowerComponentFromBody(CharacterBody body)
+        public static ElementCounter GetPowerComponentFromBody(GameObject body)
         {
             ElementCounter powerComponent = null;
-            if (AltArtiPassive.instanceLookup.ContainsKey(body.gameObject))
+            if (AltArtiPassive.instanceLookup.ContainsKey(body))
             {
-                AltArtiPassive AApassive = AltArtiPassive.instanceLookup[body.gameObject];
+                AltArtiPassive AApassive = AltArtiPassive.instanceLookup[body];
                 powerComponent = AApassive.elementPower;
             }
             else
             {
-                powerComponent = body.gameObject.GetComponent<ElementCounter>();
+                powerComponent = body.GetComponent<ElementCounter>();
             }
             return powerComponent;
         }

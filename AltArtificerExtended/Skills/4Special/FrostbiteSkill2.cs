@@ -1,5 +1,5 @@
-﻿using ArtificerExtended.CoreModules;
-using ArtificerExtended.EntityState;
+﻿using ArtificerExtended.Modules;
+using ArtificerExtended.States;
 using ArtificerExtended.Unlocks;
 using BepInEx.Configuration;
 using EntityStates;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static ArtificerExtended.Skills.SkillBase;
 
 namespace ArtificerExtended.Skills
 {
@@ -19,7 +20,7 @@ namespace ArtificerExtended.Skills
         public static BuffDef artiIceShield;
         public override int TargetVariant => 2;
 
-        public override string SkillName => "Cryostasis";
+        public override string SkillName => "Cryogenesis";
 
         public override string SkillDescription => "Cover yourself in a <style=cIsUtility>protective icy armor.</style> " +
                 "Erupts once for <style=cIsDamage>300% damage,</style> then another <style=cIsUtility>Freezing</style> blast for <style=cIsDamage>500%.</style>" +
@@ -35,10 +36,9 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
             (
-                baseRechargeInterval: 6,
-                interruptPriority: InterruptPriority.Skill,
                 mustKeyPress: false,
-                canceledFromSprinting: true
+                canceledFromSprinting: true,
+                beginSkillCooldownOnSkillEnd: true
             );
 
         public override void Hooks()
@@ -47,16 +47,12 @@ namespace ArtificerExtended.Skills
 
         public void RegisterBuffWhiteout()
         {
-            artiIceShield = ScriptableObject.CreateInstance<BuffDef>();
-            {
-                artiIceShield.name = "artiIceShield2";
-                artiIceShield.iconSprite = ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png");
-                artiIceShield.canStack = true;
-                artiIceShield.isDebuff = false;
-                artiIceShield.buffColor = Color.magenta;
-            }
-            Buffs.AddBuff(artiIceShield);
+            artiIceShield = Content.CreateAndAddBuff("bdArtiIceShield2",
+                ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png"),
+                Color.white,
+                true, false);
 
+            return;
             On.RoR2.CharacterBody.RecalculateStats += (On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self) =>
             {
                 orig(self);
@@ -89,13 +85,11 @@ namespace ArtificerExtended.Skills
         {
             if (NetworkServer.active)
             {
-                if (ArtificerExtendedPlugin.AllowBrokenSFX.Value == true)
-                    Util.PlaySound(PrepWall.prepWallSoundString, self.gameObject);
 
-                EffectManager.SpawnEffect(EntityState.Frostbite.novaEffectPrefab, new EffectData
+                EffectManager.SpawnEffect(States.Frostbite.novaEffectPrefab, new EffectData
                 {
                     origin = self.transform.position,
-                    scale = EntityState.Frostbite.novaRadius
+                    scale = States.Frostbite.novaRadius
                 }, true);
                 BlastAttack blastAttack = new BlastAttack();
                 blastAttack.radius = Frostbite2.novaRadius;
