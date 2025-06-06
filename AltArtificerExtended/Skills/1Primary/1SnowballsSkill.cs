@@ -15,6 +15,7 @@ namespace ArtificerExtended.Skills
 {
     class _1SnowballsSkill : SkillBase
     {
+        public static float snowballBaseDuration = 0.7f;
         public static GameObject snowballProjectilePrefab;
         public override string SkillName => "Cryo Bolt";
         public override string TOKEN_IDENTIFIER => "SNOWBALL";
@@ -33,7 +34,7 @@ namespace ArtificerExtended.Skills
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
             mustKeyPress: false,
-            stockToConsume: 1,
+            //stockToConsume: 1,
             requiredStock: 1,
             useAttackSpeedScaling: true
         );
