@@ -183,6 +183,11 @@ namespace ArtificerExtended.Skills
             {
                 GameObject.Destroy(uhhp);
             }
+            ProjectileOverlapLimitHits overlapLimitHits = icicleProjectilePrefab.GetComponent<ProjectileOverlapLimitHits>();
+            if (overlapLimitHits)
+            {
+                GameObject.Destroy(uhhp);
+            }
         }
 
         private void RegisterArmorEffects()
