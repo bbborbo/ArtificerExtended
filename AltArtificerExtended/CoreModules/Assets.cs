@@ -200,7 +200,7 @@ namespace ArtificerExtended.Modules
             Content.AddProjectilePrefab(proj);
             AltArtiPassive.lightningProjectile[meshInd] = proj;
         }
-        internal static GameObject CreateLightningSwordGhost(Int32 meshInd)
+        internal static GameObject CreateLightningSwordGhost(Int32 meshInd, bool isPreFire = false)
         {
             GameObject obj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/ProjectileGhosts/ElectricWormSeekerGhost").InstantiateClone("LightningBolt" + (isPreFire ? "Prefire" : "ProjectileGhost") + meshInd, false);
 
