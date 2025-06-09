@@ -21,7 +21,7 @@ namespace ArtificerExtended.States
 
         public float procCoefficient = 1.0f;
 
-        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage * 0.75f;
+        public static float damageCoefficient => _3LaserBoltsSkill.damageCoefficient;
 
         public float force = 20f;
 

@@ -225,9 +225,11 @@ namespace ArtificerExtended.Skills
             bombImpactExplosion.snowglobeProjectilePrefab = snowglobeProjectilePrefab;
             bombImpactExplosion.pc = bombController;
 
-            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Croco/CrocoSpitGhost.prefab").WaitForCompletion();
+            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MageIceBombGhost_prefab).WaitForCompletion();
             if (ghostPrefab/*_assetBundle.LoadAsset<GameObject>("HenryBombGhost")*/ != null)
+            {
                 bombController.ghostPrefab = ghostPrefab;//Assets.CreateProjectileGhostPrefab("HenryBombGhost");
+            }
 
             bombController.startSound = "";
             Content.AddProjectilePrefab(snowglobeDeployProjectilePrefab);

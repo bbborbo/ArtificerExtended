@@ -16,11 +16,12 @@ namespace ArtificerExtended.Skills
     {
         public static GameObject tracerLaser;
 
+        public static float damageCoefficient = 2.2f;
         int maxStock = 4;
         public override string SkillName => "Laser Bolts";
 
         public override string SkillDescription => $"Fire a long-range laser that <style=cIsUtility>chains lightning</style> " +
-            $"for <style=cIsDamage>2x{Tools.ConvertDecimal(FireLaserbolts.damageCoefficient)} damage</style>. " +
+            $"for <style=cIsDamage>2x{Tools.ConvertDecimal(damageCoefficient)} damage</style>. " +
             $"Hold up to 4, recharging all at once.";
 
         public override string TOKEN_IDENTIFIER => "LASERBOLTS";
