@@ -22,8 +22,8 @@ namespace ArtificerExtended.Skills
     class _1SnowballsSkill : SkillBase
     {
         const string CryoBoltHitBoxGroupName = "CryoBoltPierce";
-        [AutoConfig("Attack Base Duration", 0.8f)]
-        public static float snowballBaseDuration = 0.8f;
+        [AutoConfig("Attack Base Duration", 0.65f)]
+        public static float snowballBaseDuration = 0.65f;
         [AutoConfig("Attack Base Damage", 2.2f)]
         public static float snowballBaseDamage = 2.2f;
         [AutoConfig("Attack Proc Coefficient", 0.5f)]
