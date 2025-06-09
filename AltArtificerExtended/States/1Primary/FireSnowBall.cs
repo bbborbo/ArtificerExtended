@@ -14,6 +14,10 @@ namespace ArtificerExtended.States
 {
     public class FireSnowBall : FireFireBolt, SteppedSkillDef.IStepSetter
     {
+        public void SetStep(int i)
+        {
+            this.gauntlet = (Gauntlet)i;
+        }
         public static float damageCoeff = _1SnowballsSkill.snowballBaseDamage;//Mathf.Ceil((ArtificerExtendedPlugin.artiBoltDamage * 0.8f) * 10) / 10;
         public override void OnEnter()
         {
@@ -25,12 +29,16 @@ namespace ArtificerExtended.States
             this.attackSoundPitch = 10;
             if(VRStuff.VRInstalled)
                 VRStuff.AnimateVRHand(true, "Cast");
+            this.muzzleString = this.gauntlet == Gauntlet.Left ? "MuzzleLeft" : "MuzzleRight";
             base.OnEnter();
+            this.muzzleString = this.gauntlet == Gauntlet.Left ? "MuzzleLeft" : "MuzzleRight";
         }
         public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
         {
             base.ModifyProjectileInfo(ref fireProjectileInfo);
             fireProjectileInfo.damageTypeOverride = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Primary);
+            if (muzzleTransform != null)
+                fireProjectileInfo.position = muzzleTransform.position;
         }
     }
 }

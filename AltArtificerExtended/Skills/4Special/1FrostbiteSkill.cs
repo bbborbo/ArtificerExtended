@@ -124,7 +124,7 @@ namespace ArtificerExtended.Skills
         }
         public override SkillDef ModifyScepterSkill(SkillDef scepterSkillDef)
         {
-            scepterSkillDef.icon = LoadSpriteFromBundle("frostbitesketch1-2");
+            scepterSkillDef.icon = LoadSpriteFromBundle("PolarVortexSCEPTERAE");
             return scepterSkillDef;
         }
 

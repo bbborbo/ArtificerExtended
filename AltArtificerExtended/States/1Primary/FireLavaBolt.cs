@@ -1,5 +1,6 @@
 ﻿using ArtificerExtended.Skills;
 using EntityStates.Mage.Weapon;
+using RoR2.Projectile;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,10 @@ namespace ArtificerExtended.States
 {
     class FireLavaBolt : FireFireBolt, SteppedSkillDef.IStepSetter
     {
+        public void SetStep(int i)
+        {
+            this.gauntlet = (Gauntlet)i;
+        }
         public override void OnEnter()
         {
             this.projectilePrefab = _2LavaBoltsSkill.lavaProjectilePrefab;
@@ -20,7 +25,15 @@ namespace ArtificerExtended.States
             this.attackSoundPitch = 10;
             if (VRStuff.VRInstalled)
                 VRStuff.AnimateVRHand(true, "Cast");
+            this.muzzleString = this.gauntlet == Gauntlet.Left ? "MuzzleLeft" : "MuzzleRight";
             base.OnEnter();
+            this.muzzleString = this.gauntlet == Gauntlet.Left ? "MuzzleLeft" : "MuzzleRight";
+        }
+        public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
+        {
+            base.ModifyProjectileInfo(ref fireProjectileInfo);
+            if (muzzleTransform != null)
+                fireProjectileInfo.position = muzzleTransform.position;
         }
     }
 }

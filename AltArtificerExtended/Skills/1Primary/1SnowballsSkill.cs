@@ -11,7 +11,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static R2API.DamageAPI;
-using RoR2BepInExPack.GameAssetPaths;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using RoR2.ContentManagement;
 using RainrotSharedUtils.Components;
@@ -75,7 +74,7 @@ namespace ArtificerExtended.Skills
 
         public override void Hooks()
         {
-            AssetReferenceT<GameObject> refSnowballProjectile = new AssetReferenceT<GameObject>(RoR2_Junk_Mage.MageIceBolt_prefab);
+            AssetReferenceT<GameObject> refSnowballProjectile = new AssetReferenceT<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MageIceBolt_prefab);
             AssetAsyncReferenceManager<GameObject>.LoadAsset(refSnowballProjectile).Completed += LoadSnowballProjectile;
             //Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MageIceBolt_prefab).Completed += LoadSnowballProjectile;
         }
@@ -145,7 +144,7 @@ namespace ArtificerExtended.Skills
                 projectileOverlap.maximumOverlapTargets = 100;
                 projectileOverlap.fireFrequency = 60;
 
-                AssetReferenceT<GameObject> ref1 = new AssetReferenceT<GameObject>(RoR2_Junk_Mage.MuzzleflashMageIce_prefab);
+                AssetReferenceT<GameObject> ref1 = new AssetReferenceT<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageIce_prefab);
                 AssetAsyncReferenceManager<GameObject>.LoadAsset(ref1).Completed += (obj) => projectileOverlap.impactEffect = obj.Result;
                 //projectileOverlap.impactEffect = ;
 
@@ -161,7 +160,7 @@ namespace ArtificerExtended.Skills
                     psti.destroyOnWorld = true;
                     psti.destroyWhenNotAlive = true;
 
-                    AssetReferenceT<GameObject> ref2 = new AssetReferenceT<GameObject>(RoR2_Junk_Mage.MuzzleflashMageIce_prefab);
+                    AssetReferenceT<GameObject> ref2 = new AssetReferenceT<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageIce_prefab);
                     AssetAsyncReferenceManager<GameObject>.LoadAsset(ref2).Completed += (obj) => psti.impactEffect = obj.Result;
                     //psti.impactEffect = ;
                 }

@@ -26,7 +26,7 @@ namespace ArtificerExtended.Skills
         public static float rechargeInterval = 2f;
         public static float baseDuration = 0.2f;
 
-        public static float impactDamageCoefficient = 1.8f;
+        public static float impactDamageCoefficient = 2.1f;
         public static float impactProcCoefficient = 1.0f;
         public override string SkillName => "Lava Bolts";
 

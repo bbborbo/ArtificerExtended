@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ArtificerExtended.States
 {
@@ -22,6 +23,9 @@ namespace ArtificerExtended.States
         bool keyReleased;
         float armorAddStopwatch;
         float stopwatch;
+        int maxIcicles = _1FrostbiteSkill.icicleCount;
+        int currentIcicles = 0;
+        bool hasFiredIcicles => currentIcicles >= maxIcicles;
         public override void OnEnter()
         {
             base.OnEnter();
@@ -38,26 +42,15 @@ namespace ArtificerExtended.States
             {
                 orbitProjectileManager = outer.gameObject.AddComponent<SeekerController>();
             }
-            if(orbitProjectileManager != null)
-            {
-                FireProjectileInfo projectileInfo = new FireProjectileInfo
-                {
-                    projectilePrefab = _1FrostbiteSkill.icicleProjectilePrefab,
-                    owner = base.gameObject,
-                    damage = this.damageStat * _1FrostbiteSkill.icicleDamage,
-                    force = SoulSpiral.projectileForce,
-                    position = base.characterBody.corePosition,
-                    crit = Util.CheckRoll(this.critStat, base.characterBody.master)
-                };
-                orbitProjectileManager.FireSoulSpiral(projectileInfo);
-                orbitProjectileManager.FireSoulSpiral(projectileInfo);
-                orbitProjectileManager.FireSoulSpiral(projectileInfo);
-            }
             //ProjectileManager.instance.FireProjectile(SoulSpiral.projectilePrefab, )
         }
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (!hasFiredIcicles && NetworkServer.active)
+            {
+                FireIcicles();
+            }
             if (isAuthority)
             {
                 armorAddStopwatch += (ending ? Time.fixedDeltaTime * endingSpeedMultiplier : Time.fixedDeltaTime); 
@@ -87,6 +80,24 @@ namespace ArtificerExtended.States
                         base.PlayAnimation("Gesture, Additive", "PrepWall", "PrepWall.playbackRate", 0.3f / this.attackSpeedStat);
                     }
                 }
+            }
+        }
+
+        private void FireIcicles()
+        {
+            currentIcicles++;
+            if (orbitProjectileManager != null)
+            {
+                FireProjectileInfo projectileInfo = new FireProjectileInfo
+                {
+                    projectilePrefab = _1FrostbiteSkill.icicleProjectilePrefab,
+                    owner = base.gameObject,
+                    damage = this.damageStat * _1FrostbiteSkill.icicleDamage,
+                    force = SoulSpiral.projectileForce,
+                    position = base.characterBody.corePosition,
+                    crit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                };
+                orbitProjectileManager.FireSoulSpiral(projectileInfo);
             }
         }
 

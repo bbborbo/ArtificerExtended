@@ -74,8 +74,20 @@ namespace ArtificerExtended
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
 
 
-            AssetReferenceT<GameObject> refSnowballProjectile = new AssetReferenceT<GameObject>(RoR2_Base_Mage.MageIceBombProjectile_prefab);
-            AssetAsyncReferenceManager<GameObject>.LoadAsset(refSnowballProjectile).Completed += FixIceSpear;
+            AssetReferenceT<GameObject> ref1 = new AssetReferenceT<GameObject>(RoR2_Base_Mage.MageIceBombProjectile_prefab);
+            AssetAsyncReferenceManager<GameObject>.LoadAsset(ref1).Completed += FixIceSpear;
+
+            //On.RoR2.SeekerSoulSpiralManager.DiscoverUnassignedSpirals += FixSoulSpiralNRE;
+        }
+
+        private void FixSoulSpiralNRE(On.RoR2.SeekerSoulSpiralManager.orig_DiscoverUnassignedSpirals orig, SeekerSoulSpiralManager self)
+        {
+            if(self == null || self.seekerController == null || SoulSpiralProjectile.unassignedSoulSpirals == null || SoulSpiralProjectile.unassignedSoulSpirals.Count <= 0)
+            {
+                self.StopListeningForUnassignedSpirals();
+                return;
+            }    
+            orig(self);
         }
 
         private void FixIceSpear(AsyncOperationHandle<GameObject> iceSpearPrefab)

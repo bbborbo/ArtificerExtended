@@ -30,7 +30,7 @@ namespace ArtificerExtended.States
         public static float bulletRadius = 0.15f;
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
-        private int bulletCount;
+        private int bulletCount => bulletCountPoint + bulletCountSpread + bulletCountBuckshot;
         public static int bulletCountPoint = 1;
         public static int bulletCountSpread = 1;
         public static int bulletCountBuckshot = 2;
@@ -73,8 +73,6 @@ namespace ArtificerExtended.States
 
             if (ArtificerExtendedPlugin.isRiskyModLoaded)
                 FireSkill();
-
-            bulletCount = bulletCountPoint + bulletCountSpread + bulletCountBuckshot;
 
             base.AddRecoil(-1f * FireIceShard.recoilAmplitude, -2f * FireIceShard.recoilAmplitude, -0.5f * FireIceShard.recoilAmplitude, 0.5f * FireIceShard.recoilAmplitude);
             base.characterBody.AddSpreadBloom(FireIceShard.spreadBloomValue);

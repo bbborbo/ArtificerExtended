@@ -297,7 +297,7 @@ namespace ArtificerExtended.Modules
         public static float napalmDamageCoefficient = 0.25f;
         public static float napalmDuration = 3f;
         public static float napalmProcCoefficient = 0.25f;
-        public static float lavaPoolSize = 3;
+        public static float lavaPoolSize = 3.5f;
         public static GameObject lavaPoolPrefab;
         public static GameObject lavaProjectilePrefab;
         internal static void CreateLavaProjectile()
