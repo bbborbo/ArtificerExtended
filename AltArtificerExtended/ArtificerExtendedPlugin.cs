@@ -112,7 +112,7 @@ namespace ArtificerExtended
             if (mageObject && mageBody && mageSkillLocator)
             {
                 Modules.Skills.characterSkillLocators.Add("MageBody", mageSkillLocator);
-                Debug.Log("ARTIFICEREXTENDED setup succeeded!");
+                Log.Debug("AE Skill Setup succeeded!");
             }
 
             magePassive = CreateMagePassiveSlot(mageObject, mageSkillLocator);
@@ -122,7 +122,7 @@ namespace ArtificerExtended
             mageUtility = mageSkillLocator.utility.skillFamily;
             mageSpecial = mageSkillLocator.special.skillFamily;
 
-            Debug.Log("ArtificerExtended setup succeeded!");
+            Log.Debug("ArtificerExtended setup succeeded!");
 
             CreateMagePassives(magePassiveFamily);
             if (ShouldReworkIonSurge)
