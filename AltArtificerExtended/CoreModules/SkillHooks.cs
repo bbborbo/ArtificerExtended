@@ -29,6 +29,10 @@ using ArtificerExtended.States;
 using RoR2.Projectile;
 using RoR2.Orbs;
 using EntityStates;
+using RoR2BepInExPack.GameAssetPaths;
+using UnityEngine.AddressableAssets;
+using RoR2.ContentManagement;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ArtificerExtended
 {
@@ -68,6 +72,15 @@ namespace ArtificerExtended
             On.RoR2.SetStateOnHurt.SetFrozenInternal += FixSetFrozen;
 
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
+
+
+            AssetReferenceT<GameObject> refSnowballProjectile = new AssetReferenceT<GameObject>(RoR2_Base_Mage.MageIceBombProjectile_prefab);
+            AssetAsyncReferenceManager<GameObject>.LoadAsset(refSnowballProjectile).Completed += FixIceSpear;
+        }
+
+        private void FixIceSpear(AsyncOperationHandle<GameObject> iceSpearPrefab)
+        {
+            iceSpearPrefab.Result.layer = LayerIndex.projectileWorldOnly.intVal;
         }
 
         private void FixSetFrozen(On.RoR2.SetStateOnHurt.orig_SetFrozenInternal orig, SetStateOnHurt self, float duration)

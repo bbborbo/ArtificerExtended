@@ -117,7 +117,6 @@ namespace ArtificerExtended.Skills
                 childTransform = proximityDetonator.transform;
                 childTransform.localScale = Vector3.one * snowballHitBoxSize;
                 childTransform.localPosition = Vector3.zero;
-                childTransform.gameObject.layer = LayerIndex.projectile.intVal;
 
                 hitBox = childTransform.gameObject.AddComponent<HitBox>();
 
@@ -153,7 +152,6 @@ namespace ArtificerExtended.Skills
                 if(boxCollider != null)
                 {
                     boxCollider.gameObject.layer = LayerIndex.projectileWorldOnly.intVal;
-                    childTransform.gameObject.layer = LayerIndex.projectile.intVal;
 
                     ProjectileSingleTargetImpact psti = snowballProjectilePrefab.AddComponent<ProjectileSingleTargetImpact>();
                     psti.destroyOnWorld = true;
