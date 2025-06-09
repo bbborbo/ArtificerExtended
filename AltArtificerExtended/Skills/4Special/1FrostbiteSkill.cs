@@ -73,7 +73,7 @@ namespace ArtificerExtended.Skills
                 beginSkillCooldownOnSkillEnd: true,
                 fullRestockOnAssign: false
             );
-        public override Sprite Icon => LoadSpriteFromBundle("frostbitesketch1");
+        public override Sprite Icon => LoadSpriteFromBundle("PolarVortexAE");
         public override SkillSlot SkillSlot => SkillSlot.Special;
         public override InterruptPriority InterruptPriority => InterruptPriority.Skill;
         public override Type BaseSkillDef => typeof(SkillDef);
@@ -216,7 +216,7 @@ namespace ArtificerExtended.Skills
         {
             artiIceShield = Content.CreateAndAddBuff("bdArtiIceShield",
                 ArtificerExtendedPlugin.iconBundle.LoadAsset<Sprite>(ArtificerExtendedPlugin.iconsPath + "texBuffFrostbiteShield.png"),
-                Color.white,
+                Color.cyan,
                 true, false);
         }
 
