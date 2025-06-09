@@ -22,8 +22,12 @@ namespace ArtificerExtended.Skills
     class _1SnowballsSkill : SkillBase
     {
         const string CryoBoltHitBoxGroupName = "CryoBoltPierce";
-        [AutoConfig("Base Attack Duration", 0.8f)]
+        [AutoConfig("Attack Base Duration", 0.8f)]
         public static float snowballBaseDuration = 0.8f;
+        [AutoConfig("Attack Base Damage", 2.2f)]
+        public static float snowballBaseDamage = 2.2f;
+        [AutoConfig("Attack Proc Coefficient", 0.5f)]
+        public static float snowballProcCoeff = 0.5f;
         [AutoConfig("Pierce Hit Limit", 3)]
         public static int snowballPierceLimit = 3;
         [AutoConfig("Pierce Hitbox Size", 3f)]
@@ -96,7 +100,7 @@ namespace ArtificerExtended.Skills
             ProjectileController pc = snowballProjectilePrefab.GetComponent<ProjectileController>();
             if (pc)
             {
-                pc.procCoefficient = 0.75f;
+                pc.procCoefficient = snowballProcCoeff;
             }
 
 

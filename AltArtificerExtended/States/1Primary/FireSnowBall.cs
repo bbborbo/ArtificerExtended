@@ -14,13 +14,13 @@ namespace ArtificerExtended.States
 {
     public class FireSnowBall : FireFireBolt, SteppedSkillDef.IStepSetter
     {
-        public static float damageCoeff = ArtificerExtendedPlugin.artiBoltDamage;//Mathf.Ceil((ArtificerExtendedPlugin.artiBoltDamage * 0.8f) * 10) / 10;
+        public static float damageCoeff = _1SnowballsSkill.snowballBaseDamage;//Mathf.Ceil((ArtificerExtendedPlugin.artiBoltDamage * 0.8f) * 10) / 10;
         public override void OnEnter()
         {
             this.projectilePrefab = _1SnowballsSkill.snowballProjectilePrefab;
             this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
             this.damageCoefficient = damageCoeff;
-            this.baseDuration = 0.5f;
+            this.baseDuration = _1SnowballsSkill.snowballBaseDuration;
             this.attackSoundString = "Play_mage_shift_wall_build";
             this.attackSoundPitch = 10;
             if(VRStuff.VRInstalled)
