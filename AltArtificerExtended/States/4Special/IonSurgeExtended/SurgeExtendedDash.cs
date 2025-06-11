@@ -146,9 +146,11 @@ namespace ArtificerExtended.States
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (ArtificerExtendedPlugin.BodyHasAncientScepterItem(this.characterBody))
+                base.fixedAge -= Time.fixedDeltaTime * 0.3f;
 
             //begin flight after windup
-            if(!isInFlight && 
+            if (!isInFlight && 
                 base.fixedAge >= windupDuration && 
                 base.fixedAge < windupDuration + flightDuration)
             {
@@ -387,6 +389,8 @@ namespace ArtificerExtended.States
         }
         private float GetDamageBoostFromSpeed()
         {
+            if (ArtificerExtendedPlugin.BodyHasAncientScepterItem(this.characterBody))
+                return 2;
             return 1;
             return Mathf.Max(1f, base.characterBody.moveSpeed / base.characterBody.baseMoveSpeed);
         }

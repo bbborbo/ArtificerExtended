@@ -42,7 +42,7 @@ namespace ArtificerExtended.Skills
         public static int totalDrops => Mathf.CeilToInt(maxDistance / (CommonAssets.lavaPoolSize * 2)) + 1;
         public static float delayBetweenDrops => (maxDistance / totalDrops) / sloshProjectileSpeed;
         public static float durationBeforeGravity = maxDistance / sloshProjectileSpeed;
-        public override string SkillName => "Lava Bolts";
+        public override string SkillName => "Lava Bolt";
 
         public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Lob a molten projectile for " +
             $"<style=cIsDamage>{Tools.ConvertDecimal(pierceDamageCoefficient)} damage</style>, leaving a trail of " +

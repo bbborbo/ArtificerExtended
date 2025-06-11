@@ -197,14 +197,15 @@ namespace ArtificerExtended
             }
         }
 
+        public static string surgeFullDesc =
+            $"<style=cIsDamage>Stunning</style>. Surge forward, dealing " +
+                $"<style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.grazeDamageCoefficient)} damage</style> to enemies in your path. " +
+                $"Upon impact, create an explosion for <style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.impactDamageCoefficient)} damage</style>.";
         public void ModifyVanillaIonSurge(SkillDef surge)
         {
             Content.AddEntityState(typeof(States.SurgeExtendedDash));
             Content.AddEntityState(typeof(States.SurgeExtendedImpact));
-            LanguageAPI.Add("MAGE_SPECIAL_LIGHTNING_DESCRIPTION",
-                $"<style=cIsDamage>Stunning</style>. Surge forward, dealing " +
-                $"<style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.grazeDamageCoefficient)} damage</style> to enemies in your path. " +
-                $"Upon impact, create an explosion for <style=cIsDamage>{Tools.ConvertDecimal(SurgeExtendedDash.impactDamageCoefficient)} damage</style>.");
+            LanguageAPI.Add("MAGE_SPECIAL_LIGHTNING_DESCRIPTION", surgeFullDesc);
                 //"Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early.");
             surge.activationState = new SerializableEntityStateType(typeof(States.SurgeExtendedDash));
             surge.baseRechargeInterval = 8f;
@@ -213,7 +214,11 @@ namespace ArtificerExtended
 
         public void ModifyScepterSurge(SkillDef surge2)
         {
-            Debug.LogError("Scepter Surge Shit Not Available!!!!!!! Report to Borbo Immediatelly!!!!!!!!!!");
+            //Debug.LogError("Scepter Surge Shit Not Available!!!!!!! Report to Borbo Immediatelly!!!!!!!!!!");
+            LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_DESC",
+                surgeFullDesc +
+                "\n<color=#d299ff>SCEPTER: 30% longer flight time, 200% impact damage.</color>");
+            surge2.activationState = new SerializableEntityStateType(typeof(States.SurgeExtendedDash));
             //Content.AddEntityState(typeof(States.AlternateIonSurge2));
             //
             //LanguageAPI.Add("MAGE_ANTISURGE_LIGHTNING_NAME", "Antimatter Surge");
@@ -221,7 +226,6 @@ namespace ArtificerExtended
             //    "Burst forward up to 3 times. <style=cIsDamage>Can attack while dashing.</style> Trigger again to cancel early." +
             //    "\n<color=#d299ff>SCEPTER: Each burst reduces ALL cooldowns.</color>");
             //
-            //surge2.activationState = new SerializableEntityStateType(typeof(States.AlternateIonSurge2));
             //surge2.baseRechargeInterval = 8f;
             //surge2.skillDescriptionToken = "MAGE_ANTISURGE_LIGHTNING_DESC";
             //surge2.skillNameToken = "MAGE_ANTISURGE_LIGHTNING_NAME";

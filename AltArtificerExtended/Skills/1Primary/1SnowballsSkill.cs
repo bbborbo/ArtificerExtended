@@ -38,7 +38,7 @@ namespace ArtificerExtended.Skills
         [AutoConfig("Pierce Damage Decay (Later Hits)", "1.0 means pierce damage will not continue to decay after the first hit.", 1.0f)]
         public static float snowballPierceDamageDecay = 1.0f;
         public static GameObject snowballProjectilePrefab;
-        public override string SkillName => "Frost Bolts";
+        public override string SkillName => "Frost Bolt";
         public override string TOKEN_IDENTIFIER => "SNOWBALL";
 
         public override string SkillDescription => $"<style=cIsUtility>Frost</style>. " +
