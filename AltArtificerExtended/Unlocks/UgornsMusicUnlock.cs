@@ -16,7 +16,7 @@ namespace ArtificerExtended.Unlocks
 
         public override string AchievementName => "Artificer: Ugorn\u2019s Music";
 
-        public override string AchievementDesc => $"As Artificer, (with at least one Lightning ability equipped) obtain a Charged Perforator and Royal Capacitor, OR become an aspect of lightning.";
+        public override string AchievementDesc => $"As Artificer, with at least one Lightning ability equipped, obtain a Charged Perforator and Royal Capacitor, OR become an aspect of lightning.";
 
         #region implementation
         private Inventory currentInventory;

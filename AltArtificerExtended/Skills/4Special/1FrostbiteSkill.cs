@@ -140,6 +140,9 @@ namespace ArtificerExtended.Skills
             if(buffCount > 0)
             {
                 args.armorAdd += 100;
+                if (ArtificerExtendedPlugin.BodyHasAncientScepterItem(sender))
+                    args.armorAdd += 100;
+
                 if (buffCount < buffsForZeroMovementIncrease)
                     args.moveSpeedMultAdd += 0.12f * (buffsForZeroMovementIncrease - buffCount);
                 else if (buffCount > buffsForZeroMovementIncrease)

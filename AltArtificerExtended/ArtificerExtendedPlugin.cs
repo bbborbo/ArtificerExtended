@@ -58,7 +58,7 @@ namespace ArtificerExtended
         public const string guid = "com." + teamName + "." + modName;
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
-        public const string version = "4.0.0";
+        public const string version = "4.0.9";
         public static ArtificerExtendedPlugin instance;
 
         public static AssetBundle iconBundle => Tools.mainAssetBundle;
@@ -146,6 +146,22 @@ namespace ArtificerExtended
             new ContentPacks().Initialize();
             //VRStuff.SetupVR();
         }
+
+        public static bool BodyHasAncientScepterItem(CharacterBody body)
+        {
+            if (!body || !body.inventory)
+                return false;
+            if (!isScepterLoaded)
+                return false;
+            return _BodyHasAncientScepterItem(body);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private static bool _BodyHasAncientScepterItem(CharacterBody body)
+        {
+            return body.inventory.GetItemCount(AncientScepter.AncientScepterItem.instance.ItemDef) > 0;
+        }
+
         private void InitializeContent()
         {
             Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();

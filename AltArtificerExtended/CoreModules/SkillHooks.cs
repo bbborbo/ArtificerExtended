@@ -70,6 +70,8 @@ namespace ArtificerExtended
             GetStatCoefficients += MeltAttackSpeedBuff;
             On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
             On.RoR2.SetStateOnHurt.SetFrozenInternal += FixSetFrozen;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffIndex_float += FixFrostStacks;
+            On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += FixFrostStacks2;
 
             On.RoR2.GlobalEventManager.OnHitAll += ChainLightningHook;
 
@@ -78,6 +80,24 @@ namespace ArtificerExtended
             AssetAsyncReferenceManager<GameObject>.LoadAsset(ref1).Completed += FixIceSpear;
 
             //On.RoR2.SeekerSoulSpiralManager.DiscoverUnassignedSpirals += FixSoulSpiralNRE;
+        }
+
+        private void FixFrostStacks2(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
+        {
+            if (self.healthComponent.isInFrozenState && buffDef == DLC2Content.Buffs.Frost)
+            {
+                return;
+            }
+            orig(self, buffDef, duration);
+        }
+
+        private void FixFrostStacks(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffIndex_float orig, CharacterBody self, BuffIndex buffDef, float duration)
+        {
+            if (self.healthComponent.isInFrozenState && buffDef == DLC2Content.Buffs.Frost.buffIndex)
+            {
+                return;
+            }
+            orig(self, buffDef, duration);
         }
 
         private void FixSoulSpiralNRE(On.RoR2.SeekerSoulSpiralManager.orig_DiscoverUnassignedSpirals orig, SeekerSoulSpiralManager self)
@@ -207,9 +227,9 @@ namespace ArtificerExtended
                 {
                     CharacterBody aBody = damageReport.attackerBody;
                     CharacterBody vBody = damageReport.victimBody;
-                    if (vBody && aBody && vBody.healthComponent)
+                    if (vBody && aBody && vBody.healthComponent && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out var passive))
                     {
-                        Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice);
+                        Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
 
                         int chillDebuffCount = vBody.GetBuffCount(DLC2Content.Buffs.Frost);
                         if(vBody.healthComponent.isInFrozenState)

@@ -25,8 +25,8 @@ namespace ArtificerExtended.Skills
         public static float maxBlastDamage = 8f;
         public static float minBlastRadius = 6f;
         public static float maxBlastRadius = 9f;
-        public static int minClusterProjectiles = 2;
-        public static int maxClusterProjectiles = 6;
+        public static int minClusterProjectiles = 3;
+        public static int maxClusterProjectiles = 8;
         public static float clusterProjectileDamage = 3f;
         public override string SkillName => "Focused Nano-Eruption";
 

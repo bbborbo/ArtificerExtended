@@ -19,7 +19,11 @@ namespace ArtificerExtended.Unlocks
 
         public UnlockBase()
         {
-            if (instance != null) throw new InvalidOperationException("Singleton class \"" + typeof(T).Name + "\" inheriting UnlockBase was instantiated twice");
+            if (instance != null)
+            {
+                Log.Error("Singleton class \"" + typeof(T).Name + "\" inheriting UnlockBase was instantiated twice");
+                return;
+            }
             instance = this as T;
         }
     }

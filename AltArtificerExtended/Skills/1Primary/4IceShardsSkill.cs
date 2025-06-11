@@ -24,7 +24,7 @@ namespace ArtificerExtended.Skills
         float totalShards = FireIceShard.bulletCountBuckshot + FireIceShard.bulletCountPoint + FireIceShard.bulletCountSpread;
         public override string SkillDescription => $"<style=cIsUtility>Frost</style>. Fire a blast of ice shards for " +
             $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(FireIceShard.damageCoefficient / totalShards)} damage</style> total. " +
-            $"Hold up to 4.";
+            $"Hold up to 2.";
 
         public override string TOKEN_IDENTIFIER => "ICESHARDS";
 
@@ -37,8 +37,8 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         ( 
-            baseMaxStock: 4,
-            rechargeStock: ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1,
+            baseMaxStock: 2,
+            rechargeStock: 1,//ArtificerExtendedPlugin.isRiskyModLoaded ? 0 : 1,
             useAttackSpeedScaling: true
         );
         public override Sprite Icon => LoadSpriteFromBundle("IceShardsIcon");

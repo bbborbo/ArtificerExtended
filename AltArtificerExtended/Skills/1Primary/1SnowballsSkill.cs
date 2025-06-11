@@ -21,27 +21,29 @@ namespace ArtificerExtended.Skills
     class _1SnowballsSkill : SkillBase
     {
         const string CryoBoltHitBoxGroupName = "CryoBoltPierce";
-        [AutoConfig("Attack Base Duration", 0.65f)]
-        public static float snowballBaseDuration = 0.65f;
-        [AutoConfig("Attack Base Damage", 2.2f)]
-        public static float snowballBaseDamage = 2.2f;
+        [AutoConfig("Attack Velocity", "Vanilla bolts are 80", 60f)]
+        public static float snowballVelocity = 60f;
+        [AutoConfig("Attack Base Duration", 0.3f)]
+        public static float snowballBaseDuration = 0.3f;
+        [AutoConfig("Attack Base Damage", 2.8f)]
+        public static float snowballBaseDamage = 2.8f;
         [AutoConfig("Attack Proc Coefficient", 0.5f)]
         public static float snowballProcCoeff = 0.5f;
         [AutoConfig("Pierce Hit Limit", 3)]
         public static int snowballPierceLimit = 3;
-        [AutoConfig("Pierce Hitbox Size", 3f)]
-        public static float snowballHitBoxSize = 3f;
+        [AutoConfig("Pierce Hitbox Size", 2.5f)]
+        public static float snowballHitBoxSize = 2.5f;
         [AutoConfig("Pierce Damage Decay (First Hit)", 0.5f)]
         public static float snowballPierceDamageDecayFirstHit = 0.5f;
         [AutoConfig("Pierce Damage Decay (Later Hits)", "1.0 means pierce damage will not continue to decay after the first hit.", 1.0f)]
         public static float snowballPierceDamageDecay = 1.0f;
         public static GameObject snowballProjectilePrefab;
-        public override string SkillName => "Cryo Bolt";
+        public override string SkillName => "Frost Bolts";
         public override string TOKEN_IDENTIFIER => "SNOWBALL";
 
         public override string SkillDescription => $"<style=cIsUtility>Frost</style>. " +
             $"Fire a bolt for <style=cIsDamage>{Tools.ConvertDecimal(FireSnowBall.damageCoeff)} damage</style> " +
-            $"that pierces up to <style=cIsUtility>{snowballPierceLimit}</style> times.";
+            $"that pierces up to <style=cIsUtility>{snowballPierceLimit}</style> times. Hold up to 4.";
 
         public override Sprite Icon => LoadSpriteFromBundle("frostbolt");
 
@@ -53,8 +55,9 @@ namespace ArtificerExtended.Skills
 
         public override SimpleSkillData SkillData => new SimpleSkillData
         (
-            stockToConsume: 0,
-            //requiredStock: 1,
+            stockToConsume: 1,
+            requiredStock: 1,
+            baseMaxStock: 4,
             //useAttackSpeedScaling: true,
             mustKeyPress: false
         );
@@ -62,7 +65,7 @@ namespace ArtificerExtended.Skills
 
         public override Type BaseSkillDef => typeof(SteppedSkillDef);
 
-        public override float BaseCooldown => 0.5f;
+        public override float BaseCooldown => 1.2f;
         public override Type RequiredUnlock => typeof(FreezeManySimultaneousUnlock);
 
         public override void Init()
@@ -93,7 +96,7 @@ namespace ArtificerExtended.Skills
             ProjectileSimple ps = snowballProjectilePrefab.GetComponent<ProjectileSimple>();
             if (ps)
             {
-                ps.desiredForwardSpeed = 80f;
+                ps.desiredForwardSpeed = snowballVelocity;
             }
             ProjectileDamage pd = snowballProjectilePrefab.GetComponent<ProjectileDamage>();
             ProjectileController pc = snowballProjectilePrefab.GetComponent<ProjectileController>();

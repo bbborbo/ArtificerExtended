@@ -20,7 +20,7 @@ namespace ArtificerExtended.Skills
 
         public override string TOKEN_IDENTIFIER => "TEMPDROP";
 
-        public override Type RequiredUnlock => (typeof(FreezeManySimultaneousUnlock));
+        public override Type RequiredUnlock => null;// (typeof(FreezeManySimultaneousUnlock));
 
         public override MageElement Element => MageElement.Ice;
 

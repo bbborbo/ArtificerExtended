@@ -56,6 +56,7 @@ namespace ArtificerExtended.Modules
             AddAAKeywords();
 
             CreateLavaPool();
+            CreateLavaImpactEffect();
             CreateLavaProjectile();
             CreateLightningPreFire();
             CreateLightningSwords();
@@ -297,21 +298,35 @@ namespace ArtificerExtended.Modules
         public static float napalmDamageCoefficient = 0.25f;
         public static float napalmDuration = 3f;
         public static float napalmProcCoefficient = 0.25f;
-        public static float lavaPoolSize = 3.5f;
+        public static float lavaPoolSize = 3f;
         public static GameObject lavaPoolPrefab;
         public static GameObject lavaProjectilePrefab;
-        internal static void CreateLavaProjectile()
-        {
-            lavaProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("862783bd9da988641bbcdc1606415b09").WaitForCompletion().InstantiateClone("MageLavaProjectile", true); //beetlequeenspit.prefab
-            GameObject lavaPoolGhostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Drones/PaladinRocketGhost.prefab").WaitForCompletion().InstantiateClone("MageLavaProjectileGhost", false);
+        public static GameObject lavaImpactEffect;
 
+        private static void CreateLavaImpactEffect()
+        {
+            GameObject orig = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_BeetleQueen.BeetleSpitExplosion_prefab).WaitForCompletion();
+
+            lavaImpactEffect = orig.InstantiateClone("LavaPoolImpact", false); //beetlespitexplosion
             Color napalmColor = new Color32(255, 40, 0, 255);
-            GameObject lavaImpactEffect = Addressables.LoadAssetAsync<GameObject>("e184c0c8bc862ff40b9fd07db0b8e98c").WaitForCompletion().InstantiateClone("NapalmSpitExplosion", false); //beetlespitexplosion
             Tools.GetParticle(lavaImpactEffect, "Bugs", Color.clear);
             Tools.GetParticle(lavaImpactEffect, "Flames", napalmColor);
             Tools.GetParticle(lavaImpactEffect, "Flash", Color.yellow);
             Tools.GetParticle(lavaImpactEffect, "Distortion", napalmColor);
             Tools.GetParticle(lavaImpactEffect, "Ring, Mesh", Color.yellow);
+
+            Transform distortion = lavaImpactEffect.transform.Find("Distortion");
+            if (distortion)
+            {
+                GameObject.Destroy(distortion);
+            }
+
+            Content.CreateAndAddEffectDef(lavaImpactEffect);
+        }
+        internal static void CreateLavaProjectile()
+        {
+            GameObject orig = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_BeetleQueen.BeetleQueenSpit_prefab).WaitForCompletion();
+            lavaProjectilePrefab = orig.InstantiateClone("MageLavaProjectile", true); //beetlequeenspit.prefab
 
             ProjectileImpactExplosion pieNapalm = lavaProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pieNapalm && lavaPoolPrefab != null)
@@ -326,12 +341,22 @@ namespace ArtificerExtended.Modules
             }
 
             ProjectileController pc = lavaProjectilePrefab.GetComponent<ProjectileController>();
-            pc.ghostPrefab = lavaPoolGhostPrefab;
+            if (pc)
+            {
+                Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Drones.PaladinRocketGhost_prefab).Completed += 
+                    (ctx) => pc.ghostPrefab = ctx.Result;
+                //GameObject lavaPoolGhostPrefab = .WaitForCompletion().InstantiateClone("MageLavaProjectileGhost", false);
+                //pc.ghostPrefab = lavaPoolGhostPrefab;
+            }
 
             ProjectileDamage pd = lavaProjectilePrefab.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.IgniteOnHit;
 
-            Content.CreateAndAddEffectDef(lavaImpactEffect);
+            ProjectileSimple ps = lavaProjectilePrefab.GetComponent<ProjectileSimple>();
+            ps.desiredForwardSpeed = 0;
+
+            lavaProjectilePrefab.gameObject.layer = LayerIndex.projectileWorldOnly.intVal;
+
             Content.AddProjectilePrefab(lavaProjectilePrefab);
         }
         internal static void CreateLavaPool()

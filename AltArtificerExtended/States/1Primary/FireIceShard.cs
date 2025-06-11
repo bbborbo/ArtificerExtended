@@ -23,11 +23,11 @@ namespace ArtificerExtended.States
         public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
         public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
-        public static float damageCoefficient = ArtificerExtendedPlugin.artiBoltDamage + 1.4f;
+        public static float damageCoefficient = 5.6f;
         public static float procCoefficientPoint = 0.5f;
         public static float procCoefficientSpread = 0.7f;
         public static float procCoefficientBuckshot = 0.7f;
-        public static float bulletRadius = 0.15f;
+        public static float bulletRadius = 0.2f;
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount => bulletCountPoint + bulletCountSpread + bulletCountBuckshot;
@@ -35,7 +35,7 @@ namespace ArtificerExtended.States
         public static int bulletCountSpread = 1;
         public static int bulletCountBuckshot = 2;
 
-        public float baseDuration = 0.3f;
+        public float baseDuration = 0.5f;
         private float duration;
         public static float attackSpeedAltAnimationThreshold = FireFireBolt.attackSpeedAltAnimationThreshold;
 
@@ -71,8 +71,8 @@ namespace ArtificerExtended.States
         {
             base.OnEnter();
 
-            if (ArtificerExtendedPlugin.isRiskyModLoaded)
-                FireSkill();
+            //if (ArtificerExtendedPlugin.isRiskyModLoaded)
+            //    FireSkill();
 
             base.AddRecoil(-1f * FireIceShard.recoilAmplitude, -2f * FireIceShard.recoilAmplitude, -0.5f * FireIceShard.recoilAmplitude, 0.5f * FireIceShard.recoilAmplitude);
             base.characterBody.AddSpreadBloom(FireIceShard.spreadBloomValue);
@@ -189,12 +189,12 @@ namespace ArtificerExtended.States
                     procCoefficientPoint, BulletAttack.FalloffModel.None, crit, true).Fire();
 
                 //spread
-                CreateIceShardSpread(20, aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
+                CreateIceShardSpread(100, aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
                     (uint)((FireIceShard.bulletCountSpread > 0) ? FireIceShard.bulletCountSpread : 0), 
                     procCoefficientSpread, BulletAttack.FalloffModel.DefaultBullet, crit, true).Fire();
 
                 //buckshot
-                CreateIceShardSpread(50, aimRay, baseSpread * spreadShotFraction, baseSpread, 
+                CreateIceShardSpread(100, aimRay, baseSpread * spreadShotFraction, baseSpread, 
                     (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0), 
                     procCoefficientBuckshot, BulletAttack.FalloffModel.Buckshot, crit, false).Fire();
             }

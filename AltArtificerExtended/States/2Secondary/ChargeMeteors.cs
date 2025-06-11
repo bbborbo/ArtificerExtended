@@ -262,7 +262,7 @@ namespace ArtificerExtended.States
                 int projectiles = Mathf.FloorToInt(Util.Remap(chargeProgress, minChargeDuration / maxChargeDuration, 1, minProjectiles, maxProjectiles));
                 for(int i = 0; i < projectiles; i++)
                 {
-                    Vector3 forward = Util.ApplySpread(aimNormal, 20, 70, 1, 1);
+                    Vector3 forward = (UnityEngine.Random.insideUnitSphere + aimNormal).normalized;
                     ProjectileManager.instance.FireProjectile(new FireProjectileInfo
                     {
                         projectilePrefab = CommonAssets.lavaProjectilePrefab,

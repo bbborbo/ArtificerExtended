@@ -1,4 +1,5 @@
 ﻿using ArtificerExtended.Skills;
+using EntityStates;
 using EntityStates.Mage.Weapon;
 using RoR2.Projectile;
 using RoR2.Skills;
@@ -17,9 +18,9 @@ namespace ArtificerExtended.States
         }
         public override void OnEnter()
         {
-            this.projectilePrefab = _2LavaBoltsSkill.lavaProjectilePrefab;
+            this.projectilePrefab = _2LavaBoltsSkill.sloshProjectilePrefab;
             this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
-            this.damageCoefficient = _2LavaBoltsSkill.impactDamageCoefficient;
+            this.damageCoefficient = _2LavaBoltsSkill.damageCoefficient;
             this.baseDuration = _2LavaBoltsSkill.baseDuration;
             this.attackSoundString = "Play_mage_shift_wall_build";
             this.attackSoundPitch = 10;
@@ -34,6 +35,12 @@ namespace ArtificerExtended.States
             base.ModifyProjectileInfo(ref fireProjectileInfo);
             if (muzzleTransform != null)
                 fireProjectileInfo.position = muzzleTransform.position;
+        }
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            if (this.fixedAge <= this.duration * 0.2f)
+                return InterruptPriority.PrioritySkill;
+            return base.GetMinimumInterruptPriority();
         }
     }
 }

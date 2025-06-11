@@ -37,6 +37,8 @@ namespace ArtificerExtended.States
 
             // add ice armor
             AddIceArmorBuff();
+            if (ArtificerExtendedPlugin.BodyHasAncientScepterItem(this.characterBody))
+                currentIcicles -= 3;
             // create spiral projectiles
             if(!outer.gameObject.TryGetComponent(out orbitProjectileManager))
             {

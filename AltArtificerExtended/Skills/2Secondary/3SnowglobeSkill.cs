@@ -36,7 +36,7 @@ namespace ArtificerExtended.Skills
         public static float snowWardRadius = 10f;
         public static float damageCoefficientPerSecond = 0.5f;
         public static float procCoefficientPerTick = 1f;
-        public static float damageTicksPerSecond = 0.5f;
+        public static float damageInterval = 1f;
         public static int chillStacksPerSnowglobe = 2;
         public static float projectileBaseSpeed = 120f;
 
@@ -173,8 +173,8 @@ namespace ArtificerExtended.Skills
                     //buffWard.rangeIndicator = verticalWard ? encourageWardIndicator.transform : buffWard.rangeIndicator;
                     buffWard.radius = snowWardRadius;
                     buffWard.buffDef = Addressables.LoadAssetAsync<BuffDef>("7f3ccdb51063fc0439ba0f7bd64c4679").WaitForCompletion();//bdfrost.asset;
-                    buffWard.buffDuration = damageTicksPerSecond * chillStacksPerSnowglobe;
-                    buffWard.interval = damageTicksPerSecond;
+                    buffWard.buffDuration = damageInterval * chillStacksPerSnowglobe;
+                    buffWard.interval = damageInterval;
                     buffWard.expireDuration = 9999;
                     buffWard.shape = BuffWard.BuffWardShape.Sphere;
                     buffWard.invertTeamFilter = true;

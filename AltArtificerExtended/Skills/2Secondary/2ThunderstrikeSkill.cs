@@ -64,7 +64,7 @@ namespace ArtificerExtended.Skills
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTTHUNDERDASH";
             CommonAssets.AddResonantKeyword(resonantKeywordToken, "Pulse Conduit",
-                $"If only <style=cIsDamage>Lightning</style> abilities are equipped, striking an enemy reduces {SkillName} cooldown by style=cIsUtility>{resonantCdrFirst} seconds</style>" +
+                $"If only <style=cIsDamage>Lightning</style> abilities are equipped, striking an enemy reduces {SkillName} cooldown by <style=cIsUtility>{resonantCdrFirst} second</style>" +
                 $"plus <style=cIsUtility>{resonantCdr} seconds</style> for every additional enemy (up to <style=cIsUtility>{resonantCdrMax}</style> times).");
             KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_STUNNING" };
 
