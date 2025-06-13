@@ -51,14 +51,15 @@ namespace ArtificerExtended
     [BepInDependency("com.RiskyLives.RiskyMod", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(JetHack.JetHackPlugin.guid, BepInDependency.DependencyFlags.SoftDependency)]
-    [R2APISubmoduleDependency(nameof(UnlockableAPI), nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI), nameof(DamageAPI), nameof(DeployableAPI))]
+    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI), nameof(UnlockableAPI),
+        nameof(SkillsAPI), nameof(DamageAPI), nameof(RecalculateStatsAPI), nameof(DeployableAPI))]
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin
     {
         public const string guid = "com." + teamName + "." + modName;
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
-        public const string version = "4.0.9";
+        public const string version = "4.0.10";
         public static ArtificerExtendedPlugin instance;
 
         public static AssetBundle iconBundle => Tools.mainAssetBundle;
@@ -99,11 +100,12 @@ namespace ArtificerExtended
         {
             instance = this;
 
+            Log.Init(Logger);
             Modules.Config.Init();
             InitializeConfig();
-            Log.Init(Logger);
-
             Modules.Language.Init();
+            Modules.CommonAssets.Init();
+            AddHooks();
 
             mageObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
             mageObject.AddComponent<ElementCounter>();
@@ -136,9 +138,6 @@ namespace ArtificerExtended
                 artiNanoDamage = 12f;
                 artiUtilCooldown = 8f;
             }
-
-            Modules.CommonAssets.Init();
-            AddHooks();
             this.ArtiChanges();
             InitializeContent();
             On.RoR2.CharacterMaster.OnBodyStart += AddAEBodyFX;
@@ -344,6 +343,7 @@ namespace ArtificerExtended
 
         private void InitializeConfig()
         {
+            return;
             ShouldReworkIonSurge = ConfigManager.DualBind<bool>("(A0) ArtificerExtended : Ion Surge", "Enable Ion Surge Rework", true,
                 "Determines whether Ion Surge gets reworked. Note that vanilla Ion Surge is INCOMPATIBLE with ALL alt-passives. Use at your own risk.");
         }
