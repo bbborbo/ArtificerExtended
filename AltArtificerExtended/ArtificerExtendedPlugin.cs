@@ -59,7 +59,7 @@ namespace ArtificerExtended
         public const string guid = "com." + teamName + "." + modName;
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
-        public const string version = "4.0.14";
+        public const string version = "4.0.15";
         public static ArtificerExtendedPlugin instance;
 
         public static AssetBundle iconBundle => Tools.mainAssetBundle;
