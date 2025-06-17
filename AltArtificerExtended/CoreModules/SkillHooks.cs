@@ -69,6 +69,7 @@ namespace ArtificerExtended
             //OnMaxChill += FrostNovaOnMaxChill;
             GetStatCoefficients += MeltAttackSpeedBuff;
             On.EntityStates.FrozenState.OnEnter += FrostNovaOnFreeze;
+            On.EntityStates.FrozenState.FixedUpdate += RemoveFrostWhileFrozen;
             On.RoR2.SetStateOnHurt.SetFrozenInternal += FixSetFrozen;
             On.RoR2.CharacterBody.AddTimedBuff_BuffIndex_float += FixFrostStacks;
             On.RoR2.CharacterBody.AddTimedBuff_BuffDef_float += FixFrostStacks2;
@@ -80,6 +81,15 @@ namespace ArtificerExtended
             AssetAsyncReferenceManager<GameObject>.LoadAsset(ref1).Completed += FixIceSpear;
 
             //On.RoR2.SeekerSoulSpiralManager.DiscoverUnassignedSpirals += FixSoulSpiralNRE;
+        }
+
+        private void RemoveFrostWhileFrozen(On.EntityStates.FrozenState.orig_FixedUpdate orig, FrozenState self)
+        {
+            if (self.characterBody)
+            {
+                self.characterBody.SetBuffCount(DLC2Content.Buffs.Frost.buffIndex, 0);
+            }
+            orig(self);
         }
 
         private void FixFrostStacks2(On.RoR2.CharacterBody.orig_AddTimedBuff_BuffDef_float orig, CharacterBody self, BuffDef buffDef, float duration)
@@ -136,10 +146,13 @@ namespace ArtificerExtended
             {
                 CharacterBody attackerBody = null;
                 GameObject lastHitAttacker = self.healthComponent.lastHitAttacker;
+                bool crit = false;
                 if (lastHitAttacker)
                     attackerBody = lastHitAttacker.GetComponent<CharacterBody>();
+                if (attackerBody)
+                    crit = Util.CheckRoll(attackerBody.crit, attackerBody.master);
 
-                FrostNovaOnMaxChill(attackerBody, self.characterBody);
+                FrostNovaOnMaxChill(attackerBody, self.characterBody, crit);
             }
 
             orig(self);
@@ -246,7 +259,7 @@ namespace ArtificerExtended
                             if (Util.CheckRoll(procChanceFraction * 100, damageReport.attackerMaster))
                             {
                                 //Arctic Blast
-                                AltArtiPassive.DoNova(aBody, icePower, damageReport.victim.transform.position, chillDebuffCount);
+                                AltArtiPassive.DoArcticBlast(aBody, icePower, damageReport.victim.transform.position, damageReport.damageInfo.crit, chillDebuffCount);
                             }
                         }
                         #region old stuff
@@ -311,13 +324,14 @@ namespace ArtificerExtended
                 x => x.MatchCallOrCallvirt<SetStateOnHurt>(nameof(SetStateOnHurt.SetFrozen)));
             if (b)
             {
+                c.Emit(OpCodes.Ldarg_0, 0); //damageInfo
                 c.Emit(OpCodes.Ldloc, 0); //attackerBody
                 c.Emit(OpCodes.Ldloc, 1); //victimBody
-                c.EmitDelegate<Action<CharacterBody, CharacterBody>>((attackerBody, victimBody) =>
+                c.EmitDelegate<Action<DamageInfo, CharacterBody, CharacterBody>>((damageInfo, attackerBody, victimBody) =>
                 {
                     if (NetworkServer.active)
                     {
-                        FrostNovaOnMaxChill(attackerBody, victimBody);
+                        FrostNovaOnMaxChill(attackerBody, victimBody, damageInfo.crit);
                     }
                 });
             }
@@ -326,14 +340,14 @@ namespace ArtificerExtended
             }
         }
 
-        private static void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody)
+        private static void FrostNovaOnMaxChill(CharacterBody aBody, CharacterBody vBody, bool isCrit)
         {
             if (aBody != null && AltArtiPassive.instanceLookup.TryGetValue(aBody.gameObject, out AltArtiPassive passive))
             {
                 Power icePower = GetPowerLevelFromBody(aBody.gameObject, MageElement.Ice, passive);
                 if (icePower > Power.None) //Arctic Blast
                 {
-                    AltArtiPassive.DoNova(aBody, icePower, vBody.corePosition);
+                    AltArtiPassive.DoArcticBlast(aBody, icePower, vBody.corePosition, isCrit);
                 }
             }
         }
@@ -370,7 +384,7 @@ namespace ArtificerExtended
             if (this.flamethrowerContext.ContainsKey(self))
             {
                 FlamethrowerContext context = this.flamethrowerContext[self];
-                context.timer += Time.fixedDeltaTime * context.passive.ext_attackSpeedStat;
+                context.timer += Time.fixedDeltaTime * context.passive.attackSpeedStat;
                 Int32 count = 0;
                 while (context.timer >= context.passive.ext_flamethrowerInterval && count <= context.passive.ext_flamethrowerMaxPerTick)
                 {

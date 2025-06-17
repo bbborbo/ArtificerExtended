@@ -16,6 +16,7 @@ namespace ArtificerExtended.States
     {
         internal bool continuing = false;
         internal bool addedFallImmunity = false;
+        internal bool crit = false;
         public GenericSkill activatorSkillSlot { get; set; }
 
         protected virtual void SetNextState()
@@ -88,6 +89,12 @@ namespace ArtificerExtended.States
 
         public void InflictSnow()
         {
+            float damage = characterBody.damage * _1FrostbiteSkill.blizzardDamageCoefficient;
+            RainrotSharedUtils.Frost.FrostUtilsModule.CreateIceBlast(characterBody,
+                FlyUpState.blastAttackForce, damage, _1FrostbiteSkill.blizzardProcCoefficient,
+                _1FrostbiteSkill.blizzardRadius, this.crit, base.transform.position, true, DamageSource.Special);
+
+            return;
             EffectManager.SpawnEffect(_1FrostbiteSkill.novaEffectPrefab, new EffectData
             {
                 origin = base.transform.position,
@@ -98,7 +105,7 @@ namespace ArtificerExtended.States
             blastAttack.procCoefficient = _1FrostbiteSkill.blizzardProcCoefficient;
             blastAttack.position = base.transform.position;
             blastAttack.attacker = base.gameObject;
-            blastAttack.crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
+            blastAttack.crit = crit;
             blastAttack.baseDamage = base.characterBody.damage * _1FrostbiteSkill.blizzardDamageCoefficient;
             blastAttack.falloffModel = BlastAttack.FalloffModel.None;
             blastAttack.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);

@@ -18,12 +18,26 @@ namespace ArtificerExtended.Skills
         public static GameObject tracerShotgun;
         public static GameObject tracerBuckshot;
 
+        public static float damageCoefficient = 6.4f;
+        public static float procCoefficientPoint = 0.5f;
+        public static float procCoefficientSpread = 0.7f;
+        public static float procCoefficientBuckshot = 0.7f;
+        public static float bulletRadius = 0.3f;
+
+        public static int bulletCountPoint = 1;
+        public static int bulletCountSpread = 1;
+        public static int bulletCountBuckshot = 2;
+
+        public static float recoilAmplitude = 3.25f;
+        public static float spreadAmplitude = 1.2f;
+        public static float spreadBloomValue = 0.3f;
+        public static float spreadShotFraction = 0.4f;
         public override string SkillName => "Icicle Bolts";
 
 
-        float totalShards = FireIceShard.bulletCountBuckshot + FireIceShard.bulletCountPoint + FireIceShard.bulletCountSpread;
+        float totalShards = bulletCountBuckshot + bulletCountPoint + bulletCountSpread;
         public override string SkillDescription => $"<style=cIsUtility>Frost</style>. Fire a blast of ice shards for " +
-            $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(FireIceShard.damageCoefficient / totalShards)} damage</style> total. " +
+            $"<style=cIsDamage>up to {totalShards}x{Tools.ConvertDecimal(damageCoefficient / totalShards)} damage</style> total. " +
             $"Hold up to 2.";
 
         public override string TOKEN_IDENTIFIER => "ICESHARDS";

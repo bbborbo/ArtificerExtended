@@ -29,24 +29,24 @@ namespace ArtificerExtended.Skills
         public static int rechargeStock = 2;
         public static float rechargeInterval = 2f;
         public static float baseDuration = 1.2f;
-        public static float visualScale = 0.4f;
+        public static float visualScale = 0.3f;
 
         static float pierceDamageCoefficient = 3.8f;
         static float pierceProcCoefficient = 1.0f;
         public static float damageCoefficient = pierceDamageCoefficient * 0.5f;
         public static float procCoefficient = 0.5f;
 
-        public static float sloshProjectileSize = 4f;
+        public static float sloshProjectileSize = 4.5f;
         public static float sloshProjectileSpeed = 25;
         public static float maxDistance = 21;
-        public static int totalDrops => Mathf.CeilToInt(maxDistance / (CommonAssets.lavaPoolSize * 2)) + 1;
+        public static int totalDrops => Mathf.CeilToInt(maxDistance / (CommonAssets.lavaPoolSize * 2));
         public static float delayBetweenDrops => (maxDistance / totalDrops) / sloshProjectileSpeed;
         public static float durationBeforeGravity = maxDistance / sloshProjectileSpeed;
         public override string SkillName => "Lava Bolt";
 
         public override string SkillDescription => $"<style=cIsDamage>Ignite</style>. Lob a molten projectile for " +
             $"<style=cIsDamage>{Tools.ConvertDecimal(pierceDamageCoefficient)} damage</style>, leaving a trail of " +
-            $"<style=cIsDamage>molten pools</style> behind.";
+            $"<style=cIsDamage>molten pools</style> for <style=cIsDamage>{totalDrops+1}x{Tools.ConvertDecimal(damageCoefficient)} damage</style>.";
 
         public override string TOKEN_IDENTIFIER => "LAVABOLTS";
 
@@ -150,7 +150,7 @@ namespace ArtificerExtended.Skills
                     light.color = new Color32(79, 46, 0, 255);
                 }
 
-                Content.CreateAndAddEffectDef(sloshGhost);
+                //Content.CreateAndAddEffectDef(sloshGhost);
             };
 
             ProjectileMageFirewallWalkerController walkerController = sloshProjectilePrefab.AddComponent<ProjectileMageFirewallWalkerController>();

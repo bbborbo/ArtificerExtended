@@ -126,8 +126,8 @@ namespace ArtificerExtended.Skills
                             //meshRenderer.sharedMaterials = sm;
 
                             Material mat = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/Base/EliteIce/matAffixWhiteSphereExplosion.mat").WaitForCompletion());
-                            //mat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLunarInfection.png").WaitForCompletion());
-                            mat.SetColor("_TintColor", new Color32(81,255,160,75));
+                            mat.SetTexture("_RemapTex", RainrotSharedUtils.Assets.iceNovaRampPersistent);
+                            mat.SetColor("_TintColor", new Color32(81,255,160,55));
                             meshRenderer.material = mat;
                         }
                         RotateAroundAxis rax = sphere.GetComponent<RotateAroundAxis>();
@@ -225,7 +225,7 @@ namespace ArtificerExtended.Skills
             bombImpactExplosion.snowglobeProjectilePrefab = snowglobeProjectilePrefab;
             bombImpactExplosion.pc = bombController;
 
-            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MageIceBombGhost_prefab).WaitForCompletion();
+            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MageIceboltExpandedGhost_prefab).WaitForCompletion();
             if (ghostPrefab/*_assetBundle.LoadAsset<GameObject>("HenryBombGhost")*/ != null)
             {
                 bombController.ghostPrefab = ghostPrefab;//Assets.CreateProjectileGhostPrefab("HenryBombGhost");

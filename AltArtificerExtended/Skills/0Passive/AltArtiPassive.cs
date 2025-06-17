@@ -57,6 +57,7 @@ namespace ArtificerExtended.Passive
         public static Single lightningProcCoef = 0.2f;
 
         public static Single meltAspdIncrease = 0.025f;
+        public static Int32 burnBuffMaxStacks = 50;
         public static Single burnBuffDurationBase = 4f;
         public static Single burnBuffDurationStack = -0.6f;
 
@@ -442,14 +443,15 @@ namespace ArtificerExtended.Passive
                 this.DoFire(elementPower.firePower);
         }
 
-        public static void DoNova(CharacterBody attacker, Power currentPower, Vector3 position, int strength = 6/*ChillRework.ChillRework.chillStacksMax*/)
+        public static void DoArcticBlast(CharacterBody attacker, Power currentPower, Vector3 position, bool isCrit, int strength = 6/*ChillRework.ChillRework.chillStacksMax*/)
         {
             if (attacker == null || currentPower == Power.None || strength == 0)
                 return;
 
             float radiusByPower = (1 * (int)currentPower);
             float radiusByBuffs = Util.Remap((float)strength, 0, 6/*ChillRework.ChillRework.chillStacksMax*/, novaMinRadius, novaMaxRadius);
-            CreateIceBlast(attacker, currentPower, position, radiusByPower + radiusByBuffs);
+            float procByPower = 0.8f - (0.1f * (int)currentPower);
+            CreateIceBlast(attacker, 0, attacker.damage * novaBaseDamage, procByPower, radiusByPower + radiusByBuffs, isCrit, position);
         }
         #endregion
 
@@ -470,33 +472,35 @@ namespace ArtificerExtended.Passive
             {
                 for (Int32 i = 0; i < (Int32)power; i++)
                 {
-                    base.characterBody.AddTimedBuff(CommonAssets.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
+                    base.characterBody.AddTimedBuff(CommonAssets.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1), burnBuffMaxStacks);
                 }
 
                 //base.characterBody.AddTimedBuff(Buffs.meltBuff, burnBuffDurationBase + burnBuffDurationStack * ((Int32)power - 1));
             }
         }
-
-        public static void CreateIceBlast(CharacterBody attacker, Power icePowerToUse, Vector3 position, Single radius)
+        public static void CreateIceBlast(CharacterBody attackerBody, float baseForce, float damage, float procCoefficient, float radius, bool crit, Vector3 blastPosition, DamageSource damageSource = DamageSource.NoneSpecified)
         {
+            //RainrotSharedUtils.Frost.FrostUtilsModule.CreateIceBlast(attackerBody, baseForce, damage, procCoefficient, radius, crit, blastPosition, false, damageSource);
+
             if (NetworkServer.active)
             {
-                //ChillRework.ChillRework.ApplyChillSphere(position, radius, attacker.teamComponent.teamIndex);
-
-                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(iceExplosion, position, Quaternion.identity);
+                RainrotSharedUtils.Frost.FrostUtilsModule.ApplyChillSphere(blastPosition, radius, attackerBody.teamComponent.teamIndex);
+                
+                GameObject blast = UnityEngine.Object.Instantiate<GameObject>(iceExplosion, blastPosition, Quaternion.identity);
                 blast.transform.localScale = new Vector3(radius, radius, radius);
                 DelayBlast delay = blast.GetComponent<DelayBlast>();
                 delay.maxTimer += UnityEngine.Random.Range(-0.1f, 0.1f);
-                delay.position = position;
-                delay.baseDamage = attacker.damage * novaBaseDamage;// attacker.damage * (1 + 0.5f * (int)icePowerToUse);
-                delay.procCoefficient = 0.8f - (0.1f * (int)icePowerToUse);//0.5f;//
-                delay.attacker = attacker.gameObject;
+                delay.position = blastPosition;
+                delay.baseDamage = damage;// attacker.damage * (1 + 0.5f * (int)icePowerToUse);
+                delay.procCoefficient = procCoefficient;//0.5f;//
+                delay.attacker = attackerBody.gameObject;
                 delay.radius = radius;
                 delay.damageType = DamageType.Frost;
                 delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
-                blast.GetComponent<TeamFilter>().teamIndex = attacker.teamComponent.teamIndex;
-
-                //NetworkServer.Spawn(blast);
+                blast.GetComponent<TeamFilter>().teamIndex = attackerBody.teamComponent.teamIndex;
+                delay.explosionEffect = RainrotSharedUtils.Frost.FrostUtilsModule.GetIceBlastEffect(false);
+            
+                NetworkServer.Spawn(blast);
             }
         }
 

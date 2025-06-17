@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using RiskyMod.Survivors.Mage.Components;
 //using AlternativeArtificer.States.Main;
 using static R2API.DamageAPI;
+using static ArtificerExtended.Skills._4IceShardsSkill;
 using ArtificerExtended.Passive;
 
 namespace ArtificerExtended.States
@@ -23,17 +24,9 @@ namespace ArtificerExtended.States
         public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
         public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
         public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
-        public static float damageCoefficient = 5.6f;
-        public static float procCoefficientPoint = 0.5f;
-        public static float procCoefficientSpread = 0.7f;
-        public static float procCoefficientBuckshot = 0.7f;
-        public static float bulletRadius = 0.2f;
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount => bulletCountPoint + bulletCountSpread + bulletCountBuckshot;
-        public static int bulletCountPoint = 1;
-        public static int bulletCountSpread = 1;
-        public static int bulletCountBuckshot = 2;
 
         public float baseDuration = 0.5f;
         private float duration;
@@ -41,11 +34,6 @@ namespace ArtificerExtended.States
 
         public string attackSoundString = "Play_mage_m2_iceSpear_shoot";
         public string attackSoundString2 = "Play_mage_shift_wall_build";
-
-        public static float recoilAmplitude = 3.25f;
-        public static float spreadAmplitude = 1f;
-        public static float spreadBloomValue = 0.3f;
-        public static float spreadShotFraction = 0.4f;
 
         public static float bloom = 0;
         private bool hasFiredGauntlet;
@@ -74,8 +62,8 @@ namespace ArtificerExtended.States
             //if (ArtificerExtendedPlugin.isRiskyModLoaded)
             //    FireSkill();
 
-            base.AddRecoil(-1f * FireIceShard.recoilAmplitude, -2f * FireIceShard.recoilAmplitude, -0.5f * FireIceShard.recoilAmplitude, 0.5f * FireIceShard.recoilAmplitude);
-            base.characterBody.AddSpreadBloom(FireIceShard.spreadBloomValue);
+            base.AddRecoil(-1f * recoilAmplitude, -2f * recoilAmplitude, -0.5f * recoilAmplitude, 0.5f * recoilAmplitude);
+            base.characterBody.AddSpreadBloom(spreadBloomValue);
             this.duration = this.baseDuration / this.attackSpeedStat;
             Util.PlaySound(this.attackSoundString, base.gameObject);
             Util.PlaySound(this.attackSoundString2, base.gameObject);
@@ -185,17 +173,17 @@ namespace ArtificerExtended.States
 
                 //point
                 CreateIceShardSpread(100, aimRay, 0, 0, 
-                    (uint)((FireIceShard.bulletCountPoint > 0) ? FireIceShard.bulletCountPoint : 1), 
+                    (uint)((bulletCountPoint > 0) ? bulletCountPoint : 1), 
                     procCoefficientPoint, BulletAttack.FalloffModel.None, crit, true).Fire();
 
                 //spread
                 CreateIceShardSpread(100, aimRay, baseSpread * 0.1f, baseSpread * spreadShotFraction, 
-                    (uint)((FireIceShard.bulletCountSpread > 0) ? FireIceShard.bulletCountSpread : 0), 
+                    (uint)((bulletCountSpread > 0) ? bulletCountSpread : 0), 
                     procCoefficientSpread, BulletAttack.FalloffModel.DefaultBullet, crit, true).Fire();
 
                 //buckshot
                 CreateIceShardSpread(100, aimRay, baseSpread * spreadShotFraction, baseSpread, 
-                    (uint)((FireIceShard.bulletCountBuckshot > 0) ? FireIceShard.bulletCountBuckshot : 0), 
+                    (uint)((bulletCountBuckshot > 0) ? bulletCountBuckshot : 0), 
                     procCoefficientBuckshot, BulletAttack.FalloffModel.Buckshot, crit, false).Fire();
             }
         }
@@ -213,7 +201,7 @@ namespace ArtificerExtended.States
             bulletAttack.maxSpread = maxSpread;
             bulletAttack.bulletCount = bulletsPerSpread;
             bulletAttack.procCoefficient = procCoefficient;
-            bulletAttack.damage = FireIceShard.damageCoefficient * this.damageStat / bulletCount;
+            bulletAttack.damage = damageCoefficient * this.damageStat / bulletCount;
             bulletAttack.force = FireIceShard.force;
             bulletAttack.falloffModel = falloffModel;
             bulletAttack.tracerEffectPrefab = _4IceShardsSkill.tracerShotgun;

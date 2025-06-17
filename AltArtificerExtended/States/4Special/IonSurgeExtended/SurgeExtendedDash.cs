@@ -143,6 +143,12 @@ namespace ArtificerExtended.States
             isCrit = base.RollCrit();
             this.attack.isCrit = isCrit;
         }
+
+        private void OnSurgeImpactAuthority(ref CharacterMotor.MovementHitInfo movementHitInfo)
+        {
+            detonateNextFrame = true;
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
@@ -165,7 +171,7 @@ namespace ArtificerExtended.States
                         (base.characterMotor.Motor.GroundingStatus.FoundAnyGround
                         && !base.characterMotor.Motor.LastGroundingStatus.FoundAnyGround)))
                 {
-                    Debug.Log("Environment detonation");
+                    Debug.Log("Ground detonation");
                     OnSurgeImpact();
                     return;
                 }
@@ -341,11 +347,6 @@ namespace ArtificerExtended.States
             this.previousTargets.Clear();
         }
 
-        private void OnHitGroundAuthority(ref CharacterMotor.HitGroundInfo hitGroundInfo)
-        {
-            detonateNextFrame = true;
-        }
-
         public override void OnExit()
         {
             base.OnExit();
@@ -361,7 +362,7 @@ namespace ArtificerExtended.States
             }
             if (base.isAuthority)
             {
-                base.characterMotor.onHitGroundAuthority -= OnHitGroundAuthority;
+                base.characterMotor.onMovementHit -= OnSurgeImpactAuthority;
             }
         }
         public override InterruptPriority GetMinimumInterruptPriority()
@@ -497,7 +498,7 @@ namespace ArtificerExtended.States
                 }
                 this.UpdateDirection();
 
-                base.characterMotor.onHitGroundAuthority += OnHitGroundAuthority;
+                base.characterMotor.onMovementHit += OnSurgeImpactAuthority;
             }
             if (NetworkServer.active)
             {

@@ -17,7 +17,7 @@ namespace ArtificerExtended
 {
     partial class ArtificerExtendedPlugin
     {
-        public const string ThunderSurgeHitBoxGroupName = "Charge";
+        public const string ThunderSurgeHitBoxGroupName = "IonCharge";
         public static Material ionSurgePowerOverlay;
         public static BuffDef ionSurgePower;
         public static GameObject muzzleflashIonSurgeTrail;
@@ -92,9 +92,9 @@ namespace ArtificerExtended
                         HitBox hitBox = hitboxTransform.AddComponent<HitBox>();
                         hitboxTransform.transform.parent = rootTransform;
                         hitboxTransform.layer = LayerIndex.projectile.intVal;
-                        hitboxTransform.transform.localPosition = new Vector3(0, 1.564f, 0);
+                        hitboxTransform.transform.localPosition = new Vector3(0, 1.5f, 0);
                         hitboxTransform.transform.localRotation = Quaternion.identity;
-                        hitboxTransform.transform.localScale = Vector3.one * 3f;
+                        hitboxTransform.transform.localScale = new Vector3(4,4,4);
 
                         hitBoxGroup.hitBoxes = new HitBox[1] { hitBox };
                     }

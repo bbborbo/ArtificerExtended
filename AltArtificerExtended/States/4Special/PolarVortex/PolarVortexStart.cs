@@ -23,6 +23,7 @@ namespace ArtificerExtended.States
             // determine duration
             duration = (exiting ? baseDurationExit : baseDurationEnter) / this.attackSpeedStat;
             base.StopHover();
+            crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
 
             GameObject obj = base.outer.gameObject;
             if (AltArtiPassive.instanceLookup.TryGetValue(obj, out var passive))
@@ -67,7 +68,8 @@ namespace ArtificerExtended.States
             outer.SetNextState(new PolarVortex
             {
                 addedFallImmunity = this.addedFallImmunity,
-                activatorSkillSlot = this.activatorSkillSlot
+                activatorSkillSlot = this.activatorSkillSlot,
+                crit = this.crit
             });
         }
     }

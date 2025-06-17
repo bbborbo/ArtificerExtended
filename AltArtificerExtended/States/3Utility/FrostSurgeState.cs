@@ -70,40 +70,30 @@ namespace ArtificerExtended.States
 				this.blastPosition = base.characterBody.corePosition;
 			}
             if (NetworkServer.active)
-			{
-				BlastAttack blastAttack = new BlastAttack();
-				blastAttack.radius = FlyUpState.blastAttackRadius;
-				blastAttack.procCoefficient = FlyUpState.blastAttackProcCoefficient;
-				blastAttack.position = this.blastPosition;
-				blastAttack.attacker = base.gameObject;
-				blastAttack.crit = crit;
-				blastAttack.baseDamage = base.characterBody.damage * 3.5f;
-				blastAttack.falloffModel = BlastAttack.FalloffModel.SweetSpot;
-				blastAttack.baseForce = FlyUpState.blastAttackForce;
-				blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
-				blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-				blastAttack.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
-				blastAttack.Fire();
-				EffectManager.SimpleEffect(this.iceExplosionEffectPrefab, base.transform.position + Vector3.up, Util.QuaternionSafeLookRotation(Vector3.forward), true);
+            {
+                float damage = characterBody.damage * 3.5f;
+				RainrotSharedUtils.Frost.FrostUtilsModule.CreateIceBlast(characterBody, 
+					FlyUpState.blastAttackForce, damage, FlyUpState.blastAttackProcCoefficient, 
+					FlyUpState.blastAttackRadius, crit, blastPosition, true, DamageSource.Special);
 
 				FireProjectileInfo fpi = new FireProjectileInfo()
-				{
-					projectilePrefab = this.bigWallPrefab,
-					position = base.transform.position,
-					rotation = Util.QuaternionSafeLookRotation(flyVector),
-					owner = base.gameObject,
-					damage = this.damageStat * wallDamageCoefficient,
-					force = 0,
-					crit = crit
-				};
-				ProjectileManager.instance.FireProjectile(fpi);
-				if (base.isGrounded)
-				{
-					InstantiateCircle();
-				}
-			}
+                {
+                    projectilePrefab = this.bigWallPrefab,
+                    position = base.transform.position,
+                    rotation = Util.QuaternionSafeLookRotation(flyVector),
+                    owner = base.gameObject,
+                    damage = this.damageStat * wallDamageCoefficient,
+                    force = 0,
+                    crit = crit
+                };
+                ProjectileManager.instance.FireProjectile(fpi);
+                if (base.isGrounded)
+                {
+                    InstantiateCircle();
+                }
+            }
 
-			void InstantiateCircle()
+            void InstantiateCircle()
 			{
 				float d = 2f;
 				int num = 6;
@@ -128,7 +118,7 @@ namespace ArtificerExtended.States
 			}
 		}
 
-		public override void OnExit()
+        public override void OnExit()
 		{
 			bool flag = !this.outer.destroying;
 			if (flag)

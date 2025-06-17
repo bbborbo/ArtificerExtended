@@ -21,26 +21,50 @@ namespace ArtificerExtended.Unlocks
             "dampcavesimple",
             "helminthroost"
         };
+        private SceneDef depthsSceneDef;
+        private SceneDef hatcherySceneDef;
         public static float timeInMinutes = 3f;
         private bool stageOk = false;
         private float stageEnterTime;
+        public override void OnInstall()
+        {
+            base.OnInstall();
+            this.depthsSceneDef = SceneCatalog.GetSceneDefFromSceneName("dampcavesimple");
+            this.hatcherySceneDef = SceneCatalog.GetSceneDefFromSceneName("helminthroost");
+        }
         public override void OnBodyRequirementMet()
         {
             base.OnBodyRequirementMet();
+            //Stage.onStageStartGlobal += this.OnStageStart;
             SceneCatalog.onMostRecentSceneDefChanged += this.HandleMostRecentSceneDefChanged;
         }
 
         public override void OnBodyRequirementBroken()
         {
             base.OnBodyRequirementBroken();
+            //Stage.onStageStartGlobal -= this.OnStageStart;
             SceneCatalog.onMostRecentSceneDefChanged -= this.HandleMostRecentSceneDefChanged;
             stageOk = false;
             stageEnterTime = float.NegativeInfinity;
         }
 
-        private void HandleMostRecentSceneDefChanged(SceneDef sceneDef)
+        bool CheckSceneRequirement(SceneDef sceneDef)
         {
-            if (stageOk && stageEnterTime > 0)
+            return sceneDef == hatcherySceneDef || sceneDef == depthsSceneDef;
+        }
+
+        private void OnStageStart(Stage obj)
+        {
+            if(CheckSceneRequirement(obj.sceneDef))
+            {
+                stageOk = true;
+                stageEnterTime = Run.instance.GetRunStopwatch();
+            }
+        }
+
+        private void HandleMostRecentSceneDefChanged(SceneDef newSceneDef)
+        {
+            if (stageOk && stageEnterTime >= 0)
             {
                 if (Run.instance.GetRunStopwatch() <= stageEnterTime + (timeInMinutes * 60 + 5));
                 {
@@ -50,10 +74,11 @@ namespace ArtificerExtended.Unlocks
                     return;
                 }
             }
-            this.stageOk = (Array.IndexOf<string>(FastHellUnlock.requiredScenes, sceneDef.baseSceneName) != -1);
-            if (this.stageOk)
+            if (CheckSceneRequirement(newSceneDef))
             {
+                this.stageOk = true;
                 stageEnterTime = Run.instance.GetRunStopwatch();
+                return;
             }
             stageOk = false;
             stageEnterTime = float.NegativeInfinity;

@@ -97,7 +97,7 @@ namespace ArtificerExtended.States
                     damage = this.damageStat * _1FrostbiteSkill.icicleDamage,
                     force = SoulSpiral.projectileForce,
                     position = base.characterBody.corePosition,
-                    crit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                    crit = crit
                 };
                 orbitProjectileManager.FireSoulSpiral(projectileInfo);
             }
@@ -130,7 +130,8 @@ namespace ArtificerExtended.States
             {
                 addedFallImmunity = this.addedFallImmunity,
                 exiting = true,
-                activatorSkillSlot = this.activatorSkillSlot
+                activatorSkillSlot = this.activatorSkillSlot,
+                crit = this.crit
             });
         }
     }

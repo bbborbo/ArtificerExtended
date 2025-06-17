@@ -14,11 +14,9 @@ namespace ArtificerExtended.Unlocks
     {
         private class OverkillOverloadingServerAchievement : BaseServerAchievement
         {
-            CharacterBody trackedBody;
             public override void OnInstall()
             {
                 base.OnInstall();
-                RoR2Application.onFixedUpdate += SetTrackedBody;
                 GlobalEventManager.onCharacterDeathGlobal += OnDeathOverkillCheck;
                 GlobalEventManager.onServerCharacterExecuted += OnExecuteOverkillCheck;
             }
@@ -26,14 +24,8 @@ namespace ArtificerExtended.Unlocks
             public override void OnUninstall()
             {
                 base.OnUninstall();
-                RoR2Application.onFixedUpdate -= SetTrackedBody;
                 GlobalEventManager.onCharacterDeathGlobal -= OnDeathOverkillCheck;
                 GlobalEventManager.onServerCharacterExecuted -= OnExecuteOverkillCheck;
-            }
-
-            private void SetTrackedBody()
-            {
-                trackedBody = base.GetCurrentBody();
             }
 
             private void OnDeathOverkillCheck(DamageReport damageReport)
@@ -42,6 +34,8 @@ namespace ArtificerExtended.Unlocks
             }
             private void OnExecuteOverkillCheck(DamageReport damageReport, float executionHealthLost)
             {
+                if (damageReport.attackerBody != base.GetCurrentBody())
+                    return;
                 CharacterBody victimBody = damageReport.victimBody;
                 HealthComponent victimHealthComponent = victimBody.healthComponent;
                 bool isVictimOverloading = victimBody.HasBuff(RoR2Content.Buffs.AffixBlue);

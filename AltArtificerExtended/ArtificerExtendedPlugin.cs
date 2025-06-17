@@ -59,7 +59,7 @@ namespace ArtificerExtended
         public const string guid = "com." + teamName + "." + modName;
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
-        public const string version = "4.0.10";
+        public const string version = "4.0.14";
         public static ArtificerExtendedPlugin instance;
 
         public static AssetBundle iconBundle => Tools.mainAssetBundle;
@@ -100,8 +100,8 @@ namespace ArtificerExtended
         {
             instance = this;
 
-            Log.Init(Logger);
             Modules.Config.Init();
+            Log.Init(Logger);
             InitializeConfig();
             Modules.Language.Init();
             Modules.CommonAssets.Init();
@@ -127,10 +127,7 @@ namespace ArtificerExtended
             Log.Debug("ArtificerExtended setup succeeded!");
 
             CreateMagePassives(magePassiveFamily);
-            if (ShouldReworkIonSurge)
-            {
-                DoSurgeReworkAssetSetup();
-            }
+            DoSurgeReworkAssetSetup();
             On.RoR2.Skills.SkillCatalog.Init += ReplaceSkillDefs;
 
             if (is2r4rLoaded)
@@ -331,7 +328,7 @@ namespace ArtificerExtended
         {
             orig();
 
-            ReplaceVanillaIonSurge(ShouldReworkIonSurge);
+            ReplaceVanillaIonSurge(true);
         }
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {
