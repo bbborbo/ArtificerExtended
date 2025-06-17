@@ -79,6 +79,8 @@ namespace ArtificerExtended.Skills
 
             ProjectileController pc = magnetRollerProjectilePrefab.GetComponent<ProjectileController>();
             pc.ghostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElectricWorm/ElectricOrbGhost.prefab").WaitForCompletion();
+
+            Content.AddProjectilePrefab(magnetRollerProjectilePrefab);
         }
 
         private void RegisterProjectileThunder()

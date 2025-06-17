@@ -102,6 +102,7 @@ namespace ArtificerExtended.Skills
         {
             projectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/LunarSkillReplacements/LunarSecondaryProjectile.prefab")
                 .WaitForCompletion().InstantiateClone("ArtiSolarFlareProjectile", true);
+            Content.AddProjectilePrefab(projectilePrefab);
 
             GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElementalRings/FireTornadoGhost.prefab")
                 .WaitForCompletion().InstantiateClone("ArtiSolarFlareGhost");

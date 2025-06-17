@@ -125,7 +125,7 @@ namespace ArtificerExtended.Modules
         private static void CreateLightningSword(Int32 meshInd)
         {
             GameObject ghost = CreateLightningSwordGhost(meshInd);
-            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), false);
+            GameObject proj = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Projectiles/LunarNeedleProjectile").InstantiateClone("LightningSwordProjectile" + meshInd.ToString(), true);
 
             UnityEngine.Networking.NetworkIdentity netID = proj.GetComponent<UnityEngine.Networking.NetworkIdentity>();
             netID.localPlayerAuthority = true;
@@ -295,7 +295,7 @@ namespace ArtificerExtended.Modules
         #region lava pools
         public static string lavaPoolKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_LAVAPOOLS";
         public static float napalmFireFrequency = 2f;
-        public static float napalmDamageCoefficient = 0.25f;
+        public static float napalmDamageCoefficient = 0.5f;
         public static float napalmDuration = 3f;
         public static float napalmProcCoefficient = 0.25f;
         public static float lavaPoolSize = 3f;
@@ -452,8 +452,8 @@ namespace ArtificerExtended.Modules
                 GameObject gameObject2 = fxTransform.Find("Point Light").gameObject;
                 Light component2 = gameObject2.GetComponent<Light>();
                 component2.color = new Color(1f, 1f, 0f);
-                component2.intensity = 4f;
-                component2.range = 7.5f;
+                component2.intensity = 2.5f;
+                component2.range = lavaPoolSize * 1.5f;
             }
 
             Content.AddProjectilePrefab(lavaPoolPrefab);

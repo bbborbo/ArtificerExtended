@@ -116,6 +116,8 @@ namespace ArtificerExtended.Skills
             //  Frostbite.novaRadius,
             //  "Determines the radius of the nova created after the Frostbite buff expires."
             //  ).Value;
+
+            Content.AddEntityState(typeof(PolarVortex));
             KeywordTokens = new string[3] { "KEYWORD_AGILE", "KEYWORD_FROST", frostArmorKeywordToken };
             RegisterBuffWhiteout();
             RegisterArmorEffects();
@@ -154,6 +156,8 @@ namespace ArtificerExtended.Skills
         private void CreateIcicleProjectile()
         {
             icicleProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC2/Seeker/SoulSpiralProjectile.prefab").WaitForCompletion().InstantiateClone("ArtiOrbitIcicle", true);
+            Content.AddProjectilePrefab(icicleProjectilePrefab);
+            
             GameObject icicleGhostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Junk/Mage/MageIceboltExpandedGhost.prefab").WaitForCompletion().InstantiateClone("ArtiOrbitIcicleGhost");
             AnimateShaderAlpha asa = icicleGhostPrefab.GetComponentInChildren<AnimateShaderAlpha>();
             if (asa)
