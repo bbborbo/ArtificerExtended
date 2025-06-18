@@ -197,7 +197,7 @@ namespace ArtificerExtended.Skills
         private static void CreateBombProjectile()
         {
             //highly recommend setting up projectiles in editor, but this is a quick and dirty way to prototype if you want
-            snowglobeDeployProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Toolbot/CryoCanisterProjectile.prefab").WaitForCompletion();
+            snowglobeDeployProjectilePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Toolbot/CryoCanisterProjectile.prefab").WaitForCompletion().InstantiateClone("MageSnowglobeBombProjectile");
 
             //remove their ProjectileImpactExplosion component and start from default values
             //UnityEngine.Object.Destroy(snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>());
