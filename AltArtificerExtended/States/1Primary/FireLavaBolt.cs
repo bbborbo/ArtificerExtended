@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
@@ -19,7 +20,7 @@ namespace ArtificerExtended.States
         public override void OnEnter()
         {
             this.projectilePrefab = _2LavaBoltsSkill.sloshProjectilePrefab;
-            this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+            this.muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageFireLarge_prefab).WaitForCompletion();
             this.damageCoefficient = _2LavaBoltsSkill.damageCoefficient;
             this.baseDuration = _2LavaBoltsSkill.baseDuration;
             this.attackSoundString = "Play_mage_shift_wall_build";

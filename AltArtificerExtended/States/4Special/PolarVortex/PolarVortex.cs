@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.States
@@ -24,21 +25,29 @@ namespace ArtificerExtended.States
         float armorAddStopwatch;
         float stopwatch;
         int maxIcicles = _1FrostbiteSkill.icicleCount;
+        float baseBuffInterval = _1FrostbiteSkill.buffInterval;
+        float buffInterval;
         int currentIcicles = 0;
         bool hasFiredIcicles => currentIcicles >= maxIcicles;
         public override void OnEnter()
         {
             base.OnEnter();
 
-            if (activatorSkillSlot && ToolbotDualWieldBase.cancelSkillDef != null)
+            int stock = activatorSkillSlot.stock;
+            if (activatorSkillSlot && CancelFrostbiteSkill.instance.SkillDef != null)
             {
                 activatorSkillSlot.SetSkillOverride(this, CancelFrostbiteSkill.instance.SkillDef, GenericSkill.SkillOverridePriority.Contextual);
+                activatorSkillSlot.stock = stock;
             }
 
             // add ice armor
             AddIceArmorBuff();
+            buffInterval = baseBuffInterval;
             if (ArtificerExtendedPlugin.BodyHasAncientScepterItem(this.characterBody))
+            {
                 currentIcicles -= 3;
+                buffInterval *= 1 + (0.5f * stock);
+            }
             // create spiral projectiles
             if(!outer.gameObject.TryGetComponent(out orbitProjectileManager))
             {
@@ -57,9 +66,9 @@ namespace ArtificerExtended.States
             {
                 armorAddStopwatch += (ending ? Time.fixedDeltaTime * endingSpeedMultiplier : Time.fixedDeltaTime); 
 
-                while (armorAddStopwatch > _1FrostbiteSkill.buffInterval)
+                while (armorAddStopwatch > buffInterval)
                 {
-                    armorAddStopwatch -= _1FrostbiteSkill.buffInterval;
+                    armorAddStopwatch -= buffInterval;
                     AddIceArmorBuff();
 
                     int buffCount = characterBody.GetBuffCount(_1FrostbiteSkill.artiIceShield);

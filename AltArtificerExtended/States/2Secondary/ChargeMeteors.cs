@@ -15,12 +15,13 @@ using ArtificerExtended.Skills;
 using ArtificerExtended.Passive;
 using System.Linq;
 using ArtificerExtended.Modules;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
     public class ChargeMeteors : BaseSkillState
     {
-        public GameObject muzzleflashEffectPrefab;
+        public GameObject muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageFireLarge_prefab).WaitForCompletion();
         public GameObject chargeEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/ChargeMageFireBomb");
         public string chargeSoundString = "Play_mage_m2_charge";
 
@@ -84,6 +85,7 @@ namespace ArtificerExtended.States
             this.chargeDuration = maxChargeDuration / this.attackSpeedStat;
             this.soundID = Util.PlayAttackSpeedSound(this.chargeSoundString, base.gameObject, this.attackSpeedStat);
             base.characterBody.SetAimTimer(this.chargeDuration + this.windDownDuration + 2f);
+            this.chargeEffectPrefab = ChargeSolarFlare.fireBombChargeEffectPrefab;
             this.muzzleString = "MuzzleBetween";
             this.animator = base.GetModelAnimator();
             if (this.animator)

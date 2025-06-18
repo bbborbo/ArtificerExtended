@@ -91,6 +91,9 @@ namespace ArtificerExtended.Skills
             GameObject impactEffect = impact.InstantiateClone("ThunderImpact", false);
             if(impactEffect != null)
             {
+                EffectComponent effectComponent = impactEffect.GetComponent<EffectComponent>();
+                effectComponent.soundName = "Play_item_use_lighningArm";
+
                 ShakeEmitter shakeEmitter = impactEffect.GetComponent<ShakeEmitter>();
                 if (shakeEmitter)
                 {
@@ -128,6 +131,7 @@ namespace ArtificerExtended.Skills
                     Debug.LogWarning("Destroying thunder point light");
                     sphere.localScale = Vector3.one * thunderBlastRadius / 4;
                 }
+                Content.CreateAndAddEffectDef(impactEffect);
             }
 
             var pc = projectilePrefabThunder.GetComponent<ProjectileController>();

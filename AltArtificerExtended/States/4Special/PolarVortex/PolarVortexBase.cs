@@ -8,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.States
 {
     class PolarVortexBase : GenericCharacterMain, ISkillState
     {
+        public static GameObject muzzleflashEffect => Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MuzzleflashMageIceLarge_prefab).WaitForCompletion();//FlyUpState.muzzleflashEffect;
+
         internal bool continuing = false;
         internal bool addedFallImmunity = false;
         internal bool crit = false;
@@ -89,6 +92,9 @@ namespace ArtificerExtended.States
 
         public void InflictSnow()
         {
+            EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
+            EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+
             float damage = characterBody.damage * _1FrostbiteSkill.blizzardDamageCoefficient;
             RainrotSharedUtils.Frost.FrostUtilsModule.CreateIceBlast(characterBody,
                 FlyUpState.blastAttackForce, damage, _1FrostbiteSkill.blizzardProcCoefficient,

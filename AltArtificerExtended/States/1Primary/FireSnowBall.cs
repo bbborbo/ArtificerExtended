@@ -8,6 +8,7 @@ using RoR2;
 using RoR2.Projectile;
 using RoR2.Skills;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.States
@@ -22,7 +23,7 @@ namespace ArtificerExtended.States
         public override void OnEnter()
         {
             this.projectilePrefab = _1SnowballsSkill.snowballProjectilePrefab;
-            this.muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+            this.muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageIce_prefab).WaitForCompletion();
             this.damageCoefficient = damageCoeff;
             this.baseDuration = _1SnowballsSkill.snowballBaseDuration;
             this.attackSoundString = "Play_mage_shift_wall_build";

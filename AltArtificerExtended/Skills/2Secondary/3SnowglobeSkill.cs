@@ -24,7 +24,7 @@ namespace ArtificerExtended.Skills
         public DeployableAPI.GetDeployableSameSlotLimit GetSnowglobeSlotLimit;
         public static DeployableSlot snowglobeDeployableSlot;
 
-        public static GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+        public static GameObject muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MuzzleflashMageIceLarge_prefab).WaitForCompletion();
         public static GameObject snowglobeDeployProjectilePrefab;
         public static GameObject snowglobeProjectilePrefab;
 

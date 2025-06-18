@@ -81,7 +81,7 @@ namespace ArtificerExtended.Skills
         public override string ActivationStateMachineName => "Body";
 
         public override string ScepterSkillName => "Cryostasis"; 
-        public override string ScepterSkillDesc => "+100 armor, +3 frost crystals."; 
+        public override string ScepterSkillDesc => "+100 armor, +3 frost crystals, 50% more duration per charge consumed."; 
         public override void Init()
         {
             LanguageAPI.Add(frostArmorKeywordToken, $"<style=cKeywordName>Frost Armor</style>" +
@@ -127,7 +127,7 @@ namespace ArtificerExtended.Skills
         public override SkillDef ModifyScepterSkill(SkillDef scepterSkillDef)
         {
             scepterSkillDef.icon = LoadSpriteFromBundle("PolarVortexSCEPTERAE");
-            scepterSkillDef.fullRestockOnAssign = true;
+            scepterSkillDef.fullRestockOnAssign = false;
             return scepterSkillDef;
         }
 

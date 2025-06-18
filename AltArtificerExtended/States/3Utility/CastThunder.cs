@@ -10,6 +10,7 @@ using EntityStates.Mage.Weapon;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
@@ -20,7 +21,7 @@ namespace ArtificerExtended.States
 
         public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
         public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
-        public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
+        public static GameObject muzzleflashEffect = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MuzzleflashMageLightningLarge_prefab).WaitForCompletion();
 
         public static float minMeteorRadius = _2ThunderSkill.thunderBlastRadius;
         public static float damagePerMeatball = 3f;
@@ -69,7 +70,11 @@ namespace ArtificerExtended.States
         public override void OnExit()
         {
             base.PlayAnimation("Gesture, Additive", "FireWall");
-            EffectManager.SimpleMuzzleFlash(CastThunderOld.muzzleflashEffect, base.gameObject, "Muzzle", false);
+            if (muzzleflashEffect)
+            {
+                EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
+                EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+            }
             if (!this.outer.destroying && base.isAuthority)
             {
                 GameObject obj = base.outer.gameObject;

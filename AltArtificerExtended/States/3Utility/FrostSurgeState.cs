@@ -11,12 +11,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
 namespace ArtificerExtended.States
 {
 	public class FrostSurgeState : GenericCharacterMain
 	{
+		static GameObject muzzleflashEffect => PolarVortexBase.muzzleflashEffect;//FlyUpState.muzzleflashEffect;
 		public static float blastDamageCoefficient => _3IceSurgeSkill.blastDamageCoefficient;
 		public static float wallDamageCoefficient => _3IceSurgeSkill.wallDamageCoefficient;
 		bool crit = false;
@@ -63,8 +65,8 @@ namespace ArtificerExtended.States
 			base.PlayCrossfade("Body", "FlyUp", "FlyUp.playbackRate", FlyUpState.duration, 0.1f);
 			base.characterMotor.Motor.ForceUnground();
 			base.characterMotor.velocity = Vector3.zero;
-			EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
-			EffectManager.SimpleMuzzleFlash(FlyUpState.muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+			EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
+			EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleRight", false);
 			if (base.isAuthority)
 			{
 				this.blastPosition = base.characterBody.corePosition;

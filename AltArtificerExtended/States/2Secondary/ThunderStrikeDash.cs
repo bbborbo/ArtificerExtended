@@ -3,6 +3,8 @@ using ArtificerExtended.Passive;
 using ArtificerExtended.Skills;
 using EntityStates;
 using EntityStates.Huntress;
+using EntityStates.Mage;
+using EntityStates.Mage.Weapon;
 using RoR2;
 using RoR2.Networking;
 using RoR2.Orbs;
@@ -21,7 +23,7 @@ namespace ArtificerExtended.States
 		private CharacterModel characterModel;
 		float invulDuration = 0.1f;
 		public float speedCoefficient => _2ThunderstrikeSkill.speedCoefficient;
-		public string endSoundString;
+		public string endSoundString => PrepWall.fireSoundString;
 		public float exitSmallHop = 6f;
 		public float delayedDamageCoefficient => _2ThunderstrikeSkill.delayDamageCoefficient;
 		public float delayedProcCoefficient => _2ThunderstrikeSkill.delayProcCoefficient;
@@ -104,6 +106,7 @@ namespace ArtificerExtended.States
 			{
 				//base.characterBody.AddBuff(RoR2Content.Buffs.HiddenInvincibility);
 			}
+			Util.PlaySound(FlyUpState.beginSoundString, base.gameObject);
 			CreateBlinkEffect(Util.GetCorePosition(this.gameObject));
 		}
 		private void CreateBlinkEffect(Vector3 origin)

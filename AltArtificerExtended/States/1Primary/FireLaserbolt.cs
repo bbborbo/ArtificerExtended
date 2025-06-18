@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static R2API.DamageAPI;
 
@@ -17,7 +18,7 @@ namespace ArtificerExtended.States
 {
     class FireLaserbolts : BaseSkillState, SteppedSkillDef.IStepSetter
     {
-        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/muzzleflashes/MuzzleflashMageLightningLarge");
+        public GameObject muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MuzzleflashMageLightning_prefab).WaitForCompletion();
 
         public float procCoefficient = 1.0f;
 

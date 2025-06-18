@@ -16,6 +16,7 @@ using RiskyMod.Survivors.Mage.Components;
 using static R2API.DamageAPI;
 using static ArtificerExtended.Skills._4IceShardsSkill;
 using ArtificerExtended.Passive;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
@@ -23,7 +24,7 @@ namespace ArtificerExtended.States
     {
         public static GameObject effectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageLightningLarge");
         public static GameObject hitEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCommandoShotgun");
-        public GameObject muzzleflashEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/MuzzleflashMageIceLarge");
+        public GameObject muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageIce_prefab).WaitForCompletion();
         public static float maxRange = ArtificerExtendedPlugin.meleeRangeSingle;
         public static float force = 0f;
         private int bulletCount => bulletCountPoint + bulletCountSpread + bulletCountBuckshot;

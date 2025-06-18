@@ -66,7 +66,9 @@ namespace ArtificerExtended.Unlocks
         {
             if (stageOk && stageEnterTime >= 0)
             {
-                if (Run.instance.GetRunStopwatch() <= stageEnterTime + (timeInMinutes * 60 + 5));
+                float timeThisStage = Run.instance.GetRunStopwatch() - stageEnterTime;
+                Debug.Log(timeThisStage);
+                if (timeThisStage <= timeInMinutes * 60 + 5);
                 {
                     base.Grant();
                     stageOk = false;

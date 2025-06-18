@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
@@ -14,9 +15,11 @@ namespace ArtificerExtended.States
         GameObject solarFlareProjectilePrefab => _4SolarFlareSkill.projectilePrefab;
         public override void OnEnter()
         {
+            this.muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageFireLarge_prefab).WaitForCompletion();
             this.projectilePrefab = solarFlareProjectilePrefab;
             this.minDamageCoefficient = _4SolarFlareSkill.blastDamage;
             this.maxDamageCoefficient = _4SolarFlareSkill.blastDamage;
+            this.baseDuration = 1f;
             base.OnEnter();
         }
 

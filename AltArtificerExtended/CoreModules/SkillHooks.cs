@@ -79,8 +79,26 @@ namespace ArtificerExtended
 
             AssetReferenceT<GameObject> ref1 = new AssetReferenceT<GameObject>(RoR2_Base_Mage.MageIceBombProjectile_prefab);
             AssetAsyncReferenceManager<GameObject>.LoadAsset(ref1).Completed += FixIceSpear;
+            AssetReferenceT<GameObject> ref2 = new AssetReferenceT<GameObject>(RoR2_Base_Lightning.LightningStrikeImpact_prefab);
+            AssetAsyncReferenceManager<GameObject>.LoadAsset(ref2).Completed += (ctx) => FixLightningStrike(ctx.Result);
+            AssetReferenceT<GameObject> ref3 = new AssetReferenceT<GameObject>(RoR2_Base_LightningStrikeOnHit.SimpleLightningStrikeImpact_prefab);
+            AssetAsyncReferenceManager<GameObject>.LoadAsset(ref3).Completed += (ctx) => FixLightningStrike(ctx.Result);
 
             //On.RoR2.SeekerSoulSpiralManager.DiscoverUnassignedSpirals += FixSoulSpiralNRE;
+        }
+
+        private void FixLightningStrike(GameObject lightningStrikeImpactPrefab)
+        {
+            if (!lightningStrikeImpactPrefab.TryGetComponent(out EffectComponent effectComponent))
+            {
+                Log.Error("Lightning strike impact is missing EffectComponent");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(effectComponent.soundName))
+            {
+                effectComponent.soundName = "Play_item_use_lighningArm";
+            }
         }
 
         private void RemoveFrostWhileFrozen(On.EntityStates.FrozenState.orig_FixedUpdate orig, FrozenState self)

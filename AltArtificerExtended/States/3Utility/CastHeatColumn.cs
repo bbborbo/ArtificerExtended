@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ArtificerExtended.States
 {
@@ -19,8 +20,8 @@ namespace ArtificerExtended.States
 
         public static GameObject projectilePrefab => _1HeatColumnSkill.HeatWardPrefab;
         public static GameObject areaIndicatorPrefab => _1HeatColumnSkill.HeatWardAreaIndicator;
-        public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
-        public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
+        public static GameObject aoeEffect = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.OmniImpactVFXLightningMage_prefab).WaitForCompletion();
+        public static GameObject muzzleflashEffect = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Junk_Mage.MuzzleflashMageFireLarge_prefab).WaitForCompletion();
 
         public static float damagePerMeatball = 1.8f;
 
@@ -95,10 +96,14 @@ namespace ArtificerExtended.States
 
         public override void OnExit()
         {
+            if (muzzleflashEffect)
+            {
+                EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleLeft", false);
+                EffectManager.SimpleMuzzleFlash(muzzleflashEffect, base.gameObject, "MuzzleRight", false);
+            }
             if (this.areaIndicatorInstance)
             {
                 base.PlayAnimation("Gesture, Additive", "FireWall");
-                EffectManager.SimpleMuzzleFlash(CastThunderOld.muzzleflashEffect, base.gameObject, "Muzzle", false);
                 if (!this.outer.destroying && base.isAuthority)
                 {
                     GameObject obj = base.outer.gameObject;
@@ -107,7 +112,7 @@ namespace ArtificerExtended.States
                         passive.SkillCast(isFire: true);
                     }
 
-                    EffectManager.SpawnEffect(CastThunderOld.aoeEffect, new EffectData
+                    EffectManager.SpawnEffect(aoeEffect, new EffectData
                     {
                         origin = this.areaIndicatorInstance.transform.position,
                     }, true);
