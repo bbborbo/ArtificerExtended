@@ -59,7 +59,7 @@ namespace ArtificerExtended
         public const string guid = "com." + teamName + "." + modName;
         public const string modName = "ArtificerExtended";
         public const string teamName = "Borbo";
-        public const string version = "4.0.17";
+        public const string version = "4.0.19";
         public static ArtificerExtendedPlugin instance;
 
         public static AssetBundle iconBundle => Tools.mainAssetBundle;
@@ -108,8 +108,9 @@ namespace ArtificerExtended
             AddHooks();
 
             mageObject = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/characterbodies/MageBody");
-            mageObject.AddComponent<ElementCounter>();
             mageBody = mageObject.GetComponent<CharacterBody>();
+            ElementCounter counter = mageObject.AddComponent<ElementCounter>();
+            counter.body = mageBody;
             mageSkillLocator = mageObject.GetComponent<SkillLocator>();
             if (mageObject && mageBody && mageSkillLocator)
             {

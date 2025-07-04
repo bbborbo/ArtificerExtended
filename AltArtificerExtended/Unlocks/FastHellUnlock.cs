@@ -2,6 +2,7 @@
 using RoR2;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,69 +22,62 @@ namespace ArtificerExtended.Unlocks
             "dampcavesimple",
             "helminthroost"
         };
-        private SceneDef depthsSceneDef;
-        private SceneDef hatcherySceneDef;
-        public static float timeInMinutes = 3f;
+        static float timeInMinutes = 3f;
+        static float gracePeriodInSeconds = 10f;
         private bool stageOk = false;
-        private float stageEnterTime;
+        private float stageEntryStopwatchValue = float.NegativeInfinity;
         public override void OnInstall()
         {
             base.OnInstall();
-            this.depthsSceneDef = SceneCatalog.GetSceneDefFromSceneName("dampcavesimple");
-            this.hatcherySceneDef = SceneCatalog.GetSceneDefFromSceneName("helminthroost");
         }
         public override void OnBodyRequirementMet()
         {
             base.OnBodyRequirementMet();
-            //Stage.onStageStartGlobal += this.OnStageStart;
-            SceneCatalog.onMostRecentSceneDefChanged += this.HandleMostRecentSceneDefChanged;
+            Stage.onStageStartGlobal += this.OnStageStart;
         }
 
         public override void OnBodyRequirementBroken()
         {
             base.OnBodyRequirementBroken();
-            //Stage.onStageStartGlobal -= this.OnStageStart;
-            SceneCatalog.onMostRecentSceneDefChanged -= this.HandleMostRecentSceneDefChanged;
+            Stage.onStageStartGlobal -= this.OnStageStart;
+            stageEntryStopwatchValue = float.NegativeInfinity;
             stageOk = false;
-            stageEnterTime = float.NegativeInfinity;
+        }
+
+        private void OnStageStart(Stage newStageDef)
+        {
+            SceneDef newSceneDef = newStageDef.sceneDef;
+            HandleMostRecentSceneDefChanged(newSceneDef);
         }
 
         bool CheckSceneRequirement(SceneDef sceneDef)
         {
-            return sceneDef == hatcherySceneDef || sceneDef == depthsSceneDef;
-        }
-
-        private void OnStageStart(Stage obj)
-        {
-            if(CheckSceneRequirement(obj.sceneDef))
-            {
-                stageOk = true;
-                stageEnterTime = Run.instance.GetRunStopwatch();
-            }
+            Debug.Log(sceneDef.baseSceneName);
+            return requiredScenes.Contains(sceneDef.baseSceneName);
         }
 
         private void HandleMostRecentSceneDefChanged(SceneDef newSceneDef)
         {
-            if (stageOk && stageEnterTime >= 0)
+            if (stageOk)
             {
-                float timeThisStage = Run.instance.GetRunStopwatch() - stageEnterTime;
-                Debug.Log(timeThisStage);
-                if (timeThisStage <= timeInMinutes * 60 + 5);
+                float timeThisStage = Run.instance.GetRunStopwatch() - stageEntryStopwatchValue;
+                Debug.Log("seconds this stage: " + timeThisStage);
+                if (timeThisStage <= (timeInMinutes * 60) + gracePeriodInSeconds)
                 {
                     base.Grant();
                     stageOk = false;
-                    stageEnterTime = float.NegativeInfinity;
                     return;
                 }
             }
+
             if (CheckSceneRequirement(newSceneDef))
             {
+                stageEntryStopwatchValue = Stage.instance.entryStopwatchValue;
                 this.stageOk = true;
-                stageEnterTime = Run.instance.GetRunStopwatch();
                 return;
             }
+            stageEntryStopwatchValue = float.NegativeInfinity;
             stageOk = false;
-            stageEnterTime = float.NegativeInfinity;
         }
     }
 }

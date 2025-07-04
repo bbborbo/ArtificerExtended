@@ -24,8 +24,17 @@ namespace ArtificerExtended.Unlocks
         public override void OnInstall()
         {
             //On.EntityStates.Mage.MageCharacterMain.OnEnter += PowerCheck;
-            Run.onClientGameOverGlobal += ClearCheck;
             base.OnInstall();
+        }
+        public override void OnBodyRequirementMet()
+        {
+            base.OnBodyRequirementMet();
+            Run.onClientGameOverGlobal += ClearCheck;
+        }
+        public override void OnBodyRequirementBroken()
+        {
+            base.OnBodyRequirementBroken();
+            Run.onClientGameOverGlobal -= ClearCheck;
         }
 
         private void ClearCheck(Run run, RunReport runReport)
@@ -39,23 +48,25 @@ namespace ArtificerExtended.Unlocks
             if (runReport.gameEnding.isWin)
             {
                 CharacterBody localBody = this.localUser.cachedBody;
-                if (localBody.bodyIndex == requiredBodyIndex)
+                if (localBody)
                 {
-                    ElementCounter power = localBody.GetComponent<ElementCounter>();
-                    if(power != null && 
-                        (power.firePower >= Power.Extreme || power.icePower >= Power.Extreme || power.lightningPower >= Power.Extreme))
-                    {
-                        base.Grant();
-                    }
+                    //ElementCounter power = localBody.GetComponent<ElementCounter>();
+                    //if (power != null &&
+                    //    (power.firePower >= Power.Extreme || power.icePower >= Power.Extreme || power.lightningPower >= Power.Extreme))
+                    //{
+                    //    base.Grant();
+                    //}
+                }
+                else
+                {
+                    Log.Error("FullKitElementUnlock : Local Body destroyed, unable to access element counter! This may be a result of the ending destroying the body or dying before the ending!");
+                }
+
+                if(ElementCounter.localUserFirePower >= Power.Extreme || ElementCounter.localUserIcePower >= Power.Extreme || ElementCounter.localUserLightningPower >= Power.Extreme)
+                {
+                    base.Grant();
                 }
             }
-        }
-
-        public override void OnUninstall()
-        {
-            //On.EntityStates.Mage.MageCharacterMain.OnEnter -= PowerCheck;
-            Run.onClientGameOverGlobal -= ClearCheck;
-            base.OnUninstall();
         }
 
 

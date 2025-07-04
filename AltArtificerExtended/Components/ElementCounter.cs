@@ -20,12 +20,18 @@ namespace ArtificerExtended.Components
             Unfathomable
         }
 
+        internal CharacterBody body;
         internal bool useIceAspect = false;
         internal bool useFireAspect = false;
         internal bool useLightningAspect = false;
         public Power firePower;
         public Power icePower;
         public Power lightningPower;
+
+        public static Power localUserFirePower { get; private set; } = Power.None;
+        public static Power localUserIcePower { get; private set; } = Power.None;
+        public static Power localUserLightningPower { get; private set; } = Power.None;
+
         SkillLocator loc = null;
 
         public void OnBodyStart(SkillLocator skillLocator = null)
@@ -45,6 +51,8 @@ namespace ArtificerExtended.Components
             loc.utility.onSkillChanged += (s) => RecalculatePowers();
             loc.special.onSkillChanged += (s) => RecalculatePowers();
 
+            if (!body)
+                body = loc.GetComponent<CharacterBody>();
             RecalculatePowers();
         }
 
@@ -70,6 +78,12 @@ namespace ArtificerExtended.Components
             this.GetPowerFromSkill(loc.utility);
             this.GetPowerFromSkill(loc.special);
 
+            if (body && body.hasAuthority)
+            {
+                localUserFirePower = this.firePower;
+                localUserIcePower = this.icePower;
+                localUserLightningPower = this.lightningPower;
+            }
 
             Debug.Log($"Fire: {this.firePower}\nIce: {this.icePower}\nLightning: {this.lightningPower}");
         }
