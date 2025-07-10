@@ -104,54 +104,77 @@ namespace ArtificerExtended.Skills
                 .WaitForCompletion().InstantiateClone("ArtiSolarFlareProjectile", true);
             Content.AddProjectilePrefab(projectilePrefab);
 
-            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ElementalRings/FireTornadoGhost.prefab")
+            GameObject ghostPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MageFireboltGhost_prefab)
                 .WaitForCompletion().InstantiateClone("ArtiSolarFlareGhost");
 
             if (ghostPrefab)
             {
-                GameObject initialBurst = ghostPrefab.transform.Find("InitialBurst")?.gameObject;
-                if (initialBurst)
+
+                //FindAndDestroy(ghostPrefab, "InitialBurst");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
+                //FindAndDestroy(ghostPrefab, "Embers");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
+                //FindAndDestroy(ghostPrefab, "TornadoMeshCore");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
+                //FindAndDestroy(ghostPrefab, "TornadoMeshCore, Wide");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
+                //FindAndDestroy(ghostPrefab, "Smoke");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
+                void FindAndDestroy(GameObject gameObject, string name)
                 {
-                    GameObject.Destroy(initialBurst);
+                    Transform t = gameObject.transform.Find(name);
+                    if (t && t.gameObject != gameObject)
+                    {
+                        UnityEngine.Object.Destroy(t.gameObject);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Could not find transform [{name}] to destroy");
+                        
+                    }
                 }
 
-                Transform embers = ghostPrefab.transform.Find("Embers");
-                if (embers)
-                {
-                    ParticleSystem ps = embers.GetComponent<ParticleSystem>();
-                    ParticleSystem.MainModule main = ps.main;
-                    main.duration = tornadoLifetime;
-                }
+                //ShakeEmitter shakeEmitter = ghostPrefab.GetComponent<ShakeEmitter>();
+                //if (shakeEmitter.gameObject)
+                //{
+                //    GameObject.Destroy(shakeEmitter.gameObject);
+                //}
 
-                Transform tmcw = ghostPrefab.transform.Find("TornadoMeshCore, Wide");
-                if (tmcw)
+                GameObject gpaSun = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Grandparent.GrandParentSun_prefab).WaitForCompletion();
+                Transform vfxRoot = gpaSun.transform.Find("VfxRoot");
+                if (vfxRoot)
                 {
-                    ParticleSystem ps = tmcw.GetComponent<ParticleSystem>();
-                    ParticleSystem.MainModule main = ps.main;
-                    main.duration = tornadoLifetime;
-                    tmcw.localScale = Vector3.one * tornadoRadius / 14;
-                }
+                    GameObject sunEffect = vfxRoot.gameObject.InstantiateClone("ArtiSolarFlareSunEffect");
+                    sunEffect.transform.parent = ghostPrefab.transform;
+                    sunEffect.transform.localPosition = Vector3.zero;
 
-                Transform tmc = ghostPrefab.transform.Find("TornadoMeshCore");
-                if (tmc)
-                {
-                    ParticleSystem ps = tmc.GetComponent<ParticleSystem>();
-                    ParticleSystem.MainModule main = ps.main;
-                    main.duration = tornadoLifetime;
-                }
+                    FindAndDestroy(sunEffect, "MoonMesh");
+                    FindAndDestroy(sunEffect, "Goo, Drip");
+                    FindAndDestroy(sunEffect, "HeatDistortionEmitter");
+                    FindAndDestroy(sunEffect, "PP");
+                    FindAndDestroy(sunEffect, "LightSpinner");
+                    FindAndDestroy(sunEffect, "AreaIndicator");
+                    FindAndResize(sunEffect, "Mesh", Vector3.one * 0.5f);
+                    FindAndResize(sunEffect, "Particles", Vector3.one * 2.5f);
+                    void FindAndResize(GameObject gameObject, string name, Vector3 size)
+                    {
+                        Transform t = gameObject.transform.Find(name);
+                        if (t)
+                        {
+                            t.localScale = size;
+                        }
+                        else
+                        {
+                            Debug.LogError($"Could not find transform [{name}] to resize");
+                        }
+                    }
 
-                Transform smoke = ghostPrefab.transform.Find("Smoke");
-                if (smoke)
-                {
-                    ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
-                    ParticleSystem.MainModule main = ps.main;
-                    main.duration = tornadoLifetime;
-                }
-
-                ShakeEmitter shakeEmitter = ghostPrefab.GetComponent<ShakeEmitter>();
-                if (shakeEmitter)
-                {
-                    GameObject.Destroy(shakeEmitter);
+                    Transform sunMesh = sunEffect.transform.Find("SunMesh");
+                    if (sunMesh)
+                    {
+                        MeshRenderer renderer = sunMesh.GetComponent<MeshRenderer>();
+                        if (renderer)
+                        {
+                            Material mat = UnityEngine.Object.Instantiate(renderer.material);
+                            mat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/DLC2/Scorchling/texRampScorchling.png").WaitForCompletion());
+                            renderer.material = mat;
+                        }
+                    }
                 }
 
                 GameObject warbannerWard = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/WardOnLevel/WarbannerWard.prefab").WaitForCompletion();
@@ -174,7 +197,7 @@ namespace ArtificerExtended.Skills
                         break;
                     }
                 }
-                GameObject.Destroy(gah);
+                Transform.Destroy(gah);
             }
 
 
