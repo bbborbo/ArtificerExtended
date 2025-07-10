@@ -110,7 +110,9 @@ namespace ArtificerExtended.Skills
             CreateSkill();
             if(RequiredUnlock != null)
             {
-                unlockDef = UnlockBase.CreateUnlockDef(RequiredUnlock, Icon);
+                UnlockableDef unlock = UnlockBase.CreateUnlockDef(RequiredUnlock, Icon);
+                if (!Bind(false, "Bypass Unlock"))
+                    unlockDef = unlock;
             }
             AddSkillToSkillFamily();
 
