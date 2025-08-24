@@ -173,7 +173,7 @@ namespace ArtificerExtended.Skills
 
             #region SkillData
             SkillDef.baseRechargeInterval = Bind(BaseCooldown, "Base Cooldown");
-            SkillDef.attackSpeedBuffsRestockSpeed = Bind(SkillData.useAttackSpeedScaling, "Use Attack Speed Scaling");
+            SkillDef.attackSpeedBuffsRestockSpeed = Bind(SkillData.useAttackSpeedScaling, "Scale Cooldown With Attack Speed");
             SkillDef.baseMaxStock = Bind(SkillData.baseMaxStock, "Base Max Stock");
             SkillDef.rechargeStock = Mathf.Min(Bind(SkillData.rechargeStock, "Recharge Stock"), SkillDef.baseMaxStock);
             SkillDef.interruptPriority = this.InterruptPriority;
