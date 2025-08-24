@@ -209,6 +209,24 @@ namespace ArtificerExtended.Skills
                 antiGrav.durationBeforeGravity = durationBeforeGravity;
             }
 
+            FindAndDestroy(sloshProjectilePrefab.transform, "SweetSpotBehavior");
+            FindAndDestroy(sloshProjectilePrefab.transform, "SweetSpotVFX");
+            FindAndDestroy(sloshProjectilePrefab.transform, "SweetSpotWindupVFX");
+            FindAndDestroy(sloshProjectilePrefab.transform, "SweetSpotEndVFX");
+            void FindAndDestroy(Transform gameObject, string name)
+            {
+                Transform t = gameObject.Find(name);
+                if (t && t.gameObject != gameObject)
+                {
+                    UnityEngine.Object.Destroy(t.gameObject);
+                }
+                else
+                {
+                    Debug.LogError($"Could not find transform [{name}] to destroy");
+
+                }
+            }
+
             Content.AddProjectilePrefab(sloshProjectilePrefab);
         }
 
@@ -223,11 +241,28 @@ namespace ArtificerExtended.Skills
             Tools.GetParticle(lavaGhostPrefab, "SpitCore", napalmColor);
 
             lavaImpactEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("e184c0c8bc862ff40b9fd07db0b8e98c").InstantiateClone("NapalmSpitExplosion", false); //beetlespitexplosion
-            Tools.GetParticle(lavaImpactEffect, "Bugs", Color.clear);
-            Tools.GetParticle(lavaImpactEffect, "Flames", napalmColor);
-            Tools.GetParticle(lavaImpactEffect, "Flash", Color.yellow);
-            Tools.GetParticle(lavaImpactEffect, "Distortion", napalmColor);
-            Tools.GetParticle(lavaImpactEffect, "Ring, Mesh", Color.yellow);
+            Transform particles = lavaImpactEffect.transform.Find("Particles");
+            if (particles)
+            {
+                Tools.GetParticle(particles.gameObject, "Flames", napalmColor);
+                Tools.GetParticle(particles.gameObject, "Flash", Color.yellow);
+                Tools.GetParticle(particles.gameObject, "Ring, Mesh", Color.yellow);
+                FindAndDestroy(particles, "Bugs");
+                FindAndDestroy(particles, "Distortion");
+                void FindAndDestroy(Transform gameObject, string name)
+                {
+                    Transform t = gameObject.Find(name);
+                    if (t && t.gameObject != gameObject)
+                    {
+                        UnityEngine.Object.Destroy(t.gameObject);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Could not find transform [{name}] to destroy");
+
+                    }
+                }
+            }
 
             ProjectileImpactExplosion pieNapalm = lavaProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pieNapalm && CommonAssets.lavaPoolPrefab != null)

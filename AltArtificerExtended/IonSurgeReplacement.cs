@@ -128,18 +128,14 @@ namespace ArtificerExtended
                 tr.time = SurgeExtendedDash.flightDuration + 0.5f;
             }
 
-            Transform trail = muzzleflashIonSurgeTrail.transform.Find("Trail");
+            Transform trail = muzzleflashIonSurgeTrail.transform.Find("Particles").Find("Trail");
             if (trail)
             {
                 TrailRenderer t = trail.GetComponent<TrailRenderer>();
                 t.time = SurgeExtendedDash.flightDuration + 0.5f;
             }
-            else
-            {
-                Debug.LogError("A");
-            }
 
-            Transform matrix = muzzleflashIonSurgeTrail.transform.Find("Matrix, Mesh");
+            Transform matrix = muzzleflashIonSurgeTrail.transform.Find("Particles").Find("Matrix, Mesh");
             if (matrix)
             {
                 ParticleSystem ps = matrix.GetComponent<ParticleSystem>();
@@ -147,33 +143,21 @@ namespace ArtificerExtended
                 main.duration = SurgeExtendedDash.flightDuration;
                 main.loop = true;
             }
-            else
-            {
-                Debug.LogError("nb");
-            }
 
-            Transform light = muzzleflashIonSurgeTrail.transform.Find("Point Light");
+            Transform light = muzzleflashIonSurgeTrail.transform.Find("Particles").Find("Point Light");
             if (light)
             {
                 LightIntensityCurve lit = light.GetComponent<LightIntensityCurve>();
                 lit.timeMax = 2f;
             }
-            else
-            {
-                Debug.LogError("c");
-            }
 
-            Transform smoke = muzzleflashIonSurgeTrail.transform.Find("Smoke");
+            Transform smoke = muzzleflashIonSurgeTrail.transform.Find("Particles").Find("Smoke");
             if (smoke)
             {
                 ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
                 ParticleSystem.MainModule main = ps.main;
                 main.duration = SurgeExtendedDash.flightDuration;
                 main.loop = true;
-            }
-            else
-            {
-                Debug.LogError("d");
             }
             // attack prefabs
         }

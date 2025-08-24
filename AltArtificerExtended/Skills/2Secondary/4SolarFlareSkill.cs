@@ -42,7 +42,7 @@ namespace ArtificerExtended.Skills
         public static float blastRadius = 14;
         public static float missileDamageCoefficient = 0.8f;
         public static float missileProcCoefficient = 0.5f;
-        public static float missileFireInterval = 0.67f;
+        public static float missileFireInterval = 0.5f;
         public override string SkillName => "Solar Flare";
 
         public override string SkillDescription => $"<style=cIsUtility>Resonant</style>. " +
@@ -73,7 +73,7 @@ namespace ArtificerExtended.Skills
         {
             string resonantKeywordToken = ArtificerExtendedPlugin.DEVELOPER_PREFIX + "KEYWORD_RESONANTSTAR";
             CommonAssets.AddResonantKeyword(resonantKeywordToken, "Coronal Mass Ejection",
-                $"If only <style=cIsDamage>Fire</style> abilities are equipped, periodically fires additional fire missiles for {DamageValueText(missileDamageCoefficient)}.");
+                $"If only <style=cIsDamage>Fire</style> abilities are equipped, periodically launches superheated plasma for {DamageValueText(missileDamageCoefficient)}.");
             CreateMissileProjectile();
             CreateTornadoProjectile();
             KeywordTokens = new string[] { resonantKeywordToken, "KEYWORD_IGNITE" };
@@ -115,9 +115,9 @@ namespace ArtificerExtended.Skills
                 //FindAndDestroy(ghostPrefab, "TornadoMeshCore");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
                 //FindAndDestroy(ghostPrefab, "TornadoMeshCore, Wide");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
                 //FindAndDestroy(ghostPrefab, "Smoke");//, "Embers", "TornadoMeshCore, Wide", "TornadoMeshCore", "Smoke" });
-                void FindAndDestroy(GameObject gameObject, string name)
+                void FindAndDestroy(Transform gameObject, string name)
                 {
-                    Transform t = gameObject.transform.Find(name);
+                    Transform t = gameObject.Find(name);
                     if (t && t.gameObject != gameObject)
                     {
                         UnityEngine.Object.Destroy(t.gameObject);
@@ -143,13 +143,14 @@ namespace ArtificerExtended.Skills
                     sunEffect.transform.parent = ghostPrefab.transform;
                     sunEffect.transform.localPosition = Vector3.zero;
 
-                    FindAndDestroy(sunEffect, "MoonMesh");
-                    FindAndDestroy(sunEffect, "Goo, Drip");
-                    FindAndDestroy(sunEffect, "HeatDistortionEmitter");
-                    FindAndDestroy(sunEffect, "PP");
-                    FindAndDestroy(sunEffect, "LightSpinner");
-                    FindAndDestroy(sunEffect, "AreaIndicator");
-                    FindAndResize(sunEffect, "Mesh", Vector3.one * 0.5f);
+                    FindAndDestroy(sunEffect.transform.Find("Mesh").Find("SunMesh"), "MoonMesh");
+                    FindAndDestroy(sunEffect.transform.Find("Particles"), "Sparks");
+                    FindAndDestroy(sunEffect.transform.Find("Particles"), "Goo, Drip");
+                    FindAndDestroy(sunEffect.transform.Find("Particles"), "HeatDistortionEmitter");
+                    FindAndDestroy(sunEffect.transform, "PP");
+                    FindAndDestroy(sunEffect.transform, "LightSpinner");
+                    FindAndDestroy(sunEffect.transform.Find("Mesh"), "AreaIndicator");
+                    FindAndResize(sunEffect, "Mesh", Vector3.one * 0.4f);
                     FindAndResize(sunEffect, "Particles", Vector3.one * 2.5f);
                     void FindAndResize(GameObject gameObject, string name, Vector3 size)
                     {
@@ -164,7 +165,7 @@ namespace ArtificerExtended.Skills
                         }
                     }
 
-                    Transform sunMesh = sunEffect.transform.Find("SunMesh");
+                    Transform sunMesh = sunEffect.transform.Find("Mesh").Find("SunMesh");
                     if (sunMesh)
                     {
                         MeshRenderer renderer = sunMesh.GetComponent<MeshRenderer>();
