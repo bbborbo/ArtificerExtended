@@ -14,8 +14,8 @@ namespace ArtificerExtended.Skills
     {
         public static float blastDamageCoefficient = 3.5f;
         public static float wallDamageCoefficient = 2.0f;
-        public static float baseDurationHorizontal = 0.8f;
-        public static float baseDurationVertical = 1.5f;
+        public static float baseDurationHorizontal = 1.0f;
+        public static float baseDurationVertical = 1.4f;
 
         public override string TOKEN_IDENTIFIER => "ICESURGE";
         public override string SkillName => "Cryoburst";
