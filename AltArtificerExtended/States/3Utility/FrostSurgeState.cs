@@ -57,7 +57,7 @@ namespace ArtificerExtended.States
 			}
 			else
 			{
-				this.flyVector = Vector3.Normalize(base.characterDirection.forward + Vector3.up / 2f) * 0.8f;
+				this.flyVector = Vector3.Normalize(inputBank.moveVector.normalized + Vector3.up / 2f) * 0.8f;
 				this.duration = _3IceSurgeSkill.baseDurationHorizontal;
 			}
 			crit = Util.CheckRoll(base.characterBody.crit, base.characterBody.master);
