@@ -231,6 +231,8 @@ namespace ArtificerExtended.States
             {
                 if (base.fixedAge >= antiGravityDuration + windupDuration)
                 {
+                    if (windupDuration > 0 && characterBody.HasBuff(RoR2Content.Buffs.ArmorBoost))
+                        base.characterBody.RemoveBuff(RoR2Content.Buffs.ArmorBoost);
                     SetAntiGravity(false);
                 }
             }
@@ -441,6 +443,7 @@ namespace ArtificerExtended.States
             }
             else
             {
+                base.characterBody.AddBuff(RoR2Content.Buffs.ArmorBoost);
                 base.characterMotor.velocity = Vector3.zero;
                 base.characterBody.previousPosition = base.characterBody.transform.position;
                 base.characterBody.notMovingStopwatch = 1;
