@@ -76,7 +76,7 @@ namespace ArtificerExtended.States
                 float damage = characterBody.damage * 3.5f;
 				RainrotSharedUtils.Frost.FrostUtilsModule.CreateIceBlast(characterBody, 
 					FlyUpState.blastAttackForce, damage, FlyUpState.blastAttackProcCoefficient, 
-					FlyUpState.blastAttackRadius, crit, blastPosition, true, DamageSource.Special);
+					FlyUpState.blastAttackRadius * 1.3f, crit, blastPosition, true, DamageSource.Special);
 
 				FireProjectileInfo fpi = new FireProjectileInfo()
                 {

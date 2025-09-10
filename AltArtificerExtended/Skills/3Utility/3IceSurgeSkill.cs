@@ -13,14 +13,15 @@ namespace ArtificerExtended.Skills
     class _3IceSurgeSkill : SkillBase<_3IceSurgeSkill>
     {
         public static float blastDamageCoefficient = 3.5f;
-        public static float wallDamageCoefficient = 1.2f;
+        public static float wallDamageCoefficient = 2.0f;
         public static float baseDurationHorizontal = 0.8f;
         public static float baseDurationVertical = 1.5f;
 
         public override string TOKEN_IDENTIFIER => "ICESURGE";
         public override string SkillName => "Cryoburst";
 
-        public override string SkillDescription => $"{UtilityColor("Agile")}. {UtilityColor("Freezing")}. Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
+        public override string SkillDescription => $"{UtilityColor("Agile")}. {UtilityColor("Freezing")}. " +
+            $"Cause a glacial burst beneath you for {DamageValueText(blastDamageCoefficient)}, launching you into the air.";
 
         public override Sprite Icon => LoadSpriteFromBundle("cryoburstAE");
 
