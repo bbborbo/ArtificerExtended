@@ -24,6 +24,7 @@ namespace ArtificerExtended.States
 		bool crit = false;
 
 		private Vector3 flyVector = Vector3.zero;
+		bool flyingUp = false;
 
 		private Transform modelTransform;
 
@@ -47,8 +48,9 @@ namespace ArtificerExtended.States
 				passive.SkillCast();
 			}
 
-			bool flyUp = this.inputBank.moveVector.sqrMagnitude < 0.1f || this.inputBank.jump.down;
-			if (flyUp)
+
+			flyingUp = this.inputBank.moveVector.sqrMagnitude < 0.1f || this.inputBank.jump.down;
+			if (flyingUp)
 			{
 				this.flyVector = Vector3.up; //Vector3.Normalize(base.characterDirection.forward + Vector3.up / 1.15f) * 0.8f;
 				this.duration = _3IceSurgeSkill.baseDurationVertical;
@@ -172,7 +174,10 @@ namespace ArtificerExtended.States
 		public override void HandleMovements()
 		{
 			base.HandleMovements();
-			base.characterMotor.rootMotion += this.flyVector * (this.moveSpeedStat * FlyUpState.speedCoefficientCurve.Evaluate(base.fixedAge / duration) * Time.fixedDeltaTime);
+			Vector3 rootMotion = this.flyVector * (FlyUpState.speedCoefficientCurve.Evaluate(base.fixedAge / duration) * Time.fixedDeltaTime);
+			if (!flyingUp)
+				rootMotion *= moveSpeedStat;
+			base.characterMotor.rootMotion += rootMotion;
 			base.characterMotor.velocity.y = 0f;
 		}
 		public override void UpdateAnimationParameters()
