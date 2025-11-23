@@ -495,7 +495,7 @@ namespace ArtificerExtended.Passive
                 delay.procCoefficient = procCoefficient;//0.5f;//
                 delay.attacker = attackerBody.gameObject;
                 delay.radius = radius;
-                delay.damageType = DamageType.Frost;
+                delay.damageType = DamageTypeExtended.Frost;
                 delay.falloffModel = BlastAttack.FalloffModel.SweetSpot;
                 blast.GetComponent<TeamFilter>().teamIndex = attackerBody.teamComponent.teamIndex;
                 delay.explosionEffect = RainrotSharedUtils.Frost.FrostUtilsModule.GetIceBlastEffect(false);

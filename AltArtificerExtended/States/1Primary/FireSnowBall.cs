@@ -37,7 +37,7 @@ namespace ArtificerExtended.States
         public override void ModifyProjectileInfo(ref FireProjectileInfo fireProjectileInfo)
         {
             base.ModifyProjectileInfo(ref fireProjectileInfo);
-            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Primary);
+            fireProjectileInfo.damageTypeOverride = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Frost, DamageSource.Primary);
             if (muzzleTransform != null)
                 fireProjectileInfo.position = muzzleTransform.position;
         }

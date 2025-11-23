@@ -184,7 +184,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = icicleProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
+                pd.damageType = new DamageTypeCombo(DamageTypeExtended.Generic, DamageTypeExtended.Frost, DamageSource.Special);
             }
             UnseenHandHealingProjectile uhhp = icicleProjectilePrefab.GetComponent<UnseenHandHealingProjectile>();
             if(uhhp)
