@@ -52,7 +52,7 @@ namespace ArtificerExtended
     [BepInDependency("com.DrBibop.VRAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(JetHack.JetHackPlugin.guid, BepInDependency.DependencyFlags.SoftDependency)]
     [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(LoadoutAPI),  nameof(PrefabAPI), nameof(UnlockableAPI),
-        nameof(SkillsAPI), nameof(DamageAPI), nameof(RecalculateStatsAPI), nameof(DeployableAPI))]
+        nameof(SkillsAPI), nameof(DamageAPI), nameof(RecalculateStatsAPI), nameof(DeployableAPI), nameof(Skins))]
     [BepInPlugin(guid, modName, version)]
     public partial class ArtificerExtendedPlugin : BaseUnityPlugin
     {
@@ -100,6 +100,8 @@ namespace ArtificerExtended
         {
             instance = this;
 
+            Modules.Materials.SwapShadersFromMaterialsInBundle(iconBundle);
+
             Modules.Config.Init();
             Log.Init(Logger);
             InitializeConfig();
@@ -138,10 +140,75 @@ namespace ArtificerExtended
             }
             this.ArtiChanges();
             InitializeContent();
+            InitializeSkins();
             On.RoR2.CharacterMaster.OnBodyStart += AddAEBodyFX;
 
             new ContentPacks().Initialize();
             //VRStuff.SetupVR();
+        }
+
+        private void InitializeSkins()
+        {
+            Renderer[] renderers = mageObject.GetComponentsInChildren<Renderer>(true);
+            ModelSkinController skinController = mageObject.GetComponentInChildren<ModelSkinController>();
+            GameObject mdl = skinController.gameObject;
+            Sprite skinIcon = Skins.CreateSkinIcon(Color.white, new Color(1, 0, 0), new Color(0.8f, 0.2f, 0.2f), new Color(0.3f, 0, 0));
+
+            UnlockableDef unlock = UnlockBase.CreateUnlockDef(typeof(SuperbugUnlock), skinIcon);
+            bool bypassUnlock = ConfigManager.DualBindToConfig<bool>("Skins : Lousy Bug", ArtificerExtended.Modules.Config.MyConfig, "Bypass Unlock", false, "");
+
+            LanguageAPI.Add("ARTIFICEREXTENDED_SKIN_SUPERBUG", "Lousy Bug");
+
+            LoadoutAPI.SkinDefInfo skin = new LoadoutAPI.SkinDefInfo
+            {
+                Icon = skinIcon,
+                Name = "Superbug",
+                NameToken = "ARTIFICEREXTENDED_SKIN_SUPERBUG",
+
+                RootObject = mdl,
+                BaseSkins = new SkinDef[] { skinController.skins[0] },
+                UnlockableDef = bypassUnlock ? null : unlock,
+                GameObjectActivations = new SkinDef.GameObjectActivation[0],
+                RendererInfos = new CharacterModel.RendererInfo[2]
+                {
+                    //magecapemesh
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = null,
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[6]
+                    },
+                    //magemesh
+                    new CharacterModel.RendererInfo
+                    {
+                        defaultMaterial = iconBundle.LoadAsset<Material>("Assets/SuperbugSkin/matBug.mat").SetHopooMaterial(),
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                        ignoreOverlays = false,
+                        renderer = renderers[7]
+                    }
+                },
+                MeshReplacements = new SkinDef.MeshReplacement[2]
+                {
+                    //magecapemesh
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = null,
+                        renderer = renderers[6]
+                    },
+                    //magemesh
+                    new SkinDef.MeshReplacement
+                    {
+                        mesh = iconBundle.LoadAsset<Mesh>("Assets/SuperbugSkin/BugMesh.mesh"),
+                        renderer = renderers[7]
+                    }
+                },
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0]
+            };
+
+            //Adding new skin to a character's skin controller
+            Skins.AddSkinToCharacter(mageObject, skin);
         }
 
         public static bool BodyHasAncientScepterItem(CharacterBody body)
