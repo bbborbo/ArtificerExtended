@@ -114,7 +114,7 @@ namespace ArtificerExtended.States
             blastAttack.crit = crit;
             blastAttack.baseDamage = base.characterBody.damage * _1FrostbiteSkill.blizzardDamageCoefficient;
             blastAttack.falloffModel = BlastAttack.FalloffModel.None;
-            blastAttack.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Special);
+            blastAttack.damageType = new DamageTypeCombo(DamageTypeExtended.Generic, DamageTypeExtended.Frost, DamageSource.Special);
             blastAttack.baseForce = 1500;
             blastAttack.teamIndex = TeamComponent.GetObjectTeam(blastAttack.attacker);
             blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;

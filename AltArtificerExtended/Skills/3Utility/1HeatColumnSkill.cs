@@ -114,7 +114,7 @@ namespace ArtificerExtended.Skills
             mr1.material = heatWardIndicatorMaterial;
 
 
-            GameObject itSafeWard = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/GameModes/InfiniteTowerRun/InfiniteTowerAssets/InfiniteTowerSafeWardAwaitingInteraction.prefab").WaitForCompletion();
+            GameObject itSafeWard = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/GameModes/InfiniteTowerRun/ITAssets/InfiniteTowerSafeWardAwaitingInteraction.prefab").WaitForCompletion();
             GameObject verticalWard = itSafeWard.transform.Find("Indicator")?.gameObject;
             GameObject encourageWardIndicator = PrefabAPI.InstantiateClone(verticalWard, "EncourageWardIndicatorPrefab");
 

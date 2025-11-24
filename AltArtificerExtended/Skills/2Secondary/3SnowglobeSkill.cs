@@ -118,7 +118,7 @@ namespace ArtificerExtended.Skills
                         MeshRenderer meshRenderer = sphere.GetComponent<MeshRenderer>();
                         if (meshRenderer)
                         {
-                            Material bgMat = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/GameModes/InfiniteTowerRun/InfiniteTowerAssets/matITSafeWardAreaIndicator2.mat").WaitForCompletion());
+                            Material bgMat = UnityEngine.Object.Instantiate(Addressables.LoadAssetAsync<Material>("RoR2/DLC1/GameModes/InfiniteTowerRun/ITAssets/matITSafeWardAreaIndicator2.mat").WaitForCompletion());
                             bgMat.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampLunarInfection.png").WaitForCompletion());
                             meshRenderer.sharedMaterials[1] = bgMat;
                             //Material[] sm = meshRenderer.sharedMaterials;
@@ -208,7 +208,7 @@ namespace ArtificerExtended.Skills
             ProjectileDamage pd = snowglobeDeployProjectilePrefab.GetComponent<ProjectileDamage>();
             if (pd)
             {
-                pd.damageType.damageType = new DamageTypeCombo(DamageType.Frost, DamageTypeExtended.Generic, DamageSource.Secondary);
+                pd.damageType.damageType = new DamageTypeCombo(DamageTypeExtended.Generic, DamageTypeExtended.Frost, DamageSource.Secondary);
             }
             ProjectileImpactExplosion pie = snowglobeDeployProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             if (pie)

@@ -214,8 +214,8 @@ namespace ArtificerExtended.States
             bulletAttack.maxDistance = maxRange;
             bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
             if (Util.CheckRoll(frostChance, characterBody.master))
-                bulletAttack.damageType.damageType = DamageType.Frost;
-
+                bulletAttack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Frost, DamageSource.Primary);
+            
             return bulletAttack;
         }
 
