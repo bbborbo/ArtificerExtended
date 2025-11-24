@@ -362,6 +362,8 @@ namespace ArtificerExtended.States
             {
                 base.characterBody.RemoveBuff(JunkContent.Buffs.IgnoreFallDamage.buffIndex);
             }
+            if (characterBody.HasBuff(RoR2Content.Buffs.ArmorBoost))
+                base.characterBody.RemoveBuff(RoR2Content.Buffs.ArmorBoost);
             if (base.isAuthority)
             {
                 base.characterMotor.onMovementHit -= OnSurgeImpactAuthority;
