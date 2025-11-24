@@ -20,12 +20,20 @@ namespace ArtificerExtended.Components
         {
             if (this.isAlive && snowglobeProjectilePrefab != null)
             {
-                this.SpawnSnowglobe(impactInfo);
+                this.SpawnSnowglobe(impactInfo.estimatedPointOfImpact);
+                this.isAlive = false;
+            }
+        }
+        void OnDestroy()
+        {
+            if (this.isAlive && snowglobeProjectilePrefab != null)
+            {
+                this.SpawnSnowglobe(transform.position);
                 this.isAlive = false;
             }
         }
 
-        private void SpawnSnowglobe(ProjectileImpactInfo impactInfo)
+        private void SpawnSnowglobe(Vector3 position)
         {
             if (!NetworkServer.active)
                 return;
@@ -46,7 +54,7 @@ namespace ArtificerExtended.Components
             if (!projectileDamage)
                 return;
 
-            GameObject snowglobeInstance = UnityEngine.Object.Instantiate<GameObject>(snowglobeProjectilePrefab, impactInfo.estimatedPointOfImpact, Quaternion.identity);
+            GameObject snowglobeInstance = UnityEngine.Object.Instantiate<GameObject>(snowglobeProjectilePrefab, position, Quaternion.identity);
             snowglobeInstance.GetComponent<TeamFilter>().teamIndex = ownerBody.teamComponent.teamIndex;
             snowglobeInstance.GetComponent<GenericOwnership>().ownerObject = ownerBody.gameObject;
             Deployable deployableComponent = snowglobeInstance.GetComponent<Deployable>();
