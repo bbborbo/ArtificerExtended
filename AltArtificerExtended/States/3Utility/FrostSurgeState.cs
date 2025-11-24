@@ -177,6 +177,8 @@ namespace ArtificerExtended.States
 			Vector3 rootMotion = this.flyVector * (FlyUpState.speedCoefficientCurve.Evaluate(base.fixedAge / duration) * Time.fixedDeltaTime);
 			if (!flyingUp)
 				rootMotion *= moveSpeedStat;
+			else
+				rootMotion *= characterBody.baseMoveSpeed;
 			base.characterMotor.rootMotion += rootMotion;
 			base.characterMotor.velocity.y = 0f;
 		}
