@@ -96,6 +96,8 @@ namespace ArtificerExtended
         public static float meleeRangeChannel = 21; //flamethrower
         public static float meleeRangeSingle = meleeRangeChannel + 7f;
 
+        private static bool LegacyIonSurge;
+
         void Awake()
         {
             instance = this;
@@ -105,6 +107,12 @@ namespace ArtificerExtended
             Modules.Config.Init();
             Log.Init(Logger);
             InitializeConfig();
+
+            LegacyIonSurge = ConfigManager.DualBindToConfig("ArtificerExtended", Modules.Config.MyConfig, "Legacy Ion Surge", false,
+                "!!!! WARNING: Using Ion Surge with this config set to TRUE may cause issues with other abilities; " +
+                "these bugs WILL NOT be fixed, so USE WITH CAUTION !!!! " +
+                "(Reverts Ion Surge rework back to vanilla functionality.)");
+
             Modules.Language.Init();
             Modules.CommonAssets.Init();
             AddHooks();
@@ -396,7 +404,7 @@ namespace ArtificerExtended
         {
             orig();
 
-            ReplaceVanillaIonSurge(true);
+            ReplaceVanillaIonSurge(!LegacyIonSurge);
         }
         private void AddAEBodyFX(On.RoR2.CharacterMaster.orig_OnBodyStart orig, CharacterMaster self, CharacterBody body)
         {

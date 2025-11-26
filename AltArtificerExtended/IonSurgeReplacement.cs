@@ -37,8 +37,14 @@ namespace ArtificerExtended
                 }
                 else
                 {
-                    Content.AddEntityState(typeof(States.VanillaIonSurge));
-                    surge.activationState = new SerializableEntityStateType(typeof(States.VanillaIonSurge));
+                    Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
+                        "ArtificerExtended will not replace ION SURGE functionality. " +
+                        "This WILL break Artificer Extended's alt passives. \n" +
+                        "Either turn on ArtificerExtended's Ion Surge rework, " +
+                        "or avoid using Ion Surge with ArtificerExtended's alt passive. \n " +
+                        "This is NOT an error that can be fixed on the ArtificerExtended side.\n" +
+                        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    return;
                 }
             }
 
