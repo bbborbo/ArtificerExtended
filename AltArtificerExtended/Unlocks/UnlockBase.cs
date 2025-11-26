@@ -21,7 +21,7 @@ namespace ArtificerExtended.Unlocks
         {
             if (instance != null)
             {
-                Log.Error("Singleton class \"" + typeof(T).Name + "\" inheriting UnlockBase was instantiated twice");
+                Log.Warning("Singleton class \"" + typeof(T).Name + "\" inheriting UnlockBase was instantiated twice");
                 return;
             }
             instance = this as T;
