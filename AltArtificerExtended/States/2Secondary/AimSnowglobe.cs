@@ -23,7 +23,7 @@ namespace ArtificerExtended.States
             this.maxDistance = 100;
             this.setFuse = true;
             this.arcVisualizerPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/BasicThrowableVisualizer.prefab").WaitForCompletion();
-            this.endpointVisualizerPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/TreebotMortarAreaIndicator.prefab").WaitForCompletion();
+            this.endpointVisualizerPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPathsBetter.RoR2_Base_Huntress.HuntressArrowRainIndicator_prefab).WaitForCompletion();
             base.OnEnter();
             this.PlayAnimation("Gesture, Additive", PrepWall.PrepWallStateHash, PrepWall.PrepWallParamHash, this.minimumDuration);
         }
