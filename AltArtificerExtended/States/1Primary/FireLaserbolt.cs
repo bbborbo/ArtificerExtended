@@ -162,7 +162,7 @@ namespace ArtificerExtended.States
                 bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
                 //maxDistance = maxRange;
                 bulletAttack.smartCollision = true;
-                bulletAttack.damageType = DamageTypeCombo.GenericPrimary;
+                bulletAttack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Electrical, DamageSource.Primary);
 
                 bulletAttack.AddModdedDamageType(CommonAssets.ChainLightningDamageType);
 

@@ -37,7 +37,7 @@ namespace ArtificerExtended.States
                     crit = this.isCrit,
                     procCoefficient = 1f,
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Generic, DamageSource.Special),
+                    damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Electrical, DamageSource.Special),
                     position = base.characterBody.corePosition,
                     falloffModel = BlastAttack.FalloffModel.None,
                     baseForce = SurgeExtendedDash.impactBlastForce,

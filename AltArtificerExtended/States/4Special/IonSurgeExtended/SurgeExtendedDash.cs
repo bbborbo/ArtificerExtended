@@ -324,7 +324,7 @@ namespace ArtificerExtended.States
             lightningOrb.procCoefficient = grazeProcCoefficient;
             lightningOrb.target = hurtBox;
             lightningOrb.damageColorIndex = DamageColorIndex.Default;
-            lightningOrb.damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Generic, DamageSource.Special);
+            lightningOrb.damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Electrical, DamageSource.Special);
 
             OrbManager.instance.AddOrb(lightningOrb);
         }

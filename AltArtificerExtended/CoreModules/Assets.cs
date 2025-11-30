@@ -133,6 +133,7 @@ namespace ArtificerExtended.Modules
 
             ProjectileDamage projDamage = proj.GetComponent<ProjectileDamage>();
             projDamage.damage = 1;
+            projDamage.damageType = DamageTypeExtended.Electrical;
 
             ProjectileController projController = proj.GetComponent<ProjectileController>();
             projController.ghostPrefab = ghost;

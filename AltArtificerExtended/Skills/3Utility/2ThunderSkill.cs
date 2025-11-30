@@ -139,7 +139,7 @@ namespace ArtificerExtended.Skills
             pc.ghostPrefab = null;
 
             var pd = projectilePrefabThunder.GetComponent<ProjectileDamage>();
-            pd.damageType = DamageType.Stun1s;
+            pd.damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Electrical, DamageSource.Utility);
 
             var ps = projectilePrefabThunder.GetComponent<ProjectileSimple>();
             ps.desiredForwardSpeed = desiredForwardSpeedMax;

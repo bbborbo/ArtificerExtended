@@ -94,8 +94,9 @@ namespace ArtificerExtended.States
                     damage = this.characterBody.damage * damagePerMeatball,
                     force = meatballForce,
                     crit = Util.CheckRoll(this.characterBody.crit, this.characterBody.master),
-                    damageColorIndex = DamageColorIndex.Default
-                });
+                    damageColorIndex = DamageColorIndex.Default,
+                    damageTypeOverride = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Electrical, DamageSource.Utility)
+            });
             }
             base.characterBody._defaultCrosshairPrefab = this.cachedCrosshairPrefab;
             if (VRStuff.VRInstalled)
