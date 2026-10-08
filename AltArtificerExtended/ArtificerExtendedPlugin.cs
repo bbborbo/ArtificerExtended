@@ -136,6 +136,8 @@ namespace ArtificerExtended
             mageUtility = mageSkillLocator.utility.skillFamily;
             mageSpecial = mageSkillLocator.special.skillFamily;
 
+            RemoveTectonicBlast(mageUtility);
+
             Log.Debug("ArtificerExtended setup succeeded!");
 
             CreateMagePassives(magePassiveFamily);
@@ -154,6 +156,19 @@ namespace ArtificerExtended
 
             new ContentPacks().Initialize();
             //VRStuff.SetupVR();
+        }
+
+        private void RemoveTectonicBlast(SkillFamily mageUtility)
+        {
+            //List<SkillFamily.Variant> variants = new List<SkillFamily.Variant>();
+            //foreach (SkillFamily.Variant variant in mageUtility.variants)
+            //{
+            //    if (variant.skillDef.skillNameToken == "MAGE_UTILITY_ALT_NAME")
+            //        continue;
+            //    variants.Add(variant);
+            //}
+            //mageUtility.variants = variants.ToArray();
+            mageUtility.variants = mageUtility.variants.Where(x => x.skillDef.skillNameToken != "MAGE_UTILITY_ALT_NAME").ToArray();
         }
 
         private void InitializeSkins()
