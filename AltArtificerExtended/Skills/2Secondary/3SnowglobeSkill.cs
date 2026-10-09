@@ -229,6 +229,7 @@ namespace ArtificerExtended.Skills
             if (ghostPrefab/*_assetBundle.LoadAsset<GameObject>("HenryBombGhost")*/ != null)
             {
                 bombController.ghostPrefab = ghostPrefab;//Assets.CreateProjectileGhostPrefab("HenryBombGhost");
+                bombController.ghostPrefabAddress = null;
             }
 
             bombController.startSound = "";

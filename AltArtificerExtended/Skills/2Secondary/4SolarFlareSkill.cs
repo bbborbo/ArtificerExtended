@@ -214,6 +214,7 @@ namespace ArtificerExtended.Skills
                 if (ghostPrefab)
                 {
                     pc.ghostPrefab = ghostPrefab;
+                    pc.ghostPrefabAddress = null;
                 }
 
                 SolarFlareMissileComponent missileComponent = projectilePrefab.AddComponent<SolarFlareMissileComponent>();
