@@ -337,7 +337,7 @@ namespace ArtificerExtended
             ILCursor c = new ILCursor(il);
 
             bool b = c.TryGotoNext(MoveType.After,
-                x => x.MatchCallOrCallvirt<DamageTypeCombo>(nameof(DamageTypeCombo.IsChefFrostDamage)))
+                x => x.MatchCallOrCallvirt<DamageTypeCombo>(nameof(DamageTypeCombo.IsFrostSkillDamage)))
                 && c.TryGotoNext(MoveType.After,
                 x => x.MatchCallOrCallvirt<SetStateOnHurt>(nameof(SetStateOnHurt.SetFrozen)));
             if (b)
