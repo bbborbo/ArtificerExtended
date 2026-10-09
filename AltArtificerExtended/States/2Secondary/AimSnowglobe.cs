@@ -17,7 +17,7 @@ namespace ArtificerExtended.States
         {
             this.damageCoefficient = _3SnowglobeSkill.impactDamageCoefficient;
             this.projectileBaseSpeed = _3SnowglobeSkill.projectileBaseSpeed;
-            this.detonationRadius = _3SnowglobeSkill.snowWardRadius / 2;
+            this.endpointVisualizerRadiusScale = _3SnowglobeSkill.snowWardRadius / 2;
             this.projectilePrefab = _3SnowglobeSkill.snowglobeDeployProjectilePrefab;
             this.baseMinimumDuration = 0.4f;
             this.maxDistance = 100;
