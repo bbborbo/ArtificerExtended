@@ -180,6 +180,7 @@ namespace ArtificerExtended.Skills
             if (pc)
             {
                 pc.ghostPrefab = icicleGhostPrefab;
+                pc.ghostPrefabAddress = null;
                 pc.procCoefficient = 0.1f;
             }
             ProjectileOwnerOrbiter poo = icicleProjectilePrefab.GetComponent<ProjectileOwnerOrbiter>();

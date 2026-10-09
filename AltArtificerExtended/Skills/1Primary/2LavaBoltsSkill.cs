@@ -93,6 +93,7 @@ namespace ArtificerExtended.Skills
             {
                 GameObject sloshGhost = ctx.Result.InstantiateClone("MageLavaSloshGhost");
                 pc.ghostPrefab = sloshGhost;
+                pc.ghostPrefabAddress = null;
 
                 sloshGhost.transform.localScale = Vector3.one * sloshProjectileSize * visualScale;
                 sloshGhost.transform.localPosition = Vector3.zero;
@@ -236,7 +237,9 @@ namespace ArtificerExtended.Skills
 
             Color napalmColor = new Color32(255, 40, 0, 255);
 
-            GameObject ghostPrefab = lavaProjectilePrefab.GetComponent<ProjectileController>().ghostPrefab;
+
+            ProjectileController pc = lavaProjectilePrefab.GetComponent<ProjectileController>();
+            GameObject ghostPrefab = pc.ghostPrefab;
             lavaGhostPrefab = ghostPrefab.InstantiateClone("NapalmSpitGhost", false);
             Tools.GetParticle(lavaGhostPrefab, "SpitCore", napalmColor);
 
@@ -275,8 +278,8 @@ namespace ArtificerExtended.Skills
                 pieNapalm.bonusBlastForce = new Vector3(0, 500, 0);
             }
 
-            ProjectileController pc = lavaProjectilePrefab.GetComponent<ProjectileController>();
             pc.ghostPrefab = lavaGhostPrefab;
+            pc.ghostPrefabAddress = null;
 
             ProjectileDamage pd = lavaProjectilePrefab.GetComponent<ProjectileDamage>();
             pd.damageType = DamageType.IgniteOnHit;

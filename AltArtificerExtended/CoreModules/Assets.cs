@@ -137,6 +137,7 @@ namespace ArtificerExtended.Modules
 
             ProjectileController projController = proj.GetComponent<ProjectileController>();
             projController.ghostPrefab = ghost;
+            projController.ghostPrefabAddress = null;
             projController.procCoefficient = AltArtiPassive.lightningProcCoef;
             projController.allowPrediction = true;
 
@@ -344,8 +345,12 @@ namespace ArtificerExtended.Modules
             ProjectileController pc = lavaProjectilePrefab.GetComponent<ProjectileController>();
             if (pc)
             {
-                Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Drones.PaladinRocketGhost_prefab).Completed += 
-                    (ctx) => pc.ghostPrefab = ctx.Result;
+                Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Drones.PaladinRocketGhost_prefab).Completed +=
+                    (ctx) =>
+                    {
+                        pc.ghostPrefab = ctx.Result;
+                        pc.ghostPrefabAddress = null;
+                    };
                 //GameObject lavaPoolGhostPrefab = .WaitForCompletion().InstantiateClone("MageLavaProjectileGhost", false);
                 //pc.ghostPrefab = lavaPoolGhostPrefab;
             }
@@ -397,6 +402,7 @@ namespace ArtificerExtended.Modules
             {
                 pc.procCoefficient = 1;
                 pc.ghostPrefab = lavaPoolGhostPrefab;
+                pc.ghostPrefabAddress = null;
             }
 
 
