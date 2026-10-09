@@ -103,16 +103,16 @@ namespace ArtificerExtended.Unlocks
 
         public static int freezeRequirementTotal = 5;
 
-        public override void TryToCompleteActivity()
-        {
-            bool flag = base.localUser.id == LocalUserManager.GetFirstLocalUser().id;
-            if (this.shouldGrant && flag)
-            {
-                BaseActivitySelector baseActivitySelector = new BaseActivitySelector();
-                baseActivitySelector.activityAchievementID = nameof(FreezeManySimultaneousUnlock);
-                PlatformSystems.activityManager.TryToCompleteActivity(baseActivitySelector, true, true);
-            }
-        }
+        //public override void TryToCompleteActivity()
+        //{
+        //    bool flag = base.localUser.id == LocalUserManager.GetFirstLocalUser().id;
+        //    if (this.shouldGrant && flag)
+        //    {
+        //        BaseActivitySelector baseActivitySelector = new BaseActivitySelector();
+        //        baseActivitySelector.activityAchievementID = nameof(FreezeManySimultaneousUnlock);
+        //        PlatformSystems.activityManager.TryToCompleteActivity(baseActivitySelector, true, true);
+        //    }
+        //}
 
         public override void OnBodyRequirementMet()
         {

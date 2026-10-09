@@ -60,16 +60,16 @@ namespace ArtificerExtended.Unlocks
 
         public override string AchievementDesc => $"As Artificer, overkill an Overloading Elite enemy by more than {overkillAmount * 100}% of its combined maximum health.";
 
-        public override void TryToCompleteActivity()
-        {
-            bool flag = base.localUser.id == LocalUserManager.GetFirstLocalUser().id;
-            if (this.shouldGrant && flag)
-            {
-                BaseActivitySelector baseActivitySelector = new BaseActivitySelector();
-                baseActivitySelector.activityAchievementID = nameof(FreezeManySimultaneousUnlock);
-                PlatformSystems.activityManager.TryToCompleteActivity(baseActivitySelector, true, true);
-            }
-        }
+        //public override void TryToCompleteActivity()
+        //{
+        //    bool flag = base.localUser.id == LocalUserManager.GetFirstLocalUser().id;
+        //    if (this.shouldGrant && flag)
+        //    {
+        //        BaseActivitySelector baseActivitySelector = new BaseActivitySelector();
+        //        baseActivitySelector.activityAchievementID = nameof(FreezeManySimultaneousUnlock);
+        //        PlatformSystems.activityManager.TryToCompleteActivity(baseActivitySelector, true, true);
+        //    }
+        //}
         public override void OnInstall()
         {
             base.OnInstall();
