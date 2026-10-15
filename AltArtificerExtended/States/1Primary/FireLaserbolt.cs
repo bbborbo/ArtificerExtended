@@ -19,18 +19,19 @@ namespace ArtificerExtended.States
     class FireLaserbolts : BaseSkillState, SteppedSkillDef.IStepSetter
     {
         public GameObject muzzleflashEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_Mage.MuzzleflashMageLightning_prefab).WaitForCompletion();
+        public static GameObject impactEffectPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPathsBetter.RoR2_Base_Common_VFX.LightningFlash_prefab).WaitForCompletion();
 
         public float procCoefficient = 1.0f;
 
         public static float damageCoefficient => _3LaserBoltsSkill.damageCoefficient;
 
-        public float force = 20f;
+        public float force = 300f;
 
         public static float attackSpeedAltAnimationThreshold = FireFireBolt.attackSpeedAltAnimationThreshold;
 
         public float baseDuration = 0.45f;
 
-        public string attackSoundString = FireLaserbolt.attackString;
+        public string attackSoundString = "Play_item_use_BFG_zaps";
         public string attackSoundString2 = "Play_mage_m2_impact";
 
         private float duration;
@@ -153,10 +154,10 @@ namespace ArtificerExtended.States
                 bulletAttack.minSpread = 0f;
                 bulletAttack.maxSpread = 0f;
                 bulletAttack.damage = damageCoefficient * this.damageStat;
-                bulletAttack.force = FireLaserbolt.force;
+                bulletAttack.force = this.force;
                 bulletAttack.tracerEffectPrefab = _3LaserBoltsSkill.tracerLaser;
                 bulletAttack.muzzleName = this.muzzleString;
-                bulletAttack.hitEffectPrefab = FireLaserbolt.impactEffectPrefab;
+                bulletAttack.hitEffectPrefab = FireLaserbolts.impactEffectPrefab;
                 bulletAttack.isCrit = Util.CheckRoll(this.critStat, base.characterBody.master);
                 bulletAttack.radius = 0.25f;
                 bulletAttack.falloffModel = BulletAttack.FalloffModel.None;

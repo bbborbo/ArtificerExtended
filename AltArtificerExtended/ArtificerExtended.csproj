@@ -12,16 +12,16 @@
 
   <ItemGroup>
     <PackageReference Include="RiskOfRain2.GameLibs" Version="1.5.0-r.1" />
-    <PackageReference Include="MMHOOK.RoR2" Version="2025.11.19" NoWarn="NU1701" />
-    <PackageReference Include="RoR2BepInExPack" Version="1.36.0" />
+    <PackageReference Include="MMHOOK.RoR2" Version="2026.10.8" NoWarn="NU1701" />
+    <PackageReference Include="RoR2BepInExPack" Version="1.46.0" />
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.45" />
     <PackageReference Include="R2API" Version="5.0.5" />
-    <PackageReference Include="R2API.Skills" Version="1.0.1" />
+    <PackageReference Include="R2API.Skills" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>

@@ -257,7 +257,7 @@ namespace ArtificerExtended.Skills
                         break;
                     case SkillSlot.None:
                         Log.Warning(s + "Special case!");
-                        break;
+                        return;
                 }
 
                 if (skillFamily != null)
