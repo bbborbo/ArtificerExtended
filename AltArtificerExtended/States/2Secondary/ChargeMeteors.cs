@@ -58,7 +58,7 @@ namespace ArtificerExtended.States
 
         private AltArtiPassive.BatchHandle handle;
 
-        public static GameObject areaIndicatorPrefab = ChargeMeteor.areaIndicatorPrefab;
+        public static GameObject areaIndicatorPrefab = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPathsBetter.RoR2_Base_Huntress.HuntressArrowRainIndicator_prefab).WaitForCompletion();
         public static GameObject aoeEffect = RoR2.LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLightningMage");
         public static GameObject muzzleflashEffect = ChargeMeteor.muzzleflashEffect;
         public static GameObject meteorEffect = _1EruptionSkill.meteorImpactEffectPrefab;
@@ -71,9 +71,9 @@ namespace ArtificerExtended.States
         public override void OnEnter()
         {
             base.OnEnter();
-            if (ChargeMeteor.areaIndicatorPrefab != null)
+            if (ChargeMeteors.areaIndicatorPrefab != null)
             {
-                this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteor.areaIndicatorPrefab);
+                this.areaIndicatorInstance = UnityEngine.Object.Instantiate<GameObject>(ChargeMeteors.areaIndicatorPrefab);
                 this.UpdateAreaIndicator();
             }
             else

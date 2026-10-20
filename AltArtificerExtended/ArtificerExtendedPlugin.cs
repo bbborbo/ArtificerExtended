@@ -415,6 +415,7 @@ namespace ArtificerExtended
             //
             Content.AddSkillDef(hoverSkillDef);
             Content.AddSkillDef(resonanceSkillDef);
+            Content.AddEntityState(typeof(Passive.AltArtiPassive));
         }
         private void ReplaceSkillDefs(On.RoR2.Skills.SkillCatalog.orig_Init orig)
         {
